@@ -141,7 +141,7 @@ public class addassetperipheral extends _JInternalFrame implements _GUI, ActionL
 				pnlmain.add(pnlcenter, BorderLayout.CENTER);
 				pnlcenter.setBorder(JTBorderFactory.createTitleBorder(""));
 				{
-					JPanel pnltagging = new JPanel(new GridLayout(1, 2, 5, 5));
+					JPanel pnltagging = new JPanel(new GridLayout(2, 1, 5, 5));
 					pnlcenter.add(pnltagging, BorderLayout.CENTER);
 					{
 						JPanel pnlfortag = new JPanel(new BorderLayout());
@@ -151,6 +151,9 @@ public class addassetperipheral extends _JInternalFrame implements _GUI, ActionL
 							scrollfortag = new JScrollPane();
 							pnlfortag.add(scrollfortag);
 							scrollfortag.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+							{
+								
+							}
 						}
 					}
 					{
@@ -161,6 +164,9 @@ public class addassetperipheral extends _JInternalFrame implements _GUI, ActionL
 							scrolltagged = new JScrollPane();
 							pnltagged.add(scrolltagged);
 							scrolltagged.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+							{
+								
+							}
 						}
 					}
 				}
