@@ -249,8 +249,8 @@ public class AssetMonitoring extends _JInternalFrame implements ActionListener, 
 
 	public static String dept_code = null;
 
-	public static String co_id = "02";
-	public static String co_name = "CENQHOMES DEVELOPMENT CORPORATION";
+	public static String co_id = "01";
+	public static String co_name = "Acerland DEVELOPMENT CORPORATION";
 	public static String co_logo = "cenqlogo.png";
 	private static boolean incl_Inc_asset;
 
@@ -324,7 +324,8 @@ public class AssetMonitoring extends _JInternalFrame implements ActionListener, 
 							pnl1.add(lookupselectcompany, BorderLayout.CENTER);
 							lookupselectcompany.setPreferredSize(new Dimension(80, 0));
 							lookupselectcompany.setValue(co_id);
-							lookupselectcompany.setLookupSQL(_AssetMonitoring.getCompany());
+							//lookupselectcompany.setLookupSQL(_AssetMonitoring.getCompany());
+							lookupselectcompany.setLookupSQL("Select '01', 'Acerland DEVELOPMENT CORPORATION' ");
 							lookupselectcompany.addLookupListener(new LookupListener() {
 
 								public void lookupPerformed(LookupEvent event) {
@@ -334,19 +335,19 @@ public class AssetMonitoring extends _JInternalFrame implements ActionListener, 
 									if (data != null) {
 										co_id = (String) data[0];
 										co_name = (String) data[1];
-										co_logo = (String) data[3];
+										//co_logo = (String) data[3];
+										
 										lookupselectcompany.setValue(co_id);
 										txtselectcompany.setText(co_name);
 										lookupCustodianid.setValue("");
 										txtCustodianid.setText("");
-										lookupCustodianid
-												.setLookupSQL(_AssetMonitoring.pnlinformationgetCustodian(co_id));
+										//lookupCustodianid.setLookupSQL(_AssetMonitoring.pnlinformationgetCustodian(co_id));
 										panelAssetInformation.co_id = co_id;
 										panelAssetInformation.co_name = co_name;
 										panelAssetInformation.co_logo = co_logo;
 
-										panelAssetInformation.lookupCustodian
-												.setLookupSQL(_AssetMonitoring.pnlinformationgetCustodian(co_id));
+										//panelAssetInformation.lookupCustodian.setLookupSQL(_AssetMonitoring.pnlinformationgetCustodian(co_id));
+										panelAssetInformation.lookupCustodian.setLookupSQL("select '900767', 'BITUEN, JOHN ERICK RESPICIO'");
 
 										new Thread(new Runnable() {
 
@@ -415,6 +416,7 @@ public class AssetMonitoring extends _JInternalFrame implements ActionListener, 
 							pnllookuptext.add(lookupCustodianid, BorderLayout.WEST);
 							lookupCustodianid.setPreferredSize(new Dimension(80, 0));
 							lookupCustodianid.setLookupSQL(_AssetMonitoring.pnlinformationgetCustodian(co_id));
+							//lookupCustodianid.setLookupSQL("select '900767', 'BITUEN, JOHN ERICK RESPICIO'");
 							lookupCustodianid.addLookupListener(new LookupListener() {
 
 								public void lookupPerformed(LookupEvent event) {

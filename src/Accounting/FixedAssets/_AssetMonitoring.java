@@ -494,7 +494,8 @@ public class _AssetMonitoring {
 							"replaced_assetno,\n"+
 							"date_disposed)\n"+
 							"VALUES (\n" +
-							"'"+generateNewAssetCount(current_cust)+"', \n" +	//asset_code
+							//"'"+generateNewAssetCount(current_cust)+"', \n" +	//asset_code
+							"'"+panelAssetInformation.txtAssetCode.getText()+"', \n" +	//asset_code
 							""+item_id+", \n" +									//item_id
 							"'"+asset_name+"', \n" +							//asset_name
 							""+asset_cost+", \n" +								//asset_cost
@@ -938,7 +939,7 @@ public class _AssetMonitoring {
 	}
 	
 	public static String getItem(String category_id){
-		return "select to_char(item_id, 'FM000000') as \"ID\", item_name as \"Item Name\" from tbl_item where category_id="+category_id+"";
+		return "select to_char(item_id, 'FM000000') as \"ID\", item_name as \"Item Name\" from tbl_item where category_id='"+category_id+"'";
 	}
 	
 	public static String getCategory(){

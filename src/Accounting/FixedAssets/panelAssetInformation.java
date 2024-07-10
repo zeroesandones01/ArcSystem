@@ -425,19 +425,19 @@ public class panelAssetInformation extends JPanel implements ActionListener, _GU
 									FncSystem.out("Display SQL for Client", lookupCustodian.getLookupSQL());
 									String emp_code= (String) getCustodian[0];
 									String emp_name= (String) getCustodian[1];
-									 division_code= (String) getCustodian[4];
-									 dept_code = (String) getCustodian[6];
+									 //division_code= (String) getCustodian[4];
+									 //dept_code = (String) getCustodian[6];
 									lookupCustodian.setValue(emp_code);
 									txtCustodian.setText(emp_name);
 									
-									String asset_code = _AssetMonitoring.generateNewAssetCount(getCustodian[0].toString());
+									//String asset_code = _AssetMonitoring.generateNewAssetCount(getCustodian[0].toString());
 
-									System.out.println(dept_code);
-									if(!asset_code.trim().equals("")){
-										txtAssetCode.setText(asset_code);
-									}else{
-										btnState(false, false, false, true,false);
-									}
+//									System.out.println(dept_code);
+//									if(!asset_code.trim().equals("")){
+//										txtAssetCode.setText(asset_code);
+//									}else{
+//										btnState(false, false, false, true,false);
+//									}
 									lookupCategory.requestFocus();
 								}
 							});
@@ -647,7 +647,8 @@ public class panelAssetInformation extends JPanel implements ActionListener, _GU
 							lookupSupplier = new _JLookup(null , "Supplier", 0);
 							jPanel8.add(lookupSupplier);
 							lookupSupplier.setEditable(false);
-							lookupSupplier.setLookupSQL(_AssetMonitoring.getSupplier());
+							//lookupSupplier.setLookupSQL(_AssetMonitoring.getSupplier());
+							lookupSupplier.setLookupSQL("Select '01', 'Test Supplier'");
 							lookupSupplier.addLookupListener(new LookupListener() {
 								
 								@Override
@@ -1149,7 +1150,8 @@ public class panelAssetInformation extends JPanel implements ActionListener, _GU
 								lookupLocation= new _JLookup("", 1);
 								pnl19_2.add(lookupLocation,BorderLayout.CENTER);
 								lookupLocation.setEditable(false);
-								lookupLocation.setLookupSQL(getassetlocation());
+								//lookupLocation.setLookupSQL(getassetlocation());
+								lookupLocation.setLookupSQL("select '01','Aster Building' ");
 								lookupLocation.addLookupListener(new LookupListener() {
 									
 
@@ -1276,7 +1278,7 @@ public class panelAssetInformation extends JPanel implements ActionListener, _GU
 												
 												if(/*grpNE.getSelection().getActionCommand().equals("New"))*/
 													grpNE.isSelected(btnNew.getModel())){
-													if(checksttachment(txtAssetNo.getText())) {
+													//if(checksttachment(txtAssetNo.getText())) {
 														
 														if (!lookupItem.getValue().equals("000192") || !lookupItem.getValue().equals("000289") || !lookupItem.getValue().equals("000228") || checkaccessories(txtAssetNo.getText())) { //added by erick 2023-12-07 to check accesories before saving.
 															_AssetMonitoring.addAsset(
@@ -1311,31 +1313,32 @@ public class panelAssetInformation extends JPanel implements ActionListener, _GU
 																	txtBrand.getText(),
 																	txtDescription.getText(),
 																	dept_code,
-																	cmbremarks.getSelectedItem(),
+																	//cmbremarks.getSelectedItem(),
+																	"",
 																	loc_id,
 																	assettoreplace);
 															
-															if(cmbremarks.getSelectedIndex()== 1){
-																
-																_AssetMonitoring.updatereplacement(assettoreplace);
-																System.out.println("Dumaan dito sa Replacement");
-																System.out.println("cmbremarks value= "+ cmbremarks.getSelectedIndex());
-																
-															}else{}
+//															if(cmbremarks.getSelectedIndex()== 1){
+//																
+//																_AssetMonitoring.updatereplacement(assettoreplace);
+//																System.out.println("Dumaan dito sa Replacement");
+//																System.out.println("cmbremarks value= "+ cmbremarks.getSelectedIndex());
+//																
+//															}else{}
 															
-															String current_date=null;
-															String date_edited="";
-															String insert_activity = null;
-															String user_code=UserInfo.EmployeeCode;
-															insertAudit_trail_new(txtAssetNo.getText(), txtAssetCode.getText(), (txtItem.getText()+" "+txtBrand.getText().replace("'", "''")+" "+txtDescription.getText().replace("'", "''")), current_date, date_edited,user_code,insert_activity );
+//															String current_date=null;
+//															String date_edited="";
+//															String insert_activity = null;
+//															String user_code=UserInfo.EmployeeCode;
+															//insertAudit_trail_new(txtAssetNo.getText(), txtAssetCode.getText(), (txtItem.getText()+" "+txtBrand.getText().replace("'", "''")+" "+txtDescription.getText().replace("'", "''")), current_date, date_edited,user_code,insert_activity );
 															JOptionPane.showMessageDialog(getTopLevelAncestor(), "New Asset has been Added", "Save", JOptionPane.INFORMATION_MESSAGE);
 															
-															int toprint_sticker = JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Print STICKER and ASSET CARD?", "Print", JOptionPane.YES_NO_OPTION);
-															
-															if(toprint_sticker == JOptionPane.YES_OPTION) {
-																previewSticker(txtAssetNo.getText(),txtCustodian.getText(),co_name);
-																previewAssetCard(lookupCustodian.getValue(), AssetMonitoring.co_logo,AssetMonitoring.co_name, co_alias, null);
-															}else {}
+//															int toprint_sticker = JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Print STICKER and ASSET CARD?", "Print", JOptionPane.YES_NO_OPTION);
+//															
+//															if(toprint_sticker == JOptionPane.YES_OPTION) {
+//																previewSticker(txtAssetNo.getText(),txtCustodian.getText(),co_name);
+//																previewAssetCard(lookupCustodian.getValue(), AssetMonitoring.co_logo,AssetMonitoring.co_name, co_alias, null);
+//															}else {}
 															
 															
 															
@@ -1347,10 +1350,10 @@ public class panelAssetInformation extends JPanel implements ActionListener, _GU
 															JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please encode accessories", "Save", JOptionPane.WARNING_MESSAGE);
 														}
 														
-													}else {
-														
-														JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please Upload Attachment.", "Save", JOptionPane.WARNING_MESSAGE);
-													}
+//													}else {
+//														
+//														JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please Upload Attachment.", "Save", JOptionPane.WARNING_MESSAGE);
+//													}
 												}else{
 												FncGlobal.startProgress("Please wait while updating asset.");
 												_AssetMonitoring.updateAsset(
@@ -1724,7 +1727,7 @@ public class panelAssetInformation extends JPanel implements ActionListener, _GU
 		dateAcquired.setDate(FncGlobal.getDateToday());
 		lookupCustodian.setEnabled(true);
 		lookupCustodian.setEditable(true);
-		lookupCustodian.setLookupSQL(_AssetMonitoring.pnlinformationgetCustodian(co_id));
+		//lookupCustodian.setLookupSQL(_AssetMonitoring.pnlinformationgetCustodian(co_id));
 		txtAssetNo.setText(_AssetMonitoring.getAssetNo());
 		grpNE.setSelected(btnNew.getModel(), true);
 		dateAcquired.getCalendarButton().setEnabled(true);

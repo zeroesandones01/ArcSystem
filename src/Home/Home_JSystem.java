@@ -91,6 +91,7 @@ import Accounting.Disbursements.RequestForPayment;
 import Accounting.Disbursements.reversalProccessing;
 import Accounting.FixedAssets.AssetMonitoring;
 import Accounting.FixedAssets.addassetperipheral;
+import Accounting.FixedAssets.addassetperipheral2;
 import Accounting.GeneralLedger.GeneralLedger;
 import Accounting.GeneralLedger.JournalVoucher;
 import Admin.AddEditEntityType;
@@ -894,7 +895,7 @@ public class Home_JSystem extends JXFrame implements ActionListener, WindowListe
 								menuitemaddperipheral.addActionListener(new ActionListener() {
 									public void actionPerformed(ActionEvent e) {
 										if(isNotExisting("Add Asset Peripherals")){
-											addassetperipheral ap = new addassetperipheral();
+											addassetperipheral2 ap = new addassetperipheral2();
 											addWindow(ap, e);
 										}
 									}

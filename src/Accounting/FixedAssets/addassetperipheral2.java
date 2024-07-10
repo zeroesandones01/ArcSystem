@@ -1,6 +1,7 @@
 package Accounting.FixedAssets;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -33,42 +34,42 @@ import interfaces._GUI;
 import tablemodel.modelasset_peripheral;
 import tablemodel.modeltagging_peripheral;
 
-public class addassetperipheral extends _JInternalFrame implements _GUI, ActionListener {
-
+public class addassetperipheral2 extends _JInternalFrame implements _GUI, ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	static String title = "Add Asset Peripherals";
-	public static Dimension frameSize = new Dimension(700, 500);
+	public static Dimension frameSize = new Dimension(900, 500);
 	private _JLookup lookupcomp;
 	private _JTagLabel tagcomp;
-	private JButton btnnew;
-	private JButton btncancel;
-	private JButton btnsave;
-	protected String co_name;
-	protected String asset_name;
 	private JScrollPane scrollassetperipheral;
-	public static JList rowheaderassetperipheral;
-	private _JTableMain tbltagperipheral;
-	private JScrollPane scrolltagperipheral;
-	private JButton btnedit;
-	protected String asset_no;
 	private static modelasset_peripheral modelasset;
 	private _JTableMain tblasset;
-	private JList rowheadertagging;
+	protected String asset_no;
+	private static JList rowheaderassetperipheral;
+	private JScrollPane scrolltagperipheral;
 	private static modeltagging_peripheral modeltagging;
+	private _JTableMain tbltagperipheral;
+	private JList rowheadertagging;
+	private JButton btnnew;
+	private JButton btnsave;
+	private JButton btnedit;
+	private JButton btncancel;
+	protected String co_name;
 
-	public addassetperipheral() {
+	public addassetperipheral2() {
 		super(title, true, true, true, true);
 		initGUI();
 	}
 
-	public addassetperipheral(String title) {
+	public addassetperipheral2(String title) {
 		super(title);
+		// TODO Auto-generated constructor stub
 	}
 
-	public addassetperipheral(String title, boolean resizable, boolean closable, boolean maximizable,
+	public addassetperipheral2(String title, boolean resizable, boolean closable, boolean maximizable,
 			boolean iconifiable) {
 		super(title, resizable, closable, maximizable, iconifiable);
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -104,6 +105,7 @@ public class addassetperipheral extends _JInternalFrame implements _GUI, ActionL
 						lookupcomp.setLookupSQL("select '01', 'Acerland'");
 						lookupcomp.addLookupListener(new LookupListener() {
 
+
 							public void lookupPerformed(LookupEvent event) {
 								Object[] data = ((_JLookup) event.getSource()).getDataSet();
 								if(data != null) {
@@ -112,7 +114,7 @@ public class addassetperipheral extends _JInternalFrame implements _GUI, ActionL
 									tagcomp.setTag(co_name);
 									display_assets();
 									modelasset.setEditable(true);
-									buttonstate(true, false, false, true);
+									tblasset.setEnabled(true);
 								}
 							}
 						});
@@ -122,7 +124,7 @@ public class addassetperipheral extends _JInternalFrame implements _GUI, ActionL
 				{
 					JPanel pnlnorth_east = new JPanel(new GridLayout(2, 1, 3, 3) );
 					pnlnorth.add(pnlnorth_east, BorderLayout.EAST);
-					pnlnorth_east.setPreferredSize(new Dimension(470, 0));
+					pnlnorth_east.setPreferredSize(new Dimension(670, 0));
 					{
 						tagcomp = new _JTagLabel("[ ]");
 						pnlnorth_east.add(tagcomp);
@@ -140,7 +142,7 @@ public class addassetperipheral extends _JInternalFrame implements _GUI, ActionL
 					{
 						JPanel pnlfortag = new JPanel(new BorderLayout());
 						pnltagging.add(pnlfortag);
-						pnlfortag.setBorder(JTBorderFactory.createTitleBorder("For Tagging"));
+						pnlfortag.setBorder(JTBorderFactory.createTitleBorder("Select Asset"));
 						{
 							scrollassetperipheral = new JScrollPane();
 							pnlfortag.add(scrollassetperipheral);
@@ -158,13 +160,14 @@ public class addassetperipheral extends _JInternalFrame implements _GUI, ActionL
 											try {
 												int row = tblasset.getSelectedRow();
 												asset_no = (String) modelasset.getValueAt(row, 1);
-												display_peripherals(modeltagging, rowheadertagging, asset_no);
+												//display_peripherals(modeltagging, rowheadertagging, asset_no);
 												System.out.println("Value of Asset No.: "+asset_no);
 												
 											} catch (ArrayIndexOutOfBoundsException ex) {
 												
 											}
 										}
+										buttonstate(true, false, false, true);
 									}
 								});
 								
@@ -182,37 +185,45 @@ public class addassetperipheral extends _JInternalFrame implements _GUI, ActionL
 							}
 						}
 					}
-					
 					{
 						JPanel pnltagged = new JPanel((new GridLayout(1, 2)));
 						pnltagging.add(pnltagged);
-						pnltagged.setBorder(JTBorderFactory.createTitleBorder("Tagged Peripheral"));
 						{
-							scrolltagperipheral = new JScrollPane();
-							pnltagged.add(scrolltagperipheral);
-							scrolltagperipheral.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+							JPanel pnlselect_peripheral = new JPanel(new BorderLayout(5, 5));
+							pnltagged.add(pnlselect_peripheral);
+							pnlselect_peripheral.setBorder(JTBorderFactory.createTitleBorder("Select Peripheral"));
 							{
-								modeltagging = new modeltagging_peripheral();
-								tbltagperipheral = new _JTableMain(modeltagging);
-								modeltagging.setEditable(false);
-								scrolltagperipheral.setViewportView(tbltagperipheral);
-								tbltagperipheral.getColumnModel().getColumn(0).setPreferredWidth(50);
-								tbltagperipheral.hideColumns("Asset No.");
+								scrolltagperipheral = new JScrollPane();
+								pnlselect_peripheral.add(scrolltagperipheral);
+								scrolltagperipheral.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+								{
+									modeltagging = new modeltagging_peripheral();
+									tbltagperipheral = new _JTableMain(modeltagging);
+									modeltagging.setEditable(false);
+									scrolltagperipheral.setViewportView(tbltagperipheral);
+									tbltagperipheral.getColumnModel().getColumn(0).setPreferredWidth(50);
+									tbltagperipheral.hideColumns("Asset No.");
+								}
+								{
+									rowheadertagging= tbltagperipheral.getRowHeader22();
+									scrolltagperipheral.setRowHeaderView(rowheadertagging);
+									scrolltagperipheral.setCorner(ScrollPaneConstants.UPPER_LEFT_CORNER, FncTables.getRowHeader_Header());
+								}
 							}
-							{
-								rowheadertagging= tbltagperipheral.getRowHeader22();
-								scrolltagperipheral.setRowHeaderView(rowheadertagging);
-								scrolltagperipheral.setCorner(ScrollPaneConstants.UPPER_LEFT_CORNER, FncTables.getRowHeader_Header());
-							}
+						}
+						{
+							JPanel pnlselected_peripheral = new JPanel(new BorderLayout(5, 5));
+							pnltagged.add(pnlselected_peripheral);
+							pnlselected_peripheral.setBorder(JTBorderFactory.createTitleBorder("Tagged Peripheral"));
+							
 						}
 					}
 				}
-			}
+			}	
 			{
 				JPanel pnlsouth = new JPanel(new GridLayout(1, 6, 5, 5));
 				pnlmain.add(pnlsouth, BorderLayout.SOUTH);
 				pnlsouth.setPreferredSize(new Dimension(0, 35));
-				
 				pnlsouth.add(Box.createHorizontalBox());
 				{
 					btnnew = new JButton("New"); 
@@ -250,9 +261,10 @@ public class addassetperipheral extends _JInternalFrame implements _GUI, ActionL
 		if (e.getActionCommand().equals("new")) {
 			if(asset_no != null) {
 				
-				//display_peripherals(modeltagperip, rowheadertagperipheral, asset_no);
+				display_peripherals(modeltagging, rowheadertagging, asset_no);
 				modeltagging.setEditable(true);
 				modelasset.setEditable(false);
+				tblasset.setEnabled(false);
 				buttonstate(false, true, false, true);
 				
 			}
@@ -270,12 +282,21 @@ public class addassetperipheral extends _JInternalFrame implements _GUI, ActionL
 			tagcomp.setTag("");
 			FncTables.clearTable(modelasset);
 			FncTables.clearTable(modeltagging);
+			rowheaderassetperipheral = tblasset.getRowHeader22(); 
+			scrollassetperipheral.setRowHeaderView(rowheaderassetperipheral);
+			rowheadertagging= tbltagperipheral.getRowHeader22();
+			scrolltagperipheral.setRowHeaderView(rowheadertagging);
 			buttonstate(false, false, false, false);
 			
 		}
 		
 	}
-	
+	public void buttonstate(Boolean addnew, Boolean save,  Boolean edit,  Boolean cancel) {
+		btnnew.setEnabled(addnew);
+		btnsave.setEnabled(save);
+		btnedit.setEnabled(edit);
+		btncancel.setEnabled(cancel);
+	}
 	public static void display_assets() {
 		FncTables.clearTable(modelasset);
 		DefaultListModel listModel = new DefaultListModel();// Creating listModel for rowHeader.
@@ -304,13 +325,6 @@ public class addassetperipheral extends _JInternalFrame implements _GUI, ActionL
 		}
 	}
 	
-	public void buttonstate(Boolean addnew, Boolean save,  Boolean edit,  Boolean cancel) {
-		btnnew.setEnabled(addnew);
-		btnsave.setEnabled(save);
-		btnedit.setEnabled(edit);
-		btncancel.setEnabled(cancel);
-	}
-	
 	public void display_peripherals(DefaultTableModel modelMain, JList rowHeader,String asset_no) {
 		
 		FncTables.clearTable(modelMain);
@@ -331,10 +345,10 @@ public class addassetperipheral extends _JInternalFrame implements _GUI, ActionL
 			}
 		}
 	}
-	
 	public static void save_peripherals() {
 		
 		for(int x = 0; x < modeltagging.getRowCount(); x++) {
+			
 			Boolean selected = (Boolean) modeltagging.getValueAt(x, 0);
 			String cat_id = (String) modeltagging.getValueAt(x, 2);
 			String brand = (String) modeltagging.getValueAt(x, 6);
@@ -342,12 +356,9 @@ public class addassetperipheral extends _JInternalFrame implements _GUI, ActionL
 			String description = (String) modeltagging.getValueAt(x, 8);
 			String serial_no = (String) modeltagging.getValueAt(x, 9);
 			String lic_key = (String) modeltagging.getValueAt(x, 10);
-			
-			
 			if(selected) {
 				
 			}
 		}
 	}
 }
-
