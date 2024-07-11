@@ -1,5 +1,4 @@
 
-
 package tablemodel;
 
 import java.math.BigDecimal;
@@ -10,42 +9,43 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
 import Functions.FncTables;
+import Lookup._JLookup;
 
-public class modeltagging_peripheral extends DefaultTableModel {
+public class modeltagged_peripheral extends DefaultTableModel {
 
 	private static final long serialVersionUID = 1L;
 	
 	private boolean editable = false;
 
-	public modeltagging_peripheral() {
+	public modeltagged_peripheral() {
 		initThis();
 	}
 
-	public modeltagging_peripheral(boolean editable) {
+	public modeltagged_peripheral(boolean editable) {
 		initThis();
 	}
 
-	public modeltagging_peripheral(int rowCount, int columnCount) {
+	public modeltagged_peripheral(int rowCount, int columnCount) {
 		super(rowCount, columnCount);
 		initThis();
 	}
 
-	public modeltagging_peripheral(Vector columnNames, int rowCount) {
+	public modeltagged_peripheral(Vector columnNames, int rowCount) {
 		super(columnNames, rowCount);
 		initThis();
 	}
 
-	public modeltagging_peripheral(Object[] columnNames, int rowCount) {
+	public modeltagged_peripheral(Object[] columnNames, int rowCount) {
 		super(columnNames, rowCount);
 		initThis();
 	}
 
-	public modeltagging_peripheral(Vector data, Vector columnNames) {
+	public modeltagged_peripheral(Vector data, Vector columnNames) {
 		super(data, columnNames);
 		initThis();
 	}
 
-	public modeltagging_peripheral(Object[][] data, Object[] columnNames) {
+	public modeltagged_peripheral(Object[][] data, Object[] columnNames) {
 		super(data, columnNames);
 		initThis();
 	}
@@ -74,7 +74,7 @@ public class modeltagging_peripheral extends DefaultTableModel {
 			String.class, 	//Asset No.
 			Integer.class, 	//Peripheral ID
 			Object.class, 	//Peripheral Name
-			String.class,//"Custodian",
+			_JLookup.class,//"Custodian",
 			BigDecimal.class,//"Amount",
 			String.class,//"Brand",
 			String.class,//"Model",
@@ -82,9 +82,9 @@ public class modeltagging_peripheral extends DefaultTableModel {
 			String.class,//"Serial",
 			String.class,//"License Key",
 			String.class,//"Status",
-			String.class,//"Prev Custodian",
-			Date.class,//"Date Retired",
-			Date.class,//"Date Disposed"
+			_JLookup.class,//"Prev Custodian",
+			Timestamp.class,//"Date Retired",
+			Timestamp.class,//"Date Disposed"
 			
 	};
 	

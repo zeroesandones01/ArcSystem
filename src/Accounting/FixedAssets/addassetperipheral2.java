@@ -6,13 +6,16 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
@@ -21,6 +24,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import Database.pgSelect;
+import Database.pgUpdate;
 import Functions.FncSystem;
 import Functions.FncTables;
 import Lookup.LookupEvent;
@@ -28,10 +32,12 @@ import Lookup.LookupListener;
 import Lookup._JLookup;
 import components.JTBorderFactory;
 import components._JInternalFrame;
+import components._JScrollPane;
 import components._JTableMain;
 import components._JTagLabel;
 import interfaces._GUI;
 import tablemodel.modelasset_peripheral;
+import tablemodel.modeltagged_peripheral;
 import tablemodel.modeltagging_peripheral;
 
 public class addassetperipheral2 extends _JInternalFrame implements _GUI, ActionListener {
@@ -43,8 +49,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 	private _JTagLabel tagcomp;
 	private JScrollPane scrollassetperipheral;
 	private static modelasset_peripheral modelasset;
-	private _JTableMain tblasset;
-	protected String asset_no;
+	private static _JTableMain tblasset;
 	private static JList rowheaderassetperipheral;
 	private JScrollPane scrolltagperipheral;
 	private static modeltagging_peripheral modeltagging;
@@ -55,6 +60,12 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 	private JButton btnedit;
 	private JButton btncancel;
 	protected String co_name;
+	private _JScrollPane scrolltagged_peripheral;
+	private modeltagged_peripheral modeltagged;
+	private _JTableMain tbltagged;
+	private JList rowheadertagged;
+	public static Integer asset_no;
+	protected static ButtonGroup grpNE = new ButtonGroup();
 
 	public addassetperipheral2() {
 		super(title, true, true, true, true);
@@ -112,7 +123,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 									co_name = (String)data[1];
 									
 									tagcomp.setTag(co_name);
-									display_assets();
+									display_assets(lookupcomp.getValue());
 									modelasset.setEditable(true);
 									tblasset.setEnabled(true);
 								}
@@ -154,20 +165,22 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 								tblasset.getTableHeader().setEnabled(false);
 								scrollassetperipheral.setViewportView(tblasset);
 								tblasset.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
 									@Override
 									public void valueChanged(ListSelectionEvent e) {
 										if(!e.getValueIsAdjusting()) {
 											try {
 												int row = tblasset.getSelectedRow();
-												asset_no = (String) modelasset.getValueAt(row, 1);
+												asset_no = (Integer) modelasset.getValueAt(row, 1);
 												//display_peripherals(modeltagging, rowheadertagging, asset_no);
 												System.out.println("Value of Asset No.: "+asset_no);
+												displaytagged_peripherals(modeltagged, rowheadertagged, asset_no);
 												
 											} catch (ArrayIndexOutOfBoundsException ex) {
 												
 											}
 										}
-										buttonstate(true, false, false, true);
+										buttonstate(true, false, true, true);
 									}
 								});
 								
@@ -179,7 +192,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 								
 							}
 							{
-								rowheaderassetperipheral = tblasset.getRowHeader22(); 
+								rowheaderassetperipheral = tblasset.getRowHeader(); 
 								scrollassetperipheral.setRowHeaderView(rowheaderassetperipheral);
 								scrollassetperipheral.setCorner(ScrollPaneConstants.UPPER_LEFT_CORNER, FncTables.getRowHeader_Header());
 							}
@@ -202,10 +215,10 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 									modeltagging.setEditable(false);
 									scrolltagperipheral.setViewportView(tbltagperipheral);
 									tbltagperipheral.getColumnModel().getColumn(0).setPreferredWidth(50);
-									tbltagperipheral.hideColumns("Asset No.");
+									//tbltagperipheral.hideColumns("Asset No.", "Custodian");
 								}
 								{
-									rowheadertagging= tbltagperipheral.getRowHeader22();
+									rowheadertagging= tbltagperipheral.getRowHeader();
 									scrolltagperipheral.setRowHeaderView(rowheadertagging);
 									scrolltagperipheral.setCorner(ScrollPaneConstants.UPPER_LEFT_CORNER, FncTables.getRowHeader_Header());
 								}
@@ -215,7 +228,23 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 							JPanel pnlselected_peripheral = new JPanel(new BorderLayout(5, 5));
 							pnltagged.add(pnlselected_peripheral);
 							pnlselected_peripheral.setBorder(JTBorderFactory.createTitleBorder("Tagged Peripheral"));
-							
+							{
+								scrolltagged_peripheral = new _JScrollPane();
+								pnlselected_peripheral.add(scrolltagged_peripheral);
+								scrolltagged_peripheral.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+								{
+									modeltagged = new modeltagged_peripheral();
+									tbltagged = new _JTableMain(modeltagged);
+									modeltagged.setEditable(false);
+									scrolltagged_peripheral.setViewportView(tbltagged);
+								}
+								{
+									rowheadertagged = tbltagged.getRowHeader();
+									scrolltagged_peripheral.setRowHeaderView(rowheadertagged);
+									scrolltagged_peripheral.setCorner(ScrollPaneConstants.UPPER_LEFT_CORNER, FncTables.getRowHeader_Header());
+									
+								}
+							}
 						}
 					}
 				}
@@ -229,6 +258,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 					btnnew = new JButton("New"); 
 					btnnew.setActionCommand("new");
 					btnnew.setEnabled(false);
+					grpNE.add(btnnew);
 					pnlsouth.add(btnnew);
 					btnnew.addActionListener(this);
 				}
@@ -243,6 +273,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 					btnedit = new JButton("Edit");
 					btnedit.setActionCommand("edit");
 					btnedit.setEnabled(false);
+					grpNE.add(btnedit);
 					pnlsouth.add(btnedit);
 					btnedit.addActionListener(this);
 				}
@@ -259,7 +290,8 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 	}
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("new")) {
-			if(asset_no != null) {
+			if(hasCheckedAssets()) {
+				System.out.println("Hascheck: "+hasCheckedAssets());
 				
 				display_peripherals(modeltagging, rowheadertagging, asset_no);
 				modeltagging.setEditable(true);
@@ -267,29 +299,35 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 				tblasset.setEnabled(false);
 				buttonstate(false, true, false, true);
 				
+			}else {
+				JOptionPane.showMessageDialog(this, "Please check the box of selected asset.", "", JOptionPane.PLAIN_MESSAGE);
 			}
 		}
 		
 		if (e.getActionCommand().equals("save")) {
+			if(grpNE.isSelected(btnnew.getModel())) {
+				save_peripherals();
+			}else {
+				System.out.println("Save Edit Peripheral");
+			}
+			
 			
 		}
 		if(e.getActionCommand().equals("edit")) {
+			if(hasCheckedAssets()) {
+				modeltagged.setEditable(true);
+				buttonstate(false, true, false, true);
+			}else {
+				JOptionPane.showMessageDialog(this, "Please check the box of selected asset.", "", JOptionPane.PLAIN_MESSAGE);
+			}
 			
 		}
 		
 		if(e.getActionCommand().equals("cancel")) {
-			lookupcomp.setValue("");
-			tagcomp.setTag("");
-			FncTables.clearTable(modelasset);
-			FncTables.clearTable(modeltagging);
-			rowheaderassetperipheral = tblasset.getRowHeader22(); 
-			scrollassetperipheral.setRowHeaderView(rowheaderassetperipheral);
-			rowheadertagging= tbltagperipheral.getRowHeader22();
-			scrolltagperipheral.setRowHeaderView(rowheadertagging);
-			buttonstate(false, false, false, false);
-			
+			if(JOptionPane.showConfirmDialog(this, "Are you sure to cancel unsave data?", "Cancel", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+				cancelstate();
+			}
 		}
-		
 	}
 	public void buttonstate(Boolean addnew, Boolean save,  Boolean edit,  Boolean cancel) {
 		btnnew.setEnabled(addnew);
@@ -297,15 +335,15 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 		btnedit.setEnabled(edit);
 		btncancel.setEnabled(cancel);
 	}
-	public static void display_assets() {
+	public static void display_assets(String co_id) {
 		FncTables.clearTable(modelasset);
 		DefaultListModel listModel = new DefaultListModel();// Creating listModel for rowHeader.
 		rowheaderassetperipheral.setModel(listModel);// Setting of listModel into rowHeader.
 		
-		String strSQL = "select false, a.asset_no::varchar, a.asset_name, 'Erick Bituen', a.date_acquired \n"
+		String strSQL = "select false, a.asset_no, a.asset_name, 'Erick Bituen', a.date_acquired \n"
 				+ "from tbl_asset a\n"
 				+ "where a.status = 'A' \n"
-				+ "and a.with_peripheral = true";
+				+ "and a.with_peripheral = true and co_id ='"+co_id+"' ";
 		
 		FncSystem.out("Display All Assets", strSQL);
 
@@ -325,14 +363,15 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 		}
 	}
 	
-	public void display_peripherals(DefaultTableModel modelMain, JList rowHeader,String asset_no) {
+	public void display_peripherals(DefaultTableModel modelMain, JList rowHeader, Integer asset_no) {
 		
 		FncTables.clearTable(modelMain);
 		DefaultListModel listModel = new DefaultListModel();
 		rowheadertagging.setModel(listModel);
 		
-		String sql = "select false, '', category_id, category_name, '', 0.00, '','','','','','','',null,null  \n"
-				+ "from rf_asset_peripheral_category where status_id = 'A'";
+		String sql = "select false, '', a.category_id, a.category_name, '', 0.00, '','','','','','','',null,null  \n"
+				+ "from mf_asset_peripheral_category a where status_id = 'A'\n"+
+				"and not exists(select parent_id from rf_asset_peripheral where parent_id = "+asset_no+" and child_cat = a.category_id and status_id = 'A')";
 		
 		System.out.printf("display_peripherals: %s", sql);
 		pgSelect db = new pgSelect();
@@ -345,20 +384,84 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 			}
 		}
 	}
+	
+	public void displaytagged_peripherals(DefaultTableModel modelMain, JList rowHeader,Integer asset_no) {
+		
+		FncTables.clearTable(modelMain);
+		DefaultListModel listModel = new DefaultListModel();
+		rowHeader.setModel(listModel);
+		
+		String sql = "select false,a.parent_id, a.child_id, b.category_name,d.entity_name,a.amount, a.brand, a.model, a.description, a.license_key, a.status_id, null, null, null\n"
+				+ "from rf_asset_peripheral a \n"
+				+ "left join  mf_asset_peripheral_category b on a.child_cat = category_id and a.status_id = b.status_id\n"
+				+ "left join em_employee c on a.current_cust = emp_code \n"
+				+ "left join rf_entity d on c.entity_id = d.entity_id \n"
+				+ "where a.parent_id = "+asset_no+" and a.status_id = 'A'";
+		
+		System.out.printf("displaytagged_peripherals: %s", sql);
+		pgSelect db = new pgSelect();
+		db.select(sql);
+		
+		if (db.isNotNull()) {
+			for (int x = 0; x < db.getRowCount(); x++) {
+				modelMain.addRow(db.getResult()[x]);
+				listModel.addElement(modelMain.getRowCount());
+			}
+		}
+	}
 	public static void save_peripherals() {
 		
 		for(int x = 0; x < modeltagging.getRowCount(); x++) {
-			
+			//pgUpdate db = new pgUpdate();
 			Boolean selected = (Boolean) modeltagging.getValueAt(x, 0);
-			String cat_id = (String) modeltagging.getValueAt(x, 2);
+			Integer cat_id = (Integer) modeltagging.getValueAt(x, 2);
 			String brand = (String) modeltagging.getValueAt(x, 6);
 			String model = (String) modeltagging.getValueAt(x, 7);
 			String description = (String) modeltagging.getValueAt(x, 8);
 			String serial_no = (String) modeltagging.getValueAt(x, 9);
 			String lic_key = (String) modeltagging.getValueAt(x, 10);
+			
 			if(selected) {
-				
+				System.out.println("cat_id: "+ cat_id);
+				System.out.println("brand: "+ brand);
+				System.out.println("model: "+ model);
+				System.out.println("description: "+ description);
+				System.out.println("serial_no: "+ serial_no);
+				System.out.println("lic_key: "+ lic_key);
+				String sql = "select sp_save_asset_peripherals("+asset_no+", "+cat_id+", '"+brand+"', '"+model+"', '"+description+"', '"+serial_no+"', '"+lic_key+"')";
+				//String sql="";
+				//db.executeUpdate(sql, false);
+				pgSelect db = new pgSelect();
+				db.select(sql);
 			}
+			//db.commit();
+			
 		}
+	}
+	public Boolean hasCheckedAssets(){
+		
+		ArrayList<Boolean> checkTable = new ArrayList<Boolean>();
+		for(int x=0; x<tblasset.getRowCount(); x++){
+			if(tblasset.getValueAt(x, 0).equals(true))
+				checkTable.add(true);
+		}
+		return checkTable.contains(true);
+		
+	}
+	
+	public void cancelstate() {
+		
+		lookupcomp.setValue("");
+		tagcomp.setTag("");
+		FncTables.clearTable(modelasset);
+		FncTables.clearTable(modeltagging);
+		FncTables.clearTable(modeltagged);
+		rowheaderassetperipheral = tblasset.getRowHeader(); 
+		scrollassetperipheral.setRowHeaderView(rowheaderassetperipheral);
+		rowheadertagging= tbltagperipheral.getRowHeader();
+		scrolltagperipheral.setRowHeaderView(rowheadertagging);
+		rowheadertagged = tbltagged.getRowHeader();
+		scrolltagged_peripheral.setRowHeaderView(rowheadertagged);
+		buttonstate(false, false, false, false);
 	}
 }

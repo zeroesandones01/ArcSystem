@@ -57,7 +57,7 @@ public class modelasset_peripheral extends DefaultTableModel {
 	
 	Class[] CLASS_TYPES = new Class[] {
 			Boolean.class,	//checkbox
-			String.class, 	//Asset No.
+			Integer.class, 	//Asset No.
 			Object.class, 	//Asset Name
 			Object.class, 	//Custodian
 			Timestamp.class,//Date Acquired
