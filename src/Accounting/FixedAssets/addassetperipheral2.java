@@ -215,7 +215,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 									modeltagging.setEditable(false);
 									scrolltagperipheral.setViewportView(tbltagperipheral);
 									tbltagperipheral.getColumnModel().getColumn(0).setPreferredWidth(50);
-									//tbltagperipheral.hideColumns("Asset No.", "Custodian");
+									tbltagperipheral.hideColumns("Asset No.", "Custodian", "Status", "Prev_Custodian","Date_Retired", "Date_Disposed");
 								}
 								{
 									rowheadertagging= tbltagperipheral.getRowHeader();
@@ -290,8 +290,8 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 	}
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("new")) {
+			grpNE.setSelected(btnnew.getModel(), true);
 			if(hasCheckedAssets()) {
-				System.out.println("Hascheck: "+hasCheckedAssets());
 				
 				display_peripherals(modeltagging, rowheadertagging, asset_no);
 				modeltagging.setEditable(true);
@@ -306,14 +306,23 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 		
 		if (e.getActionCommand().equals("save")) {
 			if(grpNE.isSelected(btnnew.getModel())) {
-				save_peripherals();
+				System.out.println("hasCheckedAssets_tagging(): "+hasCheckedAssets_tagging());
+				if(hasCheckedAssets_tagging()) {
+					
+					if(JOptionPane.showConfirmDialog(this, "Are you sure you want to save new peripheral?", "Save", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+						save_peripherals();
+					}
+				}else {
+					JOptionPane.showMessageDialog(this, "Please check the box of the peripheral that you want to add.", "", JOptionPane.PLAIN_MESSAGE);
+				}
 			}else {
 				System.out.println("Save Edit Peripheral");
+				
 			}
-			
-			
 		}
+		
 		if(e.getActionCommand().equals("edit")) {
+			grpNE.setSelected(btnedit.getModel(), true);
 			if(hasCheckedAssets()) {
 				modeltagged.setEditable(true);
 				buttonstate(false, true, false, true);
@@ -335,13 +344,13 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 		btnedit.setEnabled(edit);
 		btncancel.setEnabled(cancel);
 	}
-	public static void display_assets(String co_id) {
+	public  void display_assets(String co_id) {
 		FncTables.clearTable(modelasset);
 		DefaultListModel listModel = new DefaultListModel();// Creating listModel for rowHeader.
 		rowheaderassetperipheral.setModel(listModel);// Setting of listModel into rowHeader.
 		
 		String strSQL = "select false, a.asset_no, a.asset_name, 'Erick Bituen', a.date_acquired \n"
-				+ "from tbl_asset a\n"
+				+ "from rf_asset a\n"
 				+ "where a.status = 'A' \n"
 				+ "and a.with_peripheral = true and co_id ='"+co_id+"' ";
 		
@@ -443,6 +452,17 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 		ArrayList<Boolean> checkTable = new ArrayList<Boolean>();
 		for(int x=0; x<tblasset.getRowCount(); x++){
 			if(tblasset.getValueAt(x, 0).equals(true))
+				checkTable.add(true);
+		}
+		return checkTable.contains(true);
+		
+	}
+	
+	public Boolean hasCheckedAssets_tagging(){
+		
+		ArrayList<Boolean> checkTable = new ArrayList<Boolean>();
+		for(int x=0; x<tbltagperipheral.getRowCount(); x++){
+			if(tbltagperipheral.getValueAt(x, 0).equals(true))
 				checkTable.add(true);
 		}
 		return checkTable.contains(true);

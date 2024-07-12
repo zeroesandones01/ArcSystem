@@ -1164,10 +1164,10 @@ public class AssetMonitoring extends _JInternalFrame implements ActionListener, 
 				String custodian_id = (String) modelAssets.getValueAt(x, 5).toString();
 				String strSQL = null;
 				if (loc_id == null) {
-					strSQL = "INSERT INTO tbl_asset_history( \n" + "asset_code, " + "prev_cust, " + "current_cust, "
+					strSQL = "INSERT INTO rf_asset_history( \n" + "asset_code, " + "prev_cust, " + "current_cust, "
 							+ "trans_date, " + "reason, " + "remarks, \n" + "status, " + "move_no, " + "asset_no, "
 							+ "trans_by,\n" +
-							"dept_code) \n" + "VALUES (" + "(select asset_code from tbl_asset where asset_no='"
+							"dept_code) \n" + "VALUES (" + "(select asset_code from rf_asset where asset_no='"
 							+ asset_no + "' ), " + // asset_code
 							"'" + custodian_id + "', \n" + // prev_cust
 							"'" + current_cust + "', \n" + // current_cust
@@ -1175,26 +1175,26 @@ public class AssetMonitoring extends _JInternalFrame implements ActionListener, 
 							"'TRANSFER', \n" + // reason
 							"'" + remarks + "', \n" + // remarks
 							"'A', \n" + // status
-							"(select max(move_no)+1 from tbl_asset_history), \n" + // move_no
+							"(select max(move_no)+1 from rf_asset_history), \n" + // move_no
 							"'" + asset_no + "', \n" + // asset_no
 							"'" + UserInfo.EmployeeCode + "',\n" +
 							"'" + dept_code + "') \n";// trans_by
 				} else {
-					strSQL = "INSERT INTO tbl_asset_history( \n" + "asset_code, " + "prev_cust, " + "current_cust, "
+					strSQL = "INSERT INTO rf_asset_history( \n" + "asset_code, " + "prev_cust, " + "current_cust, "
 							+ "trans_date, " + "reason, " + "remarks, \n" + "status, " + "move_no, " + "asset_no, "
 							+ "trans_by,\n" +
 							"old_location,\n" + "dept_code) \n" + "VALUES ("
-							+ "(select asset_code from tbl_asset where asset_no='" + asset_no + "' ), " + // asset_code
+							+ "(select asset_code from rf_asset where asset_no='" + asset_no + "' ), " + // asset_code
 							"'" + custodian_id + "', \n" + // prev_cust
 							"'" + current_cust + "', \n" + // current_cust
 							"current_date, \n" + // trans_date
 							"'TRANSFER', \n" + // reason
 							"'" + remarks + "', \n" + // remarks
 							"'A', \n" + // status
-							"(select max(move_no)+1 from tbl_asset_history), \n" + // move_no
+							"(select max(move_no)+1 from rf_asset_history), \n" + // move_no
 							"'" + asset_no + "', \n" + // asset_no
 							"'" + UserInfo.EmployeeCode + "',\n" +
-							"(select loc_id from tbl_asset where asset_no='" + asset_no + "' ),\n" + "'" + dept_code
+							"(select loc_id from rf_asset where asset_no='" + asset_no + "' ),\n" + "'" + dept_code
 							+ "') \n";// trans_by
 				}
 				System.out.println("move_no" + move_no);
@@ -1207,10 +1207,10 @@ public class AssetMonitoring extends _JInternalFrame implements ActionListener, 
 				db.executeUpdate(strSQL, true);
 				String strSQL2 = null;
 				if (loc_id == null) {
-					strSQL2 = "update tbl_asset set current_cust='" + current_cust
+					strSQL2 = "update rf_asset set current_cust='" + current_cust
 							+ "',status='A',item_found='t'  where asset_no='" + asset_no + "'::int";
 				} else {
-					strSQL2 = "update tbl_asset set current_cust='" + current_cust
+					strSQL2 = "update rf_asset set current_cust='" + current_cust
 							+ "',status='A',item_found='t',loc_id='" + loc_id + "'  where asset_no='" + asset_no
 							+ "'::int";
 				}
@@ -1227,7 +1227,7 @@ public class AssetMonitoring extends _JInternalFrame implements ActionListener, 
 
 	public static String getassetlocation() {
 
-		return "select loc_id,loc_name from tbl_asset_location ";
+		return "select loc_id,loc_name from rf_asset_location ";
 	}
 
 }

@@ -1704,14 +1704,14 @@ public class panelAssetInformation extends JPanel implements ActionListener, _GU
 	public static void pulloutAsset(String asset_no){
 		pgUpdate db=new pgUpdate();
 		
-		String strSQL="update tbl_asset set status = 'FOR REPAIR' where asset_no ="+asset_no+" ";
+		String strSQL="update rf_asset set status = 'FOR REPAIR' where asset_no ="+asset_no+" ";
 		
 		db.executeUpdate(strSQL, true);
 		db.commit();
 	}
 	 public static String replaceasset(){
 		 
-		 String strsql="select asset_no,asset_name,status,current_cust from tbl_asset  where status='A'";
+		 String strsql="select asset_no,asset_name,status,current_cust from rf_asset  where status='A'";
 		 
 		 return strsql;
 	 }
@@ -1874,14 +1874,14 @@ public class panelAssetInformation extends JPanel implements ActionListener, _GU
 				"a.to_dep as to_depreciation,\n" + 
 				"a.item_found, \n"+
 				"a.remarks2, \n"+
-				"(case when a.loc_id != '' then (select loc_name from tbl_asset_location  where loc_id=a.loc_id) else 'Not yet scanned' end) as loc_name \n"+
-				"from tbl_asset a \n" + 
+				"(case when a.loc_id != '' then (select loc_name from rf_asset_location  where loc_id=a.loc_id) else 'Not yet scanned' end) as loc_name \n"+
+				"from rf_asset a \n" + 
 				"left join em_employee  b on a.current_cust=b.emp_code::int\n" + 
 				"left join mf_company  c on b.co_id=c.co_id\n" + 
 				"left join rf_entity  d on b.entity_id=d.entity_id\n" + 
-				"left join tbl_item  e on e.item_id=a.item_id\n" + 
-				"left join tbl_category  f on f.category_id= e.category_id\n" + 
-				"left join tbl_supplier g on g.supp_id=a.supp_id\n" + 
+				"left join rf_asset_item  e on e.item_id=a.item_id\n" + 
+				"left join rf_asset_category  f on f.category_id= e.category_id\n" + 
+				"left join rf_asset_supplier g on g.supp_id=a.supp_id\n" + 
 				"where a.asset_no="+asset_no+";";
 		FncSystem.out("display Asset Detail", SQL);
 		pgSelect db = new pgSelect();
@@ -2296,7 +2296,7 @@ public class panelAssetInformation extends JPanel implements ActionListener, _GU
 	
 	public static String assetforreplacement(){
 		
-		return "select asset_no,asset_code,asset_name from tbl_asset  where status='A' ";
+		return "select asset_no,asset_code,asset_name from rf_asset  where status='A' ";
 		
 	}
 	
@@ -2315,7 +2315,7 @@ public class panelAssetInformation extends JPanel implements ActionListener, _GU
 	}
 	public static String getassetlocation(){
 		
-		return"select loc_id,loc_name from tbl_asset_location ";
+		return"select loc_id,loc_name from rf_asset_location ";
 	}
 
 }
