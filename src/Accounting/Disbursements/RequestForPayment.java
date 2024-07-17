@@ -2198,11 +2198,13 @@ public class RequestForPayment extends _JInternalFrame implements _GUI, ActionLi
 
 	}
 
-	public String getDivision() {
+	public String getOffices() {
 
-		String sql = "select \n" + "trim(division_code) as \"Div Code\",\n" + "trim(status_id) as \"Status\",\n"
-				+ "trim(division_name) as \"Div Name\",\n" + "trim(division_alias) as \"Div Alias\"\n"
-				+ "from mf_division ";
+		String sql = "select \n" + "trim(exec_office_code) as \"Office Code\",\n" + "trim(status_id) as \"Status\",\n"
+				+ "trim(exec_office_name) as \"Office Name\",\n" + "trim(exec_office_alias) as \"Office Alias\"\n"
+				+ "from mf_exec_office \n"
+				+ "where status_id = 'A' \n"
+				+ "AND rec_status != 'D' ";
 
 		System.out.printf("getDivision : " + sql);
 
@@ -2858,26 +2860,26 @@ public class RequestForPayment extends _JInternalFrame implements _GUI, ActionLi
 
 	}
 
-	public static Boolean isItemDiv(String item) {
+	public static Boolean isItemOffice(String exec_off_code) {
 
-		Boolean isItemDiv = false;
+		Boolean isItemOffice = false;
 
-		String SQL = "select division_code from mf_division where division_code = '" + item.trim() + "'  ";
+		String SQL = "select trim(exec_office_code) from mf_exec_office where exec_office_code = '" + exec_off_code.trim() + "' and status_id = 'A' AND rec_status != 'D'";
 
 		pgSelect db = new pgSelect();
 		db.select(SQL);
 
 		if (db.isNotNull()) {
-			isItemDiv = true;
+			isItemOffice = true;
 		} else {
-			isItemDiv = false;
+			isItemOffice = false;
 		}
 
-		return isItemDiv;
+		return isItemOffice;
 
 	}
 
-	public static Boolean isItemDept(String item) {
+	public static Boolean isItemDivision(String div_code) {
 
 		Boolean isItemDept = false;
 
@@ -3297,7 +3299,7 @@ public class RequestForPayment extends _JInternalFrame implements _GUI, ActionLi
 		// --index 1, 11, 12 SQL was edited by JED 2018-12-10--//
 		Integer x[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
 				26, 27, 28, 29, 30, 31, 32 };
-		String sql[] = { "", getChartofAccount(), getDivision(), getDepartment(), "", getProject(co_id),
+		String sql[] = { "", getChartofAccount(), getOffices(), getDepartment(), "", getProject(co_id),
 				getSubproject(tblDRF_part, modelDRF_part, 5), "", "", "", getEntityList(), getEntity_type(entity_id),
 				getReferenceDoc(), "", "", "", "", "", "", "", "", "", "", "", getWTaxID(), "", "", "", "", "", "" };
 		String lookup_name[] = { "", "Chart of Account", "Division", "Department", "", "Project", "SubProject", "", "",
@@ -4845,7 +4847,7 @@ public class RequestForPayment extends _JInternalFrame implements _GUI, ActionLi
 		}
 
 		else if (column == 2) {
-			if (isItemDiv(item) == true) {
+			if (isItemOffice(item) == true) {
 				modelDRF_part.setValueAt(item, row, column);
 				tblDRF_part.packAll();
 			} else {
@@ -4855,7 +4857,7 @@ public class RequestForPayment extends _JInternalFrame implements _GUI, ActionLi
 		}
 
 		else if (column == 3) {
-			if (RequestForPayment.isItemDept(item) == true) {
+			if (RequestForPayment.isItemDivision(item) == true) {
 				modelDRF_part.setValueAt(item, row, column);
 				tblDRF_part.packAll();
 			} else {

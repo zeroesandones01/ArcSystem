@@ -25,14 +25,14 @@ public class ImagePanel extends JPanel{
 	Image IMAGE_BG;
 
 
-	String file = "Images/5.jpg";
+	String file = "Images/arc.png";
 	String test_system_bg = "Images/test_bg.jpg";
 
 	public ImagePanel() throws IOException {
 
 
 
-		IMAGE_BG = Toolkit.getDefaultToolkit().createImage(this.getClass().getClassLoader().getResource("Images/5.jpg"));
+		IMAGE_BG = Toolkit.getDefaultToolkit().createImage(this.getClass().getClassLoader().getResource("Images/arc.png"));
 	}
 	public ImagePanel(String file) throws IOException {
 
@@ -57,7 +57,7 @@ public class ImagePanel extends JPanel{
 
 		System.out.printf("Value of database: %s%n", database);
 		System.out.printf("Value of ip: %s%n", ip);
-		IMAGE_BG = Toolkit.getDefaultToolkit().createImage(this.getClass().getClassLoader().getResource("Images/5.jpg"));
+		IMAGE_BG = Toolkit.getDefaultToolkit().createImage(this.getClass().getClassLoader().getResource("Images/arc.png"));
 
 //		try {
 //			Functions.FncSelectRecords.rs.last();
