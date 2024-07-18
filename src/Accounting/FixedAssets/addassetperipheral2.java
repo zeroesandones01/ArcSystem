@@ -421,7 +421,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 	public static void save_peripherals() {
 		
 		for(int x = 0; x < modeltagging.getRowCount(); x++) {
-			//pgUpdate db = new pgUpdate();
+			
 			Boolean selected = (Boolean) modeltagging.getValueAt(x, 0);
 			Integer cat_id = (Integer) modeltagging.getValueAt(x, 2);
 			String brand = (String) modeltagging.getValueAt(x, 6);
@@ -438,20 +438,17 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 				System.out.println("serial_no: "+ serial_no);
 				System.out.println("lic_key: "+ lic_key);
 				String sql = "select sp_save_asset_peripherals("+asset_no+", "+cat_id+", '"+brand+"', '"+model+"', '"+description+"', '"+serial_no+"', '"+lic_key+"')";
-				//String sql="";
-				//db.executeUpdate(sql, false);
 				pgSelect db = new pgSelect();
 				db.select(sql);
 			}
-			//db.commit();
 			
 		}
 	}
 	public Boolean hasCheckedAssets(){
 		
 		ArrayList<Boolean> checkTable = new ArrayList<Boolean>();
-		for(int x=0; x<tblasset.getRowCount(); x++){
-			if(tblasset.getValueAt(x, 0).equals(true))
+		for(int x=0; x<modelasset.getRowCount(); x++){
+			if(modelasset.getValueAt(x, 0).equals(true))
 				checkTable.add(true);
 		}
 		return checkTable.contains(true);
@@ -461,8 +458,8 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 	public Boolean hasCheckedAssets_tagging(){
 		
 		ArrayList<Boolean> checkTable = new ArrayList<Boolean>();
-		for(int x=0; x<tbltagperipheral.getRowCount(); x++){
-			if(tbltagperipheral.getValueAt(x, 0).equals(true))
+		for(int x=0; x<modeltagging.getRowCount(); x++){
+			if(modeltagging.getValueAt(x, 0).equals(true))
 				checkTable.add(true);
 		}
 		return checkTable.contains(true);
