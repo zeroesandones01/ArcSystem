@@ -123,7 +123,7 @@ public class AssetMonitoring extends _JInternalFrame implements ActionListener, 
 
 	private JScrollPane scrollMovement;
 	private DefaultTableModel modelMovement;
-	private panelAssetInformation pnlInformation;
+	private panelAssetInformation2 pnlInformation;
 
 	private JTextField txtCustodian;
 	private JTextField jtRequestedby;
@@ -254,9 +254,6 @@ public class AssetMonitoring extends _JInternalFrame implements ActionListener, 
 	public static String co_logo = "cenqlogo.png";
 	private static boolean incl_Inc_asset;
 
-	private JPopupMenu menu2;
-	private JPopupMenu menu;
-	private JMenuItem mniopenTag;
 
 	protected static String loc_id = null;
 
@@ -587,7 +584,7 @@ public class AssetMonitoring extends _JInternalFrame implements ActionListener, 
 				pnlMain.add(tabAssets, BorderLayout.SOUTH);
 				tabAssets.setPreferredSize(new Dimension(500, 350));
 				{
-					pnlInformation = new panelAssetInformation();
+					pnlInformation = new panelAssetInformation2();
 					tabAssets.addTab(" Information ", null, pnlInformation, null);
 					panelAssetInformation.co_id = co_id;
 					panelAssetInformation.co_name = co_name;

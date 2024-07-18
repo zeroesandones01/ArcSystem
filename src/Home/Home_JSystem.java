@@ -90,6 +90,7 @@ import Accounting.Disbursements.DocsProcessing;
 import Accounting.Disbursements.RequestForPayment;
 import Accounting.Disbursements.reversalProccessing;
 import Accounting.FixedAssets.AssetMonitoring;
+import Accounting.FixedAssets.AssetMonitoring2;
 import Accounting.FixedAssets.addassetperipheral;
 import Accounting.FixedAssets.addassetperipheral2;
 import Accounting.GeneralLedger.GeneralLedger;
@@ -884,7 +885,7 @@ public class Home_JSystem extends JXFrame implements ActionListener, WindowListe
 								menuitemAssetMonitoring.addActionListener(new ActionListener() {
 									public void actionPerformed(ActionEvent e) {
 										if(isNotExisting("AssetMonitoring")){
-											AssetMonitoring am = new AssetMonitoring();
+											AssetMonitoring2 am = new AssetMonitoring2();
 											addWindow(am, e);
 										}
 									}
