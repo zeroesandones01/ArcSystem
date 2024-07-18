@@ -129,6 +129,7 @@ import Reports.ClientServicing.OpenUnits;
 import Utilities.ChartofAccounts;
 import Utilities.Comm_Scheme;
 import Utilities.SalesAgent;
+import Utilities.TemporaryCheckVoucher;
 import Utilities.ZipCodes;
 import Utilities.fixedasset_peripheral;
 import System.Add_Edit_Holidays;
@@ -1231,6 +1232,23 @@ public class Home_JSystem extends JXFrame implements ActionListener, WindowListe
 										if(isNotExisting("ChartofAccounts")){
 											ChartofAccounts chart_accts = new ChartofAccounts();
 											addWindow(chart_accts, e);
+										}
+									}
+								});
+							}
+						}
+						{
+							JMenu menuAccounts = new JMenu("Check Voucher");
+							menuAccountingUtil.add(menuAccounts);
+
+							{
+								JMenuItem menuitemAddAccount= new JMenuItem("Temporary Check Voucher");
+								menuAccounts.add(menuitemAddAccount);
+								menuitemAddAccount.addActionListener(new ActionListener() {
+									public void actionPerformed(ActionEvent e) {
+										if(isNotExisting("TemporaryCheckVoucher")){
+											TemporaryCheckVoucher tcv = new TemporaryCheckVoucher();
+											addWindow(tcv, e);
 										}
 									}
 								});

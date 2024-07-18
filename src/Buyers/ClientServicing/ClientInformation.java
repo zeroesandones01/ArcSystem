@@ -74,16 +74,15 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 
 	private static _JTabbedPane tabCenter;
 	public static pnlClientInformation pnlCI;
-	public static ClientSubmittedID pnlSubmittedID;
-	public static pnlAddress pnlADDRESS;
-	public static pnlConnection pnlConnect;
-	public static pnlDependents pnlDepend;
-	public static pnlWorkExperience pnlWorkExp;
-	public static pnlFinancialInfo pnlFinanceInfo;
-	public static pnlReferencesOther pnlRefOther;
+//	public static ClientSubmittedID pnlSubmittedID;
+//	public static pnlAddress pnlADDRESS;
+//	public static pnlConnection pnlConnect;
+//	public static pnlDependents pnlDepend;
+//	public static pnlWorkExperience pnlWorkExp;
+//	public static pnlFinancialInfo pnlFinanceInfo;
+//	public static pnlReferencesOther pnlRefOther;
 	private JPanel pnlPicture;
 	private JPanel pnlSignature;
-	//public static pnlSubmittedID 
 
 	private JPanel pnlEast;
 	public static _JLookup lookupClient;
@@ -108,8 +107,6 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 	Timer timerStatus = null;
 	boolean blinkState = false;
 	
-	//protected byte[] imgByte = null;
-
 	public ClientInformation() {
 		super(title, true, true, true, true);
 		initGUI();
@@ -156,12 +153,7 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 		JXPanel pnlMain = new JXPanel(new BorderLayout(5, 5));
 		getContentPane().add(pnlMain, BorderLayout.CENTER);
 		pnlMain.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-		{
-			JXPanel pnlNorth = new JXPanel();
-			//pnlMain.add(pnlNorth, BorderLayout.NORTH);
-			pnlNorth.setBorder(LINE_BORDER);
-			pnlNorth.setPreferredSize(new Dimension(778, 100));
-		}
+
 		{
 			pnlEast = new JPanel(new BorderLayout(5, 5));
 			pnlMain.add(pnlEast, BorderLayout.EAST);
@@ -170,7 +162,6 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 			pnlEast.setPreferredSize(new Dimension(170, 571));
 			{
 				lookupClient = new _JLookup(null, "Client", 0);
-				//lookupClient = new _Jloo
 				pnlEast.add(lookupClient, BorderLayout.NORTH);
 				lookupClient.setLookupSQL(sqlClients());
 				lookupClient.setPreferredSize(new Dimension(170, 30));
@@ -186,49 +177,36 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 							String entity_name = (String) data[1];
 							
 							//CLEARS THE FIELDS WHEN SELECTING NEW CLIENT
-							
 							pnlCI.clearCIFields();
-							
-							pnlADDRESS.clearAddressFields();
-							pnlConnect.clearConnectionFields();
-							pnlWorkExp.clearFieldsWorkExp();
-							pnlDepend.clearDependentFields();
-							pnlFinanceInfo.clearFields();
-							pnlRefOther.clearRefOther();
+//							pnlADDRESS.clearAddressFields();	
+//							pnlConnect.clearConnectionFields();
+//							pnlWorkExp.clearFieldsWorkExp();
+//							pnlDepend.clearDependentFields();
+//							pnlFinanceInfo.clearFields();
+//							pnlRefOther.clearRefOther();
 							
 							//ClientInformation.this.setComponentsClear(pnlCI, "");
 							//pnlRefOther.cl
 
 							//DISPLAYS THE DETAILS AFTER CLEARING FOR THE SELECTED ENTITY
 							displayClientInformation(entity_id);
-							displaySubmittedID(entity_id);
-							displayConnectionList(entity_id);
-							displayAddressList(entity_id);
-							displayWorkExpList(entity_id);
-							displayDependentList(entity_id);
-							displayReferencesOther(entity_id);
-							displayFinancialInfo(entity_id);
+//							displaySubmittedID(entity_id);
+//							displayConnectionList(entity_id);
+//							displayAddressList(entity_id);
+//							displayWorkExpList(entity_id);
+//							displayDependentList(entity_id);
+//							displayReferencesOther(entity_id);
+//							displayFinancialInfo(entity_id);
 							
 							try {
 							displayClientImage(lblClientImageFileChooser, entity_id);
 							displayClientSignature(lblClientSignatureFileChooser, entity_id);
 							} catch (IOException e) {
-								e.printStackTrace();
-							} /*catch (OutOfMemoryError er){
-								JOptionPane.showMessageDialog(getContentPane(), "Out of memory.", "Loading Image.", JOptionPane.WARNING_MESSAGE);
-							}*/
-
-							//ClientInformation.this.setTitle("Client Information - "+entity_name+"");
+								e.printStackTrace();	
+							}	
 							
 							setSecondaryTitle(entity_name);
 							startTimerStatus();
-							
-							//Commented for Easier Editing of All Tabs
-							/*if(UserInfo.Department.equals("52")){
-								pnlState(false, false, true, true, true, true, true, true);
-							}else{
-								pnlState(true, true, false, false, false, false, false, false);
-							}*/
 							
 							pnlState(true, true, true, true, true, true, true, true);
 							
@@ -472,34 +450,34 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 				pnlCI = new pnlClientInformation(this);
 				tabCenter.addTab("Client Information", pnlCI);
 			}
-			{
-				pnlSubmittedID = new ClientSubmittedID(this);
-				tabCenter.addTab("Submitted ID", pnlSubmittedID);
-			}
-			{
-				pnlADDRESS = new pnlAddress(this);
-				tabCenter.addTab("Address", pnlADDRESS);
-			}
-			{
-				pnlConnect = new pnlConnection(this);
-				tabCenter.addTab("Connections", pnlConnect);
-			}
-			{
-				pnlDepend = new pnlDependents(this);
-				tabCenter.addTab("Dependents", pnlDepend);
-			}
-			{
-				pnlWorkExp = new pnlWorkExperience(this);
-				tabCenter.addTab("Work Experience", pnlWorkExp);
-			}
-			{
-				pnlFinanceInfo = new pnlFinancialInfo(this);
-				tabCenter.addTab("Financial Info", pnlFinanceInfo);
-			}
-			{
-				pnlRefOther = new pnlReferencesOther(this);
-				tabCenter.addTab("References/Other Info", pnlRefOther);
-			}
+//			{
+//				pnlSubmittedID = new ClientSubmittedID(this);
+//				tabCenter.addTab("Submitted ID", pnlSubmittedID);
+//			}
+//			{
+//				pnlADDRESS = new pnlAddress(this);
+//				tabCenter.addTab("Address", pnlADDRESS);
+//			}
+//			{
+//				pnlConnect = new pnlConnection(this);
+//				tabCenter.addTab("Connections", pnlConnect);
+//			}
+//			{
+//				pnlDepend = new pnlDependents(this);
+//				tabCenter.addTab("Dependents", pnlDepend);
+//			}
+//			{
+//				pnlWorkExp = new pnlWorkExperience(this);
+//				tabCenter.addTab("Work Experience", pnlWorkExp);
+//			}
+//			{
+//				pnlFinanceInfo = new pnlFinancialInfo(this);
+//				tabCenter.addTab("Financial Info", pnlFinanceInfo);
+//			}
+//			{
+//				pnlRefOther = new pnlReferencesOther(this);
+//				tabCenter.addTab("References/Other Info", pnlRefOther);
+//			}
 			
 			tabCenter.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent arg0) {
@@ -508,35 +486,35 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 					if(selectedTab == 0){ // Enabling of buttons for the Client Info Panel
 						btnState(true, true, false, false, false);
 					}
-					if(selectedTab == 1){//Enabling of buttons for the Submitted ID Panel
-						pnlSubmittedID.clearSubmittedID();
-						btnState(true, false, false, false, false);
-					}
-					if(selectedTab == 2){ // Enabling of buttons for the Address Panel
-						pnlADDRESS.clearAddressFields();
-						btnState(true, false, false, false, false);
-					}
-					if(selectedTab == 3){ //Enabling of buttons for the Connections Panel
-						pnlConnect.clearConnectionFields();
-						btnState(true, false, false, false, false);
-					}
-					if (selectedTab == 4){ //Enabling of buttons for the Dependents Panel
-						pnlDepend.clearDependentFields();
-						btnState(true, false, false, false, false);
-					}
-					if (selectedTab == 5){ //Enabling of buttons for the Work Exp Panel
-						pnlWorkExp.clearFieldsWorkExp();
-						displayWorkExpList(lookupClient.getValue());
-						btnState(true, false, false, false, false);
-					}
-					if (selectedTab == 6){// Enabling of buttons for the Financial Info Panel
-						
-						btnState(false, true, false, false, false);
-					}
-					if (selectedTab == 7){//Enabling of buttons for the References/Other Info Panel
-						pnlRefOther.clearRefOther();
-						btnState(true, false, false, false, false);
-					}
+//					if(selectedTab == 1){//Enabling of buttons for the Submitted ID Panel
+//						pnlSubmittedID.clearSubmittedID();
+//						btnState(true, false, false, false, false);
+//					}
+//					if(selectedTab == 2){ // Enabling of buttons for the Address Panel
+//						pnlADDRESS.clearAddressFields();
+//						btnState(true, false, false, false, false);
+//					}
+//					if(selectedTab == 3){ //Enabling of buttons for the Connections Panel
+//						pnlConnect.clearConnectionFields();
+//						btnState(true, false, false, false, false);
+//					}
+//					if (selectedTab == 4){ //Enabling of buttons for the Dependents Panel
+//						pnlDepend.clearDependentFields();
+//						btnState(true, false, false, false, false);
+//					}
+//					if (selectedTab == 5){ //Enabling of buttons for the Work Exp Panel
+//						pnlWorkExp.clearFieldsWorkExp();
+//						displayWorkExpList(lookupClient.getValue());
+//						btnState(true, false, false, false, false);
+//					}
+//					if (selectedTab == 6){// Enabling of buttons for the Financial Info Panel
+//						
+//						btnState(false, true, false, false, false);
+//					}
+//					if (selectedTab == 7){//Enabling of buttons for the References/Other Info Panel
+//						pnlRefOther.clearRefOther();
+//						btnState(true, false, false, false, false);
+//					}
 					
 					if(canEdit() == false){
 						btnState(false, false, false, false, false);
@@ -563,13 +541,13 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 	//SET THE PANEL STATE WHEN EDITING OR CREATING NEW DATA
 	public static void pnlState(Boolean CI, Boolean sub_id ,Boolean addr, Boolean conn, Boolean dpend, Boolean FI, Boolean RO, Boolean WE){
 		tabCenter.setEnabledAt(0, CI);
-		tabCenter.setEnabledAt(1, sub_id);
-		tabCenter.setEnabledAt(2, addr);
-		tabCenter.setEnabledAt(3, conn);
-		tabCenter.setEnabledAt(4, dpend);
-		tabCenter.setEnabledAt(5, WE);
-		tabCenter.setEnabledAt(6, FI);
-		tabCenter.setEnabledAt(7, RO);
+//		tabCenter.setEnabledAt(1, sub_id);
+//		tabCenter.setEnabledAt(2, addr);
+//		tabCenter.setEnabledAt(3, conn);
+//		tabCenter.setEnabledAt(4, dpend);
+//		tabCenter.setEnabledAt(5, WE);
+//		tabCenter.setEnabledAt(6, FI);
+//		tabCenter.setEnabledAt(7, RO);
 	}
 
 	public String getEntityID(){
@@ -628,33 +606,33 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 		pnlCI.displayDetails(entity_id);
 	}
 	
-	public static void displaySubmittedID(String entity_id){
-		pnlSubmittedID.displaySubmittedID(entity_id);
-	}
-
-	public static void displayConnectionList(String entity_id) {
-		pnlConnect.displayConnectionList(entity_id);
-	}
-
-	public static void displayAddressList(String entity_id) {
-		//pnlADDRESS.displayAddressList(entity_id);
-		pnlADDRESS.displayAddress(entity_id);
-	}
-
-	public static void displayWorkExpList(String entity_id){
-		pnlWorkExp.displayWorkExp(entity_id);
-	}
-
-	public static void displayDependentList(String entity_id){
-		pnlDepend.displayDependentList(entity_id);
-	}
-
-	public static void displayReferencesOther(String entity_id){
-		pnlRefOther.displayRefOther(entity_id);
-	}
-	public static void displayFinancialInfo(String entity_id){
-		pnlFinanceInfo.displayFinancialInfo(entity_id);
-	}
+//	public static void displaySubmittedID(String entity_id){
+//		pnlSubmittedID.displaySubmittedID(entity_id);
+//	}
+//
+//	public static void displayConnectionList(String entity_id) {
+//		pnlConnect.displayConnectionList(entity_id);
+//	}
+//
+//	public static void displayAddressList(String entity_id) {
+//		//pnlADDRESS.displayAddressList(entity_id);
+//		pnlADDRESS.displayAddress(entity_id);
+//	}
+//
+//	public static void displayWorkExpList(String entity_id){
+//		pnlWorkExp.displayWorkExp(entity_id);
+//	}
+//
+//	public static void displayDependentList(String entity_id){
+//		pnlDepend.displayDependentList(entity_id);
+//	}
+//
+//	public static void displayReferencesOther(String entity_id){
+//		pnlRefOther.displayRefOther(entity_id);
+//	}
+//	public static void displayFinancialInfo(String entity_id){
+//		pnlFinanceInfo.displayFinancialInfo(entity_id);
+//	}
 	
 	/*private void displayImages(String entity_id){
 		pgSelect db = new pgSelect();
@@ -692,41 +670,41 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 				
 				//Commented on 2016-09-02
 				displayClientInformation(lookupClient.getValue());
-				displaySubmittedID(lookupClient.getValue());
-				displayConnectionList(lookupClient.getValue());
-				displayAddressList(lookupClient.getValue());
-				displayWorkExpList(lookupClient.getValue());
-				displayDependentList(lookupClient.getValue());
-				displayReferencesOther(lookupClient.getValue());
-				displayFinancialInfo(lookupClient.getValue());
+//				displaySubmittedID(lookupClient.getValue());
+//				displayConnectionList(lookupClient.getValue());
+//				displayAddressList(lookupClient.getValue());
+//				displayWorkExpList(lookupClient.getValue());
+//				displayDependentList(lookupClient.getValue());
+//				displayReferencesOther(lookupClient.getValue());
+//				displayFinancialInfo(lookupClient.getValue());
 				//pnlCI.clearIndividualCI();
 				pnlState(true, false, false, false, false, false, false, false);
 			}
 			
-			if(selectedTab == 1){
-				pnlSubmittedID.newSubmittedID();
-				pnlState(false, true, false, false, false, false, false, false);
-			}
-			if (selectedTab == 2){
-				pnlADDRESS.newAddress();
-				pnlState(false, false, true, false, false, false, false, false);
-			}
-			if (selectedTab == 3){
-				pnlConnect.newConnection();
-				pnlState(false, false, false, true, false, false, false, false);
-			}
-			if (selectedTab == 4){
-				pnlDepend.newDependent();
-				pnlState(false, false, false, false, true, false, false, false);
-			}
-			if (selectedTab == 5){
-				pnlWorkExp.newWorkExp();
-				pnlState(false, false, false, false, false, false, false, true);
-			}
-			if (selectedTab == 7){
-				pnlRefOther.newRefother();
-				pnlState(false, false, false, false, false, false, true, false);
-			}
+//			if(selectedTab == 1){
+//				pnlSubmittedID.newSubmittedID();
+//				pnlState(false, true, false, false, false, false, false, false);
+//			}
+//			if (selectedTab == 2){
+//				pnlADDRESS.newAddress();
+//				pnlState(false, false, true, false, false, false, false, false);
+//			}
+//			if (selectedTab == 3){
+//				pnlConnect.newConnection();
+//				pnlState(false, false, false, true, false, false, false, false);
+//			}
+//			if (selectedTab == 4){
+//				pnlDepend.newDependent();
+//				pnlState(false, false, false, false, true, false, false, false);
+//			}
+//			if (selectedTab == 5){
+//				pnlWorkExp.newWorkExp();
+//				pnlState(false, false, false, false, false, false, false, true);
+//			}
+//			if (selectedTab == 7){
+//				pnlRefOther.newRefother();
+//				pnlState(false, false, false, false, false, false, true, false);
+//			}
 			
 			lookupClient.setEditable(false);
 			btnState(false, false, false, true, true);
@@ -749,80 +727,80 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 				}
 			}
 			
-			if(selectedTab == 1){
-				pnlSubmittedID.editSubmittedID();
-				pnlState(false, true, false, false, false, false, false, false);
-				btnState(false, false, false, true, true);
-				grpNewEdit.setSelectedButton(e);
-				lookupClient.setEditable(false);
-			}
-			
-			if(selectedTab == 2){
-				pnlADDRESS.editAddress();
-				pnlState(false, false, true, false, false, false, false, false);
-				btnState(false, false, false, true, true);
-				grpNewEdit.setSelectedButton(e);
-				lookupClient.setEditable(false);
-			}
-			
-			if(selectedTab == 3){
-				pnlConnect.editConnection();
-				pnlState(false, false, false, true, false, false, false, false);
-				btnState(false, false, false, true, true);
-				grpNewEdit.setSelectedButton(e);
-				lookupClient.setEditable(false);
-			}
-			
-			if(selectedTab == 4){
-				pnlDepend.editDependet();
-				pnlState(false, false, false, false, true, false, false, false);
-				btnState(false, false, false, true, true);
-				grpNewEdit.setSelectedButton(e);
-				lookupClient.setEditable(false);
-			}
-			
-			if(selectedTab == 5){
-				pnlWorkExp.editWorkExp();
-				pnlState(false, false, false, false, false, false, false, true);
-				btnState(false, false, false, true, true);
-				grpNewEdit.setSelectedButton(e);
-				lookupClient.setEditable(false);
-			}
-			
-			if (selectedTab == 6){
-				pnlFinanceInfo.editFinancialInfo();
-				pnlState(false, false, false, false, false, true, false, false);
-				btnState(false, false, false, true, true);
-				grpNewEdit.setSelectedButton(e);
-				lookupClient.setEditable(false);
-			}
-			
-			if(selectedTab == 7){
-				pnlRefOther.edit(lookupClient.getValue());
-				pnlState(false, false, false, false, false, false, true, false);
-				btnState(false, false, false, true, true);
-				grpNewEdit.setSelectedButton(e);
-				lookupClient.setEditable(false);
-			}
+//			if(selectedTab == 1){
+//				pnlSubmittedID.editSubmittedID();
+//				pnlState(false, true, false, false, false, false, false, false);
+//				btnState(false, false, false, true, true);
+//				grpNewEdit.setSelectedButton(e);
+//				lookupClient.setEditable(false);
+//			}
+//			
+//			if(selectedTab == 2){
+//				pnlADDRESS.editAddress();
+//				pnlState(false, false, true, false, false, false, false, false);
+//				btnState(false, false, false, true, true);
+//				grpNewEdit.setSelectedButton(e);
+//				lookupClient.setEditable(false);
+//			}
+//			
+//			if(selectedTab == 3){
+//				pnlConnect.editConnection();
+//				pnlState(false, false, false, true, false, false, false, false);
+//				btnState(false, false, false, true, true);
+//				grpNewEdit.setSelectedButton(e);
+//				lookupClient.setEditable(false);
+//			}
+//			
+//			if(selectedTab == 4){
+//				pnlDepend.editDependet();
+//				pnlState(false, false, false, false, true, false, false, false);
+//				btnState(false, false, false, true, true);
+//				grpNewEdit.setSelectedButton(e);
+//				lookupClient.setEditable(false);
+//			}
+//			
+//			if(selectedTab == 5){
+//				pnlWorkExp.editWorkExp();
+//				pnlState(false, false, false, false, false, false, false, true);
+//				btnState(false, false, false, true, true);
+//				grpNewEdit.setSelectedButton(e);
+//				lookupClient.setEditable(false);
+//			}
+//			
+//			if (selectedTab == 6){
+//				pnlFinanceInfo.editFinancialInfo();
+//				pnlState(false, false, false, false, false, true, false, false);
+//				btnState(false, false, false, true, true);
+//				grpNewEdit.setSelectedButton(e);
+//				lookupClient.setEditable(false);
+//			}
+//			
+//			if(selectedTab == 7){
+//				pnlRefOther.edit(lookupClient.getValue());
+//				pnlState(false, false, false, false, false, false, true, false);
+//				btnState(false, false, false, true, true);
+//				grpNewEdit.setSelectedButton(e);
+//				lookupClient.setEditable(false);
+//			}
 			
 		}
 		
-		if(actionCommand.equals("Delete")){//DELETE FOR THE CLIENT INFORMATION
-			if (JOptionPane.showConfirmDialog(this.getTopLevelAncestor(), "Delete this entry?", actionCommand, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
-				if(tabCenter.getSelectedIndex() == 2){
-					if(pnlADDRESS.deleteAddress(lookupClient.getValue())){
-						JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Client Address has been Updated.", actionCommand, JOptionPane.INFORMATION_MESSAGE);
-						displayAddressList(lookupClient.getValue());
-					}
-				}
-				if(tabCenter.getSelectedIndex() == 3){
-					if(pnlConnect.deleteConnection(lookupClient.getValue())){
-						JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Client Connection has been Updated.", actionCommand, JOptionPane.INFORMATION_MESSAGE);
-						displayConnectionList(lookupClient.getValue());
-					}
-				}
-			}
-		}
+//		if(actionCommand.equals("Delete")){//DELETE FOR THE CLIENT INFORMATION
+//			if (JOptionPane.showConfirmDialog(this.getTopLevelAncestor(), "Delete this entry?", actionCommand, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+//				if(tabCenter.getSelectedIndex() == 2){
+//					if(pnlADDRESS.deleteAddress(lookupClient.getValue())){
+//						JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Client Address has been Updated.", actionCommand, JOptionPane.INFORMATION_MESSAGE);
+//						displayAddressList(lookupClient.getValue());
+//					}
+//				}
+//				if(tabCenter.getSelectedIndex() == 3){
+//					if(pnlConnect.deleteConnection(lookupClient.getValue())){
+//						JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Client Connection has been Updated.", actionCommand, JOptionPane.INFORMATION_MESSAGE);
+//						displayConnectionList(lookupClient.getValue());
+//					}
+//				}
+//			}
+//		}
 		
 		if(actionCommand.equals("Save")){//SAVING FOR THE CLIENT INFORMATION
 			if (tabCenter.getSelectedIndex() == 0){
@@ -848,95 +826,95 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 				//}
 			}
 			
-			if(tabCenter.getSelectedIndex() == 1){
-				if(pnlSubmittedID.saveSubmittedID(lookupClient.getValue())){
-					pnlSubmittedID.cancelSubmittedID();
-					JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Submitted ID has been saved", actionCommand, JOptionPane.INFORMATION_MESSAGE);
-					displaySubmittedID(lookupClient.getValue());
-					btnState(true, false, false, false, false);
-					pnlState(true, true, true, true, true, true, true, true);
-
-					lookupClient.setEditable(true);
-				}
-			}
-			
-			if (tabCenter.getSelectedIndex() == 2){//SAVING FOR THE ADDRESS PANEL
-				if(pnlADDRESS.toSave()){
-					/*if (pnlADDRESS.saveAddress(lookupClient.getValue())){
-						JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Client Address has been Saved.", actionCommand, JOptionPane.INFORMATION_MESSAGE);
-						displayAddressList(lookupClient.getValue());
-						btnState(true, false, false, false, false);
-						pnlState(true, true, true, true, true, true, true, true);
-						
-						lookupClient.setEditable(true);
-					}*/
-					
-					if(pnlADDRESS.saveAddress2(lookupClient.getValue())){
-						JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Client Address has been Saved", actionCommand, JOptionPane.INFORMATION_MESSAGE);
-						displayAddressList(lookupClient.getValue());
-						btnState(true, false, false, false, false);
-						pnlState(true, true, true, true, true, true, true, true);
-						
-						lookupClient.setEditable(true);
-					}
-				}
-			}
-			
-			if(tabCenter.getSelectedIndex() == 3){
-
-				if(pnlConnect.saveClientConnection(lookupClient.getValue())){
-					//pnlConnect.saveConnectionSignature();
-					JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Client Connection Saved", actionCommand, JOptionPane.INFORMATION_MESSAGE);
-					displayConnectionList(lookupClient.getValue());
-					btnState(true, false, false, false, false);
-					pnlState(true, true, true, true, true, true, true, true);
-
-					lookupClient.setEditable(true);
-				}
-			}
-
-			if (tabCenter.getSelectedIndex() == 4){//SAVING FOT THE DEPENDENTS PANEL
-				if(pnlDepend.tosave()){
-					if(pnlDepend.saveDependent(lookupClient.getValue())){
-						displayDependentList(lookupClient.getValue());
-						btnState(true, false, false, false, false);
-						pnlState(true, true, true, true, true, true, true, true);
-
-						lookupClient.setEditable(true);
-					}
-				}
-			}
-			
-			if (tabCenter.getSelectedIndex() == 5){//SAVING FOR THE WORK EXPERIENCE PANEL
-				if (pnlWorkExp.toSave()){
-					if (pnlWorkExp.saveWorkExp(lookupClient.getValue())){
-						displayWorkExpList(lookupClient.getValue());
-						btnState(true, false, false, false, false);
-						pnlState(true, true, true, true, true, true, true, true);
-						
-						lookupClient.setEditable(true);
-					}
-				}
-			}
-			
-			if (tabCenter.getSelectedIndex() == 6){//SAVING FOR THE FINANCIAL INFO PANEL
-				if(pnlFinanceInfo.saveFinancial(lookupClient.getValue())){
-					JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Client Financial Info has been Updated.", actionCommand, JOptionPane.INFORMATION_MESSAGE);
-					displayFinancialInfo(lookupClient.getValue());
-					btnState(false, true, false, false, false);
-					pnlState(true, true, true, true, true, true, true, true);
-					
-					lookupClient.setEditable(true);
-				}
-			}
-			
-			if (tabCenter.getSelectedIndex() == 7){//SAVING FOR THE REFERENCES OTHER PANEL
-				pnlRefOther.save(lookupClient.getValue());
-				displayReferencesOther(lookupClient.getValue());
-				pnlState(true, true, true, true, true, true, true, true);
-				
-				lookupClient.setEditable(true);
-			}
+//			if(tabCenter.getSelectedIndex() == 1){
+//				if(pnlSubmittedID.saveSubmittedID(lookupClient.getValue())){
+//					pnlSubmittedID.cancelSubmittedID();
+//					JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Submitted ID has been saved", actionCommand, JOptionPane.INFORMATION_MESSAGE);
+//					displaySubmittedID(lookupClient.getValue());
+//					btnState(true, false, false, false, false);
+//					pnlState(true, true, true, true, true, true, true, true);
+//
+//					lookupClient.setEditable(true);
+//				}
+//			}
+//			
+//			if (tabCenter.getSelectedIndex() == 2){//SAVING FOR THE ADDRESS PANEL
+//				if(pnlADDRESS.toSave()){
+//					/*if (pnlADDRESS.saveAddress(lookupClient.getValue())){
+//						JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Client Address has been Saved.", actionCommand, JOptionPane.INFORMATION_MESSAGE);
+//						displayAddressList(lookupClient.getValue());
+//						btnState(true, false, false, false, false);
+//						pnlState(true, true, true, true, true, true, true, true);
+//						
+//						lookupClient.setEditable(true);
+//					}*/
+//					
+//					if(pnlADDRESS.saveAddress2(lookupClient.getValue())){
+//						JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Client Address has been Saved", actionCommand, JOptionPane.INFORMATION_MESSAGE);
+//						displayAddressList(lookupClient.getValue());
+//						btnState(true, false, false, false, false);
+//						pnlState(true, true, true, true, true, true, true, true);
+//						
+//						lookupClient.setEditable(true);
+//					}
+//				}
+//			}
+//			
+//			if(tabCenter.getSelectedIndex() == 3){
+//
+//				if(pnlConnect.saveClientConnection(lookupClient.getValue())){
+//					//pnlConnect.saveConnectionSignature();
+//					JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Client Connection Saved", actionCommand, JOptionPane.INFORMATION_MESSAGE);
+//					displayConnectionList(lookupClient.getValue());
+//					btnState(true, false, false, false, false);
+//					pnlState(true, true, true, true, true, true, true, true);
+//
+//					lookupClient.setEditable(true);
+//				}
+//			}
+//
+//			if (tabCenter.getSelectedIndex() == 4){//SAVING FOT THE DEPENDENTS PANEL
+//				if(pnlDepend.tosave()){
+//					if(pnlDepend.saveDependent(lookupClient.getValue())){
+//						displayDependentList(lookupClient.getValue());
+//						btnState(true, false, false, false, false);
+//						pnlState(true, true, true, true, true, true, true, true);
+//
+//						lookupClient.setEditable(true);
+//					}
+//				}
+//			}
+//			
+//			if (tabCenter.getSelectedIndex() == 5){//SAVING FOR THE WORK EXPERIENCE PANEL
+//				if (pnlWorkExp.toSave()){
+//					if (pnlWorkExp.saveWorkExp(lookupClient.getValue())){
+//						displayWorkExpList(lookupClient.getValue());
+//						btnState(true, false, false, false, false);
+//						pnlState(true, true, true, true, true, true, true, true);
+//						
+//						lookupClient.setEditable(true);
+//					}
+//				}
+//			}
+//			
+//			if (tabCenter.getSelectedIndex() == 6){//SAVING FOR THE FINANCIAL INFO PANEL
+//				if(pnlFinanceInfo.saveFinancial(lookupClient.getValue())){
+//					JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Client Financial Info has been Updated.", actionCommand, JOptionPane.INFORMATION_MESSAGE);
+//					displayFinancialInfo(lookupClient.getValue());
+//					btnState(false, true, false, false, false);
+//					pnlState(true, true, true, true, true, true, true, true);
+//					
+//					lookupClient.setEditable(true);
+//				}
+//			}
+//			
+//			if (tabCenter.getSelectedIndex() == 7){//SAVING FOR THE REFERENCES OTHER PANEL
+//				pnlRefOther.save(lookupClient.getValue());
+//				displayReferencesOther(lookupClient.getValue());
+//				pnlState(true, true, true, true, true, true, true, true);
+//				
+//				lookupClient.setEditable(true);
+//			}
 			
 			grpNewEdit.clearSelection();
 		}
@@ -971,37 +949,37 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 					
 				}
 				
-				if(selectedTab == 1){
-					pnlSubmittedID.cancelSubmittedID();
-					btnState(true, false, false, false, false);
-				}
-				if (selectedTab == 2){
-					pnlADDRESS.cancelAddress();
-					btnState(true, false, false, false, false);
-				}
-				if (selectedTab == 3){
-					pnlConnect.cancelConnection();
-					btnState(true, false, false, false, false);
-				}
-				if (selectedTab == 4){
-					pnlDepend.cancelDependents();
-					btnState(true, false, false, false, false);
-				}
-				if (selectedTab == 5){
-					pnlWorkExp.cancelWorkexp();
-					displayWorkExpList(lookupClient.getValue());
-					btnState(true, false, false, false, false);
-				}
-				
-				if (selectedTab == 6){
-					pnlFinanceInfo.cancelFinancialInfo();
-					btnState(false, true, false, false, false);
-					displayFinancialInfo(lookupClient.getValue());
-				}
-				
-				if (selectedTab == 7){
-					pnlRefOther.cancelRefOther();
-				}
+//				if(selectedTab == 1){
+//					pnlSubmittedID.cancelSubmittedID();
+//					btnState(true, false, false, false, false);
+//				}
+//				if (selectedTab == 2){
+//					pnlADDRESS.cancelAddress();
+//					btnState(true, false, false, false, false);
+//				}
+//				if (selectedTab == 3){
+//					pnlConnect.cancelConnection();
+//					btnState(true, false, false, false, false);
+//				}
+//				if (selectedTab == 4){
+//					pnlDepend.cancelDependents();
+//					btnState(true, false, false, false, false);
+//				}
+//				if (selectedTab == 5){
+//					pnlWorkExp.cancelWorkexp();
+//					displayWorkExpList(lookupClient.getValue());
+//					btnState(true, false, false, false, false);
+//				}
+//				
+//				if (selectedTab == 6){
+//					pnlFinanceInfo.cancelFinancialInfo();
+//					btnState(false, true, false, false, false);
+//					displayFinancialInfo(lookupClient.getValue());
+//				}
+//				
+//				if (selectedTab == 7){
+//					pnlRefOther.cancelRefOther();
+//				}
 				
 				if(lookupClient.getValue() == null){
 					pnlState(false, false, false, false, false, false, false, false);
@@ -1017,13 +995,13 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 	public void displayClientInfo(String _entity_id, String entity_name) { //CHARD
 		
 		displayClientInformation(_entity_id);
-		displaySubmittedID(_entity_id);
-		displayConnectionList(_entity_id);
-		displayAddressList(_entity_id);
-		displayWorkExpList(_entity_id);
-		displayDependentList(_entity_id);
-		displayReferencesOther(_entity_id);
-		displayFinancialInfo(_entity_id);
+//		displaySubmittedID(_entity_id);
+//		displayConnectionList(_entity_id);
+//		displayAddressList(_entity_id);
+//		displayWorkExpList(_entity_id);
+//		displayDependentList(_entity_id);
+//		displayReferencesOther(_entity_id);
+//		displayFinancialInfo(_entity_id);
 
 		lookupClient.setValue(_entity_id);
 		
@@ -1165,22 +1143,23 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 	}
 	
 	public static boolean canEdit(){
+		return true; 
 		/*System.out.printf("Display Division Code: %s%n", UserInfo.Division);
 		System.out.printf("Display Employee Code: %s%n", UserInfo.EmployeeCode);*/
 		
-		if((UserInfo.Division.equals("04") || UserInfo.Division.equals("06") || UserInfo.Division.equals("07") 
-				   || UserInfo.Division.equals("08") || UserInfo.Division.equals("09") || UserInfo.Division.equals("29"))){
-			if(UserInfo.EmployeeCode.trim().equals("900965") || UserInfo.EmployeeCode.trim().equals("900606") || 
-					UserInfo.EmployeeCode.trim().equals("900383") || UserInfo.EmployeeCode.trim().equals("900028")){
-				System.out.printf("Display Employee Code: %s%n", UserInfo.EmployeeCode);
-				System.out.println("Dumaan sa false");
-				return true;
-			}else{
-				return false;
-			}
-		}else{
-			return true;
-		}
+//		if((UserInfo.Division.equals("04") || UserInfo.Division.equals("06") || UserInfo.Division.equals("07") 
+//				   || UserInfo.Division.equals("08") || UserInfo.Division.equals("09") || UserInfo.Division.equals("29"))){
+//			if(UserInfo.EmployeeCode.trim().equals("900965") || UserInfo.EmployeeCode.trim().equals("900606") || 
+//					UserInfo.EmployeeCode.trim().equals("900383") || UserInfo.EmployeeCode.trim().equals("900028")){
+//				System.out.printf("Display Employee Code: %s%n", UserInfo.EmployeeCode);
+//				System.out.println("Dumaan sa false");
+//				return true;
+//			}else{
+//				return false;
+//			}
+//		}else{
+//			return true;
+//		}
 	}
 	
 	
