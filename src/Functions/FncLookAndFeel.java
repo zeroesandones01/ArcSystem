@@ -95,14 +95,11 @@ public class FncLookAndFeel {
 	public static void initialize() {
 		//Set Look & Feel
 		try {
-			System.out.println("Dumaan dito----1");
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-			System.out.println("Dumaan dito----2");
 			Properties props = FncGlobal.properties;//XXX
 			props.put("logoString", "");
 
-			System.out.println("Dumaan dito----3");
 			props.put("controlColor", windowString_Light);
 			props.put("controlColorLight", windowString_Light);
 			props.put("controlColorDark", windowString_Dark);
@@ -112,16 +109,13 @@ public class FncLookAndFeel {
 			props.put("buttonColorDark", windowString_Dark);*/
 			//props.put("buttonForegroundColor", "255 255 255");
 
-			System.out.println("Dumaan dito----4");
 			props.put("rolloverColor", windowString_Light); 
 			props.put("rolloverColorLight", windowString_Light); 
 			props.put("rolloverColorDark", windowString_Dark);
 
-			System.out.println("Dumaan dito----5");
 			props.put("menuColorLight", "219 218 216");
 			props.put("menuColorDark", "209 208 206");
 
-			System.out.println("Dumaan dito----6");
 			props.put("menuSelectionBackgroundColor", windowString_Light);
 			props.put("menuSelectionBackgroundColorLight", windowString_Light);
 			props.put("menuSelectionBackgroundColorDark", windowString_Light);
@@ -129,23 +123,19 @@ public class FncLookAndFeel {
 			//props.put("toolbarBackgroundColor", "0 78 78");
 			props.put("menuBackgroundColor", "219 218 216");
 
-			System.out.println("Dumaan dito----7");
 			props.put("selectionForegroundColor", "255 255 255");
 			props.put("selectionBackgroundColor", windowString_Dark);
 
-			System.out.println("Dumaan dito----8");
 			props.put("windowTitleForegroundColor", "255 255 255");
 			props.put("windowTitleBackgroundColor", windowString_Light); 
 			props.put("windowTitleColorLight", windowString_Light); 
 			props.put("windowTitleColorDark", windowString_Dark); 
 			props.put("windowBorderColor", windowString_Dark);
 
-			System.out.println("Dumaan dito----9");
 			props.put("windowInactiveTitleColorLight", windowInactiveString_Light);
 			props.put("windowInactiveTitleColorDark", windowInactiveString_Dark);
 			props.put("windowInactiveBorderColor", windowInactiveString_Dark);
 
-			System.out.println("Dumaan dito----10");
 			props.put("controlTextFont", String.format("%s %s %s", font_name, "PLAIN", font_size));
 			props.put("systemTextFont", String.format("%s %s %s", font_name, "PLAIN", font_size));
 			props.put("userTextFont", String.format("%s %s %s", font_name, "PLAIN", font_size));
@@ -155,43 +145,35 @@ public class FncLookAndFeel {
 
 			props.put("foregroundColor", "0 83 158");
 
-			System.out.println("Dumaan dito----11");
 			AcrylLookAndFeel.setCurrentTheme(props);
 
 			
 			
 			// select the Look and Feel
-			System.out.println("Dumaan dito----12");
 			UIManager.setLookAndFeel("com.jtattoo.plaf.acryl.AcrylLookAndFeel");
 			//UIManager.setLookAndFeel("joxy.JoxyLookAndFeel");
 
-			System.out.println("Dumaan dito----13");
 			Image iconInternalFrame = iconSystem;
 			iconInternalFrame = iconInternalFrame.getScaledInstance(19, 19, Image.SCALE_DEFAULT);
 			UIManager.put("InternalFrame.icon", new ImageIcon(iconInternalFrame));
 
-			System.out.println("Dumaan dito----14");
 			// Font
 			UIManager.getLookAndFeelDefaults().put("defaultFont", systemFont_Bold);
 
-			System.out.println("Dumaan dito----15");
 			// JMenuBar
 			UIManager.put("MenuBar.background", systemColor);
 
-			System.out.println("Dumaan dito----16");
 			// JMenu
 			UIManager.put("Menu.font", systemFont_Plain);
 			UIManager.put("Menu.acceleratorFont", systemFont_Plain);
 
 			// JMenuItem
-			System.out.println("Dumaan dito----17");
 			UIManager.put("MenuItem.font", systemFont_Plain);
 			UIManager.put("MenuItem.acceleratorFont", systemFont_Plain);
 			UIManager.put("MenuItem.selectionBackground", systemColor);
 
 			// JButton
 			//UIManager.put("Button.defaultButtonFollowsFocus", false);
-			System.out.println("Dumaan dito----18");
 			UIManager.put("Button.font", systemFont_Bold);
 			UIManager.put("Button.foreground", Color.WHITE);
 			UIManager.put("Button.background", windowColor);
@@ -201,7 +183,6 @@ public class FncLookAndFeel {
 
 			UIManager.put("Button.toolBarBorderBackground", Color.RED);
 
-			System.out.println("Dumaan dito----19");
 			// JToggleButton
 			//UIManager.put("Button.defaultButtonFollowsFocus", false);
 			UIManager.put("ToggleButton.font", systemFont_Bold);
@@ -209,7 +190,6 @@ public class FncLookAndFeel {
 			UIManager.put("ToggleButton.background", windowColor);
 			UIManager.put("ToggleButton.border", UIManager.getBorder("Button.border"));
 
-			System.out.println("Dumaan dito----20");
 			// JLabel
 			UIManager.put("Label.font", systemFont_Plain);
 			//UIManager.put("Label.foreground", systemColor);
@@ -224,11 +204,9 @@ public class FncLookAndFeel {
 			//UIManager.put("TextField.disabledBackground", new Color(255, 255, 255));
 			//UIManager.put("TextField.border", FncGlobal.lineBorder);
 
-			System.out.println("Dumaan dito----21");
 			// JFormattedTextField
 			UIManager.put("FormattedTextField.background", new Color(152, 255, 152));
 
-			System.out.println("Dumaan dito----22");
 			// JSplitPane
 			UIManager.put("SplitPaneUI", BaseSplitPaneUI.class.getName());
 			UIManager.put("SplitPane.supportsOneTouchButtons", true);
@@ -238,12 +216,10 @@ public class FncLookAndFeel {
 			UIManager.put("SplitPane.dividerFocusColor", windowColor);
 			UIManager.put("SplitPaneDivider.draggingColor", windowColor);
 
-			System.out.println("Dumaan dito----23");
 			// JTable
 			UIManager.put("TableHeader.font", new Font(font_name, Font.BOLD, (font_size >= 12 ? (font_size - 1):11)));
 			//UIManagerExt.put("TableHeader.font", new Font(font_name, Font.BOLD, (font_size >= 12 ? (font_size - 1):11)));
 
-			System.out.println("Dumaan dito----24");
 			//UIManager.put("Table.focusCellHighlightBorder", BorderFactory.createEmptyBorder(1, 1, 1, 1));
 			//UIManager.put("Table.selectionBackground", new Color(173, 223, 255));
 			//UIManager.put("Table.selectionForeground", Color.BLACK);
@@ -251,11 +227,9 @@ public class FncLookAndFeel {
 			UIManager.put("Table.font", new Font(font_name, Font.PLAIN, (font_size >= 12 ? (font_size - 1):11)));
 			UIManager.put("Table.rowHeight", 20);
 
-			System.out.println("Dumaan dito----25");
 			Image img = new ImageIcon("images/Portfolio.png").getImage();
 			img = img.getScaledInstance(19, 19, Image.SCALE_SMOOTH);
 
-			System.out.println("Dumaan dito----26");
 			//XXX JTree
 			//UIManager.put("Tree.font", new Font("SansSerif", Font.PLAIN, 12));
 			//UIManager.put("Tree.leafIcon", null);
@@ -270,7 +244,6 @@ public class FncLookAndFeel {
 			UIManager.put("Tree.showsRootHandles", true);
 			//UIManager.put("Tree.leftChildIndent", -10);
 
-			System.out.println("Dumaan dito----27");
 			// JTabbedPane
 			UIManager.put("TabbedPane.tabAreaBackground", UIManager.getColor("JXPanel"));
 			//UIManager.put("TabbedPane.tabAreaInsets", new Insets(5, 35, 5, 35));
@@ -301,24 +274,20 @@ public class FncLookAndFeel {
 			//UIManager.put("TaskPaneUI.titleBackgroundGradientStart", Color.WHITE);
 			//UIManager.put("TaskPaneUI.titleBackgroundGradientEnd", Color.GREEN);
 
-			System.out.println("Dumaan dito----28");
 			// JXLoginPane
 			//UIManager.put("JXLoginPane.bannerForeground", new ColorUIResource(Color.BLACK));
 			UIManager.put("JXLoginPane.bannerDarkBackground", systemColor);
 			UIManager.put("JXLoginPane.bannerLightBackground", colorTeal);
 
-			System.out.println("Dumaan dito----29");
 			// JXTitledPanel
 			UIManager.put("JXTitledPanel.titleFont", systemFont_Bold.deriveFont(16.0f));
 			//UIManager.put("JXTitledPanel.titleForeground", systemColor);
 			UIManager.put("JXTitledPanel.titlePainter", new PainterUIResource<JXTitledPanel>(new MattePainter(new GradientPaint(new Point(30, 30), new Color(82, 105, 129), new Point(30, 5), new Color(152, 175, 199)))));
 
-			System.out.println("Dumaan dito----30");
 			// JFormattedTextField
 			//UIManager.put("JXTextField.background", new Color(255, 255, 255));
 			UIManager.put("JXTextField.font", systemFont_Plain);
 
-			System.out.println("Dumaan dito----31");
 			/*UIManager.put("InternalFrame.iconifyIcon", FncGlobal.iconSystem);
 			UIManager.put("InternalFrame.minimizeIcon", FncGlobal.iconSystem);
 			UIManager.put("InternalFrame.maximizeIcon", FncGlobal.iconSystem);
@@ -356,7 +325,6 @@ public class FncLookAndFeel {
 	}
 
 	public static void setColor(Integer red, Integer green, Integer blue) {//String windowString_Light, String windowString_Dark
-		System.out.println("Dumaan Dito****1");
 		String windowString_Dark = String.format("%s %s %s", red, green, blue);
 
 		/*int darkRed = (red + 20 > 255 ? 255:red + 20);
@@ -364,7 +332,6 @@ public class FncLookAndFeel {
 		int darkBlue = (blue + 20 > 255 ? 255:blue + 20);
 		String windowString_Light = String.format("%s %s %s", darkRed, darkGreen, darkBlue);*/
 
-		System.out.println("Dumaan Dito****2");
 		Integer darkInactiveLightRed = (red + 50 > 255 ? 255:red + 50);
 		Integer darkInactiveLightGreen = (green + 50 > 255 ? 255:green + 50);
 		Integer darkInactiveLightBlue = (blue + 50 > 255 ? 255:blue + 50);
@@ -374,18 +341,15 @@ public class FncLookAndFeel {
 		//System.out.printf("Light: (%s %s %s)%n", darkInactiveLightRed, darkInactiveLightGreen, darkInactiveLightBlue);
 		//System.out.printf("Inactive Light: (%s %s %s)%n", darkInactiveLightRed, darkInactiveLightGreen, darkInactiveLightBlue);
 
-		System.out.println("Dumaan Dito****3");
 		Integer darkInactiveDarkRed = (red + 70 > 255 ? 255:red + 70);
 		Integer darkInactiveDarkGreen = (green + 70 > 255 ? 255:green + 70);
 		Integer darkInactiveDarkBlue = (blue + 70 > 255 ? 255:blue + 70);
 		String windowInactiveString_Dark = String.format("%s %s %s", darkInactiveDarkRed, darkInactiveDarkGreen, darkInactiveDarkBlue);
 		System.out.printf("Inactive Dark: (%s %s %s)%n", darkInactiveDarkRed, darkInactiveDarkGreen, darkInactiveDarkBlue);
 
-		System.out.println("Dumaan Dito****4");
 		Properties props = FncGlobal.properties;
 		props.put("logoString", "");
 
-		System.out.println("Dumaan Dito****5");
 		props.put("controlColor", windowString_Light);
 		props.put("controlColorLight", windowString_Light);
 		props.put("controlColorDark", windowString_Dark);
@@ -395,16 +359,13 @@ public class FncLookAndFeel {
 		props.put("buttonColorDark", windowString_Dark);*/
 		//props.put("buttonForegroundColor", "255 255 255");
 
-		System.out.println("Dumaan Dito****6");
 		props.put("rolloverColor", windowString_Light); 
 		props.put("rolloverColorLight", windowString_Light); 
 		props.put("rolloverColorDark", windowString_Dark);
 
-		System.out.println("Dumaan Dito****7");
 		props.put("menuColorLight", "219 218 216");
 		props.put("menuColorDark", "209 208 206");
 
-		System.out.println("Dumaan Dito****8");
 		props.put("menuSelectionBackgroundColor", windowString_Light);
 		props.put("menuSelectionBackgroundColorLight", windowString_Light);
 		props.put("menuSelectionBackgroundColorDark", windowString_Light);
@@ -412,23 +373,19 @@ public class FncLookAndFeel {
 		//props.put("toolbarBackgroundColor", "0 78 78");
 		props.put("menuBackgroundColor", "219 218 216");
 
-		System.out.println("Dumaan Dito****9");
 		props.put("selectionForegroundColor", "255 255 255");
 		props.put("selectionBackgroundColor", windowString_Dark);
 
-		System.out.println("Dumaan Dito****10");
 		props.put("windowTitleForegroundColor", "255 255 255");
 		props.put("windowTitleBackgroundColor", windowString_Light); 
 		props.put("windowTitleColorLight", windowString_Light); 
 		props.put("windowTitleColorDark", windowString_Dark); 
 		props.put("windowBorderColor", windowString_Dark);
 
-		System.out.println("Dumaan Dito****11");
 		props.put("windowInactiveTitleColorLight", windowInactiveString_Light);
 		props.put("windowInactiveTitleColorDark", windowInactiveString_Dark);
 		props.put("windowInactiveBorderColor", windowInactiveString_Dark);
 
-		System.out.println("Dumaan Dito****12");
 		props.put("controlTextFont", String.format("%s %s %s", font_name, "PLAIN", font_size));
 		props.put("systemTextFont", String.format("%s %s %s", font_name, "PLAIN", font_size));
 		props.put("userTextFont", String.format("%s %s %s", font_name, "PLAIN", font_size));
@@ -436,15 +393,12 @@ public class FncLookAndFeel {
 		props.put("windowTitleFont", String.format("%s %s %s", font_name, "BOLD", font_size));
 		props.put("subTextFont", String.format("%s %s %s", font_name, "PLAIN", font_size));
 
-		System.out.println("Dumaan Dito****13");
 		AcrylLookAndFeel.setCurrentTheme(props);
 
-		System.out.println("Dumaan Dito****14");
 		Integer darkButtonRed = (red + 40 > 255 ? 255:red + 40);
 		Integer darkButtonGreen = (green + 40 > 255 ? 255:green + 40);
 		Integer darkButtonBlue = (blue + 40 > 255 ? 255:blue + 40);
 
-		System.out.println("Dumaan Dito****15");
 		UIManager.put("Button.foreground", Color.WHITE);
 		UIManager.put("Button.background", new Color(darkButtonRed, darkButtonGreen, darkButtonBlue));
 
@@ -489,6 +443,7 @@ public class FncLookAndFeel {
 		props.put("menuSelectionBackgroundColor", windowString_Light);
 		props.put("menuSelectionBackgroundColorLight", windowString_Light);
 		props.put("menuSelectionBackgroundColorDark", windowString_Light);
+		
 		
 		
 		//props.put("toolbarBackgroundColor", "0 78 78");
