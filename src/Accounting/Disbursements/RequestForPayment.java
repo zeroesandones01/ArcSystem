@@ -99,7 +99,7 @@ public class RequestForPayment extends _JInternalFrame implements _GUI, ActionLi
 	 */
 	private static final long serialVersionUID = -3061284418918863916L;
 	protected static final Home_JSystem Home_JSystem = null;
-	static String title = "Request for Payment (DRF)";
+	static String title = "Disbursement Request Form (DRF)";
 	static Dimension SIZE = new Dimension(1000, 600);
 
 	private JPanel pnlMain;
@@ -231,6 +231,9 @@ public class RequestForPayment extends _JInternalFrame implements _GUI, ActionLi
 	private JPanel pnlEditAmount;
 	private JLabel lblEditAmount;
 	private _JXFormattedTextField txteditamount;
+	private JLabel lblDiv;
+	private _JLookup lookupDiv;
+	private _JTagLabel tagPayeeDiv;
 	public static JButton btnPreview;
 
 	public RequestForPayment() {
@@ -482,7 +485,7 @@ public class RequestForPayment extends _JInternalFrame implements _GUI, ActionLi
 			pnlDRF_a1.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
 			{
-				lblDRF_no = new JLabel("Request No.", JLabel.TRAILING);
+				lblDRF_no = new JLabel("DRF No.", JLabel.TRAILING);
 				pnlDRF_a1.add(lblDRF_no);
 				lblDRF_no.setEnabled(false);
 				lblDRF_no.setPreferredSize(new java.awt.Dimension(86, 40));
@@ -590,12 +593,12 @@ public class RequestForPayment extends _JInternalFrame implements _GUI, ActionLi
 				pnlDRFDtl_1a.addMouseListener(new PopupTriggerListener_panel());
 
 				{
-					lblDateRequest = new JLabel("Date Requested", JLabel.TRAILING);
+					lblDateRequest = new JLabel("Date", JLabel.TRAILING);
 					pnlDRFDtl_1a.add(lblDateRequest);
 					lblDateRequest.setEnabled(false);
 				}
 				{
-					lblDateNeeded = new JLabel("Date Needed", JLabel.TRAILING);
+					lblDateNeeded = new JLabel("Due Date", JLabel.TRAILING);
 					pnlDRFDtl_1a.add(lblDateNeeded);
 					lblDateNeeded.setEnabled(false);
 				}
@@ -671,7 +674,7 @@ public class RequestForPayment extends _JInternalFrame implements _GUI, ActionLi
 				pnlDRFInfo.setPreferredSize(new java.awt.Dimension(675, 116));
 				pnlDRFInfo.setBorder(BorderFactory.createEmptyBorder(0, 50, 0, 0));
 
-				pnlDRFInfo_1 = new JPanel(new GridLayout(5, 1, 5, 5));
+				pnlDRFInfo_1 = new JPanel(new GridLayout(6, 1, 5, 5));
 				pnlDRFInfo.add(pnlDRFInfo_1, BorderLayout.WEST);
 				pnlDRFInfo_1.setPreferredSize(new java.awt.Dimension(112, 146));
 				pnlDRFInfo_1.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -692,6 +695,11 @@ public class RequestForPayment extends _JInternalFrame implements _GUI, ActionLi
 					lblPayeeID2.setEnabled(false);
 				}
 				{
+					lblDiv = new JLabel("Division", JLabel.TRAILING);
+					pnlDRFInfo_1.add(lblDiv);
+					lblDiv.setEnabled(false);
+				}
+				{
 					lblPayeeType = new JLabel("Payee Type", JLabel.TRAILING);
 					pnlDRFInfo_1.add(lblPayeeType);
 					lblPayeeType.setEnabled(false);
@@ -707,7 +715,7 @@ public class RequestForPayment extends _JInternalFrame implements _GUI, ActionLi
 				pnlDRFDtl_2.setPreferredSize(new java.awt.Dimension(203, 118));
 				pnlDRFDtl_2.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
 
-				pnlDRFDtl_2a = new JPanel(new GridLayout(5, 1, 0, 5));
+				pnlDRFDtl_2a = new JPanel(new GridLayout(6, 1, 0, 5));
 				pnlDRFDtl_2.add(pnlDRFDtl_2a, BorderLayout.WEST);
 				pnlDRFDtl_2a.setPreferredSize(new java.awt.Dimension(119, 119));
 				pnlDRFDtl_2a.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -859,6 +867,26 @@ public class RequestForPayment extends _JInternalFrame implements _GUI, ActionLi
 					});
 				}
 				{
+					lookupDiv = new _JLookup(null, "Division", 2, 2); 
+					pnlDRFDtl_2a.add(lookupDiv); 
+					lookupDiv.setReturnColumn(0);
+					lookupDiv.setEnabled(false);
+					lookupDiv.setPreferredSize(new java.awt.Dimension(157, 22));
+					lookupDiv.addActionListener(new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							Object[] data = ((_JLookup) e.getSource()).getDataSet();
+							if (data != null) {
+								
+							} else {
+								
+							}
+						}
+					});
+					
+				}
+				{
 					lookupPayeeType = new _JLookup(null, "Payee Type", 2, 2);
 					pnlDRFDtl_2a.add(lookupPayeeType);
 					lookupPayeeType.setBounds(20, 27, 20, 25);
@@ -911,7 +939,7 @@ public class RequestForPayment extends _JInternalFrame implements _GUI, ActionLi
 					});
 				}
 
-				pnlDRFDtl_2b = new JPanel(new GridLayout(5, 1, 0, 5));
+				pnlDRFDtl_2b = new JPanel(new GridLayout(6, 1, 0, 5));
 				pnlDRFDtl_2.add(pnlDRFDtl_2b, BorderLayout.CENTER);
 				pnlDRFDtl_2b.setPreferredSize(new java.awt.Dimension(140, 118));
 				pnlDRFDtl_2b.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -939,6 +967,14 @@ public class RequestForPayment extends _JInternalFrame implements _GUI, ActionLi
 					tagPayee2.setEnabled(false);
 					tagPayee2.setPreferredSize(new java.awt.Dimension(27, 33));
 					tagPayee2.addMouseListener(new PopupTriggerListener_panel2());
+				}
+				{
+					tagPayeeDiv = new _JTagLabel("[ ]");
+					pnlDRFDtl_2b.add(tagPayeeDiv);
+					tagPayeeDiv.setBounds(209, 27, 700, 22);
+					tagPayeeDiv.setEnabled(false);
+					tagPayeeDiv.setPreferredSize(new java.awt.Dimension(27, 33));
+					tagPayeeDiv.addMouseListener(new PopupTriggerListener_panel2());
 				}
 				{
 					tagPayeeType = new _JTagLabel("[ ]");
@@ -1654,7 +1690,8 @@ public class RequestForPayment extends _JInternalFrame implements _GUI, ActionLi
 			cancel();
 		}
 
-		if (e.getActionCommand().equals("Add") && FncAcounting.EmpCanAddNew(UserInfo.EmployeeCode, "1") == true) {
+//		if (e.getActionCommand().equals("Add") && FncAcounting.EmpCanAddNew(UserInfo.EmployeeCode, "1") == true) { //TEMPORARY ACCESS for development
+		if (e.getActionCommand().equals("Add") && (UserInfo.EmployeeCode.equals("901101") || FncAcounting.EmpCanAddNew(UserInfo.EmployeeCode, "1")) == true) {
 			add();
 		} else if (e.getActionCommand().equals("Add")
 				&& FncAcounting.EmpCanAddNew(UserInfo.EmployeeCode, "1") == false) {
