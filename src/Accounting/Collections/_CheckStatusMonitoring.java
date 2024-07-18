@@ -7,7 +7,6 @@ import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-import Buyers.CreditandCollections._RealTimeDebit;
 import Database.pgSelect;
 import Database.pgUpdate;
 import Functions.FncGlobal;
@@ -55,11 +54,11 @@ public class _CheckStatusMonitoring {
 		System.out.println("strCheck: " + strCheck);
 
 		String strAllRec = "";
-		String strID = _RealTimeDebit.GetValue("SELECT entity_id FROM rf_payments WHERE pbl_id = '" + strUnit
+		String strID = GetValue("SELECT entity_id FROM rf_payments WHERE pbl_id = '" + strUnit
 				+ "' AND seq_no = '" + strSeq + "' AND trim(check_no) = '" + strCheck + "'");
-		String strProject = _RealTimeDebit.GetValue("SELECT proj_id FROM rf_payments WHERE pbl_id = '" + strUnit
+		String strProject = GetValue("SELECT proj_id FROM rf_payments WHERE pbl_id = '" + strUnit
 				+ "' AND seq_no = '" + strSeq + "' AND trim(check_no) = '" + strCheck + "'");
-		String strRec = _RealTimeDebit.GetValue("SELECT TRIM(pay_rec_id::CHAR(20)) FROM rf_payments WHERE pbl_id = '"
+		String strRec = GetValue("SELECT TRIM(pay_rec_id::CHAR(20)) FROM rf_payments WHERE pbl_id = '"
 				+ strUnit + "' AND seq_no = '" + strSeq + "' AND trim(check_no) = '" + strCheck + "'");
 
 		System.out.println("");
@@ -136,6 +135,21 @@ public class _CheckStatusMonitoring {
 			}
 		}
 	}
+	
+	public static String GetValue(String SQL) {
+		String strValue = "";
+		pgSelect sqlExec = new pgSelect();
+		
+		sqlExec.select(SQL);
+
+		if (sqlExec.isNotNull()) {
+			strValue = (String) sqlExec.getResult()[0][0];
+		} else {
+			strValue = "";
+		}
+		
+		return strValue;
+	}
 
 	public void reapplyLedger(String strUnit, String strSeq, String strCheck) {
 		pgUpdate dbUpdate = new pgUpdate();
@@ -146,11 +160,11 @@ public class _CheckStatusMonitoring {
 		System.out.println("=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
 
 		String strAllRec = "";
-		String strID = _RealTimeDebit.GetValue("SELECT entity_id FROM rf_payments WHERE pbl_id = '" + strUnit
+		String strID = GetValue("SELECT entity_id FROM rf_payments WHERE pbl_id = '" + strUnit
 				+ "' AND seq_no = '" + strSeq + "' AND trim(check_no) = '" + strCheck + "'");
-		String strProject = _RealTimeDebit.GetValue("SELECT proj_id FROM rf_payments WHERE pbl_id = '" + strUnit
+		String strProject = GetValue("SELECT proj_id FROM rf_payments WHERE pbl_id = '" + strUnit
 				+ "' AND seq_no = '" + strSeq + "' AND trim(check_no) = '" + strCheck + "'");
-		String strRec = _RealTimeDebit.GetValue("SELECT TRIM(pay_rec_id::CHAR(20)) FROM rf_payments WHERE pbl_id = '"
+		String strRec = GetValue("SELECT TRIM(pay_rec_id::CHAR(20)) FROM rf_payments WHERE pbl_id = '"
 				+ strUnit + "' AND seq_no = '" + strSeq + "' AND trim(check_no) = '" + strCheck + "'");
 
 		System.out.println("");

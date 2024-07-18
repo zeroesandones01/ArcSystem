@@ -4741,7 +4741,7 @@ public class JournalVoucher extends _JInternalFrame implements _GUI, ActionListe
 		}
 
 		else if (column == 2) {
-			if (RequestForPayment.isItemDept(item) == true) {
+			if (RequestForPayment.isItemDivision(item) == true) {
 				modelJV_account.setValueAt(item, row, column);
 				setTableWidth();
 			} else {
