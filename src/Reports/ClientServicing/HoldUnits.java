@@ -48,13 +48,10 @@ import components._JInternalFrame;
 
 public class HoldUnits extends _JInternalFrame implements _GUI, ActionListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5159650933602942626L;
 
 	static String title = "Hold Units";
-	Dimension frameSize = new Dimension(510, 200);
+	Dimension frameSize = new Dimension(500, 250);
 	Border lineBorder = BorderFactory.createLineBorder(Color.BLACK);
 	Cursor handCursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
 
@@ -128,7 +125,6 @@ public class HoldUnits extends _JInternalFrame implements _GUI, ActionListener {
 		{
 			pnlMain = new JXPanel(new BorderLayout(5, 5));
 			getContentPane().add(pnlMain);
-//			pnlMain.setPreferredSize(frameSize);
 			pnlMain.setBorder(new EmptyBorder(5, 5, 5, 5));
 			{
 				pnlNorth = new JXPanel(new BorderLayout(5, 5));
@@ -143,22 +139,18 @@ public class HoldUnits extends _JInternalFrame implements _GUI, ActionListener {
 					{
 						lblCompany = new JXLabel("Company");
 						pnlNorthLabel.add(lblCompany);
-						//lblCompany.setBounds(10, 10, 75, 25);
 					}
 					{
 						lblProject = new JXLabel("Project");
 						pnlNorthLabel.add(lblProject);
-						//lblProject.setBounds(10, 40, 75, 25);
 					}
 					{
 						lblPhase = new JXLabel("Phase");
 						pnlNorthLabel.add(lblPhase);
-						//lblPhase.setBounds(10, 70, 75, 25);
 					}
 					{
 						JXLabel lblDate = new JXLabel("Date");
 						pnlNorthLabel.add(lblDate);
-						//lblDate.setBounds(11, 96, 69, 28);
 					}
 				}
 				{
@@ -173,15 +165,15 @@ public class HoldUnits extends _JInternalFrame implements _GUI, ActionListener {
 						{
 							lookupCompany = new _JLookup(null, "Company");
 							pnlNorthLookUp.add(lookupCompany);
-							//lookupCompany.setReturnColumn(0);
+							lookupCompany.setReturnColumn(0);
 							lookupCompany.setLookupSQL(_JInternalFrame.SQL_COMPANY());
-							//lookupCompany.setBounds(90, 10, 50, 25);
 							lookupCompany.addLookupListener(new LookupListener() {
 								public void lookupPerformed(LookupEvent event) {
 									Object[] data = ((_JLookup)event.getSource()).getDataSet();
 
 									if(data != null){
 										txtCompany.setText(data[1].toString());
+										txtCompany.setToolTipText(data[2].toString());
 
 										lookupProject.setLookupSQL(SQL_PROJECT_ALL(data[0].toString()));
 
@@ -197,7 +189,6 @@ public class HoldUnits extends _JInternalFrame implements _GUI, ActionListener {
 							lookupProject = new _JLookup(null, "Project","Please select company.");
 							pnlNorthLookUp.add(lookupProject);
 							//lookupProject.setReturnColumn(0);
-							//lookupProject.setBounds(90, 40, 50, 25);
 							lookupProject.addLookupListener(new LookupListener() {
 								public void lookupPerformed(LookupEvent event) {
 									Object[] data = ((_JLookup)event.getSource()).getDataSet();
@@ -218,7 +209,6 @@ public class HoldUnits extends _JInternalFrame implements _GUI, ActionListener {
 							lookupPhase = new _JLookup(null, "Phase", "Please select project.");
 							pnlNorthLookUp.add(lookupPhase);
 							lookupPhase.setReturnColumn(0);
-							//lookupPhase.setBounds(90, 70, 50, 25);
 							lookupPhase.addLookupListener(new LookupListener() {
 								public void lookupPerformed(LookupEvent event) {//XXX Phase
 									Object[] data = ((_JLookup)event.getSource()).getDataSet();
@@ -238,7 +228,6 @@ public class HoldUnits extends _JInternalFrame implements _GUI, ActionListener {
 							dteDate.setDate(null);
 							dteDate.setEnabled(true);
 							dteDate.setDate(null);
-							//dteDate.setBounds(90, 100, 174, 25);
 						}
 						
 						
@@ -253,13 +242,11 @@ public class HoldUnits extends _JInternalFrame implements _GUI, ActionListener {
 						txtCompany = new JTextField();
 						pnlNorthTxtField.add(txtCompany);
 						txtCompany.setEditable(false);
-						//txtCompany.setBounds(144, 10, 456, 25);
 					}
 					{
 						txtProject = new JTextField();
 						pnlNorthTxtField.add(txtProject);
 						txtProject.setEditable(false);
-						//txtProject.setBounds(144, 40, 456, 25);
 					}
 
 					
@@ -267,7 +254,6 @@ public class HoldUnits extends _JInternalFrame implements _GUI, ActionListener {
 						txtPhase = new JXTextField("");
 						pnlNorthTxtField.add(txtPhase);
 						txtPhase.setEditable(false);
-						//txtPhase.setBounds(144, 70, 120, 25);
 					}
 					
 				}
@@ -278,7 +264,6 @@ public class HoldUnits extends _JInternalFrame implements _GUI, ActionListener {
 					{
 						chkIncludeFltng = new JCheckBox("Floating");
 						pnlSouthCheckBox.add(chkIncludeFltng );
-						//chkIncludeFltng.setBounds(35, 135, 95, 25);
 						chkIncludeFltng .setSelected(true);
 						chkIncludeFltng .addItemListener(new ItemListener() {
 							public void itemStateChanged(ItemEvent e) {
@@ -294,7 +279,6 @@ public class HoldUnits extends _JInternalFrame implements _GUI, ActionListener {
 					{
 						chkIncludeHldng = new JCheckBox("Holding");
 						pnlSouthCheckBox.add(chkIncludeHldng);
-						//chkIncludeHldng.setBounds(175, 135, 120, 25);
 						chkIncludeHldng.setSelected(true);
 						chkIncludeHldng.addItemListener(new ItemListener() {
 							public void itemStateChanged(ItemEvent e) {
@@ -312,7 +296,6 @@ public class HoldUnits extends _JInternalFrame implements _GUI, ActionListener {
 					{
 						chkIncludeCmmtmnt = new JCheckBox("Commitment");
 						pnlSouthCheckBox.add(chkIncludeCmmtmnt);
-						//	chkIncludeCmmtmnt.setBounds(330, 135, 140, 25);
 						chkIncludeCmmtmnt.setSelected(true);
 						chkIncludeCmmtmnt.addItemListener(new ItemListener() {
 							public void itemStateChanged(ItemEvent e) {
@@ -329,7 +312,6 @@ public class HoldUnits extends _JInternalFrame implements _GUI, ActionListener {
 					{
 						chkIncludeMgmtHoldAcc = new JCheckBox("Mgmt. Hold");
 						pnlSouthCheckBox.add(chkIncludeMgmtHoldAcc);
-						//chkIncludeMgmtHoldAcc.setBounds(475, 135, 130, 25);
 						chkIncludeMgmtHoldAcc.setSelected(true);
 						chkIncludeMgmtHoldAcc.addItemListener(new ItemListener() {
 							public void itemStateChanged(ItemEvent e) {
@@ -355,7 +337,7 @@ public class HoldUnits extends _JInternalFrame implements _GUI, ActionListener {
 				{
 					JPanel pnlSouthWest = new JPanel(new BorderLayout(5, 5)); 
 					pnlSouth.add(pnlSouthWest, BorderLayout.WEST); 
-					pnlSouthWest.setPreferredSize(new Dimension(230, 0)); 
+					pnlSouthWest.setPreferredSize(new Dimension(250, 80)); 
 				}
 				{
 					JPanel pnlSouthCenter = new JPanel(new BorderLayout(5, 5)); 
@@ -366,7 +348,7 @@ public class HoldUnits extends _JInternalFrame implements _GUI, ActionListener {
 						pnlSouth.add(btnPreview);
 						btnPreview.setAlignmentX(0.5f);
 						btnPreview.setAlignmentY(0.5f);
-						btnPreview.setMaximumSize(new Dimension(100, 30));
+						btnPreview.setMaximumSize(new Dimension(100, 80));
 						btnPreview.setMnemonic(KeyEvent.VK_P);
 						btnPreview.addActionListener(this);
 					}
@@ -375,7 +357,7 @@ public class HoldUnits extends _JInternalFrame implements _GUI, ActionListener {
 				{
 					JPanel pnlSoutEast = new JPanel(new BorderLayout(5, 5)); 
 					pnlSouth.add(pnlSoutEast, BorderLayout.EAST); 
-					pnlSoutEast.setPreferredSize(new Dimension(230, 0)); 
+					pnlSoutEast.setPreferredSize(new Dimension(250, 80)); 
 				}
 			}
 		}
