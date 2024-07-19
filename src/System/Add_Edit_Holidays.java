@@ -42,9 +42,7 @@ import tablemodel.model_HolidaySetterTable;
 public class Add_Edit_Holidays extends _JInternalFrame {
 
 	
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = -6143015621825644470L;
 	Dimension size =  new Dimension(550,600);
 	
@@ -425,7 +423,7 @@ public class Add_Edit_Holidays extends _JInternalFrame {
 	
 	//METHOD TO SAVE A NEW HOLIDAY INTO THE DATABASE
 	private void getValue(){
-		pgUpdate db = new pgUpdate();
+		pgSelect db = new pgSelect();
 		Date dateVal = chooseDate.getDate();
 		String textVal = textName.getText();
 		Boolean  checkVal = cBoxHalfDay.isSelected();
@@ -440,13 +438,15 @@ public class Add_Edit_Holidays extends _JInternalFrame {
 		}
 		
 		{
-			String query = "INSERT INTO mf_holidays (rec_id,holidays,holiday_desc,holiday_type,halfday,created_by,holiday_otcode,date_created) "+
-					"VALUES ((SELECT COALESCE(max(rec_id), 0)+1 from mf_holidays),"+  
-					"'"+dateVal+"','"+textVal+"', '"+comboVal+"','"+checkVal+"','"+UserInfo.EmployeeCode+"','00','"+FncGlobal.getDateToday()+"')";
-			db.executeUpdate(query, true);
+//			String query = "INSERT INTO mf_holidays (rec_id,holidays,holiday_desc,holiday_type,halfday,created_by,holiday_otcode,date_created) "+
+//					"VALUES ((SELECT COALESCE(max(rec_id), 0)+1 from mf_holidays),"+  
+//					"'"+dateVal+"','"+textVal+"', '"+comboVal+"','"+checkVal+"','"+UserInfo.EmployeeCode+"','00','"+FncGlobal.getDateToday()+"')";
+//			db.executeUpdate(query, true);
+			
+			String SQL = "SELECT sp_save_holiday( '"+dateVal+"','"+textVal+"', '"+comboVal+"', "+checkVal+", '"+UserInfo.EmployeeCode+"')";
+			db.select(SQL, "Save", true);
 
 		}
-		db.commit();
 
 
 	}
