@@ -17,8 +17,6 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-import org.springframework.util.ResourceUtils;
-
 import com.lowagie.text.pdf.PdfWriter;
 
 import Database.pgSelect;
@@ -578,51 +576,51 @@ public class FncReport {
 
 	//START OF NEW REPORT VIEWER
 
-	public static void reportViewer(final String report, final String title, final String company, final Map mapParameters) {
-		System.out.println( "generating jasper report..." );
-
-		// 1. compile template ".jrxml" file
-
-		try {
-			File template = ResourceUtils.getFile("/home/jfatallo/eclipse-workspace/JSystem2.2/src/Reports/sample.jrxml");
-			
-			//JasperReport jasperReport = JasperCompileManager.compileReport(template.getAbsolutePath());
-			
-			// 2. parameters "empty"
-
-			// 3. datasource "java object"
-
-			//JasperDesign jasperDesign = JRXmlLoader.load(new File("/home/jfatallo/eclipse-workspace/JSystem2.2/src/Reports/sample.jrxml"));
-			InputStream is = FncReport.class.getResourceAsStream(report);
-
-			JasperDesign jasperDesign = JRXmlLoader.load(is);
-			//JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
-			JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
-			
-			//jasperPrint = JasperFillManager.fillReport(jasperReport, mapParameters, FncGlobal.connection);
-			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, mapParameters, FncGlobal.connection);
-			
-			if(jasperPrint.getPages().size() > 0){
-				if(FncGlobal.homeMDI.isNotExisting("iJasperViewer")){
-					
-
-					JasperViewer printAssetSticker = new JasperViewer(jasperPrint, false);
-					printAssetSticker.setTitle(FncGlobal.getReportTitle("test", "test"));
-					printAssetSticker.setExtendedState(JFrame.MAXIMIZED_BOTH);
-					printAssetSticker.setLocationRelativeTo(null);
-					printAssetSticker.setVisible(true);
-					FncGlobal.AuditLogs(UserInfo.EmployeeCode, report, "Preview Report");
-			}
-			}else{
-				JOptionPane.showMessageDialog(FncGlobal.homeMDI, "No Reports Generated!", "test", JOptionPane.INFORMATION_MESSAGE);
-			}
-		} catch (JRException | FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-
-	}
+//	public static void reportViewer(final String report, final String title, final String company, final Map mapParameters) {
+//		System.out.println( "generating jasper report..." );
+//
+//		// 1. compile template ".jrxml" file
+//
+//		try {
+//			File template = ResourceUtils.getFile("/home/jfatallo/eclipse-workspace/JSystem2.2/src/Reports/sample.jrxml");
+//			
+//			//JasperReport jasperReport = JasperCompileManager.compileReport(template.getAbsolutePath());
+//			
+//			// 2. parameters "empty"
+//
+//			// 3. datasource "java object"
+//
+//			//JasperDesign jasperDesign = JRXmlLoader.load(new File("/home/jfatallo/eclipse-workspace/JSystem2.2/src/Reports/sample.jrxml"));
+//			InputStream is = FncReport.class.getResourceAsStream(report);
+//
+//			JasperDesign jasperDesign = JRXmlLoader.load(is);
+//			//JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+//			JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+//			
+//			//jasperPrint = JasperFillManager.fillReport(jasperReport, mapParameters, FncGlobal.connection);
+//			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, mapParameters, FncGlobal.connection);
+//			
+//			if(jasperPrint.getPages().size() > 0){
+//				if(FncGlobal.homeMDI.isNotExisting("iJasperViewer")){
+//					
+//
+//					JasperViewer printAssetSticker = new JasperViewer(jasperPrint, false);
+//					printAssetSticker.setTitle(FncGlobal.getReportTitle("test", "test"));
+//					printAssetSticker.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//					printAssetSticker.setLocationRelativeTo(null);
+//					printAssetSticker.setVisible(true);
+//					FncGlobal.AuditLogs(UserInfo.EmployeeCode, report, "Preview Report");
+//			}
+//			}else{
+//				JOptionPane.showMessageDialog(FncGlobal.homeMDI, "No Reports Generated!", "test", JOptionPane.INFORMATION_MESSAGE);
+//			}
+//		} catch (JRException | FileNotFoundException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//
+//
+//	}
 
 	
 
