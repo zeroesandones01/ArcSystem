@@ -40,9 +40,7 @@ import components._JXTextField;
 import interfaces._GUI;
 import tablemodel.modelClientSubmittedID;
 
-/**
- * @author John Lester Fatallo
- */
+
 public class ClientSubmittedID extends JXPanel implements _GUI,
 ActionListener {
 
@@ -79,7 +77,6 @@ ActionListener {
 	private _JTableMain tblIssuedID;
 	private JList rowHeaderIssuedID;
 	private modelClientSubmittedID modelSubmittedID;
-	//private JList rowHeaderSubmittedID;
 
 	private ClientInformation ci;
 	
@@ -293,7 +290,6 @@ ActionListener {
 	
 	public void displaySubmittedID(String entity_id){//DISPLAYS THE SUBMITTED ID
 		modelSubmittedID.clear();
-		//XXX PUT CLEAR HERE
 		
 		pgSelect db = new pgSelect();
 
@@ -384,7 +380,7 @@ ActionListener {
 		
 	}
 	
-	public void clearSubmittedID(){//CLEAR THE FIELDS IN THE CLIENT DETAILS AND IN THE TABLE
+	public void clearSubmittedID(){
 		
 		ci.setComponentsEditable(pnlNorth, false);
 		tblIssuedID.clearSelection();
@@ -399,7 +395,7 @@ ActionListener {
 		
 	}
 
-	public void actionPerformed(ActionEvent arg0) {//REMOVE THIS
+	public void actionPerformed(ActionEvent arg0) {
 		String actionCommand = arg0.getActionCommand();
 
 		if(actionCommand.equals("New")){//NEW SUBMITTED ID

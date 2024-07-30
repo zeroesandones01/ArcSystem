@@ -74,7 +74,7 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 
 	private static _JTabbedPane tabCenter;
 	public static pnlClientInformation pnlCI;
-//	public static ClientSubmittedID pnlSubmittedID;
+	public static ClientSubmittedID pnlSubmittedID;
 //	public static pnlAddress pnlADDRESS;
 //	public static pnlConnection pnlConnect;
 //	public static pnlDependents pnlDepend;
@@ -142,7 +142,7 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 			}
 
 			public void internalFrameClosed(InternalFrameEvent arg0) {
-				//System.out.println("internalFrameClosed");
+
 				executor.shutdown();
 				if(timerStatus != null){
 					timerStatus.stop();
@@ -190,7 +190,7 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 
 							//DISPLAYS THE DETAILS AFTER CLEARING FOR THE SELECTED ENTITY
 							displayClientInformation(entity_id);
-//							displaySubmittedID(entity_id);
+							displaySubmittedID(entity_id);
 //							displayConnectionList(entity_id);
 //							displayAddressList(entity_id);
 //							displayWorkExpList(entity_id);
@@ -401,7 +401,6 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 				pnlEastSouth = new JXPanel();
 				pnlEast.add(pnlEastSouth, BorderLayout.SOUTH);
 				pnlEastSouth.setLayout(new GridLayout(5, 1, 0, 5));
-				//pnlEastSouth.setBorder(LINE_BORDER);
 				pnlEastSouth.setPreferredSize(new Dimension(200, 170));
 				{
 					btnNew = new JButton("New");
@@ -450,10 +449,10 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 				pnlCI = new pnlClientInformation(this);
 				tabCenter.addTab("Client Information", pnlCI);
 			}
-//			{
-//				pnlSubmittedID = new ClientSubmittedID(this);
-//				tabCenter.addTab("Submitted ID", pnlSubmittedID);
-//			}
+			{
+				pnlSubmittedID = new ClientSubmittedID(this);
+				tabCenter.addTab("Submitted ID", pnlSubmittedID);
+			}
 //			{
 //				pnlADDRESS = new pnlAddress(this);
 //				tabCenter.addTab("Address", pnlADDRESS);
@@ -486,10 +485,10 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 					if(selectedTab == 0){ // Enabling of buttons for the Client Info Panel
 						btnState(true, true, false, false, false);
 					}
-//					if(selectedTab == 1){//Enabling of buttons for the Submitted ID Panel
-//						pnlSubmittedID.clearSubmittedID();
-//						btnState(true, false, false, false, false);
-//					}
+					if(selectedTab == 1){//Enabling of buttons for the Submitted ID Panel
+						pnlSubmittedID.clearSubmittedID();
+						btnState(true, false, false, false, false);
+					}
 //					if(selectedTab == 2){ // Enabling of buttons for the Address Panel
 //						pnlADDRESS.clearAddressFields();
 //						btnState(true, false, false, false, false);
@@ -541,7 +540,7 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 	//SET THE PANEL STATE WHEN EDITING OR CREATING NEW DATA
 	public static void pnlState(Boolean CI, Boolean sub_id ,Boolean addr, Boolean conn, Boolean dpend, Boolean FI, Boolean RO, Boolean WE){
 		tabCenter.setEnabledAt(0, CI);
-//		tabCenter.setEnabledAt(1, sub_id);
+		tabCenter.setEnabledAt(1, sub_id);
 //		tabCenter.setEnabledAt(2, addr);
 //		tabCenter.setEnabledAt(3, conn);
 //		tabCenter.setEnabledAt(4, dpend);
@@ -564,7 +563,6 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 				"date(a.date_of_birth) as \"Birthday\",\n" + 
 				"date(a.date_created) as \"Date Created\"\n" + 
 				"FROM rf_entity a\n" + 
-				//"WHERE date_part('year', date_created) >= 2014\n" +
 				"WHERE a.status_id = 'A' \n"+
 				"AND (CASE WHEN ('"+UserInfo.Division+"' IN ('04', '06', '07', '08', '09', '29') AND '"+UserInfo.EmployeeCode+"' NOT IN ('900965', '900606', '900383', '900028')) THEN \n"+
 				"     EXISTS (SELECT * FROM rf_entity_assigned_type WHERE entity_id = a.entity_id AND entity_type_id = '01' AND status_id = 'A') \n"+
@@ -606,9 +604,9 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 		pnlCI.displayDetails(entity_id);
 	}
 	
-//	public static void displaySubmittedID(String entity_id){
-//		pnlSubmittedID.displaySubmittedID(entity_id);
-//	}
+	public static void displaySubmittedID(String entity_id){
+		pnlSubmittedID.displaySubmittedID(entity_id);
+	}
 //
 //	public static void displayConnectionList(String entity_id) {
 //		pnlConnect.displayConnectionList(entity_id);
@@ -670,7 +668,7 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 				
 				//Commented on 2016-09-02
 				displayClientInformation(lookupClient.getValue());
-//				displaySubmittedID(lookupClient.getValue());
+				displaySubmittedID(lookupClient.getValue());
 //				displayConnectionList(lookupClient.getValue());
 //				displayAddressList(lookupClient.getValue());
 //				displayWorkExpList(lookupClient.getValue());
@@ -681,10 +679,10 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 				pnlState(true, false, false, false, false, false, false, false);
 			}
 			
-//			if(selectedTab == 1){
-//				pnlSubmittedID.newSubmittedID();
-//				pnlState(false, true, false, false, false, false, false, false);
-//			}
+			if(selectedTab == 1){
+				pnlSubmittedID.newSubmittedID();
+				pnlState(false, true, false, false, false, false, false, false);
+			}
 //			if (selectedTab == 2){
 //				pnlADDRESS.newAddress();
 //				pnlState(false, false, true, false, false, false, false, false);
@@ -727,13 +725,13 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 				}
 			}
 			
-//			if(selectedTab == 1){
-//				pnlSubmittedID.editSubmittedID();
-//				pnlState(false, true, false, false, false, false, false, false);
-//				btnState(false, false, false, true, true);
-//				grpNewEdit.setSelectedButton(e);
-//				lookupClient.setEditable(false);
-//			}
+			if(selectedTab == 1){
+				pnlSubmittedID.editSubmittedID();
+				pnlState(false, true, false, false, false, false, false, false);
+				btnState(false, false, false, true, true);
+				grpNewEdit.setSelectedButton(e);
+				lookupClient.setEditable(false);
+			}
 //			
 //			if(selectedTab == 2){
 //				pnlADDRESS.editAddress();
@@ -804,10 +802,9 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 		
 		if(actionCommand.equals("Save")){//SAVING FOR THE CLIENT INFORMATION
 			if (tabCenter.getSelectedIndex() == 0){
-				//if (pnlCI.checkRequiredFields()){
 					if (JOptionPane.showConfirmDialog(this.getTopLevelAncestor(), "Are all entries correct?", actionCommand, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
 						if (pnlCI.saveCI_Info(lookupClient.getValue()) && pnlCI.saveEntityTypes(lookupClient.getValue())){
-							//pnlCI.saveCI(lookupClient.getValue());
+
 							
 							//pnlCI.saveEntityTypes(lookupClient.getValue());
 							saveImage(lblClientImageFileChooser.getImageByte(), lblClientSignatureFileChooser.getImageByte() ,lookupClient.getValue());
@@ -826,17 +823,17 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 				//}
 			}
 			
-//			if(tabCenter.getSelectedIndex() == 1){
-//				if(pnlSubmittedID.saveSubmittedID(lookupClient.getValue())){
-//					pnlSubmittedID.cancelSubmittedID();
-//					JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Submitted ID has been saved", actionCommand, JOptionPane.INFORMATION_MESSAGE);
-//					displaySubmittedID(lookupClient.getValue());
-//					btnState(true, false, false, false, false);
-//					pnlState(true, true, true, true, true, true, true, true);
-//
-//					lookupClient.setEditable(true);
-//				}
-//			}
+			if(tabCenter.getSelectedIndex() == 1){
+				if(pnlSubmittedID.saveSubmittedID(lookupClient.getValue())){
+					pnlSubmittedID.cancelSubmittedID();
+					JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Submitted ID has been saved", actionCommand, JOptionPane.INFORMATION_MESSAGE);
+					displaySubmittedID(lookupClient.getValue());
+					btnState(true, false, false, false, false);
+					pnlState(true, true, true, true, true, true, true, true);
+
+					lookupClient.setEditable(true);
+				}
+			}
 //			
 //			if (tabCenter.getSelectedIndex() == 2){//SAVING FOR THE ADDRESS PANEL
 //				if(pnlADDRESS.toSave()){
@@ -949,10 +946,10 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 					
 				}
 				
-//				if(selectedTab == 1){
-//					pnlSubmittedID.cancelSubmittedID();
-//					btnState(true, false, false, false, false);
-//				}
+				if(selectedTab == 1){
+					pnlSubmittedID.cancelSubmittedID();
+					btnState(true, false, false, false, false);
+				}
 //				if (selectedTab == 2){
 //					pnlADDRESS.cancelAddress();
 //					btnState(true, false, false, false, false);
@@ -995,7 +992,7 @@ public class ClientInformation extends _JInternalFrame implements ActionListener
 	public void displayClientInfo(String _entity_id, String entity_name) { //CHARD
 		
 		displayClientInformation(_entity_id);
-//		displaySubmittedID(_entity_id);
+		displaySubmittedID(_entity_id);
 //		displayConnectionList(_entity_id);
 //		displayAddressList(_entity_id);
 //		displayWorkExpList(_entity_id);
