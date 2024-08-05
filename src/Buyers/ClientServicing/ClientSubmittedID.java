@@ -262,6 +262,7 @@ ActionListener {
 						}
 					});
 				}
+				
 				{
 					tblIssuedID.getColumnModel().getColumn(0).setPreferredWidth(70); //Select
 					tblIssuedID.getColumnModel().getColumn(1).setPreferredWidth(70); //ID Code
