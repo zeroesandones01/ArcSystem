@@ -31,6 +31,7 @@ import Database.pgUpdate;
 import Functions.FncGlobal;
 import Functions.FncSystem;
 import Functions.FncTables;
+import Functions.UserInfo;
 import Lookup.LookupEvent;
 import Lookup.LookupListener;
 import Lookup._JLookup;
@@ -455,7 +456,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 		
 		String sql = "select false,a.asset_no, a.peripheral_id, b.category_name,d.entity_name,a.amount, a.brand, a.model, a.description, a.license_key, a.status_id, null, null, null\n"
 				+ "from rf_asset_peripheral a \n"
-				+ "left join  mf_asset_peripheral_category b on a.category_id = category_id and a.status_id = b.status_id\n"
+				+ "left join  mf_asset_peripheral_category b on a.category_id = b.category_id and a.status_id = b.status_id\n"
 				+ "left join rf_employee c on a.current_cust = emp_code \n"
 				+ "left join rf_entity d on c.entity_id = d.entity_id \n"
 				+ "where a.asset_no = "+asset_no+" and a.status_id = 'A'";
@@ -525,7 +526,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 			Boolean selected = (Boolean) modeltagged.getValueAt(x, 0);
 			Integer perip_id = (Integer) modeltagged.getValueAt(x, 2);
 			if(selected) {
-				String Sql = "update rf_asset_peripheral set status_id = 'I' where peripheral_id = "+perip_id+"";
+				String Sql = "update rf_asset_peripheral set status_id = 'I', edited_by = '"+UserInfo.EmployeeCode+"', date_edited = now() where peripheral_id = "+perip_id+"";
 				db.executeUpdate(Sql, false);
 				db.commit();
 			}
