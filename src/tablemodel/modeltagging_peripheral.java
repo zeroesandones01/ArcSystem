@@ -10,6 +10,7 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
 import Functions.FncTables;
+import Lookup._JLookup;
 
 public class modeltagging_peripheral extends DefaultTableModel {
 
@@ -62,6 +63,7 @@ public class modeltagging_peripheral extends DefaultTableModel {
 			"Description",
 			"Serial",
 			"License Key",
+			"Supplier",
 			"Status",
 			"Prev Custodian",
 			"Date Retired",
@@ -81,6 +83,7 @@ public class modeltagging_peripheral extends DefaultTableModel {
 			String.class,//"Description",
 			String.class,//"Serial",
 			String.class,//"License Key",
+			_JLookup.class,//Supplier
 			String.class,//"Status",
 			String.class,//"Prev Custodian",
 			Date.class,//"Date Retired",
@@ -104,6 +107,7 @@ public class modeltagging_peripheral extends DefaultTableModel {
 			false,//"Description",
 			false,//"Serial",
 			false,//"License Key",
+			false,//Supplier
 			false,//"Status",
 			false,//"Prev Custodian",
 			false,//"Date Retired",
@@ -142,6 +146,7 @@ public class modeltagging_peripheral extends DefaultTableModel {
 					true,//"Description",
 					true,//"Serial",
 					true,//"License Key",
+					true,//Supplier
 					false,//"Status",
 					false,//"Prev Custodian",
 					false,//"Date Retired",
@@ -160,6 +165,7 @@ public class modeltagging_peripheral extends DefaultTableModel {
 					false,//"Description",
 					false,//"Serial",
 					false,//"License Key",
+					false,//Supplier
 					false,//"Status",
 					false,//"Prev Custodian",
 					false,//"Date Retired",

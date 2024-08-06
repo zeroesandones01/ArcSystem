@@ -51,21 +51,21 @@ public class modeltagged_peripheral extends DefaultTableModel {
 	}
 	
 	String[] COLUMNS = new String[] {
-			"Selected",
-			"Asset No.", 
-			"Peripheral ID",
-			"Peripheral Name",
-			"Custodian",
-			"Amount",
-			"Brand",
-			"Model",
-			"Description",
-			"Serial",
-			"License Key",
-			"Status",
-			"Prev Custodian",
-			"Date Retired",
-			"Date Disposed"
+			"Selected",//0
+			"Asset No.", //1
+			"Peripheral ID",//2
+			"Peripheral Name",//3
+			"Custodian",//4
+			"Amount",//5
+			"Brand",//6
+			"Model",//7
+			"Description",//8
+			"Serial",//9
+			"License Key",//10
+			"Status",//11
+			"Prev Custodian",//12
+			"Date Retired",//13
+			"Date Disposed"//14
 			
 	};
 	
