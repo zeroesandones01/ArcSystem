@@ -337,6 +337,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 					if(JOptionPane.showConfirmDialog(this, "Are you sure you want to save new peripheral?", "Save", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 						save_peripherals();
 						buttonstate(true, false, false, true);
+						cancelstate();
 						JOptionPane.showMessageDialog(this, "New peripheral is saved.", "", JOptionPane.PLAIN_MESSAGE);
 					}
 				}else {
@@ -454,7 +455,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 		DefaultListModel listModel = new DefaultListModel();
 		rowHeader.setModel(listModel);
 		
-		String sql = "select false,a.asset_no, a.peripheral_id, b.category_name,d.entity_name,a.amount, a.brand, a.model, a.description, a.license_key, a.status_id, null, null, null\n"
+		String sql = "select false,a.asset_no, a.peripheral_id, b.category_name,d.entity_name,a.amount, a.brand, a.model, a.description,a.serial_no, a.license_key, a.status_id, null, null, null\n"
 				+ "from rf_asset_peripheral a \n"
 				+ "left join  mf_asset_peripheral_category b on a.category_id = b.category_id and a.status_id = b.status_id\n"
 				+ "left join rf_employee c on a.current_cust = emp_code \n"
