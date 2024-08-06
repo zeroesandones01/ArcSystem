@@ -342,6 +342,8 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 					JOptionPane.showMessageDialog(this, "Please check the box of the peripheral that you want to add.", "", JOptionPane.PLAIN_MESSAGE);
 				}
 			}else {
+				updateperipheral();
+				
 				System.out.println("Save Edit Peripheral");
 				
 			}
@@ -431,7 +433,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 		
 		String sql = "select false, '', a.category_id, a.category_name, '', 0.00, '','','','','','','',null,null  \n"
 				+ "from mf_asset_peripheral_category a where status_id = 'A'\n"+
-				"and not exists(select parent_id from rf_asset_peripheral where parent_id = "+asset_no+" and child_cat = a.category_id and status_id = 'A')";
+				"and not exists(select asset_no from rf_asset_peripheral where asset_no = "+asset_no+" and category_id = a.category_id and status_id = 'A')";
 		
 		System.out.printf("display_peripherals: %s", sql);
 		pgSelect db = new pgSelect();
@@ -456,7 +458,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 				+ "left join  mf_asset_peripheral_category b on a.category_id = category_id and a.status_id = b.status_id\n"
 				+ "left join rf_employee c on a.current_cust = emp_code \n"
 				+ "left join rf_entity d on c.entity_id = d.entity_id \n"
-				+ "where a.parent_id = "+asset_no+" and a.status_id = 'A'";
+				+ "where a.asset_no = "+asset_no+" and a.status_id = 'A'";
 		
 		System.out.printf("displaytagged_peripherals: %s", sql);
 		pgSelect db = new pgSelect();
@@ -470,7 +472,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 			
 		}
 	}
-	public static void save_peripherals() {
+	private static void save_peripherals() {
 		
 		for(int x = 0; x < modeltagging.getRowCount(); x++) {
 			
@@ -498,10 +500,29 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 			
 		}
 	}
+	private void save_edit() {
+		pgSelect db = new pgSelect();
+		for(int x = 0; x < modeltagged.getRowCount(); x++) {
+			Boolean selected = (Boolean) modeltagged.getValueAt(x, 0);
+			String asset_no = (String) modeltagged.getValueAt(x, 1);
+			String current_cust = (String) modeltagged.getValueAt(x, 4);
+			String brand = (String) modeltagged.getValueAt(x, 6);
+			String model = (String) modeltagged.getValueAt(x, 7);
+			String desc = (String) modeltagged.getValueAt(x, 8);
+			String serial = (String) modeltagged.getValueAt(x, 9);
+			
+			if(selected) {
+				
+				String sql = "";
+				db.select(sql);
+			}
+		}
+	}
+	
 	private void updateperipheral() {
 		pgUpdate db = new pgUpdate();
-		for(int x = 0; x < modeltagging.getRowCount(); x++) {
-			Boolean selected = (Boolean) modeltagging.getValueAt(x, 0);
+		for(int x = 0; x < modeltagged.getRowCount(); x++) {
+			Boolean selected = (Boolean) modeltagged.getValueAt(x, 0);
 			Integer perip_id = (Integer) modeltagged.getValueAt(x, 2);
 			if(selected) {
 				String Sql = "update rf_asset_peripheral set status_id = 'I' where peripheral_id = "+perip_id+"";
