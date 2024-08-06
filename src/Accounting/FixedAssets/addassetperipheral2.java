@@ -6,6 +6,9 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -25,11 +28,13 @@ import javax.swing.table.DefaultTableModel;
 
 import Database.pgSelect;
 import Database.pgUpdate;
+import Functions.FncGlobal;
 import Functions.FncSystem;
 import Functions.FncTables;
 import Lookup.LookupEvent;
 import Lookup.LookupListener;
 import Lookup._JLookup;
+import Lookup._JLookupTable;
 import components.JTBorderFactory;
 import components._JInternalFrame;
 import components._JScrollPane;
@@ -216,6 +221,25 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 									scrolltagperipheral.setViewportView(tbltagperipheral);
 									tbltagperipheral.getColumnModel().getColumn(0).setPreferredWidth(50);
 									tbltagperipheral.hideColumns("Asset No.", "Custodian", "Status", "Prev_Custodian","Date_Retired", "Date_Disposed");
+									tbltagperipheral.addMouseListener(new MouseAdapter() {
+										@Override
+										public void mousePressed(MouseEvent e) {
+											if  ((e.getClickCount() >= 2)) {
+												int column 	= tbltagperipheral.getSelectedColumn();
+												System.out.println("column: "+column);
+												if(column == 9) {setsupplier();}
+											}
+										}
+										
+										@Override
+										public void mouseReleased(MouseEvent e) {
+											if  ((e.getClickCount() >= 2)) {
+												int column 	= tbltagperipheral.getSelectedColumn();
+												System.out.println("column: "+column);
+												if(column == 9) {setsupplier();}
+											}
+										}
+									});
 								}
 								{
 									rowheadertagging= tbltagperipheral.getRowHeader();
@@ -311,6 +335,8 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 					
 					if(JOptionPane.showConfirmDialog(this, "Are you sure you want to save new peripheral?", "Save", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 						save_peripherals();
+						buttonstate(true, false, false, true);
+						JOptionPane.showMessageDialog(this, "New peripheral is saved.", "", JOptionPane.PLAIN_MESSAGE);
 					}
 				}else {
 					JOptionPane.showMessageDialog(this, "Please check the box of the peripheral that you want to add.", "", JOptionPane.PLAIN_MESSAGE);
@@ -337,6 +363,31 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 				cancelstate();
 			}
 		}
+	}
+	public void setsupplier () {
+		int column = tbltagperipheral.getSelectedColumn();
+		int row = tbltagperipheral.getSelectedRow();
+		
+		
+		if (column == 9 ) {
+			_JLookupTable dlg = new _JLookupTable(FncGlobal.homeMDI, null, "Select Supplier",getsupplier(), false);
+			dlg.setLocationRelativeTo(FncGlobal.homeMDI);
+			dlg.setVisible(true);
+			
+			Object[] data = dlg.getReturnDataSet();
+			if (data != null) {
+				String test = (String) data[0];
+				modeltagging.setValueAt(test, row, 11);
+				
+				System.out.println("column:: "+column);
+				System.out.println("row:: "+row);
+			}		
+			tbltagperipheral.packAll();
+		}
+	}
+	private String getsupplier() {
+		String sql = "Select '01', 'Test' Supplier";
+		return sql;
 	}
 	public void buttonstate(Boolean addnew, Boolean save,  Boolean edit,  Boolean cancel) {
 		btnnew.setEnabled(addnew);
@@ -400,10 +451,10 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 		DefaultListModel listModel = new DefaultListModel();
 		rowHeader.setModel(listModel);
 		
-		String sql = "select false,a.parent_id, a.child_id, b.category_name,d.entity_name,a.amount, a.brand, a.model, a.description, a.license_key, a.status_id, null, null, null\n"
+		String sql = "select false,a.asset_no, a.peripheral_id, b.category_name,d.entity_name,a.amount, a.brand, a.model, a.description, a.license_key, a.status_id, null, null, null\n"
 				+ "from rf_asset_peripheral a \n"
-				+ "left join  mf_asset_peripheral_category b on a.child_cat = category_id and a.status_id = b.status_id\n"
-				+ "left join em_employee c on a.current_cust = emp_code \n"
+				+ "left join  mf_asset_peripheral_category b on a.category_id = category_id and a.status_id = b.status_id\n"
+				+ "left join rf_employee c on a.current_cust = emp_code \n"
 				+ "left join rf_entity d on c.entity_id = d.entity_id \n"
 				+ "where a.parent_id = "+asset_no+" and a.status_id = 'A'";
 		
@@ -416,6 +467,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 				modelMain.addRow(db.getResult()[x]);
 				listModel.addElement(modelMain.getRowCount());
 			}
+			
 		}
 	}
 	public static void save_peripherals() {
@@ -429,6 +481,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 			String description = (String) modeltagging.getValueAt(x, 8);
 			String serial_no = (String) modeltagging.getValueAt(x, 9);
 			String lic_key = (String) modeltagging.getValueAt(x, 10);
+			String supp_id = (String) modeltagging.getValueAt(x, 11);
 			
 			if(selected) {
 				System.out.println("cat_id: "+ cat_id);
@@ -437,11 +490,24 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 				System.out.println("description: "+ description);
 				System.out.println("serial_no: "+ serial_no);
 				System.out.println("lic_key: "+ lic_key);
-				String sql = "select sp_save_asset_peripherals("+asset_no+", "+cat_id+", '"+brand+"', '"+model+"', '"+description+"', '"+serial_no+"', '"+lic_key+"')";
+				System.out.println("supp_id: "+ supp_id);
+				String sql = "select sp_save_asset_peripherals("+asset_no+", "+cat_id+", '"+brand+"', '"+model+"', '"+description+"', '"+serial_no+"', '"+lic_key+"', '"+supp_id+"')";
 				pgSelect db = new pgSelect();
 				db.select(sql);
 			}
 			
+		}
+	}
+	private void updateperipheral() {
+		pgUpdate db = new pgUpdate();
+		for(int x = 0; x < modeltagging.getRowCount(); x++) {
+			Boolean selected = (Boolean) modeltagging.getValueAt(x, 0);
+			Integer perip_id = (Integer) modeltagged.getValueAt(x, 2);
+			if(selected) {
+				String Sql = "update rf_asset_peripheral set status_id = 'I' where peripheral_id = "+perip_id+"";
+				db.executeUpdate(Sql, false);
+				db.commit();
+			}
 		}
 	}
 	public Boolean hasCheckedAssets(){
