@@ -388,7 +388,8 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 							lookupCustodian = new _JLookup(null , "Custodian", 0);
 							jPanel3.add(lookupCustodian);
 							lookupCustodian.setEditable(false);
-							lookupCustodian.setLookupSQL("select '900767', 'BITUEN, JOHN ERICK RESPICIO'");
+							//lookupCustodian.setLookupSQL("select '900767', 'BITUEN, JOHN ERICK RESPICIO'");
+							lookupCustodian.setLookupSQL(getCustodian());
 							lookupCustodian.addLookupListener(new LookupListener() {
 								@Override
 								public void lookupPerformed(LookupEvent event) {
@@ -463,13 +464,17 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 							jPanel5.add(lookupItem);
 							lookupItem.setReturnColumn(0);
 							lookupItem.setEnabled(false);
-							lookupItem.setLookupSQL(_AssetMonitoring.getItem(lookupCategory.getValue()));
+							//lookupItem.setLookupSQL(_AssetMonitoring.getItem(lookupCategory.getValue()));
+							lookupItem.setLookupSQL("select '01', 'Car'");
 							lookupItem.addLookupListener(new LookupListener() {
 								public void lookupPerformed(LookupEvent event) {
-									
+									Object[] data = ((_JLookup) event.getSource()).getDataSet();
+									if (data != null) {
+										String item_name = (String) data[1];
+										txtItem.setText(item_name);
+									}
 								}
 							});
-							
 						}
 					}
 					{
@@ -1035,12 +1040,12 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 			{
 				pnlNavigationEast = new JPanel(new GridLayout(1, 7, 3, 3));
 				pnlNavigation.add(pnlNavigationEast, BorderLayout.CENTER);
-				{
-					btnPreview= new JButton("Preview Sticker");
-					pnlNavigationEast.add(btnPreview);
-					btnPreview.setEnabled(false);
-					btnPreview.addActionListener(this);
-				}
+//				{
+//					btnPreview= new JButton("Preview Sticker");
+//					pnlNavigationEast.add(btnPreview);
+//					btnPreview.setEnabled(false);
+//					btnPreview.addActionListener(this);
+//				}
 //				{
 //					btnattachment = new JButton("Attachments");
 //					pnlNavigationEast.add(btnattachment);
@@ -1081,6 +1086,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 	}
 	
 	public void actionPerformed(ActionEvent e) {
+		
 		if(e.getActionCommand().equals("new")) {
 			newState();
 		}
@@ -1088,190 +1094,261 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 		if(e.getActionCommand().equals("reset")) {
 			resetInformation();
 		}
+		if(e.getActionCommand().equals("save")) {
+			System.out.println("Save");
+			if(toAdd()) {
+				addAsset(
+						lookupItem.getText(), 					//item_id
+						txtItem.getText()+", "+txtBrand.getText().replace("'", "''")+", "+txtDescription.getText().replace("'", "''"),//asset_name
+						txtNetCost.getText().replace(",", ""),	//asset_cost
+						Integer.parseInt(txtUsefulLife.getText()),//asset_ulm
+						txtAssetNo.getText(),					//asset_no
+						txtSerialNo.getText(),					//asset_serial
+						txtModelNo.getText(),					//asset_model
+						txtNetCost.getText().replace(",", ""),	//asset_bk_val
+						dateAcquired.getDate().toString(),		//date_acquired
+						(rbOwnedYes.isSelected() ? "true":"false"),//owned
+						(rbInsuredYes.isSelected() ? "true":"false"),//insured
+						txtInsuredValue.getText().replace(",", ""),//insured_value
+						txtRemarks.getText(),					//remarks
+						lookupSupplier.getText(),				//supp_id
+						lookupCustodian.getValue(),				//current_cust
+						txtReferenceNo.getText(),				//reference_no
+						txtNetCost.getText().replace(",", ""), //original_cost
+						(rbCapitalizedYes.isSelected() ? "true":"false"),//capitalized
+			 			panelAssetInformation2.lookupCompany.getValue(),//comp_id
+						txtCustodian.getText().trim(),			//custodian_name
+						Integer.valueOf(txtNoOfAssets.getText()),//noofAsset
+					    true,									//toPrint
+					    panelAssetInformation2.lookupCompany.getValue(),//co_id
+						(rbFoundYes.isSelected()?"true":"false"),//item_found
+						Item,									//item_name
+						txtBrand.getText(),						//brand
+						txtDescription.getText(),				//description
+						dept_code,								//dept_code
+						loc_id									//location_id
+						);
+				JOptionPane.showMessageDialog(getTopLevelAncestor(), "New Asset has been Added", "Save", JOptionPane.INFORMATION_MESSAGE);
+				resetInformation();
+				btnState(true, false, false, true);
+			}else {
+				if(txtCustodian.getText().equals("")){
+					JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please select custodian", "Warning", JOptionPane.WARNING_MESSAGE);
+				}
+				if(lookupCompany.getText().equals("")){
+					JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please select company", "Warning", JOptionPane.WARNING_MESSAGE);
+				}
+				if(lookupItem.getText().equals("")){
+					JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please select item", "Warning", JOptionPane.WARNING_MESSAGE);
+				}
+				if (txtBrand.getText().equals("")){
+					JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please input item brand", "Warning", JOptionPane.WARNING_MESSAGE);
+				}
+				if(txtDescription.getText().equals("")){
+					JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please input item description", "Warning", JOptionPane.WARNING_MESSAGE);
+				}
+				if(txtUsefulLife.getText().equals("")||txtUsefulLife.getText().equals(0.00)){
+					JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please input item ULM", "Warning", JOptionPane.WARNING_MESSAGE);
+				}
+				if(txtNetCost.getText().equals("")||txtNetCost.getText().equals("0.00")){
+					//JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please input item net cost", "Warning", JOptionPane.WARNING_MESSAGE);
+					txtNetCost.setText(JOptionPane.showInputDialog(getTopLevelAncestor(), "Please input net cost."));
+				}
+				if (txtSerialNo.getText().equals("")){
+					JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please put serial number of the asset.", "Warning",JOptionPane.WARNING_MESSAGE);
+				}
+				if (txtModelNo.getText().equals("")){
+					JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please put model of the asset.", "Warning",JOptionPane.WARNING_MESSAGE);
+				}
+				if(txtReferenceNo.getText().equals("")){
+					JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please input item reference no.", "Warning", JOptionPane.WARNING_MESSAGE);
+				}
+				if(rbInsuredYes.isSelected()){
+					if (txtInsuredValue.getText().equals("0.00")||txtInsuredValue.getText().equals("")){
+						//JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please input item insured value.", "Warning", JOptionPane.WARNING_MESSAGE);
+						txtInsuredValue.setText(JOptionPane.showInputDialog("Please input insured amount."));
+					}
+				}
+				if(lookupLocation.getText().equals("")){
+					JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please select asset location.", "Warning", JOptionPane.WARNING_MESSAGE);
+				}
+//				if( Double.parseDouble(txtNetCost.getText().replace(",", "")) <= 5000.00){
+//					JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Asset cost is below 5,000.00", "Error", JOptionPane.ERROR_MESSAGE);
+//				}
+			}
+		}
+	}
+	
+	private void buttonstate (Boolean addnew, Boolean edit, Boolean save, Boolean reset) {
+		btnNew.setEnabled(addnew);
+		btnEdit.setEnabled(edit);
+		btnSave.setEnabled(save);
+		btnReset.setEnabled(reset);
 		
 	}
-	
-	private static void insertAudit_trail_new
+	public static void addAsset(
 			
-			(String asset_no,
-			String asset_code, 
-			String asset_name, 
-			String current_date,//date_encoded
-			String date_edited,
-			String user_code,
-			String insert_activity
-			) {
-		pgUpdate db = new pgUpdate();
-		 
-		 String strSQL= "INSERT into \n" + 
-			 		"tbl_audit_trail\n" + 
-			 		"(\n" + 
-			 		"asset_no,\n" + 
-			 		"asset_code,\n" + 
-			 		"asset_name,\n" + 
-			 		"date_encoded,\n" + 
-			 		"date_edited,\n" + 
-			 		"user_code, \n" + 
-			 		"activity, \n"+
-			 		"asset_cost, \n"+
-			 		"asset_ulm, \n"+
-			 		"asset_mon_dep, \n"+
-			 		"asset_serial, \n"+
-			 		"asset_model, \n"+
-			 		"asset_bk_val, \n"+
-			 		"asset_ret_cost, \n"+
-			 		"date_acquired, \n"+
-			 		"from_dep, \n"+
-			 		"to_dep, \n"+
-			 		"insured_value, \n"+
-			 		"remarks, \n"+
-			 		"status, \n"+
-			 		"supp_id, \n"+
-			 		"current_cust, \n"+
-			 		"reference_no, \n"+
-			 		"original_cost, \n"+
-			 		"capitalized, \n"+
-			 		"co_id, \n"+
-			 		"item_found, \n"+
-			 		"item_name, \n"+
-			 		"brand, \n"+
-			 		"description, \n"+
-			 		"owned, \n"+
-			 		"insured, \n"+
-			 		"dept_code \n"+
-			 		")   \n" + 
-			 		"VALUES\n" + 
-			 		"(\n" + 
-			 		"'"+asset_no+"',\n" +  //asset_no
-			 		"'"+asset_code+"',\n" + //asset_code
-			 		"'"+asset_name+"',\n" + //asset_name
-			 		"null,\n" +  //date_encoded
-			 		"'now()',\n" + //date_edited
-			 		"'"+UserInfo.EmployeeCode +"',\n"+ //user_code
-			 		"'Add new',\n"+   //activity
-			 		"'"+txtNetCost.getText().replace(",", "")+"',\n"+ //asset_cost
-			 		"'"+txtUsefulLife.getText()+"',\n"+ //asset_ulm
-			 		""+new BigDecimal(txtMonthlyDep.getText())+",\n"+ //asset_mon_dep
-			 		"'"+txtSerialNo.getText()+"',\n"+ //asset_serial
-			 		"'"+txtModelNo.getText()+"',\n"+ //asset_model
-			 		"'"+txtBookValue.getText().replace(",", "")+"',\n"+ //asset_bk_val
-			 		"'"+txtRetCost.getText().replace(",", "")+"',\n"+ //asset_ret_cost
-			 		"'"+dateAcquired.getText()+"',\n"+ //date_acquired
-			 		"(select ( date '"+dateAcquired.getText()+"' + INTERVAL '1 MONTH' )), \n" +//from_dep
-			 		"(select ( date '"+dateAcquired.getText()+"' + INTERVAL '"+((txtUsefulLife.getText()) + 1)+" MONTH' )), \n" +//to_dep
-			 		"'"+txtInsuredValue.getText().replace(",", "")+"',\n"+ //insured_value
-			 		"'"+txtRemarks.getText()+"',\n"+ //remarks
-			 		"'"+cmbstatus.getSelectedItem()+"',\n"+  //status
-			 		"'"+lookupSupplier.getValue()+"',\n"+ //supp_id
-			 		"'"+lookupCustodian.getValue()+"',\n"+ //current_cust
-			 		"'"+txtReferenceNo.getText()+"',\n"+   //reference_no
-			 		"'"+txtNetCost.getText().replace(",", "")+"',\n"+ //original_cost
-			 		"'"+(rbCapitalizedYes.isSelected() ? "true":"false")+"',\n"+ //capitalized
-			 		""+co_id+",\n"+ // co_id
-			 		"'"+(rbFoundYes.isSelected()?"true":"false")+"',\n"+ //item_found
-			 		"'"+txtItem.getText()+"',\n"+ //item_name
-			 		"'"+txtBrand.getText()+"',\n"+ //brand
-			 		"'"+txtDescription.getText()+"',\n"+ //description
-			 		"'"+(rbOwnedYes.isSelected() ? "true":"false")+"',\n"+ //owned
-			 		"'"+(rbInsuredYes.isSelected() ? "true":"false")+"',\n"+//insured
-		 			"'"+dept_code+"')"; //deptcode
-		 		
-		 		
-		 
-		 FncSystem.out("Insert audit_trail", strSQL);
-		 db.executeUpdate(strSQL, false);
-		 db.commit();
+			String item_id,
+			String asset_name,
+			String asset_cost,
+			Integer asset_ulm,
+			String asset_no,
+			String asset_serial, 
+			String asset_model,
+			String asset_bk_val,
+			String date_acquired,
+			String owned,
+			String insured,
+			String insured_value,
+			String remarks,
+			String supp_id,
+			String current_cust, 
+			String reference_no, 
+			String original_cost, 
+			String capitalized, 
+			String comp_id,
+			String custodian_name,
+			int noofAsset,
+			boolean toPrint,
+			String co_id,
+			String item_found,
+			String item_name,
+			String brand,
+			String description,
+			String dept_code,
+			String location_id
+			){
+		pgUpdate db=new pgUpdate();
+		
+		int num = Integer.parseInt(asset_no)-1;
+		
+		ArrayList<Boolean> toPrints = new ArrayList<Boolean>();
+		int first=1;
+		String assetToPrint = "";
+		for(int x=0; x < noofAsset; x++)
+		{
+			int asset_number = num+=1;
+			first -= 1;
+			assetToPrint = first==0 ? assetToPrint + asset_number:assetToPrint + ", "+asset_number;
+			//toPrints.add(true);
+			
+			String strSQL =
+					"INSERT INTO rf_asset( \n" +
+							//"asset_code, \n" +
+							"item_id, \n" +
+							"asset_name, \n" +
+							"asset_cost, \n" +
+							"asset_ulm, \n" +
+							"asset_mon_dep, \n" +
+							"asset_no, \n" +
+							"asset_serial, \n" +
+							"asset_model, \n" +
+							"asset_bk_val, \n" +
+							"asset_ret_cost, \n" +
+							"date_acquired, \n" +
+							"from_dep, \n" +
+							"to_dep, \n" +
+							"date_retired, \n" +
+							"owned, \n" +
+							"insured, \n" +
+							"insured_value, \n" +
+							"remarks, \n" +
+							"status, \n" +
+							"supp_id, \n" +
+							"current_cust, \n" +
+							"added_by, \n" +
+							"date_added, \n" +
+							"reference_no, \n" +
+							"original_cost, \n" +							
+							"capitalized, \n" +
+							"comp_id, \n" +
+							"co_id, \n" +
+							"item_found, \n" +
+							"item_name, \n"+
+							"brand, \n"+
+							"description, \n"+
+							"dept_code, \n"+
+							//"remarks2, \n"+
+							"loc_id,\n"+
+							//"replaced_assetno,\n"+
+							"date_disposed)\n"+
+							"VALUES (\n" +
+							//"'"+panelAssetInformation.txtAssetCode.getText()+"', \n" +	//asset_code
+							""+item_id+", \n" +									//item_id
+							"'"+asset_name+"', \n" +							//asset_name
+							""+asset_cost+", \n" +								//asset_cost
+							""+asset_ulm+", \n" +								//asset_ulm
+							"("+asset_cost+" -1)/"+asset_ulm+", \n" +			//asset_mon_dep
+							""+asset_number+", \n" +							//asset_no
+							"'"+asset_serial+"', \n" +							//asset_serial
+							"'"+asset_model+"', \n" +							//asset_model
+							""+asset_bk_val+", \n" +							//asset_bk_val
+							"1.00, \n" +										//asset_ret_cost
+							"'"+date_acquired+"', \n" +							//date_acquired
+							"(select LAST_DAY('"+date_acquired+"'::date) + 1), \n" +//from_dep
+							"(select ( date '"+date_acquired+"' + INTERVAL '"+((asset_ulm) + 1)+" MONTH' )), \n" +	//to_dep
+							"null, \n" +										//date_retired
+							""+owned+", \n" +									//owned
+							""+insured+", \n" +									//insured
+							""+insured_value+", \n" +							//insured_value
+							"'"+remarks+"', \n" +								//remarks
+							"'A', \n" +											//status
+							""+supp_id+", \n" +									//supp_id
+							"'"+current_cust+"', \n" +							//current_cust
+							"'"+UserInfo.EmployeeCode+"', \n" +					//added_by
+							"now(), \n" +										//date_added
+							"'"+reference_no+"', \n" +							//reference_no
+							""+original_cost+", \n" +							//original_cost
+							""+capitalized+", \n" +								//capitalized
+							""+comp_id+", \n"+									//comp_id
+							"'"+co_id+"', \n"+									//co_id
+							""+item_found+",\n"+								//item_found
+							"'"+item_name+"',\n"+								//item_name
+							"'"+brand+"',\n"+									//item_brand
+							"'"+description+"',\n"+								//Description
+							"'"+dept_code+"', \n"+ 								//dept_code
+							"'"+location_id+"',\n"+								//location id of the asset
+							"null)";								//asset number replace by the new item
+			
+			db.executeUpdate(strSQL, true);
+
+		}
+		db.commit();
+		
+		assetToPrint = assetToPrint + "";
+			
+			String strSQL = "\n" + 
+					"select \n" + 
+					"a.asset_code,\n" + 
+					"a.asset_no, \n" + 
+					"a.asset_name, \n" + 
+					"to_char(a.asset_no, 'FM00000000') as anum, \n" + 
+					"c.entity_name as nme,\n" + 
+					"current_date,\n" + 
+					"lower(format('%s%s%s',left(c.first_name,1),left(c.middle_name,1),c.last_name))\n" + 
+					"--lower(substr(c.first_name, left,1)||substr(c.middle_name, left,1)||c.last_name) as cuser \n" + 
+					"from rf_asset  a \n" + 
+					"left join em_employee b on a.current_cust::varchar=b.emp_code\n" + 
+					"left join rf_entity as c on b.entity_id=c.entity_id\n" + 
+					"where a.asset_no='"+assetToPrint+"' and b.emp_code= '"+UserInfo.EmployeeCode+"'\n" + 
+					"order by a.asset_no";
+			FncSystem.out("assetToPrint", strSQL);
+			System.out.println("");
+			System.out.println("asset_no" + asset_no);
 	}
-	private static void insertAudit_trail_edit
 	
-	(String asset_no,
-	String asset_code, 
-	String asset_name, 
-	String current_date,//date_encoded
-	String date_edited,
-	String user_code,
-	String insert_activity
-	) {
-	pgUpdate db = new pgUpdate();
-	 
-	 String strSQL=  "INSERT into \n" + 
-		 		"tbl_audit_trail\n" + 
-		 		"(\n" + 
-		 		"asset_no,\n" + 
-		 		"asset_code,\n" + 
-		 		"asset_name,\n" + 
-		 		"date_encoded,\n" + 
-		 		"date_edited,\n" + 
-		 		"user_code, \n" + 
-		 		"activity, \n"+
-		 		"asset_cost, \n"+
-		 		"asset_ulm, \n"+
-		 		"asset_mon_dep, \n"+
-		 		"asset_serial, \n"+
-		 		"asset_model, \n"+
-		 		"asset_bk_val, \n"+
-		 		"asset_ret_cost, \n"+
-		 		"date_acquired, \n"+
-		 		"from_dep, \n"+
-		 		"to_dep, \n"+
-		 		"insured_value, \n"+
-		 		"remarks, \n"+
-		 		"status, \n"+
-		 		"supp_id, \n"+
-		 		"current_cust, \n"+
-		 		"reference_no, \n"+
-		 		"original_cost, \n"+
-		 		"capitalized, \n"+
-		 		"co_id, \n"+
-		 		"item_found, \n"+
-		 		"item_name, \n"+
-		 		"brand, \n"+
-		 		"description, \n"+
-		 		"owned, \n"+
-		 		"insured, \n"+
-		 		"dept_code \n"+
-		 		")   \n" + 
-		 		"VALUES\n" + 
-		 		"(\n" + 
-		 		"'"+asset_no+"',\n" +  //asset_no
-		 		"'"+asset_code+"',\n" + //asset_code
-		 		"'"+asset_name+"',\n" + //asset_name
-		 		"null,\n" +  //date_encoded
-		 		"'now()',\n" + //date_edited
-		 		"'"+UserInfo.EmployeeCode +"',\n"+ //user_code
-		 		"'Edit',\n"+   //activity
-		 		""+txtNetCost.getValued()+",\n"+ //asset_cost
-		 		"'"+txtUsefulLife.getText()+"',\n"+ //asset_ulm
-		 		""+txtMonthlyDep.getValued()+",\n"+ //asset_mon_dep
-		 		"'"+txtSerialNo.getText()+"',\n"+ //asset_serial
-		 		"'"+txtModelNo.getText()+"',\n"+ //asset_model
-		 		""+txtBookValue.getValued()+",\n"+ //asset_bk_val
-		 		""+txtRetCost.getValued()+",\n"+ //asset_ret_cost
-		 		"'"+dateAcquired.getText()+"',\n"+ //date_acquired
-		 		"'"+dateFromDep.getText()+"',\n"+ //from_dep
-		 		"'"+dateToDep.getText()+"',\n"+   //to_dep
-		 		""+txtInsuredValue.getValued()+",\n"+ //insured_value
-		 		"'"+txtRemarks.getText()+"',\n"+ //remarks
-		 		"'"+cmbstatus.getSelectedItem()+"',\n"+  //status
-		 		"'"+lookupSupplier.getValue()+"',\n"+ //supp_id
-		 		"'"+lookupCustodian.getValue()+"',\n"+ //current_cust
-		 		"'"+txtReferenceNo.getText()+"',\n"+   //reference_no
-		 		""+txtNetCost.getValued()+",\n"+ //original_cost
-		 		"'"+(rbCapitalizedYes.isSelected() ? "true":"false")+"',\n"+ //capitalized
-		 		"'"+co_id+"',\n"+ // co_id
-		 		"'"+(rbFoundYes.isSelected()?"true":"false")+"',\n"+ //item_found
-		 		"'"+txtItem.getText()+"',\n"+ //item_name
-		 		"'"+txtBrand.getText()+"',\n"+ //brand
-		 		"'"+txtDescription.getText()+"',\n"+ //description
-		 		"'"+(rbOwnedYes.isSelected() ? "true":"false")+"',\n"+ //owned
-		 		"'"+(rbInsuredYes.isSelected() ? "true":"false")+"',\n"+//insured
-	 			"'"+dept_code+"')"; //deptcode
-	 		
-	 		
-	 
-	 FncSystem.out("Insert audit_trail", strSQL);
-	 db.executeUpdate(strSQL, false);
-	 db.commit();
+	public static String getCustodian(){
+		
+		String strsql="select  a.emp_code, b.entity_name\n"
+				+ "from  rf_employee a\n"
+				+ "left join rf_entity b ON a.entity_id=b.entity_id\n"
+				+ "left join mf_division as c on a.div_code=c.div_code\n"
+				+ "left join mf_exec_office d on a.exec_off_code = d.exec_office_code\n"
+				+ "order by b.entity_name";
+		
+		System.out.println("getCustodian: "+strsql);
+		return strsql;
+		
 	}
 	
 	public static void pulloutAsset(String asset_no){
@@ -1293,9 +1370,9 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 	public static  void newState(){
 		
 		cmbstatus.setEnabled(true);
-		
 		txtInsuredValue.setEditable(false);
-		AssetMonitoring2.disbletableAssets(false);
+		//AssetMonitoring2.disbletableAssets(false);
+		AssetMonitoring2.tblAssets.setEnabled(false);
 		dateAcquired.setDate(FncGlobal.getDateToday());
 		lookupCustodian.setEnabled(true);
 		lookupCustodian.setEditable(true);
@@ -1305,9 +1382,9 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 		
 		lblCompany.setFont(null);
 		lookupCompany.setEnabled(false);
-		lookupCompany.setText(co_id);
+		lookupCompany.setValue(AssetMonitoring2.lookupselectcompany.getValue());
 		lookupCompany.setEditable(false);
-		txtCompany.setText(co_name);
+		txtCompany.setText(AssetMonitoring2.txtcompany.getText());
 		
 		lblCustodian.setName("*Custodian");
 		
@@ -1401,30 +1478,20 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 		lookupLocation.setEditable(true);
 		lookupLocation.setText("");
 		
-		btnState(false, false, true, true,false);
+		btnState(false, false, true, true);
 	}
 	
 public static void resetInformation(){
-		
-		
 		new Thread(new  Runnable() {
 			public void run() {
-				
-				if(grpNE.isSelected(btnNew.getModel())) {
-					System.out.println("Reset");
-//					if(btnSave.isEnabled() && grpNE.isSelected(btnReset.getModel())) {
-//						inactiveattachment(txtAssetNo.getText());
-//					}
-				}
-				
 				FncGlobal.startProgress("Refreshing fields, please wait.");
 				AssetMonitoring2.lookupselectcompany.setValue(co_id);
 				AssetMonitoring2.txtcompany.setText(co_name);
 				AssetMonitoring2.chkinactiveassets.setSelected(false);
 				AssetMonitoring2.chkinactiveemp.setSelected(false);
-				AssetMonitoring2.disbletableAssets(true);
+				AssetMonitoring2.modelAssets.clear();
 				AssetMonitoring2.displayAllAssets(false,false);
-				AssetMonitoring2.resettable(true);
+				AssetMonitoring2.tblAssets.setEnabled(true);
 				AssetMonitoring2.lookupCustodianid.setValue("");
 				AssetMonitoring2.txtCustodianid.setText("");
 				AssetMonitoring2.lookupLocation.setValue("");
@@ -1445,7 +1512,6 @@ public static void resetInformation(){
 				txtCategory.setText("");
 				
 				lookupItem.setEnabled(false);
-				//lookupItem.setEditable(false);
 				lookupItem.setValue("");
 				txtItem.setText("");
 				
@@ -1524,13 +1590,10 @@ public static void resetInformation(){
 				lookupLocation.setText("");
 				lookupLocation.setEditable(false);
 				
-				btnState(true, true, false, true,false);
-				
+				btnState(true, true, false, true);
 				FncGlobal.stopProgress();
 			}
 		}).start();
-		
-		
 	}
 	
 	public static  void displayAssetDetail(String asset_no){
@@ -1538,7 +1601,7 @@ public static void resetInformation(){
 		String SQL="select \n" + 
 				"to_char(a.asset_no,'FM00000000') as asset_no,\n" + 
 				"a.date_acquired as date_acquired,\n" + 
-				"c.co_id,\n" + 
+				"a.co_id,\n" + 
 				"c.company_name,\n" + 
 				"lpad(a.current_cust::text,6,'0'::text) as custodian_id, \n"+
 				"d.entity_name as custodian_name,\n" + 
@@ -1555,6 +1618,7 @@ public static void resetInformation(){
 				"a.remarks,\n" + 
 				"to_char(a.asset_cost, 'FM999,999,999.00') as net_cost,\n" + 
 				"a.asset_ulm::varchar,\n" + 
+				
 				"a.asset_serial::varchar as serial_no,\n" + 
 				"a.asset_model as model_no, \n" + 
 				"a.owned as \"owned\",\n" + 
@@ -1571,11 +1635,11 @@ public static void resetInformation(){
 				"a.remarks2, \n"+
 				"(case when a.loc_id != '' then (select loc_name from rf_asset_location  where loc_id=a.loc_id) else 'Not yet scanned' end) as loc_name \n"+
 				"from rf_asset a \n" + 
-				"left join em_employee  b on a.current_cust=b.emp_code::int\n" + 
+				"left join rf_employee  b on a.current_cust=b.emp_code::int\n" + 
 				"left join mf_company  c on b.co_id=c.co_id\n" + 
 				"left join rf_entity  d on b.entity_id=d.entity_id\n" + 
 				"left join rf_asset_item  e on e.item_id=a.item_id\n" + 
-				"left join rf_asset_category  f on f.category_id= e.category_id\n" + 
+				"left join rf_asset_category  f on f.category_id::varchar = e.category_id\n" + 
 				"left join rf_asset_supplier g on g.supp_id=a.supp_id\n" + 
 				"where a.asset_no="+asset_no+";";
 		FncSystem.out("display Asset Detail", SQL);
@@ -1597,7 +1661,7 @@ public static void resetInformation(){
 			txtDescription.setText((String) db.getResult()[0][11]);
 			lookupSupplier.setValue((String) db.getResult()[0][12]);
 			txtSupplier.setText((String) db.getResult()[0][13]);
-			txtAssetCode.setText((String) db.getResult()[0][14]);
+			//txtAssetCode.setText((String) db.getResult()[0][14]);
 			cmbstatus.setSelectedItem((String)db.getResult()[0][15]);
 			
 			txtRemarks.setText((String) db.getResult()[0][16]);
@@ -1641,18 +1705,8 @@ public static void resetInformation(){
 				rbFoundNo.setSelected(true);
 				rbFoundYes.setSelected(false);	
 			}
-			
-			cmbremarks.setSelectedItem((String)db.getResult()[0][32]);
 			lookupLocation.setValue((String) db.getResult()[0][33]);
-			
-		}				//OFFICE EQUIPMENT					//1 SET OF SERVER CABINET
-		if(lookupItem.getValue().equals("000192") || lookupItem.getValue().equals("000289") || lookupItem.getValue().equals("000228")){
-			btnaccesories.setEnabled(true);
-		}else{
-			btnaccesories.setEnabled(false);
 		}
-		
-		
 	}
 	
 	private boolean checksttachment(String assetno) {
@@ -1679,12 +1733,11 @@ public static void resetInformation(){
 		}
 	}
 	
-	public static  void btnState(Boolean sNew, Boolean sEdit, Boolean sSave, Boolean sReset, Boolean sPreview){
+	public static  void btnState(Boolean sNew, Boolean sEdit, Boolean sSave, Boolean sReset){
 		btnNew.setEnabled(sNew);
 		btnEdit.setEnabled(sEdit);
 		btnSave.setEnabled(sSave);
 		btnReset.setEnabled(sReset);
-		btnPreview.setEnabled(sPreview);
 		
 	}
 
@@ -1721,16 +1774,8 @@ public static void resetInformation(){
 		lookupLocation.setEditable(true);
 		
 		
-		btnState(false, false, true, true,false);
+		btnState(false, false, true, true);
 	}
-	
-	private static void inactiveattachment ( String assetno) {
-		pgUpdate db = new pgUpdate();
-		String sql = "update tbl_asset_warranty_attachments set status_id = 'I', edited_by = '"+UserInfo.EmployeeCode+"', date_edited = now() where asset_no = '"+assetno+"' and status_id = 'A'";
-		db.executeUpdate(sql, false);
-		db.commit();
-	}
-	
 	
 	private void previewSticker(String asset_no, String current_cust, String co_name){
 		

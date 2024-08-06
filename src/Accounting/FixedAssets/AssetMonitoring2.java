@@ -5,12 +5,16 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.text.SimpleDateFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -22,8 +26,11 @@ import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 
 import Database.pgSelect;
 import Functions.FncSystem;
@@ -36,6 +43,8 @@ import components._JInternalFrame;
 import components._JTableMain;
 import interfaces._GUI;
 import tablemodel.modelAssetMonitoring;
+import tablemodel.modelMovement;
+import tablemodel.modelasset_peripheral;
 
 public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionListener {
 	
@@ -51,8 +60,8 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 	protected static JCheckBox chkinactiveemp;
 	protected static JCheckBox chkinactiveassets;
 	private JScrollPane scrollAssets;
-	private static modelAssetMonitoring modelAssets;
-	private static _JTableMain tblAssets;
+	public static modelAssetMonitoring modelAssets;
+	public static _JTableMain tblAssets;
 	private static JList rowheaderAssets;
 	private panelAssetInformation2 pnlInformation;
 	private JPanel pnlTransfer;
@@ -65,14 +74,23 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 	protected String loc_id;
 	private JTextField jtxtRemarks;
 	private JScrollPane scrollMovement;
+	private JPanel pnlsouthtransfer;
+	private JButton btn1;
+	private JButton btnDispose;
+	private JButton btnRetire;
+	private modelMovement modelmovement;
+	private _JTableMain tblmovement;
+	private JList rowheaderMovement;
 	public static String co_id = "01";
 	public static String co_name = "ACERLAND DEVELOPMENT CORPORATION";
 	public static String co_logo = "cenqlogo.png";
+	protected DefaultTableCellRenderer rendererCenterAlign = new DefaultTableCellRenderer();
 	
 
 	public AssetMonitoring2() {
 		super(title, true, true, true, true);
 		initGUI();
+		displayAllAssets(false, false);
 	}
 
 	public AssetMonitoring2(String title) {
@@ -130,7 +148,8 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 										lookupselectcompany.setValue(co_id);
 										txtcompany.setText(co_name);
 										
-										panelAssetInformation.lookupCustodian.setLookupSQL("select '900767', 'BITUEN, JOHN ERICK RESPICIO'");
+										//panelAssetInformation2.lookupCustodian.setLookupSQL("select '900767', 'BITUEN, JOHN ERICK RESPICIO'");
+										panelAssetInformation2.lookupCustodian.setLookupSQL(panelAssetInformation2.getCustodian());
 									}
 								}
 							});
@@ -162,9 +181,18 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 							{
 								lookupCustodianid = new _JLookup();
 								pnlcustodian_filter.add(lookupCustodianid, BorderLayout.WEST);
+								lookupCustodianid.setReturnColumn(0);
+								lookupCustodianid.setLookupSQL(panelAssetInformation2.getCustodian());
 								lookupCustodianid.setPreferredSize(new Dimension(80, 0));
-								//lookupCustodianid.setLookupSQL(_AssetMonitoring.pnlinformationgetCustodian(co_id));
-								
+								lookupCustodianid.addLookupListener(new LookupListener() {
+									public void lookupPerformed(LookupEvent event) {
+										Object[] data = ((_JLookup) event.getSource()).getDataSet();
+										if (data != null) {
+											String cust_name = (String) data[1];
+											txtCustodianid.setText(cust_name);
+										}
+									}
+								});
 							}
 							{
 								txtCustodianid = new JTextField();
@@ -178,10 +206,20 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 								{
 									chkinactiveemp = new JCheckBox("Include Inactive Employees");
 									pnlcheckbox.add(chkinactiveemp, BorderLayout.WEST);
+									chkinactiveemp.addItemListener(new ItemListener() {
+										public void itemStateChanged(ItemEvent e) {
+											
+										}
+									});
 								}
 								{
 									chkinactiveassets = new JCheckBox("Include Inactive Assets");
 									pnlcheckbox.add(chkinactiveassets, BorderLayout.EAST);
+									chkinactiveassets.addItemListener(new ItemListener() {
+										public void itemStateChanged(ItemEvent e) {
+											
+										}
+									});
 								}
 							}
 						}
@@ -208,6 +246,9 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 									try {
 										int row = tblAssets.getSelectedRow();
 										String asset_no = (String) modelAssets.getValueAt(row, 1);
+										
+										panelAssetInformation2.displayAssetDetail(asset_no);
+										buttontagging(true, true, true);
 										
 
 									} catch (ArrayIndexOutOfBoundsException ex) {
@@ -242,7 +283,7 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 				tabAssets.setPreferredSize(new Dimension(500, 350));
 				{
 					pnlInformation = new panelAssetInformation2();
-					tabAssets.addTab(" Information ", null, pnlInformation, null);
+					tabAssets.addTab(" Asset Information ", null, pnlInformation, null);
 				}
 				{
 					pnlTransfer = new JPanel(new BorderLayout(5, 5));
@@ -285,8 +326,8 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 								lookupnewCustodian = new _JLookup();
 								pnl2.add(lookupnewCustodian, BorderLayout.CENTER);
 								lookupnewCustodian.setEditable(true);
+								lookupnewCustodian.setLookupSQL(panelAssetInformation2.getCustodian());
 								lookupnewCustodian.addLookupListener(new LookupListener() {
-									@Override
 									public void lookupPerformed(LookupEvent event) {
 										Object[] setCustodian = ((_JLookup) event.getSource()).getDataSet();
 										FncSystem.out("Display SQL for Client", lookupnewCustodian.getLookupSQL());
@@ -295,6 +336,7 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 											String emp_name = (String) setCustodian[1];
 											lookupnewCustodian.setValue(emp_code);
 											txtnewCustodian.setText(emp_name);
+											txtmovementno.setText(getMoveNo());
 
 										}
 									}
@@ -367,23 +409,91 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 							scrollMovement = new JScrollPane();
 							pnlCentertransfer.add(scrollMovement);
 							{
-								SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
-
+								modelmovement = new modelMovement();
+								tblmovement = new _JTableMain(modelmovement);
+								scrollMovement.setViewportView(tblmovement);
 								
+								tblmovement.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+								tblmovement.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+								tblmovement.getColumnModel().getColumn(0).setPreferredWidth(100);// move_no
+								tblmovement.getColumnModel().getColumn(1).setPreferredWidth(125);// old asset
+								tblmovement.getColumnModel().getColumn(2).setPreferredWidth(135);// prev_cust
+								tblmovement.getColumnModel().getColumn(3).setPreferredWidth(135);// current_cust
+								tblmovement.getColumnModel().getColumn(4).setPreferredWidth(110);// trans_date
+								tblmovement.getColumnModel().getColumn(5).setPreferredWidth(95);// reason
+								tblmovement.getColumnModel().getColumn(6).setPreferredWidth(150);// remarks
+								tblmovement.getColumnModel().getColumn(6).setPreferredWidth(150);// old location 
+								tblmovement.setFont(new Font("DejaVu Sans", 0, 12));
+								tblmovement.getColumnModel().getColumn(0).setCellRenderer(rendererCenterAlign);
+								tblmovement.getColumnModel().getColumn(1).setCellRenderer(rendererCenterAlign);
+								tblmovement.getColumnModel().getColumn(4).setCellRenderer(rendererCenterAlign);
+							}
+							{
+								rowheaderMovement = tblmovement.getRowHeader();
+								scrollMovement.setRowHeaderView(rowheaderMovement);
+								scrollMovement.setCorner(ScrollPaneConstants.UPPER_LEFT_CORNER,
+										FncTables.getRowHeader_Header());
+							}
+						}
+					}
+					{
+						pnlsouthtransfer = new JPanel(new BorderLayout(5, 5));
+						pnlTransfer.add(pnlsouthtransfer, BorderLayout.SOUTH);
+						pnlsouthtransfer.setPreferredSize(new Dimension(0, 35));
+						{
+							JPanel pnlbuttons = new JPanel(new GridLayout(1, 3, 5, 5));
+							pnlsouthtransfer.add(pnlbuttons);
+							{
+								btn1 = new JButton("Transfer asset");
+								pnlbuttons.add(btn1, BorderLayout.WEST);
+								btn1.setEnabled(false);
+								btn1.addActionListener(this);
+							}
+							{
+								btnDispose = new JButton("Dispose");
+								pnlbuttons.add(btnDispose);
+								btnDispose.setEnabled(false);
+								btnDispose.addActionListener(this);
+							}
+							{
+								btnRetire = new JButton("Retire");
+								pnlbuttons.add(btnRetire);
+								btnRetire.setEnabled(false);
+								btnRetire.addActionListener(this);
 							}
 						}
 					}
 				}
 			}
+			tabAssets.addChangeListener(new ChangeListener() {
+				public void stateChanged(ChangeEvent e) {
+					int selectedTab = ((JTabbedPane) e.getSource()).getSelectedIndex();
+					if(selectedTab == 0) {
+						clearcheckbox();
+					}
+					if(selectedTab == 1) {
+						modelAssets.setEditable(true);
+						clearcheckbox();
+						
+					}
+				}
+			});
 		}
 	}
-	public  static void disbletableAssets(Boolean isEnabled) {
-		tblAssets.setEnabled(isEnabled);
+	
+	protected void clearcheckbox() {
+
+		for (int x = 0; x < tblAssets.getRowCount(); x++) {
+			tblAssets.setValueAt(false, x, 0);
+		}
 	}
 	
-	public static void resettable(Boolean fromdelete) {
-		modelAssets.clear();
-		displayAllAssets(false, false);
+	private static String getMoveNo(){
+		pgSelect db = new pgSelect();
+		
+		String strSQL = "select trim(to_char(coalesce(max(move_no), 0) + 1, '0000000000')) from rf_asset_history";
+		db.select(strSQL);
+		return db.getResult()[0][0].toString();
 	}
 	
 	public static void displayAllAssets(Boolean emp, Boolean assts) {
@@ -392,7 +502,7 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 		DefaultListModel listModel = new DefaultListModel();// Creating listModel for rowHeader.
 		rowheaderAssets.setModel(listModel);// Setting of listModel into rowHeader.
 		System.out.println(lookupselectcompany.getValue());
-		String strSQL = " select * from view_allassetv2('" +co_id+ "'," + assts + "," + emp
+		String strSQL = " select * from view_allassetv3('" +co_id+ "'," + assts + "," + emp
 				+ ")";
 		
 		FncSystem.out("Display All Assets", strSQL);
@@ -421,4 +531,11 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 
 		return "select loc_id,loc_name from rf_asset_location ";
 	}
+	
+	private void buttontagging(Boolean transfer, Boolean dispose, Boolean retire) {
+		btn1.setEnabled(transfer);
+		btnDispose.setEnabled(dispose);
+		btnRetire.setEnabled(retire);
+	}
+	
 }
