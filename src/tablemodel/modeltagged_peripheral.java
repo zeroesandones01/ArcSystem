@@ -62,10 +62,13 @@ public class modeltagged_peripheral extends DefaultTableModel {
 			"Description",//8
 			"Serial",//9
 			"License Key",//10
-			"Status",//11
-			"Prev Custodian",//12
-			"Date Retired",//13
-			"Date Disposed"//14
+			"Supplier ID",//11
+			"Status",//12
+			"Prev Custodian",//13
+			"Date Retired",//14
+			"Date Disposed",//15
+			"Supplier Name",//16
+			"Category ID"//17
 			
 	};
 	
@@ -81,10 +84,13 @@ public class modeltagged_peripheral extends DefaultTableModel {
 			String.class,//"Description",
 			String.class,//"Serial",
 			String.class,//"License Key",
+			_JLookup.class,//Supplier
 			String.class,//"Status",
 			_JLookup.class,//"Prev Custodian",
 			Timestamp.class,//"Date Retired",
 			Timestamp.class,//"Date Disposed"
+			String.class,//Supplier name
+			Integer.class, 	//Category ID
 			
 	};
 	
@@ -104,10 +110,13 @@ public class modeltagged_peripheral extends DefaultTableModel {
 			false,//"Description",
 			false,//"Serial",
 			false,//"License Key",
+			false,//Supplier
 			false,//"Status",
 			false,//"Prev Custodian",
 			false,//"Date Retired",
 			false,//"Date Disposed"
+			false,//Supplier name
+			false,//Category ID
 	};
 	
 	
@@ -146,6 +155,8 @@ public class modeltagged_peripheral extends DefaultTableModel {
 					false,//"Prev Custodian",
 					false,//"Date Retired",
 					false,//"Date Disposed"
+					false,//Supplier name
+					false,//Category ID
 			};
 		}else{
 			COLUMNS_EDITABLE = new Boolean[]{
@@ -164,7 +175,8 @@ public class modeltagged_peripheral extends DefaultTableModel {
 					false,//"Prev Custodian",
 					false,//"Date Retired",
 					false,//"Date Disposed"
-					
+					false,//Supplier name
+					false,//Category ID
 			};
 		}
 	}

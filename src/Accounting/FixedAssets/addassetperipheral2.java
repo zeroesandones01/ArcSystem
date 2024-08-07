@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -221,13 +222,12 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 									modeltagging.setEditable(false);
 									scrolltagperipheral.setViewportView(tbltagperipheral);
 									tbltagperipheral.getColumnModel().getColumn(0).setPreferredWidth(50);
-									tbltagperipheral.hideColumns("Asset No.", "Custodian", "Status", "Prev_Custodian","Date_Retired", "Date_Disposed");
+									tbltagperipheral.hideColumns("Asset No.", "Custodian", "Status", "Prev Custodian","Date Retired", "Date Disposed");
 									tbltagperipheral.addMouseListener(new MouseAdapter() {
 										@Override
 										public void mousePressed(MouseEvent e) {
 											if  ((e.getClickCount() >= 2)) {
 												int column 	= tbltagperipheral.getSelectedColumn();
-												System.out.println("column: "+column);
 												if(column == 9) {setsupplier();}
 											}
 										}
@@ -344,10 +344,19 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 					JOptionPane.showMessageDialog(this, "Please check the box of the peripheral that you want to add.", "", JOptionPane.PLAIN_MESSAGE);
 				}
 			}else {
-				updateperipheral();
 				
-				System.out.println("Save Edit Peripheral");
-				
+				if(JOptionPane.showConfirmDialog(this, "Are all entries correct?", "Save", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+					
+					pgUpdate db = new pgUpdate();
+					updateperipheral(db);
+					save_edit();
+					db.commit();
+					
+					displaytagged_peripherals(modeltagged, rowheadertagged, asset_no);
+					buttonstate(true, false, false, true);
+					JOptionPane.showMessageDialog(this, "New peripheral is saved.", "", JOptionPane.PLAIN_MESSAGE);
+					System.out.println("Save Edit Peripheral");
+				}
 			}
 		}
 		
@@ -381,8 +390,9 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 			Object[] data = dlg.getReturnDataSet();
 			if (data != null) {
 				String test = (String) data[0];
-				modeltagging.setValueAt(test, row, 11);
+				modeltagging.setValueAt(data[0], row, 11);
 				
+				System.out.println("Valueof data:: "+data[0]);
 				System.out.println("column:: "+column);
 				System.out.println("row:: "+row);
 			}		
@@ -390,7 +400,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 		}
 	}
 	private String getsupplier() {
-		String sql = "Select '01', 'Test' Supplier";
+		String sql = "Select '01', 'Test Supplier'";
 		return sql;
 	}
 	public void buttonstate(Boolean addnew, Boolean save,  Boolean edit,  Boolean cancel) {
@@ -455,7 +465,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 		DefaultListModel listModel = new DefaultListModel();
 		rowHeader.setModel(listModel);
 		
-		String sql = "select false,a.asset_no, a.peripheral_id, b.category_name,d.entity_name,a.amount, a.brand, a.model, a.description,a.serial_no, a.license_key, a.status_id, null, null, null\n"
+		String sql = "select false,a.asset_no, a.peripheral_id, b.category_name,d.entity_name,a.amount, a.brand, a.model, a.description,a.serial_no, a.license_key, a.supp_id, a.status_id, a.prev_cust, a.date_retired, a.date_disposed, null,a.category_id  \n"
 				+ "from rf_asset_peripheral a \n"
 				+ "left join  mf_asset_peripheral_category b on a.category_id = b.category_id and a.status_id = b.status_id\n"
 				+ "left join rf_employee c on a.current_cust = emp_code \n"
@@ -473,6 +483,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 			}
 			
 		}
+		tbltagged.packAll();
 	}
 	private static void save_peripherals() {
 		
@@ -486,6 +497,10 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 			String serial_no = (String) modeltagging.getValueAt(x, 9);
 			String lic_key = (String) modeltagging.getValueAt(x, 10);
 			String supp_id = (String) modeltagging.getValueAt(x, 11);
+			String created_by = UserInfo.EmployeeCode;
+			Double amount = Double.parseDouble( modeltagging.getValueAt(x, 5).toString());
+			
+			System.out.println("valueof amount: "+amount);
 			
 			if(selected) {
 				System.out.println("cat_id: "+ cat_id);
@@ -495,41 +510,63 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 				System.out.println("serial_no: "+ serial_no);
 				System.out.println("lic_key: "+ lic_key);
 				System.out.println("supp_id: "+ supp_id);
-				String sql = "select sp_save_asset_peripherals("+asset_no+", "+cat_id+", '"+brand+"', '"+model+"', '"+description+"', '"+serial_no+"', '"+lic_key+"', '"+supp_id+"')";
-				pgSelect db = new pgSelect();
-				db.select(sql);
-			}
-			
-		}
-	}
-	private void save_edit() {
-		pgSelect db = new pgSelect();
-		for(int x = 0; x < modeltagged.getRowCount(); x++) {
-			Boolean selected = (Boolean) modeltagged.getValueAt(x, 0);
-			String asset_no = (String) modeltagged.getValueAt(x, 1);
-			String current_cust = (String) modeltagged.getValueAt(x, 4);
-			String brand = (String) modeltagged.getValueAt(x, 6);
-			String model = (String) modeltagged.getValueAt(x, 7);
-			String desc = (String) modeltagged.getValueAt(x, 8);
-			String serial = (String) modeltagged.getValueAt(x, 9);
-			
-			if(selected) {
 				
-				String sql = "";
+				String sql = "select sp_save_asset_peripherals("+asset_no+", "+cat_id+", '"+brand+"', '"+model+"', '"+description+"', '"+serial_no+"', '"+lic_key+"', '"+supp_id+"', '"+created_by+"',"+amount+")";
+				
+				FncSystem.out("save_peripherals: ", sql);
+				pgSelect db = new pgSelect();
 				db.select(sql);
 			}
 		}
 	}
 	
-	private void updateperipheral() {
-		pgUpdate db = new pgUpdate();
+	private void save_edit() {
+		
+		for(int x = 0; x < modeltagged.getRowCount(); x++) {
+			Boolean selected = (Boolean) modeltagged.getValueAt(x, 0);
+			Integer asset_no = (Integer) modeltagged.getValueAt(x, 1);
+			String current_cust = (String) modeltagged.getValueAt(x, 4);
+			String brand = (String) modeltagged.getValueAt(x, 6);
+			String model = (String) modeltagged.getValueAt(x, 7);
+			String desc = (String) modeltagged.getValueAt(x, 8);
+			String serial = (String) modeltagged.getValueAt(x, 9);
+			String lic_key = (String) modeltagged.getValueAt(x, 10);
+			String supp_id = (String) modeltagged.getValueAt(x, 11);
+			Integer category_id = (Integer) modeltagged.getValueAt(x, 17);
+			Double amount = Double.parseDouble( modeltagged.getValueAt(x, 5).toString());
+			
+			if(selected) {
+				System.out.println("asset_no: "+asset_no);
+				System.out.println("current_cust: "+current_cust);
+				System.out.println("brand: "+brand);
+				System.out.println("model: "+model);
+				System.out.println("desc: "+desc);
+				System.out.println("serial: "+serial);
+				System.out.println("lic_key: "+lic_key);
+				System.out.println("supp_id: "+supp_id);
+				System.out.println("category_id: "+category_id);
+				System.out.println("amount: "+amount);
+				
+				String sql = "select sp_save_edit_peripherals("+asset_no+", "+category_id+", "+amount+", \n"
+						+ " '"+brand+"', '"+model+"', '"+desc+"', '"+serial+"', '"+lic_key+"', '"+supp_id+"', '"+UserInfo.EmployeeCode+"')\n"
+						+ "";
+				
+				FncSystem.out("save_edit: ", sql);
+				pgSelect db = new pgSelect();
+				db.select(sql);
+			}
+		}
+	}
+	
+	private void updateperipheral(pgUpdate db) {
+		
 		for(int x = 0; x < modeltagged.getRowCount(); x++) {
 			Boolean selected = (Boolean) modeltagged.getValueAt(x, 0);
 			Integer perip_id = (Integer) modeltagged.getValueAt(x, 2);
 			if(selected) {
 				String Sql = "update rf_asset_peripheral set status_id = 'I', edited_by = '"+UserInfo.EmployeeCode+"', date_edited = now() where peripheral_id = "+perip_id+"";
 				db.executeUpdate(Sql, false);
-				db.commit();
+				//db.commit();
 			}
 		}
 	}

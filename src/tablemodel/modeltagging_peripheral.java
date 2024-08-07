@@ -63,11 +63,12 @@ public class modeltagging_peripheral extends DefaultTableModel {
 			"Description",
 			"Serial",
 			"License Key",
-			"Supplier",
+			"Supplier ID",
 			"Status",
 			"Prev Custodian",
 			"Date Retired",
-			"Date Disposed"
+			"Date Disposed",
+			"Supplier Name"
 			
 	};
 	
@@ -77,7 +78,7 @@ public class modeltagging_peripheral extends DefaultTableModel {
 			Integer.class, 	//Peripheral ID
 			Object.class, 	//Peripheral Name
 			String.class,//"Custodian",
-			BigDecimal.class,//"Amount",
+			Double.class,//"Amount",
 			String.class,//"Brand",
 			String.class,//"Model",
 			String.class,//"Description",
@@ -88,7 +89,7 @@ public class modeltagging_peripheral extends DefaultTableModel {
 			String.class,//"Prev Custodian",
 			Date.class,//"Date Retired",
 			Date.class,//"Date Disposed"
-			
+			String.class,//Supplier name
 	};
 	
 	private void initThis() {
@@ -112,6 +113,7 @@ public class modeltagging_peripheral extends DefaultTableModel {
 			false,//"Prev Custodian",
 			false,//"Date Retired",
 			false,//"Date Disposed"
+			false,//Supplier name
 	};
 	
 	
@@ -151,6 +153,7 @@ public class modeltagging_peripheral extends DefaultTableModel {
 					false,//"Prev Custodian",
 					false,//"Date Retired",
 					false,//"Date Disposed"
+					false,//Supplier name
 			};
 		}else{
 			COLUMNS_EDITABLE = new Boolean[]{
@@ -170,7 +173,7 @@ public class modeltagging_peripheral extends DefaultTableModel {
 					false,//"Prev Custodian",
 					false,//"Date Retired",
 					false,//"Date Disposed"
-					
+					false,//Supplier name
 			};
 		}
 	}
