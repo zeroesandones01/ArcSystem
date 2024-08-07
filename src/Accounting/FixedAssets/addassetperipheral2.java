@@ -334,12 +334,23 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 				System.out.println("hasCheckedAssets_tagging(): "+hasCheckedAssets_tagging());
 				if(hasCheckedAssets_tagging()) {
 					
-					if(JOptionPane.showConfirmDialog(this, "Are you sure you want to save new peripheral?", "Save", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-						save_peripherals();
-						buttonstate(true, false, false, true);
-						cancelstate();
-						JOptionPane.showMessageDialog(this, "New peripheral is saved.", "", JOptionPane.PLAIN_MESSAGE);
+					if(checkdetails()) {
+						if(JOptionPane.showConfirmDialog(this, "Are you sure you want to save new peripheral?", "Save", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+							
+							save_peripherals();
+							displaytagged_peripherals(modeltagged, rowheadertagged, asset_no);
+							FncTables.clearTable(modeltagging);
+							modelasset.setEditable(true);
+							tblasset.setEnabled(true);
+							buttonstate(true, false, false, true);
+							
+							JOptionPane.showMessageDialog(this, "New peripheral is saved.", "", JOptionPane.PLAIN_MESSAGE);
+						}
+					}else {
+						System.out.println("Check all details");
+						JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please check all details.", "Error", JOptionPane.ERROR_MESSAGE);
 					}
+					
 				}else {
 					JOptionPane.showMessageDialog(this, "Please check the box of the peripheral that you want to add.", "", JOptionPane.PLAIN_MESSAGE);
 				}
@@ -399,8 +410,45 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 			tbltagperipheral.packAll();
 		}
 	}
+	private boolean checkdetails() {
+		
+		for(int x = 0; x < modeltagging.getRowCount(); x++) {
+			
+			Boolean selected = (Boolean) modeltagging.getValueAt(x, 0);
+			Double amount = Double.parseDouble( modeltagging.getValueAt(x, 5).toString());
+			String brand = (String) modeltagging.getValueAt(x, 6);
+			String model = (String) modeltagging.getValueAt(x, 7);
+			String description = (String) modeltagging.getValueAt(x, 8);
+			String serial_no = (String) modeltagging.getValueAt(x, 9);
+			String lic_key = (String) modeltagging.getValueAt(x, 10);
+			String supp_id = (String) modeltagging.getValueAt(x, 11);
+			
+			
+			if(selected) {
+				System.out.println("valueof amount: "+amount);
+				System.out.println("brand: "+ brand);
+				System.out.println("model: "+ model);
+				System.out.println("description: "+ description);
+				System.out.println("serial_no: "+ serial_no);
+				System.out.println("lic_key: "+ lic_key);
+				System.out.println("supp_id: "+ supp_id);
+				
+				if(amount == 0.00
+					|| 	brand.equals("")
+					||	model.equals("")
+					||	description.equals("")
+					||	serial_no.equals("")
+					||	lic_key.equals("")
+					||	supp_id.equals("")
+				) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 	private String getsupplier() {
-		String sql = "Select '01', 'Test Supplier'";
+		String sql = " select  entity_id, entity_name from rf_entity where status_id = 'A' ";
 		return sql;
 	}
 	public void buttonstate(Boolean addnew, Boolean save,  Boolean edit,  Boolean cancel) {
@@ -416,8 +464,10 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 		
 		String strSQL = "select false, a.asset_no, a.asset_name, 'Erick Bituen', a.date_acquired \n"
 				+ "from rf_asset a\n"
+				+"left join rf_employee b on a.current_cust::varchar = b.emp_code \n"
+				+"left join rf_entity c on b.entity_id = c.entity_id \n"
 				+ "where a.status = 'A' \n"
-				+ "and a.with_peripheral = true and co_id ='"+co_id+"' ";
+				+ "and a.with_peripheral = true and a.co_id ='"+co_id+"' ";
 		
 		FncSystem.out("Display All Assets", strSQL);
 
@@ -465,11 +515,12 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 		DefaultListModel listModel = new DefaultListModel();
 		rowHeader.setModel(listModel);
 		
-		String sql = "select false,a.asset_no, a.peripheral_id, b.category_name,d.entity_name,a.amount, a.brand, a.model, a.description,a.serial_no, a.license_key, a.supp_id, a.status_id, a.prev_cust, a.date_retired, a.date_disposed, null,a.category_id  \n"
+		String sql = "select false,a.asset_no, a.peripheral_id, b.category_name,d.entity_name,a.amount, a.brand, a.model, a.description,a.serial_no, a.license_key, a.supp_id, a.status_id, a.prev_cust, a.date_retired, a.date_disposed,e.entity_name,a.category_id  \n"
 				+ "from rf_asset_peripheral a \n"
 				+ "left join  mf_asset_peripheral_category b on a.category_id = b.category_id and a.status_id = b.status_id\n"
 				+ "left join rf_employee c on a.current_cust = emp_code \n"
 				+ "left join rf_entity d on c.entity_id = d.entity_id \n"
+				+ "left join rf_entity e on a.supp_id = e.entity_id \n"
 				+ "where a.asset_no = "+asset_no+" and a.status_id = 'A'";
 		
 		System.out.printf("displaytagged_peripherals: %s", sql);
@@ -489,6 +540,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 		
 		for(int x = 0; x < modeltagging.getRowCount(); x++) {
 			
+			System.out.println("rowcount: "+ modeltagging.getRowCount());
 			Boolean selected = (Boolean) modeltagging.getValueAt(x, 0);
 			Integer cat_id = (Integer) modeltagging.getValueAt(x, 2);
 			String brand = (String) modeltagging.getValueAt(x, 6);
@@ -500,8 +552,6 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 			String created_by = UserInfo.EmployeeCode;
 			Double amount = Double.parseDouble( modeltagging.getValueAt(x, 5).toString());
 			
-			System.out.println("valueof amount: "+amount);
-			
 			if(selected) {
 				System.out.println("cat_id: "+ cat_id);
 				System.out.println("brand: "+ brand);
@@ -510,6 +560,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 				System.out.println("serial_no: "+ serial_no);
 				System.out.println("lic_key: "+ lic_key);
 				System.out.println("supp_id: "+ supp_id);
+				System.out.println("valueof amount: "+amount);
 				
 				String sql = "select sp_save_asset_peripherals("+asset_no+", "+cat_id+", '"+brand+"', '"+model+"', '"+description+"', '"+serial_no+"', '"+lic_key+"', '"+supp_id+"', '"+created_by+"',"+amount+")";
 				
