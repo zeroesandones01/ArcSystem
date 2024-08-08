@@ -137,7 +137,7 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 							pnlcomp_filter.add(lookupselectcompany, BorderLayout.CENTER); 
 							lookupselectcompany.setValue(co_id);
 							//lookupselectcompany.setLookupSQL(_AssetMonitoring.getCompany());
-							lookupselectcompany.setLookupSQL("Select '01', 'Acerland DEVELOPMENT CORPORATION' ");
+							lookupselectcompany.setLookupSQL(panelAssetInformation2.getcompany());
 							lookupselectcompany.addLookupListener(new LookupListener() {
 								public void lookupPerformed(LookupEvent event) {
 									Object[] data = ((_JLookup) event.getSource()).getDataSet();
@@ -502,8 +502,7 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 		DefaultListModel listModel = new DefaultListModel();// Creating listModel for rowHeader.
 		rowheaderAssets.setModel(listModel);// Setting of listModel into rowHeader.
 		System.out.println(lookupselectcompany.getValue());
-		String strSQL = " select * from view_allassetv3('" +co_id+ "'," + assts + "," + emp
-				+ ")";
+		String strSQL = " select * from view_allassetv3('" +co_id+ "'," + assts + "," + emp+ ")";
 		
 		FncSystem.out("Display All Assets", strSQL);
 		// System.out.println(co_id);

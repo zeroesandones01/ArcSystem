@@ -272,10 +272,13 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 	public static Integer assettoreplace;
 	private JLabel lblLocation;
 
+	protected String location_id;
+
 	public static JDialog dialog;
 	public static JButton btnattachment;
 	public static JButton btnviewattachment;
 	public static _JLookup lookupLocation;
+	
 	public static String sticker_count="";
 	public static String emp_code="";
 	public static String loc_id;
@@ -359,7 +362,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 							lookupCompany = new _JLookup(null , "Company",0);
 							jPanel2.add(lookupCompany);
 							lookupCompany.setEditable(false);
-							lookupCompany.setLookupSQL(_AssetMonitoring.getCompany());
+							lookupCompany.setLookupSQL(getcompany());
 							lookupCompany.addLookupListener(new LookupListener() {
 								public void lookupPerformed(LookupEvent event) {
 									
@@ -1017,13 +1020,14 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 								lookupLocation= new _JLookup("", 1);
 								pnl19_2.add(lookupLocation,BorderLayout.CENTER);
 								lookupLocation.setEditable(false);
-								lookupLocation.setLookupSQL("select '01','Aster Building' ");
+								lookupLocation.setLookupSQL("select * from rf_asset_location ");
 								lookupLocation.addLookupListener(new LookupListener() {
+
 									public void lookupPerformed(LookupEvent event) {
 										Object [] db = ((_JLookup)event.getSource()).getDataSet();
 										
 										if(db !=null){
-											
+											location_id = (String)db[0];
 									   }
 									}
 								});
@@ -1636,7 +1640,7 @@ public static void resetInformation(){
 				"(case when a.loc_id != '' then (select loc_name from rf_asset_location  where loc_id=a.loc_id) else 'Not yet scanned' end) as loc_name \n"+
 				"from rf_asset a \n" + 
 				"left join rf_employee  b on a.current_cust=b.emp_code::int\n" + 
-				"left join mf_company  c on b.co_id=c.co_id\n" + 
+				"left join mf_company  c on a.co_id=c.co_id\n" + 
 				"left join rf_entity  d on b.entity_id=d.entity_id\n" + 
 				"left join rf_asset_item  e on e.item_id=a.item_id\n" + 
 				"left join rf_asset_category  f on f.category_id::varchar = e.category_id\n" + 
@@ -1912,6 +1916,14 @@ public static void resetInformation(){
 	public static String getassetlocation(){
 		
 		return"select loc_id,loc_name from rf_asset_location ";
+	}
+	protected static String getcompany() {
+		String sql = "select co_id as \"Company ID\", \n"
+				+ "company_name as \"Company Name\",\n"
+				+ "company_address as \"Company Address\",\n"
+				+ "company_logo as \"Company Logo\"\n"
+				+ "from mf_company";
+		return sql;
 	}
 
 }

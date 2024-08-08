@@ -119,8 +119,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 					{
 						lookupcomp = new _JLookup(null, "Company", 0);
 						pnlnorth_center.add(lookupcomp);
-						//lookupcomp.setEditable(false);
-						lookupcomp.setLookupSQL("select '01', 'Acerland'");
+						lookupcomp.setLookupSQL(getcompany());
 						lookupcomp.addLookupListener(new LookupListener() {
 
 
@@ -133,6 +132,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 									display_assets(lookupcomp.getValue());
 									modelasset.setEditable(true);
 									tblasset.setEnabled(true);
+									buttonstate(false, false, false, true);
 								}
 							}
 						});
@@ -179,7 +179,6 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 											try {
 												int row = tblasset.getSelectedRow();
 												asset_no = (Integer) modelasset.getValueAt(row, 1);
-												//display_peripherals(modeltagging, rowheadertagging, asset_no);
 												System.out.println("Value of Asset No.: "+asset_no);
 												displaytagged_peripherals(modeltagged, rowheadertagged, asset_no);
 												
@@ -451,6 +450,14 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 		String sql = " select  entity_id, entity_name from rf_entity where status_id = 'A' ";
 		return sql;
 	}
+	private String getcompany() {
+		String sql = "select co_id as \"Company ID\", \n"
+				+ "company_name as \"Company Name\",\n"
+				+ "company_address as \"Company Address\",\n"
+				+ "company_logo as \"Company Logo\"\n"
+				+ "from mf_company";
+		return sql;
+	}
 	public void buttonstate(Boolean addnew, Boolean save,  Boolean edit,  Boolean cancel) {
 		btnnew.setEnabled(addnew);
 		btnsave.setEnabled(save);
@@ -462,7 +469,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 		DefaultListModel listModel = new DefaultListModel();// Creating listModel for rowHeader.
 		rowheaderassetperipheral.setModel(listModel);// Setting of listModel into rowHeader.
 		
-		String strSQL = "select false, a.asset_no, a.asset_name, 'Erick Bituen', a.date_acquired \n"
+		String strSQL = "select false, a.asset_no, a.asset_name, c.entity_name, a.date_acquired \n"
 				+ "from rf_asset a\n"
 				+"left join rf_employee b on a.current_cust::varchar = b.emp_code \n"
 				+"left join rf_entity c on b.entity_id = c.entity_id \n"
