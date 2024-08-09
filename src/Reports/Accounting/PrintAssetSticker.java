@@ -135,11 +135,12 @@ public class PrintAssetSticker extends _JInternalFrame implements ActionListener
 								JPanel pnlAssetFilterCenter = new JPanel(new GridLayout(1, 1, 5, 5));
 								pnlAssetFilter.add(pnlAssetFilterCenter, BorderLayout.CENTER);
 								{
-									String[] typeStrings = { "Fixed Asset", "Non-fixed Asset" };
+									String[] typeStrings = { "Fixed Asset"/*, "Non-fixed Asset"*/ };
 									cbType = new JComboBox(typeStrings);
 									pnlAssetFilterCenter.add(cbType);
 									cbType.setSelectedIndex(0);
-//									cbType.setEnabled(false);
+									cbType.setEnabled(false);
+									cbType.setEditable(false);
 									cbType.addActionListener(new ActionListener() {
 										
 										@Override
@@ -182,6 +183,7 @@ public class PrintAssetSticker extends _JInternalFrame implements ActionListener
 										lookupByCustodian.setEditable(false);
 										txtByCustodian.setText("");
 										txtByCustodian.setEditable(false);
+										
 
 									}
 									else{}
@@ -189,41 +191,6 @@ public class PrintAssetSticker extends _JInternalFrame implements ActionListener
 							});
 						}
 					}
-					/*{
-						pnlNorth2= new JPanel(new BorderLayout(5,5));
-						pnlFilter.add(pnlNorth2);
-						{
-							rbByDepartment= new JRadioButton("By Department");
-							pnlNorth2.add(rbByDepartment, BorderLayout.WEST);
-							rbByDepartment.setPreferredSize(new Dimension(125, 0));
-							rbByDepartment.addActionListener(new ActionListener() {
-								public void actionPerformed(ActionEvent e) {
-									lookupByDepartment.setEditable(true);
-								}
-							});
-						}
-						{
-							lookupByDepartment= new _JLookup();
-							lookupByDepartment.setReturnColumn(0);
-							lookupByDepartment.setEditable(false);
-							pnlNorth2.add(lookupByDepartment, BorderLayout.CENTER);
-							lookupByDepartment.setLookupSQL(getDepartment());
-							lookupByDepartment.addLookupListener(new LookupListener() {
-								public void lookupPerformed(LookupEvent event) {
-									Object[] data = ((_JLookup) event.getSource()).getDataSet();
-									if(data!=null){
-										String dept_name = (String) data[1];
-										txtByDepartment.setText(dept_name);
-									}
-								}
-							});
-						}
-						{
-							txtByDepartment= new JTextField();
-							pnlNorth2.add(txtByDepartment, BorderLayout.EAST);
-							txtByDepartment.setPreferredSize(new Dimension(325, 0));
-						}
-					}*/
 					{
 						pnlNorth3= new JPanel(new BorderLayout(5,5));
 						pnlFilter.add(pnlNorth3, BorderLayout.CENTER);
@@ -236,10 +203,12 @@ public class PrintAssetSticker extends _JInternalFrame implements ActionListener
 								public void actionPerformed(ActionEvent e) {
 									if(rbByCustodian.isSelected()){
 										lblAssetType.setEnabled(true);
-										cbType.setEnabled(true);
+										//cbType.setEnabled(true);
 										lookupByCustodian.setEditable(true);
 										modelAssets.clear();
 										grpAllAsset.clearSelection();
+										rowheaderAssets = tblAssets.getRowHeader(); 
+										scrollAssets.setRowHeaderView(rowheaderAssets);
 									}
 									else{
 										lookupByCustodian.setValue("");
@@ -263,8 +232,8 @@ public class PrintAssetSticker extends _JInternalFrame implements ActionListener
 									Object[] data = ((_JLookup) event.getSource()).getDataSet();
 									if(data !=null){
 										String emp_name = (String) data[1];
-										co_name = (String) data [3];
-										co_logo=(String) data[4];
+										//co_name = (String) data [3];
+										//co_logo=(String) data[4];
 										txtByCustodian.setText(emp_name);
 										filterbyCustodian(modelAssets, rowheaderAssets, lookupByCustodian.getText());									
 										
@@ -301,17 +270,10 @@ public class PrintAssetSticker extends _JInternalFrame implements ActionListener
 									try{
 										
 										int row = tblAssets.getSelectedRow();
-										String	asset_no=    (String) modelAssets.getValueAt(row, 1);
-										//co_logo= (String) modelAssets.getValueAt(row, 10);
-										//co_name= (String) modelAssets .getValueAt(row, 9);
-										//System.out.println(row);
-										//System.out.println(asset_no);
-										FncSystem.out("Asset_no:",asset_no);
-										
-										
+										Integer	asset_no=    (Integer) modelAssets.getValueAt(row, 1);
+										System.out.println("asset_no: "+asset_no);
 										
 									}catch (ArrayIndexOutOfBoundsException ex) { }
-									
 								}
 							}
 						});
@@ -383,38 +345,38 @@ public class PrintAssetSticker extends _JInternalFrame implements ActionListener
 			}
 		} 
 		
-		System.out.println("");
-		//System.out.println("custodian: "+current_cust);
-		System.out.println("emp_code: "+UserInfo.EmployeeCode);
-		
-		Object[] option= {"Big Sticker","Small Sticker"};
+		Object[] option= {"Big Sticker"/*,"Small Sticker"*/};
 		int Option=JOptionPane.showOptionDialog(getTopLevelAncestor(), "Please select sticker size.", "Sticker size option", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
 		System.out.println("Option: "+Option);
 
 		Map<String, Object> mapParameters = new HashMap<String, Object>();
 		mapParameters.put("asset_type",filterAssetType);
 		mapParameters.put("emp_code",UserInfo.EmployeeCode);
-		try{
-			mapParameters.put("co_logo_vdc", this.getClass().getClassLoader().getResourceAsStream("Images/verdant_logo.bmp"));
-			mapParameters.put("co_logo_cdc", this.getClass().getClassLoader().getResourceAsStream("Images/cenqlogo.png"));
-			mapParameters.put("co_logo_adc", this.getClass().getClassLoader().getResourceAsStream("Images/acer_logo.bmp"));
-		}catch(NullPointerException e){}
+		mapParameters.put("co_logo_arc", this.getClass().getClassLoader().getResourceAsStream("Images/arc.png"));
 		
-		if(filterAssetType == "Non-fixed Asset") {
-			System.out.println("Non-fixed Asset");
-			if(Option == JOptionPane.NO_OPTION){
-				System.out.println("No Option");
-				FncReport.generateReport("/Reports/rptMultiple_NF_sticker.jasper", "Assetcode Sticker", mapParameters);
-			}
-			
-		}else {
-			if(Option == JOptionPane.YES_OPTION){
-				FncReport.generateReport("/Reports/rptMultipleAssetSticker.jasper", "Assetcode Sticker", mapParameters);
-			}
-			if(Option == JOptionPane.NO_OPTION){
-				FncReport.generateReport("/Reports/rptMultipleAssetSticker2.jasper", "Assetcode Sticker", mapParameters);
-			}
-		}
+		FncReport.generateReport("/Reports/rptMultipleAssetSticker.jasper", "Assetcode Sticker", mapParameters);
+		
+//		try{
+//			mapParameters.put("co_logo_vdc", this.getClass().getClassLoader().getResourceAsStream("Images/verdant_logo.bmp"));
+//			mapParameters.put("co_logo_cdc", this.getClass().getClassLoader().getResourceAsStream("Images/cenqlogo.png"));
+//			mapParameters.put("co_logo_adc", this.getClass().getClassLoader().getResourceAsStream("Images/acer_logo.bmp"));
+//		}catch(NullPointerException e){}
+		
+//		if(filterAssetType == "Non-fixed Asset") {
+//			System.out.println("Non-fixed Asset");
+//			if(Option == JOptionPane.NO_OPTION){
+//				System.out.println("No Option");
+//				FncReport.generateReport("/Reports/rptMultiple_NF_sticker.jasper", "Assetcode Sticker", mapParameters);
+//			}
+//			
+//		}else {
+//			if(Option == JOptionPane.YES_OPTION){
+//				FncReport.generateReport("/Reports/rptMultipleAssetSticker.jasper", "Assetcode Sticker", mapParameters);
+//			}
+//			if(Option == JOptionPane.NO_OPTION){
+//				FncReport.generateReport("/Reports/rptMultipleAssetSticker2.jasper", "Assetcode Sticker", mapParameters);
+//			}
+//		}
 		
 		
 	}	
@@ -428,46 +390,42 @@ public class PrintAssetSticker extends _JInternalFrame implements ActionListener
 		String strSQL = null;
 		
 		if(filterAssetType == "Fixed Asset") {
-			strSQL="select false, \n" + 
-					"a.asset_no,\n" + 
-					"a.asset_code,\n" + 
-					"a.asset_name,\n" + 
-					"a.date_acquired,\n"+
-					"lpad(a.current_cust::text, 6, '0'::text),\n" +
-					"format('%s,%s %s.', c.last_name,c.first_name,left(c.middle_name,1) ) as custodian, \n" + 
-					"a.reference_no, \n" +
-					"format('%s',left(a.status,1)) as status \n"+
-					"from tbl_asset a,\n" + 
-					"em_employee b,\n" + 
-					"rf_entity c\n" + 
-					"where a.current_cust='"+emp_code+"'\n" + 
-					"and asset_cost >= 5000\n" +
-					"and a.current_cust=b.emp_code::int\n" + 
-					"and c.entity_id=b.entity_id\n" +
-					"and a.status='A'\n" +
-					"order by a.asset_no";
+			strSQL="select false, \n"
+					+ "a.asset_no,\n"
+					+ "a.asset_name,\n"
+					+ "a.date_acquired,\n"
+					+ "lpad(a.current_cust::text, 6, '0'::text),\n"
+					+ "format('%s,%s %s.', c.last_name,c.first_name,left(c.middle_name,1) ) as custodian, \n"
+					+ "a.reference_no, \n"
+					+ "format('%s',left(a.status,1)) as status \n"
+					+ "from rf_asset a\n"
+					+ "left join rf_employee b on a.current_cust = b.emp_code::int\n"
+					+ "left join rf_entity c on b.entity_id = c.entity_id\n"
+					+ "where a.current_cust='"+emp_code+"'\n"
+					+ "and a.status='A'\n"
+					+ "order by a.asset_no";
 		}
 		
-		if(filterAssetType == "Non-fixed Asset") {
-			strSQL="select false, \n" + 
-					"a.object_id,\n" + 
-					"null,\n" + 
-					"a.object_name,\n" + 
-					"a.date_acquired,\n"+
-					"lpad(a.current_cust::text, 6, '0'::text),\n" +
-					"format('%s,%s %s.', c.last_name,c.first_name,left(c.middle_name,1) ) as custodian, \n" + 
-					"a.reference_no, \n" +
-					"format('%s',left(a.status_id,1)) as status \n"+
-					"from tbl_nonfixedasset a,\n" + 
-					"em_employee b,\n" + 
-					"rf_entity c\n" + 
-					"where a.current_cust='"+emp_code+"'\n" + 
-					"and asset_cost between 1500 and 4999\n" +
-					"and a.current_cust=b.emp_code\n" + 
-					"and c.entity_id=b.entity_id\n" +
-					"and a.status_id='Active'\n" +
-					"order by a.asset_no";
-		}
+//		if(filterAssetType == "Non-fixed Asset") {
+//			strSQL="select false, \n" + 
+//					"a.object_id,\n" + 
+//					"null,\n" + 
+//					"a.object_name,\n" + 
+//					"a.date_acquired,\n"+
+//					"lpad(a.current_cust::text, 6, '0'::text),\n" +
+//					"format('%s,%s %s.', c.last_name,c.first_name,left(c.middle_name,1) ) as custodian, \n" + 
+//					"a.reference_no, \n" +
+//					"format('%s',left(a.status_id,1)) as status \n"+
+//					"from tbl_nonfixedasset a,\n" + 
+//					"em_employee b,\n" + 
+//					"rf_entity c\n" + 
+//					"where a.current_cust='"+emp_code+"'\n" + 
+//					"and asset_cost between 1500 and 4999\n" +
+//					"and a.current_cust=b.emp_code\n" + 
+//					"and c.entity_id=b.entity_id\n" +
+//					"and a.status_id='Active'\n" +
+//					"order by a.asset_no";
+//		}
 	
 	FncSystem.out("Filter by Custodian", strSQL);
 	
@@ -490,14 +448,13 @@ public class PrintAssetSticker extends _JInternalFrame implements ActionListener
 	
 	public static String getCustodian(){
 		
-		String strsql="select a.emp_code,  b.entity_name,e.co_id,e.company_name,e.company_logo,d.division_code,d.division_name \n" + 
-				"from  em_employee a\n" + 
-				"left join rf_entity b ON a.entity_id=b.entity_id\n" + 
-				"left join mf_department as c on a.dept_code=c.dept_code\n"+
-				"left join mf_division as d on c.division_code=d.division_code \n"+
-				"left join mf_company e on a.co_id=e.co_id\n"+
-				"where not emp_status='I'\n";
-				//"AND not emp_status='I' \n";
+		String strsql="select a.emp_code,  b.entity_name,d.exec_office_code,d.exec_office_name \n"
+				+ "from  rf_employee a\n"
+				+ "left join rf_entity b ON a.entity_id=b.entity_id\n"
+				+ "left join mf_division as c on a.div_code=c.div_code\n"
+				+ "left join mf_exec_office as d on c.exec_office_code=d.exec_office_code\n"
+				+ "--left join mf_company e on a.co_id=e.co_id\n"
+				+ "where not emp_status='I'";
 		
 		FncSystem.out("Get Custodian", strsql);
 		
@@ -523,7 +480,10 @@ public class PrintAssetSticker extends _JInternalFrame implements ActionListener
 	
 	
 	private void displayAllAssets() {
+		
 		modelAssets.clear();
+		rowheaderAssets = tblAssets.getRowHeader(); 
+		scrollAssets.setRowHeaderView(rowheaderAssets);
 		DefaultListModel listModel = new DefaultListModel();//Creating listModel for rowHeader.
 		rowheaderAssets.setModel(listModel);//Setting of listModel into rowHeader.
 		String filterAssetType = cbType.getSelectedItem().toString();
@@ -531,47 +491,44 @@ public class PrintAssetSticker extends _JInternalFrame implements ActionListener
 		String strSQL = null;
 		if (filterAssetType == "Fixed Asset") {
 			strSQL = 
-					"select false,a.asset_no, \n" + 		
-					"a.asset_code, \n" + 
-					"a.asset_name,\n" + 
-					"a.date_Acquired,\n" + 
-					"lpad(a.current_cust::text, 6, '0'::text),\n" + 
-					"get_employee_name(lpad(a.current_cust::text, 6, '0'::text)), \n" + 
-					"a.reference_no, \n" + 
-					"format('%s',left(a.status,1)) as status, \n"+
-					"(case when c.company_name is null then 'ACERHOMES DEVELOPMENT CORPORATION' else c.company_name end) as company_name,\n" + 
-					"(case when c.company_logo is null then 'acer_logo.bmp' else c.company_logo end  ) as company_logo \n"+
-					"from tbl_asset a \n" + 
-					"left join em_employee b on a.current_cust::int=b.emp_code::int\n" + 
-					"left join mf_company c on b.co_id=c.co_id \n"+
-					"where get_employee_name(lpad(a.current_cust::text, 6, '0'::text)) != '' \n"+
-					"AND lpad(a.current_cust::text, 6, '0'::text) in (select emp_code from em_employee)\n"+
-					"AND a.status in ('Active', 'A')\n"+
-					"and a.asset_cost >= 5000\n" +
-					"order by asset_no,get_employee_name(lpad(a.current_cust::text, 6, '0'::text))";
+					"select false,a.asset_no, \n"
+					+ "a.asset_name,\n"
+					+ "a.date_Acquired,\n"
+					+ "lpad(a.current_cust::text, 6, '0'::text),\n"
+					+ "d.entity_name,\n"
+					+ "a.reference_no, \n"
+					+ "format('%s',left(a.status,1)) as status, \n"
+					+ "c.company_name as company_name,\n"
+					+ "c.company_logo as company_logo \n"
+					+ "from rf_asset a \n"
+					+ "left join rf_employee b on a.current_cust::int=b.emp_code::int\n"
+					+ "left join mf_company c on a.co_id=c.co_id \n"
+					+ "left join rf_entity d on b.entity_id = d.entity_id\n"
+					+ "where a.status in ('Active', 'A')\n"
+					+ "order by asset_no,d.entity_name";
 		}
 		
-		if (filterAssetType == "Non-fixed Asset") {
-			strSQL = 
-					"select false, a.object_id, \n" + 		
-					"null, \n" + 
-					"a.object_name,\n" + 
-					"a.date_Acquired,\n" + 
-					"lpad(a.current_cust::text, 6, '0'::text),\n" + 
-					"get_employee_name(lpad(a.current_cust::text, 6, '0'::text)), \n" + 
-					"a.reference_no, \n" + 
-					"format('%s',left(a.status_id,1)) as status, \n"+
-					"(case when c.company_name is null then 'ACERHOMES DEVELOPMENT CORPORATION' else c.company_name end) as company_name,\n" + 
-					"(case when c.company_logo is null then 'acer_logo.bmp' else c.company_logo end  ) as company_logo \n"+
-					"from tbl_nonfixedasset a \n" + 
-					"left join em_employee b on a.current_cust::int=b.emp_code::int\n" + 
-					"left join mf_company c on b.co_id=c.co_id \n"+
-					"where get_employee_name(lpad(a.current_cust::text, 6, '0'::text)) != '' \n"+
-					"AND lpad(a.current_cust::text, 6, '0'::text) in (select emp_code from em_employee)\n"+
-					"AND a.status_id in ('Active', 'A')\n"+
-					//"and a.asset_cost between 1500 and 4999\n" + //Comment by Erick 2023-07-19  
-					"order by object_id,get_employee_name(lpad(a.current_cust::text, 6, '0'::text))";
-		}
+//		if (filterAssetType == "Non-fixed Asset") {
+//			strSQL = 
+//					"select false, a.object_id, \n" + 		
+//					"null, \n" + 
+//					"a.object_name,\n" + 
+//					"a.date_Acquired,\n" + 
+//					"lpad(a.current_cust::text, 6, '0'::text),\n" + 
+//					"get_employee_name(lpad(a.current_cust::text, 6, '0'::text)), \n" + 
+//					"a.reference_no, \n" + 
+//					"format('%s',left(a.status_id,1)) as status, \n"+
+//					"(case when c.company_name is null then 'ACERHOMES DEVELOPMENT CORPORATION' else c.company_name end) as company_name,\n" + 
+//					"(case when c.company_logo is null then 'acer_logo.bmp' else c.company_logo end  ) as company_logo \n"+
+//					"from tbl_nonfixedasset a \n" + 
+//					"left join em_employee b on a.current_cust::int=b.emp_code::int\n" + 
+//					"left join mf_company c on b.co_id=c.co_id \n"+
+//					"where get_employee_name(lpad(a.current_cust::text, 6, '0'::text)) != '' \n"+
+//					"AND lpad(a.current_cust::text, 6, '0'::text) in (select emp_code from em_employee)\n"+
+//					"AND a.status_id in ('Active', 'A')\n"+
+//					//"and a.asset_cost between 1500 and 4999\n" + //Comment by Erick 2023-07-19  
+//					"order by object_id,get_employee_name(lpad(a.current_cust::text, 6, '0'::text))";
+//		}
 				
 				FncSystem.out("Display All Assets", strSQL);
 

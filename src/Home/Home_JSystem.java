@@ -125,6 +125,7 @@ import Projects.BiddingandAwarding.NoticeToProceed;
 import Projects.SalesandMarketing.PaymentScheme;
 import Projects.SalesandMarketing.Pricelist;
 import Projects.SalesandMarketing.Tripping_Cost;
+import Reports.Accounting.PrintAssetSticker;
 import Reports.ClientServicing.HoldUnits;
 import Reports.ClientServicing.OpenUnits;
 import Utilities.ChartofAccounts;
@@ -1180,6 +1181,26 @@ public class Home_JSystem extends JXFrame implements ActionListener, WindowListe
 					JMenu menuReports = new JMenu("Reports");
 					menuBar.add(menuReports);
 					menuReports.setMnemonic(KeyEvent.VK_R);
+					{
+						JMenu menuAccountingRpt = new JMenu("Accounting");
+						menuReports.add(menuAccountingRpt);
+						{
+							JMenu menuFixedAssets = new JMenu("Fixed Assets");
+							menuAccountingRpt.add(menuFixedAssets);
+							{
+								JMenuItem menuitemPrintAssetSticker= new JMenuItem("Print Asset Sticker");
+								menuFixedAssets.add(menuitemPrintAssetSticker);
+								menuitemPrintAssetSticker.addActionListener(new ActionListener() {
+									public void actionPerformed(ActionEvent e) {
+										if(isNotExisting("PrintAssetSticker")){
+											PrintAssetSticker pas = new PrintAssetSticker();
+											addWindow(pas, e);
+										}
+									}
+								});
+							}
+						}
+					}
 					{
 						JMenu menuReportBuyers = new JMenu("Buyers");
 						menuReports.add(menuReportBuyers);
