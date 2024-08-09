@@ -262,7 +262,6 @@ public class PrintAssetSticker extends _JInternalFrame implements ActionListener
 						tblAssets = new _JTableMain(modelAssets);
 						scrollAssets.setViewportView(tblAssets);
 						modelAssets .setEditable(true);
-						//tblAssets.setEnabled(true);
 						tblAssets.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 							public void valueChanged(ListSelectionEvent e) {
 								if(!e.getValueIsAdjusting()){
@@ -278,7 +277,6 @@ public class PrintAssetSticker extends _JInternalFrame implements ActionListener
 							}
 						});
 						tblAssets.getTableHeader().setEnabled(false); 
-						//tblAssets.setSortable(false);
 						tblAssets.setFillsViewportHeight(false);
 						tblAssets.getColumnModel().getColumn(0).setPreferredWidth(50);//checkbox
 						tblAssets.getColumnModel().getColumn(1).setPreferredWidth(120);;//asset_no

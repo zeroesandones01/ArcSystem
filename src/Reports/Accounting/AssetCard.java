@@ -151,28 +151,28 @@ private static final long serialVersionUID = 652923134846245300L;
 					panel.add(getcustodianname(),BorderLayout.CENTER);
 					pnlMain.add(panel, c);
 				}
-				{
-					c.gridx = 0; 
-					c.gridy = 2; 
-					c.weightx = 1; 
-					c.weighty = 0.5;	
-					c.ipady = 5; 
-					
-					chckbox= new JCheckBox("Exclude not found assets.");
-					chckbox.setSelected(true);
-					chckbox.addItemListener(new ItemListener() {
-						public void itemStateChanged(ItemEvent arg0) {
-							if(arg0.getStateChange()==ItemEvent.SELECTED){
-								
-							}
-							if(arg0.getStateChange()==ItemEvent.DESELECTED){
-								
-							}
-						}
-					}); 
-					pnlMain.add(chckbox, c);
-
-				}
+//				{
+//					c.gridx = 0; 
+//					c.gridy = 2; 
+//					c.weightx = 1; 
+//					c.weighty = 0.5;	
+//					c.ipady = 5; 
+//					
+//					chckbox= new JCheckBox("Exclude not found assets.");
+//					chckbox.setSelected(true);
+//					chckbox.addItemListener(new ItemListener() {
+//						public void itemStateChanged(ItemEvent arg0) {
+//							if(arg0.getStateChange()==ItemEvent.SELECTED){
+//								
+//							}
+//							if(arg0.getStateChange()==ItemEvent.DESELECTED){
+//								
+//							}
+//						}
+//					}); 
+//					pnlMain.add(chckbox, c);
+//
+//				}
 				{
 					c.gridx = 0; 
 					c.gridy = 3; 
@@ -188,12 +188,12 @@ private static final long serialVersionUID = 652923134846245300L;
 		}
 		
 	}
-	private void previewAssetCard(String emp_code,  String co_logo, String co_name, String co_alias,Boolean item_found, String asset_filter ){
+	private void previewAssetCard(String emp_code,  String co_logo, String co_name, String co_alias, String asset_filter ){
 		Map<String, Object> mapParameters = new HashMap<String, Object>();
 		
 		String strsql="";
 		
-		mapParameters.put("item_found", item_found);
+		//mapParameters.put("item_found", item_found);
 		mapParameters.put("emp_code", Integer.valueOf(emp_code));
 		mapParameters.put("company_name", co_name);
 		mapParameters.put("co_alias", co_alias);
@@ -201,7 +201,6 @@ private static final long serialVersionUID = 652923134846245300L;
 		mapParameters.put("asset_filter", asset_filter); //added by jari cruz 7.8.2022
 		
 		//FncSystem.out("co_name", co_name);
-		System.out.println(item_found);
 		System.out.println(co_logo);
 		System.out.println(emp_code);
 		System.out.println(co_name);
@@ -213,28 +212,28 @@ private static final long serialVersionUID = 652923134846245300L;
 		FncReport.generateReport("/Reports/AssetCard_v3.jasper", "Asset Card", mapParameters);
 		
 	}
-	private void previewAssetCard_notfound(String emp_code,  String co_logo, String co_name, String co_alias ){
-		Map<String, Object> mapParameters = new HashMap<String, Object>();
-		//Boolean item_found = false;
-		//String strsql="";
-		
-		//mapParameters.put("item_found", item_found);
-		mapParameters.put("emp_code", Integer.valueOf(emp_code));
-		mapParameters.put("company_name", co_name);
-		mapParameters.put("co_alias", co_alias);
-		mapParameters.put("co_logo", this.getClass().getClassLoader().getResourceAsStream("Images/"+ co_logo));
-		
-		//FncSystem.out("co_name", co_name);
-		//System.out.println(item_found);
-		System.out.println(co_logo);
-		System.out.println(emp_code);
-		System.out.println(co_name);
-		System.out.println(co_alias);
-		
-		
-		FncReport.generateReport("/Reports/AssetCard_v2.jasper", "Not found Asset Card", mapParameters);
-		
-	}
+//	private void previewAssetCard_notfound(String emp_code,  String co_logo, String co_name, String co_alias ){
+//		Map<String, Object> mapParameters = new HashMap<String, Object>();
+//		//Boolean item_found = false;
+//		//String strsql="";
+//		
+//		//mapParameters.put("item_found", item_found);
+//		mapParameters.put("emp_code", Integer.valueOf(emp_code));
+//		mapParameters.put("company_name", co_name);
+//		mapParameters.put("co_alias", co_alias);
+//		mapParameters.put("co_logo", this.getClass().getClassLoader().getResourceAsStream("Images/"+ co_logo));
+//		
+//		//FncSystem.out("co_name", co_name);
+//		//System.out.println(item_found);
+//		System.out.println(co_logo);
+//		System.out.println(emp_code);
+//		System.out.println(co_name);
+//		System.out.println(co_alias);
+//		
+//		
+//		FncReport.generateReport("/Reports/AssetCard_v2.jasper", "Not found Asset Card", mapParameters);
+//		
+//	}
 	
 	private void printAssetDetailedInduvidual(String custodian_id, String custodian_name, String co_logo, String co_name ){
 		
@@ -376,8 +375,8 @@ private static final long serialVersionUID = 652923134846245300L;
 			panbutton.add(btnpreview, c);
 			btnpreview.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-				previewAssetCard(lookupCustodianid.getValue(),  co_logo, co_name, co_alias, chckbox.isSelected(), cbType.getSelectedItem().toString());
-				previewAssetCard_notfound(lookupCustodianid.getValue(), co_logo, co_name, co_alias);
+				previewAssetCard(lookupCustodianid.getValue(),  co_logo, co_name, co_alias, cbType.getSelectedItem().toString());
+				//previewAssetCard_notfound(lookupCustodianid.getValue(), co_logo, co_name, co_alias);
 				lookupCustodianid.setValue("");
 				txtcustodianname.setText("");
 				//chckbox.setSelected(false);
@@ -417,15 +416,13 @@ private static final long serialVersionUID = 652923134846245300L;
 	
 	public static String getCustodian(){
 		
-		String strsql="select b.entity_name,a.emp_code,e.co_id,e.company_name, company_logo, company_alias\n" + 
-				"from  em_employee a\n" + 
-				"left join rf_entity b ON a.entity_id=b.entity_id\n" + 
-				"left join mf_department as c on a.dept_code=c.dept_code\n" + 
-				"left join mf_division as d on c.division_code=d.division_code \n" + 
-				"left join mf_company e on a.co_id=e.co_id\n" + 
-				"where  emp_status not in('c') ";// view inactive emp
-				//"where  emp_status not in('I') ";//view active emp only
-				//+ "and e.co_id::int="+co_id+"";
+		String strsql="select b.entity_name,a.emp_code, '01', 'ACERLAND REALTY CORPORATION','arc.png', 'ARC'  \n"
+				+ "from  rf_employee a\n"
+				+ "left join rf_entity b ON a.entity_id=b.entity_id\n"
+				+ "left join mf_division as c on a.div_code=c.div_code\n"
+				+ "left join mf_exec_office as d on c.exec_office_code=d.exec_office_code \n"
+				+ "left join mf_company e on a.co_id=e.co_id\n"
+				+ "where  emp_status not in('c')";
 		System.out.println();
 		System.out.println("getCustodian: "+strsql);
 		return strsql;
