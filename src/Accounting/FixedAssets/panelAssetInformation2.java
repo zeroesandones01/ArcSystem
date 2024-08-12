@@ -365,7 +365,11 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 							lookupCompany.setLookupSQL(getcompany());
 							lookupCompany.addLookupListener(new LookupListener() {
 								public void lookupPerformed(LookupEvent event) {
-									
+									Object[] data = ((_JLookup) event.getSource()).getDataSet();
+									if(data != null) {
+										txtCompany.setText((String)data[1]);
+										
+									}
 								}
 							});
 						}
@@ -433,13 +437,13 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 							jPanel4.add(lookupCategory);
 							lookupCategory.setReturnColumn(0);
 							lookupCategory.setEditable(false);
-							lookupCategory.setLookupSQL(_AssetMonitoring.getCategory());
+							lookupCategory.setLookupSQL(getCategory());
 							lookupCategory.addLookupListener(new LookupListener() {
 								@Override
 								public void lookupPerformed(LookupEvent event) {
 									Object[] data = ((_JLookup) event.getSource()).getDataSet();
 									if(data != null){
-										
+										txtCategory.setText((String)data[1]);
 									}
 								}
 							});
@@ -581,14 +585,15 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 							lookupSupplier = new _JLookup(null , "Supplier", 0);
 							jPanel8.add(lookupSupplier);
 							lookupSupplier.setEditable(false);
-							//lookupSupplier.setLookupSQL(_AssetMonitoring.getSupplier());
-							lookupSupplier.setLookupSQL("Select '01', 'Test Supplier'");
+							lookupSupplier.setLookupSQL(getsupplier());
+							//lookupSupplier.setLookupSQL("Select '01', 'Test Supplier'");
 							lookupSupplier.addLookupListener(new LookupListener() {
 								
 								@Override
 								public void lookupPerformed(LookupEvent event) {
 									Object [] supplier= ((_JLookup) event.getSource()).getDataSet();
 									if (supplier !=null){
+										txtSupplier.setText((String)supplier[1]);
 									}
 								}
 							});
@@ -1115,12 +1120,12 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 						(rbInsuredYes.isSelected() ? "true":"false"),//insured
 						txtInsuredValue.getText().replace(",", ""),//insured_value
 						txtRemarks.getText(),					//remarks
-						lookupSupplier.getText(),				//supp_id
+						lookupSupplier.getValue(),				//supp_id
 						lookupCustodian.getValue(),				//current_cust
 						txtReferenceNo.getText(),				//reference_no
 						txtNetCost.getText().replace(",", ""), //original_cost
 						(rbCapitalizedYes.isSelected() ? "true":"false"),//capitalized
-			 			panelAssetInformation2.lookupCompany.getValue(),//comp_id
+			 			//panelAssetInformation2.lookupCompany.getValue(),//comp_id
 						txtCustodian.getText().trim(),			//custodian_name
 						Integer.valueOf(txtNoOfAssets.getText()),//noofAsset
 					    true,									//toPrint
@@ -1136,6 +1141,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 				resetInformation();
 				btnState(true, false, false, true);
 			}else {
+				System.out.println("Else save");
 				if(txtCustodian.getText().equals("")){
 					JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please select custodian", "Warning", JOptionPane.WARNING_MESSAGE);
 				}
@@ -1183,6 +1189,14 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 		}
 	}
 	
+	public static String getCategory(){
+		return "select category_id as \"ID\", category_name as \"Category Name\" from rf_asset_category order by category_name";
+	}
+	
+	private String getsupplier () {
+		return "select entity_id, entity_name from rf_entity where status_id = 'A' ";
+	}
+	
 	private void buttonstate (Boolean addnew, Boolean edit, Boolean save, Boolean reset) {
 		btnNew.setEnabled(addnew);
 		btnEdit.setEnabled(edit);
@@ -1210,7 +1224,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 			String reference_no, 
 			String original_cost, 
 			String capitalized, 
-			String comp_id,
+			//String comp_id,
 			String custodian_name,
 			int noofAsset,
 			boolean toPrint,
@@ -1265,7 +1279,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 							"reference_no, \n" +
 							"original_cost, \n" +							
 							"capitalized, \n" +
-							"comp_id, \n" +
+							//"comp_id, \n" +
 							"co_id, \n" +
 							"item_found, \n" +
 							"item_name, \n"+
@@ -1275,7 +1289,9 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 							//"remarks2, \n"+
 							"loc_id,\n"+
 							//"replaced_assetno,\n"+
-							"date_disposed)\n"+
+							"date_disposed,\n"+
+							"rec_status \n"+
+							")\n"+
 							"VALUES (\n" +
 							//"'"+panelAssetInformation.txtAssetCode.getText()+"', \n" +	//asset_code
 							""+item_id+", \n" +									//item_id
@@ -1304,7 +1320,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 							"'"+reference_no+"', \n" +							//reference_no
 							""+original_cost+", \n" +							//original_cost
 							""+capitalized+", \n" +								//capitalized
-							""+comp_id+", \n"+									//comp_id
+							//""+comp_id+", \n"+									//comp_id
 							"'"+co_id+"', \n"+									//co_id
 							""+item_found+",\n"+								//item_found
 							"'"+item_name+"',\n"+								//item_name
@@ -1312,7 +1328,8 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 							"'"+description+"',\n"+								//Description
 							"'"+dept_code+"', \n"+ 								//dept_code
 							"'"+location_id+"',\n"+								//location id of the asset
-							"null)";								//asset number replace by the new item
+							"null, \n"+								//asset number replace by the new item
+							"true)";
 			
 			db.executeUpdate(strSQL, true);
 
@@ -1332,7 +1349,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 					"lower(format('%s%s%s',left(c.first_name,1),left(c.middle_name,1),c.last_name))\n" + 
 					"--lower(substr(c.first_name, left,1)||substr(c.middle_name, left,1)||c.last_name) as cuser \n" + 
 					"from rf_asset  a \n" + 
-					"left join em_employee b on a.current_cust::varchar=b.emp_code\n" + 
+					"left join rf_employee b on a.current_cust::varchar=b.emp_code\n" + 
 					"left join rf_entity as c on b.entity_id=c.entity_id\n" + 
 					"where a.asset_no='"+assetToPrint+"' and b.emp_code= '"+UserInfo.EmployeeCode+"'\n" + 
 					"order by a.asset_no";
@@ -1354,6 +1371,8 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 		return strsql;
 		
 	}
+	
+	
 	
 	public static void pulloutAsset(String asset_no){
 		pgUpdate db=new pgUpdate();
@@ -1384,13 +1403,24 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 		grpNE.setSelected(btnNew.getModel(), true);
 		dateAcquired.getCalendarButton().setEnabled(true);
 		
-		lblCompany.setFont(null);
-		lookupCompany.setEnabled(false);
-		lookupCompany.setValue(AssetMonitoring2.lookupselectcompany.getValue());
-		lookupCompany.setEditable(false);
-		txtCompany.setText(AssetMonitoring2.txtcompany.getText());
+		//lblCompany.setFont(null);
+//		lookupCompany.setEnabled(false);
+//		lookupCompany.setValue(AssetMonitoring2.lookupselectcompany.getValue());
+//		lookupCompany.setEditable(false);
+//		txtCompany.setText(AssetMonitoring2.txtcompany.getText());
+		
+		System.out.println("Company:: "+ AssetMonitoring2.lookupselectcompany.getValue());
 		
 		lblCustodian.setName("*Custodian");
+		if(AssetMonitoring2.lookupselectcompany.getValue() == null) {
+			lookupCompany.setEnabled(true);
+			lookupCompany.setEditable(true);
+		}else {
+			lookupCompany.setEnabled(false);
+			lookupCompany.setValue(AssetMonitoring2.lookupselectcompany.getValue());
+			lookupCompany.setEditable(false);
+			txtCompany.setText(AssetMonitoring2.txtcompany.getText());
+		}
 		
 		lookupCustodian.setText("");
 		txtCustodian.setText("");
@@ -1554,7 +1584,7 @@ public static void resetInformation(){
 				dateToDep.setEditable(false);
 				dateToDep.setEnabled(false);
 				
-				txtNetCost.setText("");
+				txtNetCost.setText("0.00");
 				txtNetCost.setEditable(false);
 				
 				txtUsefulLife.setText("");
@@ -1615,9 +1645,9 @@ public static void resetInformation(){
 				"trim(split_part(asset_name, ',', 1)) as item_name,\n" + 
 				"trim(split_part(asset_name, ',', 2)) as brand,\n" + 
 				"trim(split_part(asset_name, ',', 3)) as description,\n" + 
-				"g.supp_id::varchar,\n" + 
-				"g.supp_name,\n" + 
-				"a.asset_code,\n" + 
+				"a.supp_id,\n" + 
+				"i.entity_name,\n" + 
+				//"a.asset_code,\n" + 
 				"a.status,\n" + 
 				"a.remarks,\n" + 
 				"to_char(a.asset_cost, 'FM999,999,999.00') as net_cost,\n" + 
@@ -1636,7 +1666,7 @@ public static void resetInformation(){
 				"a.from_dep as from_depreciation, \n" + 
 				"a.to_dep as to_depreciation,\n" + 
 				"a.item_found, \n"+
-				"a.remarks2, \n"+
+				//"a.remarks2, \n"+
 				"(case when a.loc_id != '' then (select loc_name from rf_asset_location  where loc_id=a.loc_id) else 'Not yet scanned' end) as loc_name \n"+
 				"from rf_asset a \n" + 
 				"left join rf_employee  b on a.current_cust=b.emp_code::int\n" + 
@@ -1645,6 +1675,7 @@ public static void resetInformation(){
 				"left join rf_asset_item  e on e.item_id=a.item_id\n" + 
 				"left join rf_asset_category  f on f.category_id::varchar = e.category_id\n" + 
 				"left join rf_asset_supplier g on g.supp_id=a.supp_id\n" + 
+				"left join rf_entity i on a.supp_id::varchar = i.entity_id\n"+
 				"where a.asset_no="+asset_no+";";
 		FncSystem.out("display Asset Detail", SQL);
 		pgSelect db = new pgSelect();
@@ -1663,19 +1694,19 @@ public static void resetInformation(){
 			txtItem.setText((String) db.getResult()[0][9]);
 			txtBrand.setText((String) db.getResult()[0][10]);
 			txtDescription.setText((String) db.getResult()[0][11]);
-			lookupSupplier.setValue((String) db.getResult()[0][12]);
+			lookupSupplier.setText((db.getResult()[0][12].toString()));
+			//lookupSupplier.setValue( db.getResult()[0][12]);
 			txtSupplier.setText((String) db.getResult()[0][13]);
 			//txtAssetCode.setText((String) db.getResult()[0][14]);
-			cmbstatus.setSelectedItem((String)db.getResult()[0][15]);
+			cmbstatus.setSelectedItem((String)db.getResult()[0][14]);
 			
-			txtRemarks.setText((String) db.getResult()[0][16]);
-			txtRemarks.setToolTipText((String) db.getResult()[0][16]);
-			txtNetCost.setText((String) db.getResult()[0][17]);
-			txtUsefulLife.setText((String) db.getResult()[0][18]);
-			txtSerialNo.setText((String) db.getResult()[0][19]);
-			txtModelNo.setText((String) db.getResult()[0][20]);
+			txtRemarks.setText((String) db.getResult()[0][15]);
+			txtNetCost.setText((String) db.getResult()[0][16]);
+			txtUsefulLife.setText((String) db.getResult()[0][17]);
+			txtSerialNo.setText((String) db.getResult()[0][18]);
+			txtModelNo.setText((String) db.getResult()[0][19]);
 			
-			if ((boolean) db.getResult()[0][21]){
+			if ((boolean) db.getResult()[0][20]){
 				rbOwnedNo.setSelected(false);
 				rbOwnedYes .setSelected(true);
 			}else{
@@ -1683,10 +1714,10 @@ public static void resetInformation(){
 				rbOwnedYes .setSelected(false);
 			}
 
-			rbCapitalizedYes.setSelected((boolean) db.getResult()[0][22]);
-			rbCapitalizedNo.setSelected(!(boolean) db.getResult()[0][22]);
+			rbCapitalizedYes.setSelected((boolean) db.getResult()[0][21]);
+			rbCapitalizedNo.setSelected(!(boolean) db.getResult()[0][21]);
 
-			if((boolean)db.getResult()[0][23]){
+			if((boolean)db.getResult()[0][22]){
 				rbInsuredYes.setSelected(true);
 				rbInsuredNo .setSelected(false);
 				
@@ -1694,22 +1725,22 @@ public static void resetInformation(){
 				rbInsuredYes.setSelected(false);
 				rbInsuredNo .setSelected(true);
 			}
-			txtInsuredValue.setValue(db.getResult()[0][24]);
-			txtReferenceNo.setText((String) db.getResult()[0][25]);
-			txtMonthlyDep.setValue(db.getResult()[0][26]);			
-			txtBookValue.setValue(db.getResult()[0][27]);
-			txtRetCost.setValue(db.getResult()[0][28]);
-			dateFromDep.setDate((Date) db.getResult()[0][29]);
-			dateToDep.setDate((Date) db.getResult()[0][30]);
+			txtInsuredValue.setValue(db.getResult()[0][23]);
+			txtReferenceNo.setText((String) db.getResult()[0][24]);
+			txtMonthlyDep.setValue(db.getResult()[0][25]);			
+			txtBookValue.setValue(db.getResult()[0][26]);
+			txtRetCost.setValue(db.getResult()[0][27]);
+			dateFromDep.setDate((Date) db.getResult()[0][28]);
+			dateToDep.setDate((Date) db.getResult()[0][29]);
 			
-			if ((boolean) db.getResult()[0][31]) {
+			if ((boolean) db.getResult()[0][30]) {
 				rbFoundNo.setSelected(false);
 				rbFoundYes.setSelected(true);
 			} else {
 				rbFoundNo.setSelected(true);
 				rbFoundYes.setSelected(false);	
 			}
-			lookupLocation.setValue((String) db.getResult()[0][33]);
+			lookupLocation.setValue((String) db.getResult()[0][31]);
 		}
 	}
 	
@@ -1842,6 +1873,7 @@ public static void resetInformation(){
 		}
 
 		if(lookupCompany.getText().equals("")
+				|| lookupCompany.getText() == null
 				|| lookupCustodian.getText().equals("")
 				|| lookupCategory.getText().equals("")
 				|| lookupItem.getText().equals("")
@@ -1862,7 +1894,6 @@ public static void resetInformation(){
 				|| txtReferenceNo.getText().trim().equals("")
 				|| asset_num == 0
 				|| lookupLocation.getValue()==null
-				|| netcost <= 5000.00
 				 ){
 			return false;
 		}else{

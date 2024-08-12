@@ -320,11 +320,8 @@ public class PrintAssetSticker extends _JInternalFrame implements ActionListener
 						pnlSouthextra2.setPreferredSize(new Dimension(200, 0));
 					}
 				}
-				
 			}
-			
 		}
-
 	}
 	private void previewSticker(modelPrintAssetSticker model){
 		
@@ -343,9 +340,9 @@ public class PrintAssetSticker extends _JInternalFrame implements ActionListener
 			}
 		} 
 		
-		Object[] option= {"Big Sticker"/*,"Small Sticker"*/};
-		int Option=JOptionPane.showOptionDialog(getTopLevelAncestor(), "Please select sticker size.", "Sticker size option", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
-		System.out.println("Option: "+Option);
+//		Object[] option= {"Big Sticker"/*,"Small Sticker"*/};
+//		int Option=JOptionPane.showOptionDialog(getTopLevelAncestor(), "Please select sticker size.", "Sticker size option", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
+//		System.out.println("Option: "+Option);
 
 		Map<String, Object> mapParameters = new HashMap<String, Object>();
 		mapParameters.put("asset_type",filterAssetType);
