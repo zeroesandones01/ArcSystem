@@ -125,6 +125,7 @@ import Projects.BiddingandAwarding.NoticeToProceed;
 import Projects.SalesandMarketing.PaymentScheme;
 import Projects.SalesandMarketing.Pricelist;
 import Projects.SalesandMarketing.Tripping_Cost;
+import Reports.Accounting.AssetCard;
 import Reports.Accounting.PrintAssetSticker;
 import Reports.ClientServicing.HoldUnits;
 import Reports.ClientServicing.OpenUnits;
@@ -1187,6 +1188,18 @@ public class Home_JSystem extends JXFrame implements ActionListener, WindowListe
 						{
 							JMenu menuFixedAssets = new JMenu("Fixed Assets");
 							menuAccountingRpt.add(menuFixedAssets);
+							{
+								JMenuItem menuitemAssetCardPrinting = new JMenuItem("Asset Card Printing");
+								menuFixedAssets.add(menuitemAssetCardPrinting);
+								menuitemAssetCardPrinting.addActionListener(new ActionListener() {
+									public void actionPerformed(ActionEvent e) {
+										if(isNotExisting("AssetCard")){
+											AssetCard as = new AssetCard();
+											addWindow(as, e);
+										}
+									}
+								});
+							}
 							{
 								JMenuItem menuitemPrintAssetSticker= new JMenuItem("Print Asset Sticker");
 								menuFixedAssets.add(menuitemPrintAssetSticker);
