@@ -292,7 +292,7 @@ private static final long serialVersionUID = 652923134846245300L;
 						co_logo= (String) data [4];
 						co_alias= (String) data [5];
 						txtcustodianname.setText(emp_name);
-						btndetailed.setEnabled(true);
+						//btndetailed.setEnabled(true);
 						btnpreview.setEnabled(true);
 						
 					}
@@ -384,32 +384,32 @@ private static final long serialVersionUID = 652923134846245300L;
 				}
 			});
 		}
-		{
-			c.gridx = 1;
-			c.gridy = 0;
-			c.weightx = 1;
-			c.weighty = 1;
-			c.ipadx = 10;
-			
-			btndetailed=new JButton("Detailed Asset");
-			btndetailed.setEnabled(false);
-			btndetailed.setFont(FncGlobal.sizeControls);
-			panbutton.add(btndetailed, c);
-			btndetailed.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if ( lookupCustodianid.getValue().equals("")|| txtcustodianname.getText().equals("")) {
-						//JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please fill up required fields.", "Preview", JOptionPane.INFORMATION_MESSAGE);
-						JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Plese fill up required fields", "Preview", JOptionPane.WARNING_MESSAGE);
-					} else {
-						printAssetDetailedInduvidual(lookupCustodianid.getValue(), txtcustodianname.getText(), co_logo, co_name);
-						//lookupCompany.setValue("");
-						//txtCompanyname.setText("");
-						lookupCustodianid.setValue("");
-						txtcustodianname.setText("");	
-					}
-				}
-			});
-		}
+//		{
+//			c.gridx = 1;
+//			c.gridy = 0;
+//			c.weightx = 1;
+//			c.weighty = 1;
+//			c.ipadx = 10;
+//			
+//			btndetailed=new JButton("Detailed Asset");
+//			btndetailed.setEnabled(false);
+//			btndetailed.setFont(FncGlobal.sizeControls);
+//			panbutton.add(btndetailed, c);
+//			btndetailed.addActionListener(new ActionListener() {
+//				public void actionPerformed(ActionEvent e) {
+//					if ( lookupCustodianid.getValue().equals("")|| txtcustodianname.getText().equals("")) {
+//						//JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please fill up required fields.", "Preview", JOptionPane.INFORMATION_MESSAGE);
+//						JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Plese fill up required fields", "Preview", JOptionPane.WARNING_MESSAGE);
+//					} else {
+//						printAssetDetailedInduvidual(lookupCustodianid.getValue(), txtcustodianname.getText(), co_logo, co_name);
+//						//lookupCompany.setValue("");
+//						//txtCompanyname.setText("");
+//						lookupCustodianid.setValue("");
+//						txtcustodianname.setText("");	
+//					}
+//				}
+//			});
+//		}
 		
 		return panbutton;
 	}

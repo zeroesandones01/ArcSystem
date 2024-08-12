@@ -35,8 +35,8 @@ from
 	c.entity_name as entity_name_1,
 	d.company_name as company_name_1,
 	lower(format('%s%s%s',left(c.first_name,1),left(c.middle_name,1),c.last_name)) as cuser_1,
-	a.date_acquired as date_acquired_1,
-	coalesce(remarks2,'') as remarks2_1
+	a.date_acquired as date_acquired_1
+	--coalesce(remarks2,'') as remarks2_1
 	from rf_asset  a
 	left join rf_employee b on a.current_cust::int=b.emp_code::int
 	left join rf_entity as c on b.entity_id=c.entity_id
@@ -66,7 +66,7 @@ from
 	to_char(a.asset_no, 'FM00000000') as anum_2,
 	c.entity_name as entity_name_2,
 	d.company_name as company_name_2,
-	lower(format('%s%s%s',left(c.first_name,1),left(c.middle_name,1),c.last_name)) as cuser_2,a.date_acquired as date_acquired_2,coalesce(remarks2,'') as remarks2_2
+	lower(format('%s%s%s',left(c.first_name,1),left(c.middle_name,1),c.last_name)) as cuser_2,a.date_acquired as date_acquired_2--,coalesce(remarks2,'') as remarks2_2
 	from rf_asset  a
 	left join rf_employee b on a.current_cust::int=b.emp_code::int
 	left join rf_entity as c on b.entity_id=c.entity_id
@@ -83,7 +83,6 @@ on a.marker=b.marker]]>
 	<field name="company_name_1" class="java.lang.String"/>
 	<field name="cuser_1" class="java.lang.String"/>
 	<field name="date_acquired_1" class="java.sql.Date"/>
-	<field name="remarks2_1" class="java.lang.String"/>
 	<field name="marker" class="java.lang.Long"/>
 	<field name="asset_no_2" class="java.lang.String"/>
 	<field name="asset_name_2" class="java.lang.String"/>
@@ -92,7 +91,6 @@ on a.marker=b.marker]]>
 	<field name="company_name_2" class="java.lang.String"/>
 	<field name="cuser_2" class="java.lang.String"/>
 	<field name="date_acquired_2" class="java.sql.Date"/>
-	<field name="remarks2_2" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -110,6 +108,18 @@ on a.marker=b.marker]]>
 					<bottomPen lineWidth="0.5" lineStyle="Dashed"/>
 					<rightPen lineWidth="0.5" lineStyle="Dashed"/>
 				</box>
+				<staticText>
+					<reportElement x="12" y="118" width="110" height="10"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement/>
+					<text><![CDATA[Static text]]></text>
+				</staticText>
 			</frame>
 			<textField>
 				<reportElement x="20" y="75" width="230" height="26"/>
@@ -153,20 +163,6 @@ on a.marker=b.marker]]>
 				</textElement>
 				<text><![CDATA[Custodian]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="20" y="118" width="110" height="10"/>
-				<box leftPadding="2">
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement verticalAlignment="Middle">
-					<font size="6"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{remarks2_1}]]></textFieldExpression>
-			</textField>
 			<textField pattern="MM/dd/yyyy">
 				<reportElement x="130" y="118" width="120" height="10"/>
 				<box rightPadding="2">
@@ -189,14 +185,14 @@ on a.marker=b.marker]]>
 				</jr:barbecue>
 			</componentElement>
 			<textField>
-				<reportElement x="53" y="13" width="185" height="14"/>
+				<reportElement x="54" y="13" width="185" height="14"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="7" isBold="true" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{company_name_1}]]></textFieldExpression>
 			</textField>
 			<image scaleImage="FillFrame" hAlign="Left" vAlign="Top" isUsingCache="true">
-				<reportElement x="8" y="0" width="45" height="46"/>
+				<reportElement x="9" y="1" width="46" height="46"/>
 				<box>
 					<pen lineWidth="0.0"/>
 					<topPen lineWidth="0.0"/>
@@ -204,23 +200,8 @@ on a.marker=b.marker]]>
 					<bottomPen lineWidth="0.0"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<imageExpression class="java.io.InputStream"><![CDATA[$P{co_logo_arc}
-   ]]></imageExpression>
+				<imageExpression class="java.io.InputStream"><![CDATA[$P{co_logo_arc}]]></imageExpression>
 			</image>
-			<textField isBlankWhenNull="true">
-				<reportElement x="324" y="118" width="110" height="10"/>
-				<box leftPadding="2">
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement verticalAlignment="Middle">
-					<font size="6" isItalic="false"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{remarks2_2}]]></textFieldExpression>
-			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="324" y="75" width="230" height="26"/>
 				<box>
@@ -311,6 +292,18 @@ on a.marker=b.marker]]>
 					<bottomPen lineWidth="0.5" lineStyle="Dashed"/>
 					<rightPen lineWidth="0.5" lineStyle="Dashed"/>
 				</box>
+				<staticText>
+					<reportElement x="13" y="118" width="110" height="10"/>
+					<box>
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement/>
+					<text><![CDATA[Static text]]></text>
+				</staticText>
 			</frame>
 		</band>
 	</detail>

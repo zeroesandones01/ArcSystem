@@ -7,7 +7,6 @@
 	<parameter name="co_logo" class="java.io.InputStream"/>
 	<parameter name="company_name" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="co_alias" class="java.lang.String"/>
-	<parameter name="item_found" class="java.lang.Boolean"/>
 	<parameter name="asset_filter" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select format('%s, %s %s.',c.last_name, c.first_name,left(c.middle_name,1))as current_cust,
@@ -44,7 +43,7 @@ and a.status in('ACTIVE','A')]]>
 		<groupHeader>
 			<band height="17">
 				<textField isBlankWhenNull="true">
-					<reportElement x="0" y="0" width="170" height="17"/>
+					<reportElement x="0" y="0" width="756" height="17"/>
 					<textElement verticalAlignment="Middle">
 						<font size="10" isBold="true" isItalic="false"/>
 					</textElement>
