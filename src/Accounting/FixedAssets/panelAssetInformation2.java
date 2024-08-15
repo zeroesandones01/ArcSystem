@@ -1190,7 +1190,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 	}
 	
 	public static String getCategory(){
-		return "select category_id as \"ID\", category_name as \"Category Name\" from rf_asset_category order by category_name";
+		return "select category_id as \"ID\", category_name as \"Category Name\" from mf_asset_category order by category_name";
 	}
 	
 	private String getsupplier () {
@@ -1672,9 +1672,9 @@ public static void resetInformation(){
 				"left join rf_employee  b on a.current_cust=b.emp_code::int\n" + 
 				"left join mf_company  c on a.co_id=c.co_id\n" + 
 				"left join rf_entity  d on b.entity_id=d.entity_id\n" + 
-				"left join rf_asset_item  e on e.item_id=a.item_id\n" + 
-				"left join rf_asset_category  f on f.category_id::varchar = e.category_id\n" + 
-				"left join rf_asset_supplier g on g.supp_id=a.supp_id\n" + 
+				"left join mf_asset_item  e on e.item_id=a.item_id\n" + 
+				"left join mf_asset_category  f on f.category_id::varchar = e.category_id\n" + 
+				//"left join rf_asset_supplier g on g.supp_id=a.supp_id\n" + 
 				"left join rf_entity i on a.supp_id::varchar = i.entity_id\n"+
 				"where a.asset_no="+asset_no+";";
 		FncSystem.out("display Asset Detail", SQL);

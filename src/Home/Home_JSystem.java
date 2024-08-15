@@ -95,6 +95,7 @@ import Accounting.FixedAssets.addassetperipheral;
 import Accounting.FixedAssets.addassetperipheral2;
 import Accounting.GeneralLedger.GeneralLedger;
 import Accounting.GeneralLedger.JournalVoucher;
+import Accounting.OfficeSupplies.OfficeSupplies;
 import Admin.AddEditEntityType;
 import Buyers.ClientServicing.BuyersRequestforTechnicalDocuments;
 import Buyers.ClientServicing.CARD;
@@ -929,6 +930,22 @@ public class Home_JSystem extends JXFrame implements ActionListener, WindowListe
 										if(isNotExisting("JournalVoucher")){
 											JournalVoucher jv = new JournalVoucher();
 											addWindow(jv, e);
+										}
+									}
+								});
+							}
+						}
+						{
+							JMenu menusupplies = new JMenu("Supplies");
+							menuAccounting.add(menusupplies);
+							{
+								JMenuItem menuitemofficesupplies = new JMenuItem("Office Supplies");
+								menusupplies.add(menuitemofficesupplies);
+								menuitemofficesupplies.addActionListener(new ActionListener() {
+									public void actionPerformed(ActionEvent e) {
+										if(isNotExisting("Office Supplies")) {
+											OfficeSupplies os = new OfficeSupplies();
+											addWindow(os, e);
 										}
 									}
 								});
