@@ -100,8 +100,8 @@ public class model_officesupplies extends DefaultTableModel {
 					false, 	//Description
 					false,	//Unit
 					false, 	//Remaining
-					false, 	//Quantity
-					false	//Purpose
+					true, 	//Quantity
+					true	//Purpose
 			};
 		}else{
 			COLUMN_EDITABLE = new boolean[] {

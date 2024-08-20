@@ -109,6 +109,7 @@ public class OfficeSupplies extends _JInternalFrame implements _GUI, ActionListe
 										tagcategory.setTag(category_name);
 										displaysupplies(modelofc_supply, rowheaderofc_supply, cat_id);
 										txtsearch.setEditable(true);
+										btnstate(false, true, false, true);
 									}
 								}
 							});
@@ -117,7 +118,7 @@ public class OfficeSupplies extends _JInternalFrame implements _GUI, ActionListe
 							tagcategory = new _JTagLabel("[ ]");
 							pnlnorth_left_1.add(tagcategory, BorderLayout.EAST);
 							tagcategory.setPreferredSize(new Dimension(300, 0));
-							
+							tagcategory.setEditable(false);
 						}
 					}
 					{
@@ -173,6 +174,8 @@ public class OfficeSupplies extends _JInternalFrame implements _GUI, ActionListe
 						modelofc_supply = new model_officesupplies();
 						tblofc_supply = new _JTableMain(modelofc_supply);
 						scrollofc_supply.setViewportView(tblofc_supply);
+						
+						//tblofc_supply.getColumnModel().getColumn(6).setPreferredWidth(300);
 					}
 				}
 				{
@@ -214,9 +217,37 @@ public class OfficeSupplies extends _JInternalFrame implements _GUI, ActionListe
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("new")) {
+		if (e.getActionCommand().equals("generate")) {
 			
 		}
+		if (e.getActionCommand().equals("new")) {
+			lookupcategory.setEditable(true);
+			modelofc_supply.setEditable(true);
+			btnstate(false, false, true, true);
+		}
+		if (e.getActionCommand().equals("save")) {
+			btnstate(true, true, false, true);
+		}
+		if (e.getActionCommand().equals("cancel")) {
+			lookupcategory.setValue(null);
+			lookupcategory.setEditable(true);
+			tagcategory.setTag("");
+			txtsearch.setText("");
+			txtsearch.setEditable(false);
+			FncTables.clearTable(modelofc_supply);
+			rowheaderofc_supply = tblofc_supply.getRowHeader(); 
+			scrollofc_supply.setRowHeaderView(rowheaderofc_supply);
+			modelofc_supply.setEditable(false);
+			btnstate(true, true, false, true);
+		}
+	}
+	
+	private void btnstate (Boolean gen, Boolean addnew, Boolean save, Boolean cancel) {
+		btngen_order.setEnabled(gen);
+		btnnew.setEnabled(addnew);
+		btnsave.setEnabled(save);
+		btncancel.setEnabled(cancel);
+		
 	}
 	
 	private String getcategory () {
@@ -246,7 +277,6 @@ public class OfficeSupplies extends _JInternalFrame implements _GUI, ActionListe
 				modelMain.addRow(db.getResult()[x]);
 				listModel.addElement(modelMain.getRowCount());
 			}
-			
 		}
 		tblofc_supply.packAll();
 	}
