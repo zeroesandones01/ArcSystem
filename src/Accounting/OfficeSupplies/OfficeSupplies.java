@@ -175,7 +175,12 @@ public class OfficeSupplies extends _JInternalFrame implements _GUI, ActionListe
 						tblofc_supply = new _JTableMain(modelofc_supply);
 						scrollofc_supply.setViewportView(tblofc_supply);
 						
-						//tblofc_supply.getColumnModel().getColumn(6).setPreferredWidth(300);
+						tblofc_supply.getColumnModel().getColumn(1).setPreferredWidth(100);
+						tblofc_supply.getColumnModel().getColumn(2).setPreferredWidth(300);
+						tblofc_supply.getColumnModel().getColumn(3).setPreferredWidth(100);
+						tblofc_supply.getColumnModel().getColumn(4).setPreferredWidth(100);
+						tblofc_supply.getColumnModel().getColumn(5).setPreferredWidth(100);
+						tblofc_supply.getColumnModel().getColumn(6).setPreferredWidth(300);
 					}
 				}
 				{

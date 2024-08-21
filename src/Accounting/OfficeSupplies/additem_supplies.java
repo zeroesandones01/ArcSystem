@@ -99,7 +99,6 @@ public class additem_supplies extends _JInternalFrame implements _GUI, ActionLis
 				pnlmain.add(pnlnorth, BorderLayout.NORTH);		
 				pnlnorth.setPreferredSize(new Dimension(0, 260));
 				pnlnorth.setBorder(JTBorderFactory.createTitleBorder(""));
-				pnlnorth.setBackground(Color.DARK_GRAY);
 				{
 					scrollitem_supplies = new JScrollPane();
 					pnlnorth.add(scrollitem_supplies);
@@ -120,6 +119,10 @@ public class additem_supplies extends _JInternalFrame implements _GUI, ActionLis
 								}
 							}
 						});
+						tbladditemsupplies.getColumnModel().getColumn(0).setPreferredWidth(100);
+						tbladditemsupplies.getColumnModel().getColumn(1).setPreferredWidth(250);
+						tbladditemsupplies.getColumnModel().getColumn(2).setPreferredWidth(250);
+						tbladditemsupplies.getColumnModel().getColumn(3).setPreferredWidth(100);
 					}
 					{
 						rowheaderadditemsupplies = tbladditemsupplies.getRowHeader();
@@ -135,7 +138,6 @@ public class additem_supplies extends _JInternalFrame implements _GUI, ActionLis
 				{
 					JPanel pnlcenter1 = new JPanel(new BorderLayout(5, 5));
 					pnlcenter.add(pnlcenter1);
-					//pnlcenter1.setBackground(Color.blue);
 					{
 						JLabel lblcategory = new JLabel("Category");
 						pnlcenter1.add(lblcategory, BorderLayout.WEST);
@@ -168,7 +170,6 @@ public class additem_supplies extends _JInternalFrame implements _GUI, ActionLis
 				{
 					JPanel pnlcenter2 = new JPanel(new BorderLayout(5, 5));
 					pnlcenter.add(pnlcenter2);
-					//pnlcenter2.setBackground(Color.BLACK);
 					{
 						JLabel lblitemid = new JLabel("Item ID");
 						pnlcenter2.add(lblitemid, BorderLayout.WEST);
@@ -341,10 +342,10 @@ public class additem_supplies extends _JInternalFrame implements _GUI, ActionLis
 		String strSQL =
 			"INSERT INTO mf_office_supplies( \n" +
 			"ofc_supply_name, \n" +
-			"ofc_supply_category, min_supply_count, supply_count, status_id, created_by, date_created) \n" +
+			"ofc_supply_category, min_supply_count, supply_count, created_by) \n" +
 			"VALUES (" +
 			"'"+item_name+"', \n" +
-			""+category_id+", 1, 0, 'A', '"+UserInfo.EmployeeCode+"', now()) ";
+			""+category_id+", 1, 0, '"+UserInfo.EmployeeCode+"') ";
 		
 		db.executeUpdate(strSQL,false);
 		db.commit();
