@@ -91,6 +91,7 @@ import Accounting.Disbursements.RequestForPayment;
 import Accounting.Disbursements.reversalProccessing;
 import Accounting.FixedAssets.AssetMonitoring;
 import Accounting.FixedAssets.AssetMonitoring2;
+import Accounting.FixedAssets.PurchaseOrder;
 import Accounting.FixedAssets.addassetperipheral;
 import Accounting.FixedAssets.addassetperipheral2;
 import Accounting.GeneralLedger.GeneralLedger;
@@ -903,6 +904,18 @@ public class Home_JSystem extends JXFrame implements ActionListener, WindowListe
 										if(isNotExisting("Add Asset Peripherals")){
 											addassetperipheral2 ap = new addassetperipheral2();
 											addWindow(ap, e);
+										}
+									}
+								});
+							}
+							{
+								JMenuItem menuitemaddperipheral = new JMenuItem("Purchase Order");
+								menuFixedAssets.add(menuitemaddperipheral);
+								menuitemaddperipheral.addActionListener(new ActionListener() {
+									public void actionPerformed(ActionEvent e) {
+										if(isNotExisting("Purchase Order")){
+											PurchaseOrder po = new PurchaseOrder();
+											addWindow(po, e);
 										}
 									}
 								});
