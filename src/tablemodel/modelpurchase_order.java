@@ -57,8 +57,8 @@ private static final long serialVersionUID = 1L;
 			"UNIT",
 			"QTY",
 			"PURPOSE",
-			"UNIT PRICE",
-			"PO NO"
+			"UNIT PRICE"
+			//"PO NO"
 			
 	};
 	
@@ -74,7 +74,7 @@ private static final long serialVersionUID = 1L;
 			String.class, //QTY
 			String.class, //PURPOSE
 			BigDecimal.class, //UNIT PRICE
-			String.class, //terms
+			//String.class, //terms
 	};
 	
 	private void initThis() {
@@ -92,7 +92,7 @@ private static final long serialVersionUID = 1L;
 			false, //7
 			false, //8
 			false, //9
-			false, //10
+			//false, //10
 	};
 	
 	
@@ -127,7 +127,7 @@ private static final long serialVersionUID = 1L;
 					false, //7
 					false, //8
 					false, //9
-					false, //10
+					//false, //10
 			};
 		}else{
 			COLUMNS_EDITABLE = new Boolean[]{
@@ -141,7 +141,7 @@ private static final long serialVersionUID = 1L;
 					false, //7
 					false, //8
 					false, //9
-					false, //10
+					//false, //10
 			};
 	}
 		
