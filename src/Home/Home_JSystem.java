@@ -86,8 +86,9 @@ import Accounting.Commissions.Commission_Schedule_Generator;
 import Accounting.ContractorsPayment.BackchargeUtilities;
 import Accounting.ContractorsPayment.ContractorsBilling;
 import Accounting.Disbursements.CheckVoucher;
+import Accounting.Disbursements.DisbursementRequestForm;
 import Accounting.Disbursements.DocsProcessing;
-import Accounting.Disbursements.RequestForPayment;
+//import Accounting.Disbursements.RequestForPayment;
 import Accounting.Disbursements.reversalProccessing;
 import Accounting.FixedAssets.AssetMonitoring;
 import Accounting.FixedAssets.AssetMonitoring2;
@@ -832,13 +833,25 @@ public class Home_JSystem extends JXFrame implements ActionListener, WindowListe
 						{
 							JMenu menuDisbursement = new JMenu("Disbursements");
 							menuAccounting.add(menuDisbursement);
+//							{
+//								JMenuItem menuitemRequestForPayment = new JMenuItem("Request for Payments");
+//								menuDisbursement.add(menuitemRequestForPayment);
+//								menuitemRequestForPayment.addActionListener(new ActionListener() {
+//									public void actionPerformed(ActionEvent e) {
+//										if(isNotExisting("RequestForPayment")){
+//											RequestForPayment drf = new RequestForPayment();
+//											addWindow(drf, e);
+//										}
+//									}
+//								});
+//							}
 							{
-								JMenuItem menuitemRequestForPayment = new JMenuItem("Request for Payments");
-								menuDisbursement.add(menuitemRequestForPayment);
-								menuitemRequestForPayment.addActionListener(new ActionListener() {
+								JMenuItem menuitemDisbursementRequestForm = new JMenuItem("Disbursement Request Form (Request for Payment)");
+								menuDisbursement.add(menuitemDisbursementRequestForm);
+								menuitemDisbursementRequestForm.addActionListener(new ActionListener() {
 									public void actionPerformed(ActionEvent e) {
-										if(isNotExisting("RequestForPayment")){
-											RequestForPayment drf = new RequestForPayment();
+										if(isNotExisting("DisbursementRequestForm")){
+											DisbursementRequestForm drf = new DisbursementRequestForm();
 											addWindow(drf, e);
 										}
 									}

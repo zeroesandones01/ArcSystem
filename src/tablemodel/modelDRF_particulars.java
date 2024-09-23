@@ -6,6 +6,7 @@ import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 
+import DateChooser._JDateChooser;
 import Lookup._JLookup;
 
 public class modelDRF_particulars extends DefaultTableModel {
@@ -44,148 +45,122 @@ public class modelDRF_particulars extends DefaultTableModel {
 	}
 
 	public String[] COLUMNS = new String[] {
-			"        Particulars      " ,		// 0
-			"Account ID",		// 1
-			"Div",				// 2
-			"Dept",				// 3
-			"Sec",				// 4			
-			"Proj",				// 5			
-			"Sub",       		// 6	
-			"<html><center>Account<html><br><html><center>Description<html>", // 7
-			"  Amount  ",		// 8
-			"Within",			// 9			
-			"Availer ID",		// 10			
-			"Availer Type",		// 11
-			"Ref ID",			// 12
-			"Ref No.",			// 13
-			"Ref Date",			// 14			
-			"Availer Name",		// 15			
-			"Item ID",			// 16
-			"<html><center>Item<html><br><html><center>Description<html>",// 17
-			"Asset No.",		// 18
-			"<html><center>Vatable<html><br><html><center>Project<html>", // 19			
-			"<html><center>Vatable<html><br><html><center>Entity<html>",  // 20			
-			"Taxable",			// 21
+			"Account ID",		// 0
+			"Div",				// 1	
+			"Proj",				// 2			
+			"<html><center>Account<html><br><html><center>Description<html>", // 3
+			"  Amount  ",		// 4	
+			"Within", 			// 5
+			"Payee ID",			// 6			
+			"Payee Type",		// 7
+			"Payee Name",		// 8	
+			"Ref ID", 			// 9
+			"Ref No", 			// 10 
+			"Ref Date", 		// 11
+			"Item ID", 			// 12
+			"Item Description", // 13
+			"Invoice No.",		// 14
+			"Invoice Date", 	// 15
+			"SOA/Bill No.",		// 16
+			"SOA/Bill Date", 	// 17
+			"Asset No.",		// 18	
+			"Vatable Project", 	// 19
+			"<html><center>Vatable<html><br><html><center>Entity<html>",  // 20	
+			"Taxable", 			// 21	
 			"Gross Amt.",		// 22
-			"VAT Rate (%)",		// 23
-			"WTax ID",			// 24			
-			"WTax Rate (%)",	// 25			
-			"WTax Amount",		// 26
-			"VAT Amount",		// 27
-			"<html><center>Expense<html><br><html><center>Amount<html>",  	// 28
-			"<html><center>Retention<html><br><html><center>Amount<html>",  // 29			
-			"<html><center>DP Recoup.<html><br><html><center>Amount<html>", // 30					
-			"<html><center>BC Liquidation<html><br><html><center>Amount<html>", // 31		
-			"<html><center>Other Liqui.<html><br><html><center>Amount<html>",  	// 32
-			"<html><center>Payable<html><br><html><center>Amount<html>",  	// 33
-			"Remarks",			// 34		
-			"div",	// 35
-			"dep",	// 36
-			"proj",	// 37
-			"sub",	// 38
-			"availer"//,	// 39
-//			"Rec ID"
+			"Net Amt",			// 23
+			"VAT Rate (%)",		// 24
+			"VAT Amount",		// 25
+			"WTax ID",			// 26			
+			"WTax Rate (%)",	// 27			
+			"WTax Amount",		// 28
+			"<html><center>Expense<html><br><html><center>Amount<html>",  	// 29
+			"<html><center>Retention<html><br><html><center>Amount<html>",  // 30			
+			"<html><center>DP Recoup.<html><br><html><center>Amount<html>", // 31					
+			"<html><center>BC Liquidation<html><br><html><center>Amount<html>", // 32		
+			"<html><center>Other Liqui.<html><br><html><center>Amount<html>",  	// 33
+			"<html><center>Payable<html><br><html><center>Amount<html>"  	// 34
 			};
 
-	
-	/**
-	 * String.class = Alignment.CENTER
-	 * Object.class = Alignment.LEFT
-	 * BigDecimal.class = Alignment.RIGHT
-	 * Integer.class = Alignment.CENTER
-	 * Timestamp.class
-	 */
 	public Class[] CLASS_TYPES = new Class[] {
-			String.class, 		//Particulars
-			_JLookup.class,		//Account ID
-			String.class,		//Div
-			String.class, 	//Dept
-			String.class, 		//Sec			
-			String.class,		//Proj
-			String.class, 	//Sub	
-			Object.class, 		//Account Desc
-			BigDecimal.class,	//Amount
-			Boolean.class,		//Within			
-			_JLookup.class,		//Availer ID
-			_JLookup.class,		//Availer Type
-			_JLookup.class,		//Ref ID
-			String.class,		//Ref No.
-			Timestamp.class,	//Ref Date			
-			String.class,		//Availer Name
-			String.class,		//Item ID
-			String.class,		//Item Description
-			String.class,		//Asset No.
-			Boolean.class,		//Vatable Project			
-			Boolean.class,		//Vatable Entity
-			Boolean.class,		//Tax Shouldered by Co.
-			BigDecimal.class,	//Gross Amt.
-			BigDecimal.class,	//VAT Rate (%)
-			_JLookup.class,		//WTax ID			
-			BigDecimal.class,	//WTax Rate (%)
-			BigDecimal.class,	//WTax Amount
-			BigDecimal.class,	//VAT Amount
-			BigDecimal.class,	//Expense Amount
-			BigDecimal.class,	//Retention Amount			
-			BigDecimal.class,	//DP Recoup Amount
-			BigDecimal.class,	//BC Liqui. Amount
-			BigDecimal.class,	//Other Liqui. Amount
-			BigDecimal.class,	//Payable Amount
-			String.class,		//Remarks
-			String.class, 		// Ref No.
-			String.class, 		// Ref No.
-			String.class, 		// Ref No.
-			String.class, 		// Ref No.
-			String.class/*,		// Ref No.
-			Integer.class*/
 			
-			
+			_JLookup.class,		// 0 Account ID
+			String.class,		// 1 Div		
+			_JLookup.class,		// 2 Proj
+			Object.class, 		// 3 Account Desc
+			BigDecimal.class,	// 4 Amount	
+			Boolean.class, 		// 5 Within
+			_JLookup.class,		// 6 Payee ID
+			_JLookup.class,		// 7 Payee Type
+			String.class,		// 8 Payee Name
+			String.class,		// 9 Ref ID
+			String.class,		// 10 Ref No
+			_JDateChooser.class,// 11 Ref Date 
+			String.class,		// 12 Item ID
+			String.class,		// 13 Item Description
+			String.class, 		// 14 Invoice No.
+			_JDateChooser.class, // 15 Invoice Date
+			String.class, 		// 16 SOA/Bill No.
+			_JDateChooser.class, // 17 SOA/Bill Date
+			String.class,		// 18 Asset No.	
+			Boolean.class,		// 19 Vatable Project
+			Boolean.class,		// 20 Vatable Entity
+			Boolean.class,		// 21 Taxable
+			BigDecimal.class,	// 22 Gross Amt.
+			BigDecimal.class,	// 23 Net Amt
+			BigDecimal.class,	// 24 VAT Rate (%)
+			BigDecimal.class,	// 25 VAT Amount
+			_JLookup.class,		// 26 WTax ID			
+			BigDecimal.class,	// 27 WTax Rate (%)
+			BigDecimal.class,	// 28 WTax Amount
+			BigDecimal.class,	// 29 Expense Amount
+			BigDecimal.class,	// 30 Retention Amount			
+			BigDecimal.class,	// 31 DP Recoup Amount
+			BigDecimal.class,	// 32 BC Liqui. Amount
+			BigDecimal.class,	// 33 Other Liqui. Amount
+			BigDecimal.class	// 34 Payable Amount
 			
 	};
 
 	private void initThis() {
 		setColumnIdentifiers(COLUMNS);
 		COLUMN_EDITABLE = new boolean[] {
-				false, 	//Particulars
-				false,	//Account ID
-				false,	//Div				
-				false, 	//Dept
-				false, 	//Sec				
-				false,	//Proj
-				false, 	//Sub	
-				false, 	//Account Desc
-				false,	//Amount
-				false,	//Within				
-				false,	//Availer ID
-				false,	//Availer Type
-				false,	//Ref ID
-				false,	//Ref No.
-				false,	//Ref Date				
-				false,	//Availer Name
-				false,	//Item ID
-				false,	//Item Description
-				false,	//Asset No.
-				false,	//Vatable Project				
-				true,	//Vatable Entity
-				false,	//Tax Shouldered by Co.
-				false,	//Gross Amt.
-				false,	//VAT Rate (%)
-				false,	//WTax ID				
-				false,	//WTax Rate (%)
-				false,	//WTax Amount
-				false,	//VAT Amount
-				false,	//Expense Amount
-				false,	//Retention Amount				
-				false,	//DP Recoup Amount
-				false,	//BC Liqui Amount
-				false,	//Other Liqui Amount
-				false,	//Payable Amount
-				false,	//Retention Amount				
-				false,	//DP Recoup Amount
-				false,	//BC Liqui Amount
-				false,	//Other Liqui Amount
-				false,	//Payable Amount
-				false	//Remarks
-				//false, //REC ID
+			
+				false,	// 0 Account ID
+				false,	// 1 Div							
+				false,	// 2 Proj
+				false, 	// 3 Account Desc
+				false,	// 4 Amount	
+				true,	// 5 Within
+				false,	// 6 Payee ID
+				false,	// 7 Payee Type			
+				false,	// 8 Payee Name
+				false,	// 9 Ref ID*
+				false,	// 10 Ref No*
+				false,	// 11 Ref Date*
+				false,	// 12 Item ID*
+				false,	// 13 Item Description*
+				true, 	// 14 Invoice No.
+				true,	// 15 Invoice Date
+				true, 	// 16 SOA/Bill No.
+				true, 	// 17 SOA/Bill Date
+				false,	// 18 Asset No.
+				false,	// 19 Vatable Project* 			
+				true,	// 20 Vatable Entity
+				true,	// 21 Taxable
+				false,	// 22 Gross Amt.
+				false, 	// 23 Net Amt. 
+				false,	// 24 VAT Rate (%)
+				false,	// 25 VAT Amount
+				false,	// 26 WTax ID				
+				false,	// 27 WTax Rate (%)
+				false,	// 28 WTax Amount
+				false,	// 29 Expense Amount
+				false,	// 30 Retention Amount				
+				false,	// 31 DP Recoup Amount
+				false,	// 32 BC Liqui Amount
+				false,	// 33 Other Liqui Amount
+				false	// 34 Payable Amount
 		};
 	}
 
@@ -205,89 +180,79 @@ public class modelDRF_particulars extends DefaultTableModel {
 		this.editable = editable;
 		if(editable){
 			COLUMN_EDITABLE = new boolean[] {
-					true, 	//Particulars
-					false,	//Account ID
-					true,	//Div
-					true, 	//Dept
-					true, 	//Sec
-					true,	//Proj
-					true, 	//Sub	
-					false, 	//Account Desc
-					true,	//Amount
-					true,	//Within
-					false,	//Availer ID
-					false,	//Availer Type
-					false,	//Ref ID
-					true,	//Ref No.
-					false,	//Ref Date
-					false,	//Availer Name
-					false,	//Item ID
-					false,	//Item Description
-					false,	//Asset No.
-					false,	//Vatable Project
-					true,	//Vatable Entity
-					true,	//Tax Shouldered by Co.
-					false,	//Gross Amt.
-					false,	//VAT Rate (%)
-					false,	//WTax ID
-					false,	//WTax Rate (%)
-					false,	//WTax Amount
-					false,	//VAT Amount
-					false,	//Expense Amount
-					true,	//Retention Amount
-					true,	//DP Recoup Amount
-					true,	//BC Liqui Amount
-					false,	//Other Liqui Amount
-					false,	//Payable Amount
-					true,	//Remarks
-					false,	//Retention Amount				
-					false,	//DP Recoup Amount
-					false,	//BC Liqui Amount
-					false,	//Other Liqui Amount
-					false	//Payable Amount
+					
+					false,	// 0 Account ID
+					true,	// 1 Div
+					true,	// 2 Proj
+					false, 	// 3 Account Desc
+					true,	// 4 Amount
+					true,	// 5 Within
+					false,	// 6 Payee ID
+					false,	// 7 Payee Type			
+					false,	// 8 Payee Name
+					true,	// 9 Ref ID*
+					true,	// 10 Ref No*
+					true,	// 11 Ref Date*
+					true,	// 12 Item ID*
+					true,	// 13 Item Description*
+					true, 	// 14 Invoice No.
+					true,	// 15 Invoice Date
+					true, 	// 16 SOA/Bill No.
+					true, 	// 17 SOA/Bill Date
+					true,	// 18 Asset No.	
+					true,	// 19 Vatable Project*
+					true,	// 20 Vatable Entity
+					true,	// 21 Taxable
+					false,	// 22 Gross Amt.
+					false, 	// 23 Net Amt. 
+					false,	// 24 VAT Rate (%)
+					false,	// 25 VAT Amount
+					false,	// 26 WTax ID				
+					false,	// 27 WTax Rate (%)
+					false,	// 28 WTax Amount
+					false,	// 29 Expense Amount
+					false,	// 30 Retention Amount				
+					false,	// 31 DP Recoup Amount
+					false,	// 32 BC Liqui Amount
+					false,	// 33 Other Liqui Amount
+					false	// 34 Payable Amount
 			};
 		}else{
 			COLUMN_EDITABLE = new boolean[] {
-					false, 	//Particulars
-					false,	//Account ID
-					false,	//Div
-					false, 	//Dept
-					false, 	//Sec					
-					false,	//Proj
-					false, 	//Sub	
-					false, 	//Account Desc
-					false,	//Amount
-					false,	//Within					
-					false,	//Availer ID
-					false,	//Availer Type
-					false,	//Ref ID
-					false,	//Ref No.
-					false,	//Ref Date					
-					false,	//Availer Name
-					false,	//Item ID
-					false,	//Item Description
-					false,	//Asset No.
-					false,	//Vatable Project					
-					true,	//Vatable Entity
-					false,	//Tax Shouldered by Co.
-					false,	//Gross Amt.
-					false,	//VAT Rate (%)
-					false,	//WTax ID					
-					false,	//WTax Rate (%)
-					false,	//WTax Amount
-					false,	//VAT Amount
-					false,	//Expense Amount
-					false,	//Retention Amount					
-					false,	//DP Recoup Amount
-					false,	//BC Liqui Amount
-					false,	//Other Liqui Amount
-					false,	//Payable Amount
-					false,	//Retention Amount				
-					false,	//DP Recoup Amount
-					false,	//BC Liqui Amount
-					false,	//Other Liqui Amount
-					false,	//Payable Amount
-					false	//Remarks
+					false,	// Account ID
+					false,	// Div							
+					false,	// Proj
+					false, 	// Account Desc
+					false,	// Amount	
+					false,	// Within
+					false,	// Payee ID
+					false,	// Payee Type			
+					false,	// Payee Name
+					false,	// Ref ID*
+					false,	// Ref No*
+					false,	// Ref Date*
+					false,	// Item ID*
+					false, 	// Invoice No.
+					false,	// Invoice Date
+					false, 	// SOA/Bill No.
+					false, 	// SOA/Bill Date
+					false,	// Asset No.	
+					false,	// Vatable Project*
+					false,	// Vatable Entity
+					false,	// Taxable
+					false,	// Gross Amt.
+					false, 	// Net Amt. 
+					false,	// VAT Rate (%)
+					false,	// VAT Amount
+					false,	// WTax ID				
+					false,	// WTax Rate (%)
+					false,	// WTax Amount
+					false,	// Expense Amount
+					false,	// Retention Amount				
+					false,	// DP Recoup Amount
+					false,	// BC Liqui Amount
+					false,	// Other Liqui Amount
+					false	// Payable Amount
 			};
 		}
 	}
