@@ -2,6 +2,7 @@ package tablemodel;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
@@ -256,5 +257,29 @@ public class modelDRF_particulars extends DefaultTableModel {
 			};
 		}
 	}
+	
+	@Override
+	public Object getValueAt(int row, int column) {
+	    Object value = super.getValueAt(row, column);
+	    
+	    // Ensure that BigDecimal columns return as BigDecimal
+	    if (column == 4 || column == 22 || column == 23 || column == 24 || column == 25 ||
+	    	column == 27 ||column == 28 ||column == 29 || column == 30 || column == 31 || column == 32 ||
+	        column == 33 || column == 34) { // Adjust indices as needed
+	        if (value instanceof Number) {
+	            return BigDecimal.valueOf(((Number) value).doubleValue());
+	        }
+	    }
+	    
+	 // Format date columns (e.g., Timestamp)
+	    if (value instanceof Timestamp) {
+	        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy"); // Adjust format as needed
+	        return sdf.format((Timestamp) value);
+	    }
+
+	    return value;
+	}
+
+
 	
 }
