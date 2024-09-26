@@ -1,6 +1,7 @@
 package tablemodel;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
@@ -271,11 +272,16 @@ public class modelDRF_particulars extends DefaultTableModel {
 	        }
 	    }
 	    
-	 // Format date columns (e.g., Timestamp)
-	    if (value instanceof Timestamp) {
-	        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy"); // Adjust format as needed
-	        return sdf.format((Timestamp) value);
-	    }
+//	    // Format date columns
+//	    if (column == 15 || column == 17) {
+//	    	if (value instanceof Timestamp) {
+//	   	        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy"); // Adjust format as needed
+//	   	        return sdf.format((Timestamp) value);
+//	   	    } else if (value instanceof Date) {
+//	   	     SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy"); // Adjust format as needed
+//		        return sdf.format((Date) value);
+//	   	    }
+//	    }
 
 	    return value;
 	}
