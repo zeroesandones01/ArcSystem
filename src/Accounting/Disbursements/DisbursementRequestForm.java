@@ -126,8 +126,8 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 
 
 	public static JLabel lblCompany;
-	private static JLabel lblDateRequest;
-	private static JLabel lblDateNeeded;
+	private static JLabel lblDRFDate;
+	private static JLabel lblDueDate;
 	private static JLabel lblPV_no;
 	public static JLabel lblDRF_no;
 	private static JLabel lblStatus;
@@ -161,7 +161,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 	public static modelDRF_particulars_total modelDRF_part_total;
 	public static _JTableTotal tblDRF_part_total;
 	public static _JTableMain tblDRF_part;
-	public static JList rowHeaderDRF;
+	public static JList<Integer> rowHeaderDRF;
 	private static _JTabbedPane tabCenter;
 
 	public static _JTagLabel tagCompany;
@@ -213,8 +213,9 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 	private JMenuItem mnisetup2307;
 
 	public static String drf_no = ""; // this is used to denote the number upon displaying of existing/saved RPLF No.
-	static String new_drf_no = ""; // this is used to denote the DRF number for new drf request
-	public static String co_id = "01";
+	public static String co_id = "";
+	public static String payee_id = ""; 
+	public static String user_id = UserInfo.EmployeeCode; 
 	String availer_id = "";
 	Double tax_rate = 0.00;
 	String tax_id = "";
@@ -231,7 +232,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 	private JPanel pnlEditAmount;
 	private JLabel lblEditAmount;
 	private _JXFormattedTextField txteditamount;
-	private JLabel lblDRFDate;
+
 	private JPanel pnlDRF_Attachments;
 	private JScrollPane scpDRFAttachments;
 
@@ -508,24 +509,12 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 							tagDetail.setText(null);
 							lookupCompany.setEnabled(false);
 
-							if (isPVcreated() == true && txtStatus.getText().equals("PROCESSED")) {
-								btnEdit.setEnabled(false);
-								mnisetupPV.setEnabled(false);
-								mniInactivate.setEnabled(false);
-								btnPreview.setEnabled(true);
-							} else if (txtStatus.getText().equals("DELETED")
-									|| txtStatus.getText().equals("INACTIVE")) {
-								btnEdit.setEnabled(false);
-								mnisetupPV.setEnabled(false);
-								mniInactivate.setEnabled(false);
-								btnPreview.setEnabled(false);
-							} else {
-								btnEdit.setEnabled(true);
-								mnisetupPV.setEnabled(true);
-								mniInactivate.setEnabled(true);
-								btnPreview.setEnabled(true);
-							}
-
+							
+							btnEdit.setEnabled(true);
+							mnisetupPV.setEnabled(true);
+							mniInactivate.setEnabled(true);
+							btnPreview.setEnabled(true);
+							
 							mnidelete.setEnabled(false);
 							mniaddrow.setEnabled(false);
 							mniwriteoff.setEnabled(true);
@@ -579,9 +568,9 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 					lblDRFDate.setEnabled(false);
 				}
 				{
-					lblDateNeeded = new JLabel("Due Date", JLabel.TRAILING);
-					pnlDRFDtl_1a.add(lblDateNeeded);
-					lblDateNeeded.setEnabled(false);
+					lblDueDate = new JLabel("Due Date", JLabel.TRAILING);
+					pnlDRFDtl_1a.add(lblDueDate);
+					lblDueDate.setEnabled(false);
 				}
 				{
 					lblDateEdited = new JLabel("Date Edited", JLabel.TRAILING);
@@ -741,15 +730,16 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 								//								if (entityhasUnliquidatedCA((String) data[3]) == false) { // XXX CONDITION NEED TO MODIFY
 
 								String entity_name = (String) data[4];
+								payee_id = (String) data[3]; 
 								tagPayee.setTag(entity_name);
-								lookupPayeeType.setLookupSQL(getEntity_type((String) data[3]));
+								lookupPayeeType.setLookupSQL(getPayee_type(payee_id));
 								//									lookupAvailer.setValue((String) data[3]); //COMMENTED BY MONIQUE; DISABLED AUTO TAG TO MANUALLY SELECT AVAILER
 								//									tagAvailer.setTag(entity_name);
 								is_payee_vatable = (Boolean) data[1];
 								tax_rate = 0.00;
 
 								setColumnIfVatableEntity();
-								System.out.printf("Availer ID : " + (String) data[3]);
+								System.out.println("Payee ID : " + payee_id);
 								setPayee();
 
 								lblPayeeType.setEnabled(true);
@@ -1106,7 +1096,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 						tblDRF_part.putClientProperty("terminateEditOnFocusLost", true);
 					}
 					{
-						rowHeaderDRF = tblDRF_part.getRowHeader22();
+						rowHeaderDRF = tblDRF_part.getRowHeader22(); 
 						scrollDRF_part.setRowHeaderView(rowHeaderDRF);
 						scrollDRF_part.setCorner(ScrollPaneConstants.UPPER_LEFT_CORNER,
 								FncTables.getRowHeader_Header());
@@ -1304,7 +1294,6 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 			}
 		}
 
-		// added 01/26/2016 - purpose - set CENQHOMES as default company
 		initialize_comp();
 
 		{
@@ -1325,8 +1314,6 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 				txteditamount.setEnabled(true);
 				txteditamount.setEditable(true);
 				txteditamount.setBounds(130, 15, 125, 21);
-				// txteditamount.setDefaultRenderer(BigDecimal.class,
-				// NumberRenderer.getMoneyRenderer2());
 			}
 			{
 				btnOK = new JButton();
@@ -1338,37 +1325,44 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 					public void actionPerformed(ActionEvent e) {
 						Window optionPaneWindow = SwingUtilities.getWindowAncestor(pnlEditAmount);
 						optionPaneWindow.dispose();
-						// computeBillAmounts2();
 
 					}
 				});
 			}
 		}
-	}
+	}	//XXX END OF GUI
 
 	// display tables
-	public static void displayDRF_details(modelDRF_particulars model, JList rowHeader, modelDRF_particulars_total modelTotal,
+	public static void displayDRF_details(modelDRF_particulars model, JList <Integer> rowHeader, modelDRF_particulars_total modelTotal,
 			String co_id, String drf_no) {
 
-		FncTables.clearTable(model);// Code to clear modelMain.
-		DefaultListModel listModel = new DefaultListModel();// Creating DefaultListModel for rowHeader.
-		rowHeader.setModel(listModel);// Setting of DefaultListModel into rowHeader.
-
+		FncTables.clearTable(model);// 
+		DefaultListModel <Integer> listModel = new DefaultListModel<>();
+		rowHeader.setModel(listModel);
+		
 		String sql = "select \n"
 				+ "a.acct_id\n"
 				+ ", a.div_id\n"
 				+ ", a.proj_id\n"
 				+ ", trim(b.acct_name) as Account_Description\n"
 				+ ", a.amount\n"
+				+ ", NULL as withinBudget\n"
 				+ ", a.payee_id\n"
 				+ ", a.payee_type_id\n"
 				+ ", trim(c.entity_name) as payee_name\n"
+				+ ", NULL as ref_id\n"
+				+ ", NULL as ref_no\n"
+				+ ", NULL as ref_date\n"
+				+ ", NULL as item_id\n"
+				+ ", NULL as item_desc\n"
 				+ ", COALESCE(a.invoice_no, '') as invoice_no\n"
 				+ ", a.invoice_date\n"
 				+ ", COALESCE(a.soa_bill_no, '') as soa_bill_no\n"
 				+ ", a.soa_bill_date\n"
 				+ ", a.asset_no\n"
+				+ ", NULL as vatable_proj\n"
 				+ ", a.is_vat_entity\n"
+				+ ", NULL as taxable\n"
 				+ ", a.gross_amt\n"
 				+ ", a.net_amt\n"
 				+ ", a.vat_rate\n"
@@ -1382,9 +1376,9 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 				+ ", coalesce(a.bc_liq_amt,0) as bc_liq_amt\n"
 				+ ", coalesce(a.other_liq_amt,0) as other_liq_amt\n"
 				+ ", a.payable_amt\n"
+				+ ", a.rec_id 		\n"
 				+ ", fn_get_div_alias(a.div_id) as division\n"
 				+ ", (Select proj_alias from mf_project where proj_id = a.proj_id and status_id = 'A') as proj_id\n"
-				+ ", a.rec_id 		\n"
 				+ "from rf_drf_detail a\n"
 				+ "left join mf_boi_chart_of_accounts b on a.acct_id = b.acct_id\n"
 				+ "left join rf_entity c on a.payee_id = c.entity_id\n"
@@ -1412,15 +1406,13 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 			modelDRF_part_total.addRow(new Object[] { "Total", null, null, null, new BigDecimal(0.00), null, null, null,
 					null, null, null, null, null, null, null, null, null, null, null, null, null, null, new BigDecimal(0.00), new BigDecimal(0.00), null, new BigDecimal(0.00),
 					null, null, new BigDecimal(0.00), new BigDecimal(0.00), new BigDecimal(0.00), new BigDecimal(0.00),
-					new BigDecimal(0.00), new BigDecimal(0.00)});
+					new BigDecimal(0.00), new BigDecimal(0.00), null});
 
 			tblDRF_part_total = new _JTableTotal(modelDRF_part_total, tblDRF_part);
 			tblDRF_part_total.setFont(dialog11Bold);
 			scrollDRF_part_total.setViewportView(tblDRF_part_total);
 			((_JTableTotal) tblDRF_part_total).setTotalLabel(0);
 		}
-
-//		tblDRF_part.packAll();
 
 		enable_fields(false);
 		btnCancel.setEnabled(true);
@@ -1432,7 +1424,9 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		mnidelete.setEnabled(false);
 		mniaddrow.setEnabled(false);
 
-		tblDRF_part.getColumnModel().getColumn(0).setPreferredWidth(250);
+		tblDRF_part.getColumnModel().getColumn(3).setPreferredWidth(250);
+		tblDRF_part.getColumnModel().getColumn(7).setPreferredWidth(250);
+
 
 	}
 
@@ -1441,6 +1435,8 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		
 		//XXX NEED TO BALIKAN
 		String mc_no = "";
+		String div_id = ((String) drf_hdr[20]); 
+		String div_name = FncGlobal.GetString("Select div_name from mf_division where div_code = '"+div_id+"' and status_id = 'A';"); 
 		
 //		mc_no = FncGlobal.GetString(
 //				"select case when coalesce(string_agg(c.mc_no, ','), '') != '' then 'Mc No.: ' else '' end  || string_agg(c.mc_no, ',') as mc_no\n"
@@ -1456,6 +1452,8 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		dteDRFDate.setDate((Date) drf_hdr[1]);
 		dteDueDate.setDate((Date) drf_hdr[2]);
 		lookupPV_no.setText((String) drf_hdr[3]);
+		lookupDiv.setText((String) drf_hdr[20]);
+		tagAvailerDiv.setText(div_name);
 
 		lookupRequestType.setText((String) drf_hdr[4]);
 		tagReqType.setTag((String) drf_hdr[5]);
@@ -1480,11 +1478,11 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 
 	}
 
-	public void createDRFtable(DefaultTableModel modelMain, JList rowHeader, DefaultTableModel modelTotal) {
+	public void createDRFtable(DefaultTableModel modelMain, JList<Integer> rowHeader, DefaultTableModel modelTotal) {
 
-		FncTables.clearTable(modelMain);// Code to clear modelMain.
-		DefaultListModel listModel = new DefaultListModel();// Creating DefaultListModel for rowHeader.
-		rowHeader.setModel(listModel);// Setting of DefaultListModel into rowHeader.
+		FncTables.clearTable(modelMain);
+		DefaultListModel<Integer> listmodel = new DefaultListModel<Integer>();
+		rowHeader.setModel(listmodel);
 
 		String sql = "Select * from fn_create_drf_table();";
 
@@ -1494,7 +1492,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 			for (int x = 0; x < db.getRowCount(); x++) {
 				// Adding of row in table
 				modelMain.addRow(db.getResult()[x]);
-				listModel.addElement(modelMain.getRowCount());
+				listmodel.addElement(modelMain.getRowCount());
 			}
 
 			totalDRF(modelMain, modelTotal);
@@ -1532,9 +1530,9 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		lblStatus.setEnabled(x);
 		txtStatus.setEnabled(x);
 
-		lblDateRequest.setEnabled(x);
+		lblDRFDate.setEnabled(x);
 		dteDRFDate.setEnabled(x);
-		lblDateNeeded.setEnabled(x);
+		lblDueDate.setEnabled(x);
 		dteDueDate.setEnabled(x);
 		lblPV_no.setEnabled(x);
 		lookupPV_no.setEnabled(x);
@@ -1611,7 +1609,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 	public void initialize_comp() {
 
 		lookupCompany.setValue("01");
-		company = "ACERLAND REALTY CORPORATION";
+		company = FncGlobal.GetString("Select company_name from mf_company where co_id = '"+lookupCompany.getValue()+"';");
 		tagCompany.setTag(company);
 		company_logo = sql_getCompanyLogo();
 
@@ -1645,14 +1643,15 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 			}
 		}
 
-		if (e.getActionCommand().equals("Edit") && FncAcounting.EmpCanAddNew(UserInfo.EmployeeCode, "1") == true) {
-			edit();
-		} else if (e.getActionCommand().equals("Edit")
-				&& FncAcounting.EmpCanAddNew(UserInfo.EmployeeCode, "1") == false) {
-			JOptionPane.showMessageDialog(getContentPane(), "Sorry, you are not authorized to edit request.",
-					"Information", JOptionPane.INFORMATION_MESSAGE);
+		if (e.getActionCommand().equals("Edit")) {
+			if(isSameUser(lookupCompany.getValue(), lookupDRF_no.getValue(), user_id)) {
+				edit();
+			} else {
+				JOptionPane.showMessageDialog(getContentPane(), "Sorry, you are not authorized to edit request.",
+						"Information", JOptionPane.INFORMATION_MESSAGE);
+			}
 		}
-
+	
 		if (e.getActionCommand().equals("Save")) {
 			save();
 		}
@@ -1781,23 +1780,9 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		mniaddrow.setEnabled(false);
 		tabCenter.setSelectedIndex(0);
 
-		if (isPVcreated() == true && txtStatus.getText().equals("PROCESSED")) {
-			btnEdit.setEnabled(false);
-			mnisetupPV.setEnabled(false);
-			mniInactivate.setEnabled(false);
-
-		} else if (txtStatus.getText().equals("DELETED") || txtStatus.getText().equals("INACTIVE")) {
-			btnEdit.setEnabled(false);
-			mnisetupPV.setEnabled(false);
-			mniInactivate.setEnabled(false);
-
-		} else {
-			btnEdit.setEnabled(true);
-			mnisetupPV.setEnabled(true);
-			mniInactivate.setEnabled(true);
-
-		}
-
+		btnEdit.setEnabled(true);
+		mnisetupPV.setEnabled(true);
+		mniInactivate.setEnabled(true);
 		mniwriteoff.setEnabled(true);
 		JOptionPane.showMessageDialog(getContentPane(), "Data refreshed.", "Information",
 				JOptionPane.INFORMATION_MESSAGE);
@@ -1902,22 +1887,21 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		btnCancel.setEnabled(true);
 		btnSave.setEnabled(true);
 		btnPreview.setEnabled(false);
-		btnEdit.setEnabled(false);
 		btnRefresh.setEnabled(false);
 
 		lblDRF_no.setEnabled(false);
 		lookupDRF_no.setEnabled(false);
 		lblPV_no.setEnabled(false);
 		lookupPV_no.setEnabled(false);
-		txtStatus.setText("ACTIVE");
+		
 		lookupPayee.setLookupSQL(getEntityList());
-		lookupAvailer.setLookupSQL(getEntityList());
-		lookupPaymentType.setLookupSQL(PayableVoucher.getPayment_type());
+		lookupAvailer.setLookupSQL(getAvailerList());
+		lookupPaymentType.setLookupSQL(getPayment_type());
 		mnidelete.setEnabled(true);
 		mniaddrow.setEnabled(true);
 		modelDRF_part.setEditable(true);
 
-		lblDateRequest.setEnabled(false);
+		lblDRFDate.setEnabled(false);
 		dteDRFDate.setEnabled(false);
 		mnisetupPV.setEnabled(true);
 		mniwriteoff.setEnabled(false);
@@ -1931,6 +1915,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 			JOptionPane.showMessageDialog(getContentPane(), "Please enter complete request details.",
 					"Incomplete Detail", JOptionPane.WARNING_MESSAGE);
 		} else {
+			
 			executeSave();
 		}
 	}
@@ -1991,16 +1976,15 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 				if (JOptionPane.showConfirmDialog(getContentPane(), "Are all entries correct?", "Confirmation",
 						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
 
-					String drf = lookupDRF_no.getText().trim();
+					String drf_no = lookupDRF_no.getText().trim();
 					String co_id = lookupCompany.getValue(); 
 
 					//SAVING OF NEW DRF
-					if (drf.equals("")) { 
-						saveDRF(co_id, modelDRF_part); 
-//						insertAudit_trail("Add-Request for Payment", drf_no, db);
-						lookupDRF_no.setText(new_drf_no);
-						setDRF_header(co_id, new_drf_no);
-						displayDRF_details(modelDRF_part, rowHeaderDRF, modelDRF_part_total, co_id, new_drf_no);
+					if (drf_no.equals("")) { 
+						saveDRF(co_id, modelDRF_part, drf_no); 
+//XXX					insertAudit_trail("Add-Request for Payment", drf_no, db); 
+						setDRF_header(co_id, drf_no);
+						displayDRF_details(modelDRF_part, rowHeaderDRF, modelDRF_part_total, co_id, drf_no);
 						tabCenter.setSelectedIndex(0);
 						JOptionPane.showMessageDialog(getContentPane(), "New payment request saved.", "Information",
 								JOptionPane.INFORMATION_MESSAGE);
@@ -2008,14 +1992,11 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 
 					//SAVING FROM EDIT 
 					else {
-						pgUpdate db = new pgUpdate();
-						updateRPLF_header(drf, db);
-						updateRPLF_detail(drf, db);
-						insertAudit_trail("Edit-Request for Payment", drf_no, db);
-						db.commit();
-						lookupDRF_no.setText(drf);
-						setDRF_header(co_id, drf);
-						displayDRF_details(modelDRF_part, rowHeaderDRF, modelDRF_part_total, lookupCompany.getValue(), drf);
+						saveDRF(co_id, modelDRF_part, drf_no); 
+//XXX					insertAudit_trail("Edit-Request for Payment", drf_no, db);
+						lookupDRF_no.setText(drf_no);
+						setDRF_header(co_id, drf_no);
+						displayDRF_details(modelDRF_part, rowHeaderDRF, modelDRF_part_total, lookupCompany.getValue(), drf_no);
 						tabCenter.setSelectedIndex(0);
 						JOptionPane.showMessageDialog(getContentPane(), "Payment request updated.", "Information",
 								JOptionPane.INFORMATION_MESSAGE);
@@ -2211,18 +2192,18 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 
 	}
 
-	public static String getEntity_type(String entity_id) {
+	public static String getPayee_type(String entity_id) {
 
 		String sql = "select a.entity_type_id as \"Entity Type ID\"\n"
 				+ ", trim(b.entity_type_desc) as \"Description\"\n"
 				+ ", c.wtax_id as \"WTAX ID\"\n"
 				+ ", c.wtax_rate as \"WTAX Rate\"\n"
 				+ "from (select * from rf_entity_assigned_type \n"
-				+ "	  where trim(entity_id) =  '\"+entity_id+\"' and status_id = 'A' )a\n"
+				+ "	  where trim(entity_id) =  '"+entity_id+"' and status_id = 'A' )a\n"
 				+ "left join mf_entity_type b on a.entity_type_id = b.entity_type_id\n"
 				+ "left join rf_withholding_tax c on b.wtax_id = c.wtax_id";
 		
-		System.out.println("SQL-getEntity_type : " + sql);
+		System.out.println("SQL-getPayee_type : " + sql);
 		
 		return sql;
 
@@ -2251,6 +2232,8 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 				+ ", a.date_edited\n"
 				+ ", a.payment_type_id \n"
 				+ ", h.payment_type_desc\n"
+				+ ", (Select div_id from rf_drf_detail where co_id = a.co_id and drf_no = a.drf_no and status_id = 'A' limit 1) as div_id\n"
+				+ ", a.created_by\n"
 				+ "from rf_drf_header a\n"
 				+ "-- left join rf_pv_header b on a.rplf_no = b.rplf_no and a.co_id = b.co_id where b.status_id != 'I'\n"
 				+ "left join mf_drf_type c on a.drf_type_id = c.drf_type_id\n"
@@ -2262,7 +2245,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 				+ "where a.co_id = '"+co_id+"' "
 				+ "and a.drf_no = '"+drf_no+"' ";
 
-		System.out.printf("SQL #1 getDRFdetails: %s", strSQL);
+		System.out.printf("SQL-getDRFdetails: %s", strSQL);
 		pgSelect db = new pgSelect();
 		db.select(strSQL);
 
@@ -2271,8 +2254,18 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		} else {
 			return null;
 		}
+		
+		
 	}
-
+	
+	public static String getPayment_type() {
+		
+		String sql = "Select payment_type_id, payment_type_desc\n"
+				+ "from mf_payment_type\n"
+				+ "where status_id = 'A';";
+		
+		return sql; 
+	}
 
 	public static String sql_getCVno(String pv_no, String comp) {
 
@@ -2281,7 +2274,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		String SQL = "select cv_no from rf_pv_header where pv_no = '" + pv_no + "' and co_id = '" + comp
 				+ "' and pv_no is not null \n";
 
-		System.out.printf("SQL #1 getCV_no : %s", SQL);
+		System.out.printf("SQL-getCV_no : %s", SQL);
 		pgSelect db = new pgSelect();
 		db.select(SQL);
 
@@ -2418,7 +2411,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		String SQL = "select entity_id from rf_request_detail where drf_no = '" + lookupDRF_no.getText() + "'\r\n"
 				+ "and co_id = '" + co_id + "' ";
 
-		System.out.printf("SQL #1: sql_getAvailer", SQL);
+		System.out.printf("SQL-sql_getAvailer", SQL);
 		pgSelect db = new pgSelect();
 		db.select(SQL);
 
@@ -2443,7 +2436,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		String SQL = "select wtax_id from rf_request_detail where drf_no = '" + lookupDRF_no.getText() + "'\r\n"
 				+ "and co_id = '" + co_id + "' ";
 
-		System.out.printf("SQL #1: sql_getAvailer_wtaxID", SQL);
+		System.out.printf("SQL-sql_getAvailer_wtaxID", SQL);
 		pgSelect db = new pgSelect();
 		db.select(SQL);
 
@@ -2468,7 +2461,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		String SQL = "select wtax_rate from rf_request_detail where drf_no = '" + lookupDRF_no.getText() + "'\r\n"
 				+ "and co_id = '" + co_id + "' ";
 
-		System.out.printf("SQL #1: sql_getAvailer_wtaxRate", SQL);
+		System.out.printf("SQL-ql_getAvailer_wtaxRate", SQL);
 		pgSelect db = new pgSelect();
 		db.select(SQL);
 
@@ -2492,7 +2485,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 
 		String SQL = "select company_logo from mf_company where co_id = '"+co_id+"'";
 
-		System.out.printf("SQL #1: sql_getCompanyLogo", SQL);
+		System.out.printf("SQL-sql_getCompanyLogo", SQL);
 		pgSelect db = new pgSelect();
 		db.select(SQL);
 
@@ -2633,7 +2626,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		String SQL = "select trim(status_id) from rf_pv_header where pv_no = '" + lookupDRF_no.getText()
 		+ "' and status_id in ( 'A', 'F', 'P' ) and co_id = '" + co_id + "' ";
 
-		System.out.printf("SQL #1: %s", SQL);
+		System.out.printf("SQL-isPVcreated: %s", SQL);
 		pgSelect db = new pgSelect();
 		db.select(SQL);
 
@@ -2654,7 +2647,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		String SQL = "select trim(status_id) from rf_pv_header " + "where pv_no = '" + lookupDRF_no.getText()
 		+ "' and status_id in ( 'I' ) and co_id = '" + co_id + "' ";
 
-		System.out.printf("SQL #1: %s", SQL);
+		System.out.printf("SQL-isPVcreated_but_inactive: %s", SQL);
 		pgSelect db = new pgSelect();
 		db.select(SQL);
 
@@ -2792,7 +2785,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 				"and a.entity_id2 = '" + entity_id + "' \n"
 				+ "and (round((extract(epoch from f.days_overdue)/86400)::int)) >= 0 \n\n";
 
-		System.out.printf("SQL #1: %s", SQL);
+		System.out.printf("SQL-entityhasUnliquidatedCA: %s", SQL);
 		pgSelect db = new pgSelect();
 		db.select(SQL);
 
@@ -2813,7 +2806,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		String SQL = "select writeoff_no from rf_ca_writeoff " + "where drf_no = '" + drf_no + "' and co_id = '"
 				+ co_id + "' ";
 
-		System.out.printf("SQL #1: %s", SQL);
+		System.out.printf("SQL-isRPLFalreadywroteoff: %s", SQL);
 		pgSelect db = new pgSelect();
 		db.select(SQL);
 
@@ -2836,7 +2829,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 				+ "where b.status_id = 'P'\r\n" + "and b.proc_id = 5 " + "and a.pv_no = '"
 				+ lookupDRF_no.getText().trim() + "'";
 
-		System.out.printf("SQL #1: %s", SQL);
+		System.out.printf("SQL-isCApaidout: %s", SQL);
 		pgSelect db = new pgSelect();
 		db.select(SQL);
 
@@ -2859,7 +2852,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 				+ "left join rf_liq_detail c on b.liq_no = c.liq_no\r\n" + "\r\n" + "where c.status_id = 'A'"
 				+ "and a.drf_no = '" + lookupDRF_no.getText().trim() + "'";
 
-		System.out.printf("SQL #1: %s", SQL);
+		System.out.printf("SQL-isCAfullyliquidated: %s", SQL);
 		pgSelect db = new pgSelect();
 		db.select(SQL);
 
@@ -2878,83 +2871,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		return isCAfullyliquidated;
 
 	}
-
-	//	private void checkCostCenter_manual(KeyEvent evt) {
-	//
-	//		int row = 0;
-	//		int column = 0;
-	//
-	//		if (evt.getKeyCode() == KeyEvent.VK_RIGHT) {
-	//			column = tblDRF_part.convertColumnIndexToModel(tblDRF_part.getSelectedColumn()) - 1;
-	//			row = tblDRF_part.convertRowIndexToModel(tblDRF_part.getSelectedRow());
-	//		} else if (evt.getKeyCode() == KeyEvent.VK_LEFT) {
-	//			column = tblDRF_part.convertColumnIndexToModel(tblDRF_part.getSelectedColumn()) + 1;
-	//			row = tblDRF_part.convertRowIndexToModel(tblDRF_part.getSelectedRow());
-	//		} else if (evt.getKeyCode() == KeyEvent.VK_UP) {
-	//			column = tblDRF_part.convertColumnIndexToModel(tblDRF_part.getSelectedColumn());
-	//			row = tblDRF_part.convertRowIndexToModel(tblDRF_part.getSelectedRow()) + 1;
-	//		} else if (evt.getKeyCode() == KeyEvent.VK_DOWN || evt.getKeyCode() == KeyEvent.VK_ENTER) {
-	//			column = tblDRF_part.convertColumnIndexToModel(tblDRF_part.getSelectedColumn());
-	//			row = tblDRF_part.convertRowIndexToModel(tblDRF_part.getSelectedRow()) - 1;
-	//		}
-	//
-	//		String div_id = "";
-	//		String dept_id = "";
-	//		String proj_id = "";
-	//		String subproj_id = "";
-	//
-	//		if (row == -1) {
-	//		} else {
-	//			try {
-	//				div_id = modelDRF_part.getValueAt(row, 1).toString().trim();
-	//			} catch (NullPointerException e) {
-	//				div_id = "";
-	//			}
-	////			try {
-	////				dept_id = modelDRF_part.getValueAt(row, 3).toString().trim();
-	////			} catch (NullPointerException e) {
-	////				dept_id = "";
-	////			}
-	//			try {
-	//				proj_id = modelDRF_part.getValueAt(row, 2).toString().trim();
-	//			} catch (NullPointerException e) {
-	//				proj_id = "";
-	//			}
-	//			try {
-	//				subproj_id = modelDRF_part.getValueAt(row, 6).toString().trim();
-	//			} catch (NullPointerException e) {
-	//				subproj_id = "";
-	//			}
-	//
-	//			if (column == 2 || column == 3) {
-	//				if (div_id.equals("") || dept_id.equals("")) {
-	//				} else {
-	//					if (sql_getDiv(dept_id).equals(div_id)) {
-	//
-	//					} else {
-	//						JOptionPane.showMessageDialog(getContentPane(), "Dept ID / Div ID not matched.", "ERROR",
-	//								JOptionPane.ERROR_MESSAGE);
-	//						modelDRF_part.setValueAt("", row, column);
-	//					}
-	//				}
-	//			}
-	//
-	//			else if (column == 5 || column == 6) {
-	//				if (proj_id.equals("") || subproj_id.equals("")) {
-	//				} else {
-	//					if (sql_getProj(subproj_id).equals(proj_id)) {
-	//
-	//					} else {
-	//						JOptionPane.showMessageDialog(getContentPane(), "Proj ID / Phase ID not matched.", "ERROR",
-	//								JOptionPane.ERROR_MESSAGE);
-	//						modelDRF_part.setValueAt("", row, column);
-	//					}
-	//				}
-	//			}
-	//		}
-	//
-	//	}
-
+	
 	// table operations
 	public static void totalDRF(DefaultTableModel modelMain, DefaultTableModel modelTotal) {
 
@@ -3081,7 +2998,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 
 		Integer x[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
 				26, 27, 28, 29, 30, 31, 32, 33, 34};
-		String sql[] = {getChartofAccount(), getDivision(), getProject(co_id), "", "", "", getEntityList(), getEntity_type(entity_id),
+		String sql[] = {getChartofAccount(), getDivision(), getProject(co_id), "", "", "", getEntityList(), getPayee_type(entity_id),
 				"", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", getWTaxID(), "", "", "", "", "", "", "", "" };
 		String lookup_name[] = { "Chart of Account", "Division", "Project", "", "", "Entity", "Entity Type",
 				"", "", "", "", "", "", "", "", "", "", "","Withholding Tax", "", "", "", "", "", "",  "", "" };
@@ -3557,7 +3474,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 	}
 
 //XXX
-	public String saveDRF(String co_id, modelDRF_particulars model) {
+	public String saveDRF(String co_id, modelDRF_particulars model, String drf_no) {
 		// FOR DRF HEADER
 		String drf_type_id = lookupRequestType.getText().trim();
 		String div_id = lookupDiv.getValue().trim();
@@ -3596,6 +3513,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		ArrayList<BigDecimal> listBCLiqAmt = new ArrayList<BigDecimal>();
 		ArrayList<BigDecimal> listOtherLiqAmt = new ArrayList<BigDecimal>();
 		ArrayList<BigDecimal> listPayableAmt = new ArrayList<BigDecimal>();
+		ArrayList<String> listRecIds = new ArrayList<String>(); 
 
 		for(int x = 0; x < model.getRowCount(); x++){
 
@@ -3628,6 +3546,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 					BigDecimal BCLiqAmt = (BigDecimal) model.getValueAt(x, 32);
 					BigDecimal OtherLiqAmt = (BigDecimal) model.getValueAt(x, 33);
 					BigDecimal PayableAmt = (BigDecimal) model.getValueAt(x, 34);
+					String RecID = (String) model.getValueAt(x, 35) != null ? model.getValueAt(x, 35).toString() : "";
 
 					listAcctIDs.add(String.format("'%s'", acct_id));
 					listProjIDs.add(String.format("'%s'", proj_id));
@@ -3653,6 +3572,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 					listBCLiqAmt.add(BCLiqAmt); 
 					listOtherLiqAmt.add(OtherLiqAmt); 
 					listPayableAmt.add(PayableAmt); 
+					listRecIds.add(String.format("'%s'", RecID));
 			}
 		}
 
@@ -3680,34 +3600,32 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		String BCLiqAmt = listBCLiqAmt.toString().replaceAll("\\[|\\]", "");
 		String OtherLiqAmt = listOtherLiqAmt.toString().replaceAll("\\[|\\]", "");
 		String PayableAmt = listPayableAmt.toString().replaceAll("\\[|\\]", "");
+		String RecId = listRecIds.toString().replace("\\[|\\]", "");
 		
 		System.out.println("");
 		System.out.println("DRF Amt: "+ amt);
-		System.out.println("invoiceDate: "+ invoiceDate);
+		System.out.println("DRF_No: "+ drf_no);
 		
-
-		new_drf_no = null; 
-
 		try {
 
-			String SQL = "SELECT fn_save_drf('"+co_id+"', '"+div_id+"', '"+dateFormat.format(dteDRFDate.getDate())+"', '"+dateFormat.format(dteDueDate.getDate())+"', '"+drf_type_id+"', '"+payee+"', '"+payee_type_id+"' \n"
+			String SQL = "SELECT fn_save_drf('"+drf_no+"','"+co_id+"', '"+div_id+"', '"+dateFormat.format(dteDRFDate.getDate())+"', '"+dateFormat.format(dteDueDate.getDate())+"', '"+drf_type_id+"', '"+payee+"', '"+payee_type_id+"' \n"
 					+ ", '"+availer+"', '"+payment_type_id+"', '"+particulars+"', '"+other_details+"', '"+req_remarks+"', '"+attachments+"', '"+user+"', ARRAY["+acct_id+"]::VARCHAR[] \n"
 					+ ", ARRAY["+proj_id+"]::VARCHAR[], ARRAY["+amt+"]::NUMERIC[], ARRAY["+payeeID+"]::VARCHAR[], ARRAY["+payeeType+"]::VARCHAR[], ARRAY["+invoiceNo+"]::VARCHAR[], ARRAY["+invoiceDate+"]::VARCHAR[], ARRAY["+SOABillNo+"]::VARCHAR[], ARRAY["+SOABillDate+"]::VARCHAR[] \n"
 					+ ", ARRAY["+assetNo+"]::VARCHAR[], ARRAY["+vatable+"]::BOOLEAN[], ARRAY["+grossAmt+"]::NUMERIC[], ARRAY["+netAmt+"]::NUMERIC[], ARRAY["+vatRate+"]::NUMERIC[], ARRAY["+vatAmt+"]::NUMERIC[], ARRAY["+WTaxID+"]::VARCHAR[], ARRAY["+WTaxRate+"]::NUMERIC[], ARRAY["+WTaxAmt+"]::NUMERIC[], ARRAY["+ExpAmt+"]::NUMERIC[]\n"
-					+ ", ARRAY["+RetAmt+"]::NUMERIC[], ARRAY["+DPRecoupAmt+"]::NUMERIC[], ARRAY["+BCLiqAmt+"]::NUMERIC[], ARRAY["+OtherLiqAmt+"]::NUMERIC[], ARRAY["+PayableAmt+"]::NUMERIC[])"; 
+					+ ", ARRAY["+RetAmt+"]::NUMERIC[], ARRAY["+DPRecoupAmt+"]::NUMERIC[], ARRAY["+BCLiqAmt+"]::NUMERIC[], ARRAY["+OtherLiqAmt+"]::NUMERIC[], ARRAY["+PayableAmt+"]::NUMERIC[], ARRAY["+RecId+"]::VARCHAR[])"; 
 
 			pgSelect db = new pgSelect(); 
 			db.select(SQL);
 
 			if(db.isNotNull()) {
-				new_drf_no =  (String) db.getResult()[0][0];	
+				drf_no =  (String) db.getResult()[0][0];	
 			}		
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Something went wrong.", "Save", JOptionPane.INFORMATION_MESSAGE);
 		}
 		
-		FncSystem.out("DRF No: ", new_drf_no);
-		return new_drf_no;
+		FncSystem.out("DRF No: ", drf_no);
+		return drf_no;
 	}
 	// INSERT & SAVE NEW DRF
 	public void insertDRF_header(String co_id, String drf_no, pgUpdate db) {
@@ -3919,7 +3837,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 						"" + other_liqui_amount + " \n" + // 46 other_liqui_amt
 						")   ";
 
-				System.out.printf("SQL #1: %s", sqlDetail);
+				System.out.printf("SQL-insertRPLF_detail: %s", sqlDetail);
 
 				db.executeUpdate(sqlDetail, false);
 
@@ -3955,7 +3873,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		String sqlDetail = "update rf_request_detail set status_id = 'I' where trim(drf_no) = '" + drf_no
 				+ "' and co_id = '" + co_id + "'   ";
 
-		System.out.printf("SQL #1: %s", sqlDetail);
+		System.out.printf("SQL-updateRPLF_detail: %s", sqlDetail);
 		db.executeUpdate(sqlDetail, false);
 	}
 
@@ -4027,7 +3945,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 				"date_edited = now() \n" + // 21
 				"where drf_no = '" + drf_no + "' and co_id = '" + co_id + "'   ";
 
-		System.out.printf("SQL #1: %s", sqlDetail);
+		System.out.printf("SQL-updateRPLF_header_status: %s", sqlDetail);
 		db.executeUpdate(sqlDetail, false);
 
 	}
@@ -4139,7 +4057,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 
 		if (Home.Home_JSystem.isNotExisting("PayableVoucher")) {
 			PayableVoucher pv = new PayableVoucher();
-			Home.Home_JSystem.addWindow(pv);
+			Home.Home_ArcSystem.addWindow(pv);
 
 			if (FncAcounting.EmpCanAddNew(UserInfo.EmployeeCode, "2") == true) {
 
@@ -4837,7 +4755,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 						"'A'   \n" + // 18
 						")   ";
 
-				System.out.printf("SQL #1: %s", sqlDetail);
+				System.out.printf("SQL-insertCAwriteoff_detail: %s", sqlDetail);
 
 				db.executeUpdate(sqlDetail, false);
 
@@ -4928,5 +4846,41 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 	    }
 	    
 	    return formattedList;
+	}
+	
+	private static Boolean isSameUser(String co_id, String drf_no, String created_by){
+		
+		boolean sameUser = false; 
+		
+		pgSelect db = new pgSelect();
+		db.select("Select * from rf_drf_header where co_id = '"+co_id+"' and drf_no = '"+drf_no+"' and created_by = '"+created_by+"' and status_id = 'A';"); 
+		
+		if (db.isNotNull()) {
+			sameUser = true; 
+		} else {
+			sameUser = false; 
+		}
+		
+		System.out.println("Is same user? :" + sameUser);
+		return sameUser; 
+	}
+	
+	private static String getDRF_status(String co_id, String drf_no) {
+		String status = ""; 
+		
+		pgSelect db = new pgSelect(); 
+		db.select("SELECT b.status_desc \n"
+				+ "FROM rf_drf_header a\n"
+				+ "LEFT JOIN mf_record_status b ON b.status_id = a.status_id\n"
+				+ "WHERE a.co_id = '"+co_id+"' \n"
+				+ "AND a.drf_no = '"+drf_no+"'");
+		
+		if(db.isNotNull()) {
+			status = (String) db.getResult()[0][0]; 
+		} else {
+			status = null; 
+		}
+		
+		return status; 
 	}
 }

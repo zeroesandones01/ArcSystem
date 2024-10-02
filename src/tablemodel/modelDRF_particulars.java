@@ -81,7 +81,8 @@ public class modelDRF_particulars extends DefaultTableModel {
 			"<html><center>DP Recoup.<html><br><html><center>Amount<html>", // 31					
 			"<html><center>BC Liquidation<html><br><html><center>Amount<html>", // 32		
 			"<html><center>Other Liqui.<html><br><html><center>Amount<html>",  	// 33
-			"<html><center>Payable<html><br><html><center>Amount<html>"  	// 34
+			"<html><center>Payable<html><br><html><center>Amount<html>",  	// 34
+			"Rec ID" //35
 			};
 
 	public Class[] CLASS_TYPES = new Class[] {
@@ -120,7 +121,8 @@ public class modelDRF_particulars extends DefaultTableModel {
 			BigDecimal.class,	// 31 DP Recoup Amount
 			BigDecimal.class,	// 32 BC Liqui. Amount
 			BigDecimal.class,	// 33 Other Liqui. Amount
-			BigDecimal.class	// 34 Payable Amount
+			BigDecimal.class,	// 34 Payable Amount
+			String.class		// 35 Rec ID
 			
 	};
 
@@ -162,7 +164,8 @@ public class modelDRF_particulars extends DefaultTableModel {
 				false,	// 31 DP Recoup Amount
 				false,	// 32 BC Liqui Amount
 				false,	// 33 Other Liqui Amount
-				false	// 34 Payable Amount
+				false, 	// 34 Payable Amount
+				false 	// 35 Rec ID
 		};
 	}
 
@@ -217,7 +220,8 @@ public class modelDRF_particulars extends DefaultTableModel {
 					false,	// 31 DP Recoup Amount
 					false,	// 32 BC Liqui Amount
 					false,	// 33 Other Liqui Amount
-					false	// 34 Payable Amount
+					false,	// 34 Payable Amount
+					false 	// 35 Rec ID
 			};
 		}else{
 			COLUMN_EDITABLE = new boolean[] {
@@ -254,7 +258,8 @@ public class modelDRF_particulars extends DefaultTableModel {
 					false,	// DP Recoup Amount
 					false,	// BC Liqui Amount
 					false,	// Other Liqui Amount
-					false	// Payable Amount
+					false,	// Payable Amount
+					false 	// Rec ID
 			};
 		}
 	}
@@ -271,18 +276,6 @@ public class modelDRF_particulars extends DefaultTableModel {
 	            return BigDecimal.valueOf(((Number) value).doubleValue());
 	        }
 	    }
-	    
-//	    // Format date columns
-//	    if (column == 15 || column == 17) {
-//	    	if (value instanceof Timestamp) {
-//	   	        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy"); // Adjust format as needed
-//	   	        return sdf.format((Timestamp) value);
-//	   	    } else if (value instanceof Date) {
-//	   	     SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy"); // Adjust format as needed
-//		        return sdf.format((Date) value);
-//	   	    }
-//	    }
-
 	    return value;
 	}
 
