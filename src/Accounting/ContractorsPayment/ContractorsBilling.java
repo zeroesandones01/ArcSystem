@@ -69,7 +69,7 @@ import Functions.FncReport;
 import Functions.FncSystem;
 import Functions.FncTables;
 import Functions.UserInfo;
-import Home.Home_JSystem;
+import Home.Home_ArcSystem;
 import Lookup.LookupEvent;
 import Lookup.LookupListener;
 import Lookup._JLookup;
@@ -5255,7 +5255,7 @@ public class ContractorsBilling extends _JInternalFrame implements _GUI, ActionL
 	public void openDRF() {
 
 		RequestForPayment drf = new RequestForPayment();
-		Home_JSystem.addWindow(drf);
+		Home_ArcSystem.addWindow(drf);
 
 		if (co_id.equals("")) {
 
@@ -5306,7 +5306,7 @@ public class ContractorsBilling extends _JInternalFrame implements _GUI, ActionL
 	public void openCV() {
 
 		CheckVoucher chk_vchr = new CheckVoucher();
-		Home_JSystem.addWindow(chk_vchr);
+		Home_ArcSystem.addWindow(chk_vchr);
 
 		if (co_id.equals("")) {
 		} else {
@@ -5365,9 +5365,9 @@ public class ContractorsBilling extends _JInternalFrame implements _GUI, ActionL
 
 	public void openPV() {
 
-		if (Home_JSystem.isNotExisting("PayableVoucher")) {
+		if (Home_ArcSystem.isNotExisting("PayableVoucher")) {
 			PayableVoucher pv = new PayableVoucher();
-			Home_JSystem.addWindow(pv);
+			Home_ArcSystem.addWindow(pv);
 		}
 
 		if (co_id.equals("")) {
@@ -5574,7 +5574,7 @@ public class ContractorsBilling extends _JInternalFrame implements _GUI, ActionL
 	public void openBC_PV(String bc_rplf_no) {
 
 		PayableVoucher pv = new PayableVoucher();
-		Home_JSystem.addWindow(pv);
+		Home_ArcSystem.addWindow(pv);
 
 		if (co_id.equals("")) {
 

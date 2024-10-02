@@ -59,7 +59,7 @@ import Functions.FncReport;
 import Functions.FncSystem;
 import Functions.FncTables;
 import Functions.UserInfo;
-import Home.Home_JSystem;
+import Home.Home_ArcSystem;
 import Lookup.LookupEvent;
 import Lookup.LookupListener;
 import Lookup._JLookup;
@@ -3145,9 +3145,9 @@ public class CheckVoucherMC extends _JInternalFrame implements _GUI, ActionListe
 	//open screens implementations
 	public void openDRF(){
 
-		if(Home.Home_JSystem.isNotExisting("RequestForPayment")){
+		if(Home.Home_ArcSystem.isNotExisting("RequestForPayment")){
 			RequestForPayment drf = new RequestForPayment();
-			Home_JSystem.addWindow(drf);					
+			Home_ArcSystem.addWindow(drf);					
 		}
 		
 		{JOptionPane.showMessageDialog(null, "This will refresh opened Request for Payment", "Warning", 
@@ -3159,9 +3159,9 @@ public class CheckVoucherMC extends _JInternalFrame implements _GUI, ActionListe
 
 	public static void openPV(){
 
-		if(Home.Home_JSystem.isNotExisting("PayableVoucher")){
+		if(Home.Home_ArcSystem.isNotExisting("PayableVoucher")){
 			PayableVoucher pv = new PayableVoucher();
-			Home_JSystem.addWindow(pv);					
+			Home_ArcSystem.addWindow(pv);					
 		}	
 
 		{JOptionPane.showMessageDialog(null, "This will refresh opened Payable Voucher", "Warning", 
@@ -3186,9 +3186,9 @@ public class CheckVoucherMC extends _JInternalFrame implements _GUI, ActionListe
 
 	public void openDP(){
 
-		if(Home.Home_JSystem.isNotExisting("DocsProcessing")){
+		if(Home.Home_ArcSystem.isNotExisting("DocsProcessing")){
 			DocsProcessing doc_proc = new DocsProcessing();
-			Home_JSystem.addWindow(doc_proc);				
+			Home_ArcSystem.addWindow(doc_proc);				
 		}
 		
 
@@ -3224,9 +3224,9 @@ public class CheckVoucherMC extends _JInternalFrame implements _GUI, ActionListe
 
 	public void addCheck(){
 
-		if(Home.Home_JSystem.isNotExisting("AddCheckNumber")){
+		if(Home.Home_ArcSystem.isNotExisting("AddCheckNumber")){
 			AddCheckNumber add_receipt = new AddCheckNumber();
-			Home_JSystem.addWindow(add_receipt);		
+			Home_ArcSystem.addWindow(add_receipt);		
 		}		
 
 		if(co_id.equals(""))

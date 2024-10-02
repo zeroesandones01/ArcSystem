@@ -46,7 +46,7 @@ public class FncLoginService extends LoginService {
 			UserInfo.initializeEmployeeInfo(username);
 
 			try {
-				Home.Home_JSystem home = new Home.Home_JSystem(FncGlobal.ORIGINAL_TITLE);
+				Home.Home_ArcSystem home = new Home.Home_ArcSystem(FncGlobal.ORIGINAL_TITLE);
 
 				FncGlobal.homeMDI = home;
 				FncGlobal.search = new _JSearch(FncGlobal.homeMDI, "Search");

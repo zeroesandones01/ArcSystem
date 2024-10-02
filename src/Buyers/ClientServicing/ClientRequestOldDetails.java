@@ -73,7 +73,7 @@ import Functions.FncGlobal;
 import Functions.FncLookAndFeel;
 import Functions.FncTables;
 import Functions.UserInfo;
-import Home.Home_JSystem;
+import Home.Home_ArcSystem;
 import Lookup.LookupEvent;
 import Lookup.LookupListener;
 import Lookup._JLookup;
@@ -1559,7 +1559,7 @@ public class ClientRequestOldDetails extends _JInternalFrame implements _GUI, Ac
 												public void actionPerformed(ActionEvent arg0) {
 													if(FncGlobal.homeMDI.isNotExisting("OrderOfPayment")){
 														OrderOfPayment oop = new OrderOfPayment();
-														Home_JSystem.addWindow(oop, null);
+														Home_ArcSystem.addWindow(oop, null);
 
 														oop.displayFromCARD(entity_id, entity_name, proj_id, proj_name, pbl_id, unit_description, seq_no, model_id, model_name, selling_price, data);
 													}
@@ -1929,7 +1929,7 @@ public class ClientRequestOldDetails extends _JInternalFrame implements _GUI, Ac
 											public void actionPerformed(ActionEvent arg0) {
 												if(FncGlobal.homeMDI.isNotExisting("CashReceiptBook")){
 													CashReceiptBook crb = new CashReceiptBook(final_receipt_type, final_receipt_no, pbl_id, seq_no);
-													Home_JSystem.addWindow(crb, null);
+													Home_ArcSystem.addWindow(crb, null);
 												}
 											}
 										});

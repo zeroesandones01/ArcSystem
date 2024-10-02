@@ -80,7 +80,7 @@ import Functions.FncSystem;
 import Functions.FncTables;
 import Functions.SpringUtilities;
 import Functions.UserInfo;
-import Home.Home_JSystem;
+import Home.Home_ArcSystem;
 import Lookup.LookupEvent;
 import Lookup.LookupListener;
 import Lookup._JLookup;
@@ -1138,7 +1138,7 @@ public class SalesAgent extends _JInternalFrame implements _GUI, ActionListener,
 						} else {
 
 							ClientInformation ci = new ClientInformation();
-							Home_JSystem.addWindow(ci);
+							Home_ArcSystem.addWindow(ci);
 							ClientInformation.btnNew.doClick();
 							pnlClientInformation.tabEntityKind.setSelectedIndex(1);
 

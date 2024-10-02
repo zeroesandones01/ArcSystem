@@ -62,7 +62,7 @@ import Functions.FncReport;
 import Functions.FncSystem;
 import Functions.FncTables;
 import Functions.UserInfo;
-import Home.Home_JSystem;
+import Home.Home_ArcSystem;
 import Lookup.LookupEvent;
 import Lookup.LookupListener;
 import Lookup._JLookup;
@@ -1927,7 +1927,7 @@ public class GeneralLedger extends _JInternalFrame implements _GUI, ActionListen
 	public void openJV(){
 
 		JournalVoucher jv = new JournalVoucher();
-		Home_JSystem.addWindow(jv);
+		Home_ArcSystem.addWindow(jv);
 
 		if(co_id.equals(""))
 		{
@@ -1975,7 +1975,7 @@ public class GeneralLedger extends _JInternalFrame implements _GUI, ActionListen
 	public static void openCV(){
 
 		CheckVoucher chk_vchr = new CheckVoucher();
-		Home_JSystem.addWindow(chk_vchr);
+		Home_ArcSystem.addWindow(chk_vchr);
 
 		if(co_id.equals("")) {}
 		else 
@@ -2032,9 +2032,9 @@ public class GeneralLedger extends _JInternalFrame implements _GUI, ActionListen
 
 	public static void openPV(){
 
-		if(Home_JSystem.isNotExisting("PayableVoucher")){
+		if(Home_ArcSystem.isNotExisting("PayableVoucher")){
 			PayableVoucher pv = new PayableVoucher();
-			Home_JSystem.addWindow(pv);
+			Home_ArcSystem.addWindow(pv);
 		}		
 
 		if(co_id.equals(""))
@@ -2120,7 +2120,7 @@ public class GeneralLedger extends _JInternalFrame implements _GUI, ActionListen
 	public void openOR(){
 
 		CashReceiptBook crb = new CashReceiptBook();
-		Home_JSystem.addWindow(crb);
+		Home_ArcSystem.addWindow(crb);
 
 		/*if(co_id.equals(""))
 		{
@@ -2225,7 +2225,7 @@ public class GeneralLedger extends _JInternalFrame implements _GUI, ActionListen
 	public void openAR(){
 
 		CashReceiptBook crb = new CashReceiptBook();
-		Home_JSystem.addWindow(crb);
+		Home_ArcSystem.addWindow(crb);
 
 		if(co_id.equals(""))
 		{
