@@ -53,7 +53,7 @@ import Functions.FncSystem;
 import Functions.FncTables;
 import Functions.SpringUtilities;
 import Functions.UserInfo;
-import Home.Home_JSystem;
+import Home.Home_ArcSystem;
 import Lookup.LookupEvent;
 import Lookup.LookupListener;
 import Lookup._JLookup;
@@ -1425,7 +1425,7 @@ public class pnlTemporaryReservation extends JPanel implements _GUI {
 		} else {
 			if (FncGlobal.homeMDI.isNotExisting("ClientInformation")) {
 				ClientInformation ci = new ClientInformation("Client Information", entity_id, entity_name);
-				Home_JSystem.addWindow(ci, null);
+				Home_ArcSystem.addWindow(ci, null);
 			}
 			return false;
 		}
@@ -1624,7 +1624,7 @@ public class pnlTemporaryReservation extends JPanel implements _GUI {
 					model_id, model_name, pbl_id, seq_no, null };
 
 			DocumentsMonitoring dm = new DocumentsMonitoring(data);
-			Home_JSystem.addWindow(dm);
+			Home_ArcSystem.addWindow(dm);
 		}
 	}
 

@@ -67,7 +67,7 @@ import Functions.FncReport;
 import Functions.FncSystem;
 import Functions.FncTables;
 import Functions.UserInfo;
-import Home.Home_JSystem;
+import Home.Home_ArcSystem;
 import Lookup.LookupEvent;
 import Lookup.LookupListener;
 import Lookup._JLookup;
@@ -98,7 +98,7 @@ public class RequestForPayment extends _JInternalFrame implements _GUI, ActionLi
 	 * 
 	 */
 	private static final long serialVersionUID = -3061284418918863916L;
-	protected static final Home_JSystem Home_JSystem = null;
+	protected static final Home_ArcSystem Home_JSystem = null;
 	static String title = "Disbursement Request Form (DRF)";
 	static Dimension SIZE = new Dimension(1000, 600);
 
@@ -4457,9 +4457,9 @@ public class RequestForPayment extends _JInternalFrame implements _GUI, ActionLi
 	public void setupPV() {// **EDITED BY JED 2019-04-23 DCRF NO. 1020 : TO AVOID SETUP PAYABLE VOUCHER IF
 		// PV MODULE IS ALREADY OPEN**//
 
-		if (Home.Home_JSystem.isNotExisting("PayableVoucher")) {
+		if (Home.Home_ArcSystem.isNotExisting("PayableVoucher")) {
 			PayableVoucher pv = new PayableVoucher();
-			Home.Home_JSystem.addWindow(pv);
+			Home.Home_ArcSystem.addWindow(pv);
 
 			if (FncAcounting.EmpCanAddNew(UserInfo.EmployeeCode, "2") == true) {
 
@@ -4625,9 +4625,9 @@ public class RequestForPayment extends _JInternalFrame implements _GUI, ActionLi
 
 	public static void openPV() {
 
-		if (Home.Home_JSystem.isNotExisting("PayableVoucher")) {
+		if (Home.Home_ArcSystem.isNotExisting("PayableVoucher")) {
 			PayableVoucher pv = new PayableVoucher();
-			Home.Home_JSystem.addWindow(pv);
+			Home.Home_ArcSystem.addWindow(pv);
 		}
 
 		if (sql_getPV(lookupDRF_no.getText().trim()).equals("")
@@ -4712,9 +4712,9 @@ public class RequestForPayment extends _JInternalFrame implements _GUI, ActionLi
 
 	public void openCV() {
 
-		if (Home.Home_JSystem.isNotExisting("CheckVoucher")) {
+		if (Home.Home_ArcSystem.isNotExisting("CheckVoucher")) {
 			CheckVoucher chk_vchr = new CheckVoucher();
-			Home.Home_JSystem.addWindow(chk_vchr);
+			Home.Home_ArcSystem.addWindow(chk_vchr);
 		}
 
 		if (co_id.equals("")) {
@@ -4774,9 +4774,9 @@ public class RequestForPayment extends _JInternalFrame implements _GUI, ActionLi
 
 	public static void open2307() {
 
-		if (Home.Home_JSystem.isNotExisting("Form2307_Monitoring")) {
+		if (Home.Home_ArcSystem.isNotExisting("Form2307_Monitoring")) {
 			Form2307_Monitoring cwt = new Form2307_Monitoring();
-			Home.Home_JSystem.addWindow(cwt);
+			Home.Home_ArcSystem.addWindow(cwt);
 		}
 
 		if (co_id.equals("")) {
@@ -4843,9 +4843,9 @@ public class RequestForPayment extends _JInternalFrame implements _GUI, ActionLi
 
 	public static void openDRFprooflist() {
 
-		if (Home.Home_JSystem.isNotExisting("DRFprooflist")) {
+		if (Home.Home_ArcSystem.isNotExisting("DRFprooflist")) {
 			DRFprooflist drf_proof = new DRFprooflist();
-			Home.Home_JSystem.addWindow(drf_proof);
+			Home.Home_ArcSystem.addWindow(drf_proof);
 		}
 
 		if (co_id.equals("")) {
@@ -4977,9 +4977,9 @@ public class RequestForPayment extends _JInternalFrame implements _GUI, ActionLi
 
 	public void openJV() {
 
-		if (Home.Home_JSystem.isNotExisting("JournalVoucher")) {
+		if (Home.Home_ArcSystem.isNotExisting("JournalVoucher")) {
 			JournalVoucher jv = new JournalVoucher();
-			Home.Home_JSystem.addWindow(jv);
+			Home.Home_ArcSystem.addWindow(jv);
 		}
 
 		if (co_id.equals("")) {

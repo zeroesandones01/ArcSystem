@@ -43,7 +43,7 @@ import Functions.FncSystem;
 import Functions.FncTables;
 import Functions.SpringUtilities;
 import Functions.UserInfo;
-import Home.Home_JSystem;
+import Home.Home_ArcSystem;
 import Lookup.LookupEvent;
 import Lookup.LookupListener;
 import Lookup._JLookup;
@@ -749,7 +749,7 @@ public class pnlOfficialReservation extends JPanel implements ActionListener, _G
 					project_id, project_name, unit_id, unit_description, model_id, model_name, pbl_id, seq_no, res_date};
 
 			DocumentsMonitoring dm = new DocumentsMonitoring(data);
-			Home_JSystem.addWindow(dm);
+			Home_ArcSystem.addWindow(dm);
 		}
 	}
 

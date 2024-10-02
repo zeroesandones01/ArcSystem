@@ -66,7 +66,7 @@ import Functions.FncReport;
 import Functions.FncSystem;
 import Functions.FncTables;
 import Functions.UserInfo;
-import Home.Home_JSystem;
+import Home.Home_ArcSystem;
 import Lookup.LookupEvent;
 import Lookup.LookupListener;
 import Lookup._JLookup;
@@ -3807,7 +3807,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 	public void openDRF() {
 
 		RequestForPayment drf = new RequestForPayment();
-		Home_JSystem.addWindow(drf);
+		Home_ArcSystem.addWindow(drf);
 
 		if (co_id.equals("")) {
 
@@ -3854,7 +3854,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 		if (checkCVremarks(pv_no) == true) {// **ADDED BY JED 2019-05-21 : FOR PREVIEWING CHECK VOUCHER (MC)**//
 
 			CheckVoucherMC chk_vchr_mc = new CheckVoucherMC();
-			Home_JSystem.addWindow(chk_vchr_mc);
+			Home_ArcSystem.addWindow(chk_vchr_mc);
 
 			if (co_id.equals("")) {
 			} else {
@@ -3910,7 +3910,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 		} else {
 
 			CheckVoucher chk_vchr = new CheckVoucher();
-			Home_JSystem.addWindow(chk_vchr);
+			Home_ArcSystem.addWindow(chk_vchr);
 
 			if (co_id.equals("")) {
 			} else {
@@ -3994,12 +3994,12 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 
 		if (co_id.equals("")) {
 			DocsProcessing doc_proc = new DocsProcessing();
-			Home_JSystem.addWindow(doc_proc);
+			Home_ArcSystem.addWindow(doc_proc);
 		}
 
 		else {
 			DocsProcessing doc_proc = new DocsProcessing();
-			Home_JSystem.addWindow(doc_proc);
+			Home_ArcSystem.addWindow(doc_proc);
 
 			DocsProcessing.co_id = co_id;
 			DocsProcessing.company = company;
@@ -4043,7 +4043,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 	public static void open2307() {
 
 		Form2307_Monitoring cwt = new Form2307_Monitoring();
-		Home_JSystem.addWindow(cwt);
+		Home_ArcSystem.addWindow(cwt);
 
 		if (co_id.equals("")) {
 
@@ -4399,8 +4399,8 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 	private void reverse_pv() {
 
 		JournalVoucher jv = new JournalVoucher();
-		if (Home_JSystem.isNotExisting("JournalVoucher")) {
-			Home_JSystem.addWindow(jv);
+		if (Home_ArcSystem.isNotExisting("JournalVoucher")) {
+			Home_ArcSystem.addWindow(jv);
 		}
 
 		if (co_id.equals("")) {
