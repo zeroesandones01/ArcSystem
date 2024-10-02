@@ -140,6 +140,7 @@ import Utilities.TemporaryCheckVoucher;
 import Utilities.ZipCodes;
 import Utilities.fixedasset_peripheral;
 import System.Add_Edit_Holidays;
+import Transaction.PettyCash;
 
 //import System.DcrfInactivePayments;
 
@@ -1229,7 +1230,8 @@ public class Home_ArcSystem extends JXFrame implements ActionListener, WindowLis
 							@Override
 							public void actionPerformed(ActionEvent arg0) {
 								if(isNotExisting("PettyCashFund")) {
-									
+									PettyCash pc = new PettyCash();
+									addWindow(pc);
 								}
 							}
 						});
