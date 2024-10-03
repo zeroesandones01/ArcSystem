@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptDisbursementRequestForm" pageWidth="612" pageHeight="936" columnWidth="540" leftMargin="36" rightMargin="36" topMargin="36" bottomMargin="36">
-	<property name="ireport.zoom" value="1.6105100000000314"/>
+	<property name="ireport.zoom" value="1.331000000000026"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="384"/>
+	<property name="ireport.y" value="361"/>
 	<subDataset name="Table Dataset 1"/>
 	<parameter name="co_id" class="java.lang.String"/>
 	<parameter name="drf_no" class="java.lang.String"/>
@@ -10,6 +10,7 @@
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["/home/monique/Documents/git/JSystem3.0/"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="logo" class="java.io.InputStream" isForPrompting="false"/>
 	<queryString>
 		<![CDATA[SELECT b.company_name
 , b.company_address
@@ -89,6 +90,17 @@ AND a.drf_no = $P{drf_no}]]>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["Tin No.:" + $F{tin_no}]]></textFieldExpression>
 			</textField>
+			<image scaleImage="FillFrame" hAlign="Center" vAlign="Top" isUsingCache="true">
+				<reportElement x="18" y="0" width="77" height="48"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<imageExpression class="java.io.InputStream"><![CDATA[$P{logo}]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>
@@ -499,15 +511,15 @@ AND a.drf_no = $P{drf_no}]]>
 				<text><![CDATA[Requester's Remarks:]]></text>
 			</staticText>
 			<subreport>
-				<reportElement x="0" y="31" width="540" height="30" isPrintWhenDetailOverflows="true"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="31" width="540" height="30" isPrintWhenDetailOverflows="true"/>
 				<subreportParameter name="co_id">
 					<subreportParameterExpression><![CDATA[$P{co_id}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="drf_no">
 					<subreportParameterExpression><![CDATA[$P{drf_no}]]></subreportParameterExpression>
 				</subreportParameter>
-				<dataSourceExpression><![CDATA[]]></dataSourceExpression>
-				<subreportExpression class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "rptDisbursementRequestForm_subreport1.jasper"]]></subreportExpression>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.io.InputStream"><![CDATA[this.getClass().getResourceAsStream("/Reports/rptDisbursementRequestForm_subreport1.jasper")]]></subreportExpression>
 			</subreport>
 		</band>
 	</detail>
@@ -754,7 +766,7 @@ AND a.drf_no = $P{drf_no}]]>
 				<textFieldExpression class="java.lang.String"><![CDATA["I hereby authorize <b>"+$F{company_name}+"</b> to deduct from my salary the amount of P<b>"+String.format("%, .2f", $F{drf_total_amt})+"</b> upon non-liquidation of my cash advances for DRF No. <b><u>"+$F{drf_no}+"</u></b> as specified in the company policy."]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="348" y="63" width="192" height="18"/>
+				<reportElement x="338" y="63" width="192" height="18"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid"/>

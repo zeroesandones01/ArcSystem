@@ -1939,13 +1939,13 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 
 		Map<String, Object> mapParameters = new HashMap<String, Object>();
 		mapParameters.put("co_id", lookupCompany.getText().trim());
-//		mapParameters.put("logo", this.getClass().getClassLoader().getResourceAsStream("Images/" + company_logo));
+		mapParameters.put("logo", this.getClass().getClassLoader().getResourceAsStream("Images/" + company_logo));
 		mapParameters.put("user", UserInfo.FullName);
 		mapParameters.put("drf_no", lookupDRF_no.getText().trim());
 		
 		System.out.println("");
 		System.out.println("Value of co_id:" +  lookupCompany.getText().trim());
-//		System.out.println("Value of logo:" +  company_logo);
+		System.out.println("Value of logo:" +  company_logo);
 		System.out.println("Value of user:" +  UserInfo.FullName);
 		System.out.println("Value of drf_no:" +  drf_no);
 
