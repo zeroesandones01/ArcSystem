@@ -2,12 +2,11 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptDisbursementRequestForm" pageWidth="612" pageHeight="936" columnWidth="540" leftMargin="36" rightMargin="36" topMargin="36" bottomMargin="36">
 	<property name="ireport.zoom" value="1.6105100000000314"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="316"/>
+	<property name="ireport.y" value="0"/>
 	<subDataset name="Table Dataset 1"/>
 	<parameter name="co_id" class="java.lang.String"/>
 	<parameter name="drf_no" class="java.lang.String"/>
 	<parameter name="user" class="java.lang.String"/>
-	<parameter name="logo" class="java.io.InputStream" isForPrompting="false"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["/home/monique/Documents/git/JSystem3.0/"]]></defaultValueExpression>
 	</parameter>
@@ -62,17 +61,6 @@ AND a.drf_no = $P{drf_no}]]>
 	</background>
 	<title>
 		<band height="71" splitType="Stretch">
-			<image hAlign="Center" vAlign="Middle" isUsingCache="true">
-				<reportElement x="21" y="0" width="77" height="48"/>
-				<box>
-					<pen lineWidth="0.0"/>
-					<topPen lineWidth="0.0"/>
-					<leftPen lineWidth="0.0"/>
-					<bottomPen lineWidth="0.0"/>
-					<rightPen lineWidth="0.0"/>
-				</box>
-				<imageExpression class="java.io.InputStream"><![CDATA[$P{logo}]]></imageExpression>
-			</image>
 			<textField>
 				<reportElement x="98" y="0" width="442" height="20"/>
 				<textElement>
