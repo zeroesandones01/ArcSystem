@@ -423,7 +423,6 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 							co_id = (String) data[0];
 							company = (String) data[1];
 							tagCompany.setTag(company);
-							company_logo = (String) data[3];
 
 							lblDRF_no.setEnabled(true);
 							lookupDRF_no.setEnabled(true);
@@ -1611,7 +1610,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		lookupCompany.setValue("01");
 		company = FncGlobal.GetString("Select company_name from mf_company where co_id = '"+lookupCompany.getText().trim()+"';");
 		tagCompany.setTag(company);
-		company_logo = sql_getCompanyLogo();
+		company_logo = sql_getCompanyLogo(lookupCompany.getText().trim());
 
 		lblDRF_no.setEnabled(true);
 		lookupDRF_no.setEnabled(true);
@@ -1935,21 +1934,23 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 
 	public void preview() {
 
-		String criteria = "Request for Payment";
+		String criteria = "Disbursement Request Form";
 		String reportTitle = String.format("%s (%s)", title.replace(" Report", ""), criteria.toUpperCase());
 
-		Double drf_amt_tot = Double.parseDouble(modelDRF_part_total.getValueAt(0, 5).toString());
-
 		Map<String, Object> mapParameters = new HashMap<String, Object>();
-		mapParameters.put("company", company);
-		mapParameters.put("co_id", co_id);
-		mapParameters.put("logo", this.getClass().getClassLoader().getResourceAsStream("Images/" + company_logo));
-		mapParameters.put("prepared_by", UserInfo.FullName);
+		mapParameters.put("co_id", lookupCompany.getText().trim());
+//		mapParameters.put("logo", this.getClass().getClassLoader().getResourceAsStream("Images/" + company_logo));
+		mapParameters.put("user", UserInfo.FullName);
 		mapParameters.put("drf_no", lookupDRF_no.getText().trim());
-		mapParameters.put("rplf_amt", drf_amt_tot);
+		
+		System.out.println("");
+		System.out.println("Value of co_id:" +  lookupCompany.getText().trim());
+//		System.out.println("Value of logo:" +  company_logo);
+		System.out.println("Value of user:" +  UserInfo.FullName);
+		System.out.println("Value of drf_no:" +  drf_no);
 
-		FncReport.generateReport("/Reports/rptRPLF_preview.jasper", reportTitle, company, mapParameters);
 
+		FncReport.generateReport("/Reports/rptDisbursementRequestForm.jasper", reportTitle, mapParameters);
 	}
 
 	public void executeSave() {
@@ -2139,10 +2140,8 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		String sql = "select a.proj_id as \"Project ID\"\n"
 				+ ", trim(a.proj_name) as \"Project Name\"\n"
 				+ ", a.proj_alias as \"Project Alias\"\n"
-				+ ", b.sub_proj_id as \"SubProject ID\"\n"
 				+ ", a.vatable as \"Vatable\" \n"
 				+ "from mf_project a \n"
-				+ "left join (select distinct on (proj_id) proj_id, sub_proj_id from mf_unit_info)b  on a.proj_id = b.proj_id\n"
 				+ "where a.co_id = '\"+co_id+\"' \n"
 				+ "and a.status_id ='A'";
 		FncSystem.out("SQL-getProject", sql);
@@ -2486,7 +2485,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		return a;
 	}
 
-	public static String sql_getCompanyLogo() {
+	public static String sql_getCompanyLogo(String co_id) {
 
 		String a = "";
 
@@ -2619,13 +2618,11 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 			} else {
 			}
 			w++;
-		}
+		}	
 		return x;
 
 	}
-
-
-
+	
 	public static Boolean isPVcreated() {
 
 		Boolean isPVcreated = false;
@@ -3607,17 +3604,20 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		String PayableAmt = listPayableAmt.toString().replaceAll("\\[|\\]", "");
 		String RecId = listRecIds.toString().replace("\\[|\\]", "");
 		
+		BigDecimal totalDRFAmt = (BigDecimal) modelDRF_part_total.getValueAt(0, 5);
+		
 		System.out.println("");
 		System.out.println("DRF Amt: "+ amt);
 		System.out.println("DRF_No: "+ drf_no);
-		
+		System.out.println("Total DRF Amt: "+ totalDRFAmt);
+	
 		try {
 
 			String SQL = "SELECT fn_save_drf('"+drf_no+"','"+co_id+"', '"+div_id+"', '"+dateFormat.format(dteDRFDate.getDate())+"', '"+dateFormat.format(dteDueDate.getDate())+"', '"+drf_type_id+"', '"+payee+"', '"+payee_type_id+"' \n"
 					+ ", '"+availer+"', '"+payment_type_id+"', '"+particulars+"', '"+other_details+"', '"+req_remarks+"', '"+attachments+"', '"+user+"', ARRAY["+acct_id+"]::VARCHAR[], ARRAY["+proj_cost_id+"]::VARCHAR[] \n"
 					+ ", ARRAY["+proj_id+"]::VARCHAR[], ARRAY["+amt+"]::NUMERIC[], ARRAY["+payeeID+"]::VARCHAR[], ARRAY["+payeeType+"]::VARCHAR[], ARRAY["+invoiceNo+"]::VARCHAR[], ARRAY["+invoiceDate+"]::VARCHAR[], ARRAY["+SOABillNo+"]::VARCHAR[], ARRAY["+SOABillDate+"]::VARCHAR[] \n"
 					+ ", ARRAY["+assetNo+"]::VARCHAR[], ARRAY["+vatable+"]::BOOLEAN[], ARRAY["+grossAmt+"]::NUMERIC[], ARRAY["+netAmt+"]::NUMERIC[], ARRAY["+vatRate+"]::NUMERIC[], ARRAY["+vatAmt+"]::NUMERIC[], ARRAY["+WTaxID+"]::VARCHAR[], ARRAY["+WTaxRate+"]::NUMERIC[], ARRAY["+WTaxAmt+"]::NUMERIC[], ARRAY["+ExpAmt+"]::NUMERIC[]\n"
-					+ ", ARRAY["+RetAmt+"]::NUMERIC[], ARRAY["+DPRecoupAmt+"]::NUMERIC[], ARRAY["+BCLiqAmt+"]::NUMERIC[], ARRAY["+OtherLiqAmt+"]::NUMERIC[], ARRAY["+PayableAmt+"]::NUMERIC[], ARRAY["+RecId+"]::VARCHAR[])"; 
+					+ ", ARRAY["+RetAmt+"]::NUMERIC[], ARRAY["+DPRecoupAmt+"]::NUMERIC[], ARRAY["+BCLiqAmt+"]::NUMERIC[], ARRAY["+OtherLiqAmt+"]::NUMERIC[], ARRAY["+PayableAmt+"]::NUMERIC[], ARRAY["+RecId+"]::VARCHAR[], "+totalDRFAmt+")"; 
 
 			pgSelect db = new pgSelect(); 
 			db.select(SQL);

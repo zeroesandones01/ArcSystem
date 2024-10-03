@@ -27,7 +27,7 @@ import javax.swing.event.AncestorListener;
 
 import org.jdesktop.swingx.JXTextField;
 
-import Accounting.Disbursements.RequestForPayment;
+import Accounting.Disbursements.DisbursementRequestForm;
 import Database.pgSelect;
 import Database.pgUpdate;
 import DateChooser._JDateChooser;
@@ -843,7 +843,8 @@ public class AddCheckNumber extends _JInternalFrame implements ActionListener, A
 		enabledFields(true);
 		enableButtons(false, false, true, true);
 		lookupBranch.setLookupSQL(getOfficeBranch());	
-		lookupBank.setLookupSQL(getBank());
+		lookupBank.setLookupSQL(getBank());//		company_logo = DisbursementRequestForm.sql_getCompanyLogo();
+
 		lookupUser.setLookupSQL(getEmployeeList());	
 		
 	}
@@ -852,7 +853,7 @@ public class AddCheckNumber extends _JInternalFrame implements ActionListener, A
 		
 		co_id 		= "02";	
 		company		= "CENQHOMES DEVELOPMENT CORPORATION";	
-		company_logo = RequestForPayment.sql_getCompanyLogo();				
+//		company_logo = DisbursementRequestForm.sql_getCompanyLogo();				
 		txtCompany.setText(company);
 
 		lblTransNo.setEnabled(true);	
