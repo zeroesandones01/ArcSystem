@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptDisbursementRequestForm_subreport1" pageWidth="540" pageHeight="100" columnWidth="540" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
-	<property name="ireport.zoom" value="1.4641000000000013"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptDisbursementRequestForm_subreport1" pageWidth="540" pageHeight="500" columnWidth="540" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.6105100000000032"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="co_id" class="java.lang.String"/>
 	<parameter name="drf_no" class="java.lang.String"/>
+	<parameter name="particulars" class="java.lang.String"/>
+	<parameter name="attachments" class="java.lang.String"/>
+	<parameter name="other_details" class="java.lang.String"/>
+	<parameter name="requesters_remarks" class="java.lang.String"/>
+	<parameter name="invoice" class="java.lang.String"/>
+	<parameter name="soa_bill" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT FORMAT('%s / %s', fn_get_div_alias(a.div_id), fn_get_exec_ofc_alias(b.exec_office_code)) as cost_center
 , c.acct_name
 , fn_get_proj_alias(a.proj_id) AS proj_alias
 , a.amount
-, FORMAT('%s , %s', a.invoice_no, a.invoice_date::DATE) AS invoice
-, FORMAT('%s , %s', a.soa_bill_no, a.soa_bill_date::DATE) AS soa_bill
 FROM rf_drf_detail a
 LEFT JOIN mf_division b ON b.div_code = a.div_id
 LEFT JOIN mf_boi_chart_of_accounts c ON c.acct_id = a.acct_id AND c.status_id = 'A'
@@ -22,68 +26,86 @@ AND a.drf_no = $P{drf_no}]]>
 	<field name="acct_name" class="java.lang.String"/>
 	<field name="proj_alias" class="java.lang.String"/>
 	<field name="amount" class="java.math.BigDecimal"/>
-	<field name="invoice" class="java.lang.String"/>
-	<field name="soa_bill" class="java.lang.String"/>
 	<variable name="v_total_drf_amt" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{amount}]]></variableExpression>
 	</variable>
 	<columnHeader>
-		<band height="24" splitType="Stretch">
+		<band height="49" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="143" height="20"/>
+				<reportElement x="0" y="27" width="146" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[COST CENTER]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="143" y="0" width="180" height="20"/>
+				<reportElement x="146" y="27" width="180" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[BREAKDOWN]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="323" y="0" width="117" height="20"/>
+				<reportElement x="326" y="27" width="117" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[PROJECT]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="440" y="0" width="100" height="20"/>
+				<reportElement x="443" y="27" width="97" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[AMOUNT]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="81" y="0" width="442" height="18"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{particulars}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="0" width="80" height="18"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PARTICULARS:]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="143" height="20"/>
+				<reportElement x="0" y="0" width="146" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans" size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{cost_center}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="143" y="0" width="180" height="20"/>
+				<reportElement x="146" y="0" width="180" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans" size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{acct_name}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="323" y="0" width="117" height="20"/>
+				<reportElement x="326" y="0" width="117" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans" size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{proj_alias}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="440" y="0" width="100" height="20"/>
+				<reportElement x="443" y="0" width="97" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans" size="9"/>
 				</textElement>
@@ -92,9 +114,9 @@ AND a.drf_no = $P{drf_no}]]>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="56">
+		<band height="182">
 			<textField pattern="#,##0.00">
-				<reportElement x="440" y="0" width="100" height="20"/>
+				<reportElement x="440" y="35" width="100" height="20"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="0.0"/>
@@ -107,16 +129,146 @@ AND a.drf_no = $P{drf_no}]]>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{v_total_drf_amt}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="0" width="440" height="20"/>
+				<reportElement x="0" y="35" width="440" height="20"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="0.0"/>
 				</box>
-				<textElement/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" isBold="true"/>
+				</textElement>
 				<text><![CDATA[  TOTAL]]></text>
 			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="141" y="86" width="386" height="18"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="9" isBold="false"/>
+				</textElement>
+			</textField>
+			<rectangle>
+				<reportElement x="1" y="66" width="540" height="110"/>
+			</rectangle>
+			<textField>
+				<reportElement x="141" y="154" width="386" height="18"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{requesters_remarks}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="69" width="129" height="18"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Invoice No./ Date:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="141" y="69" width="386" height="18"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{invoice}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="154" width="129" height="18"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Requester's Remarks:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="141" y="103" width="386" height="18"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{attachments}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="141" y="120" width="386" height="18"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{other_details}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="103" width="129" height="18"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Attachments:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="137" width="129" height="18"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Asset No:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="141" y="137" width="386" height="18"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="9" isBold="false"/>
+				</textElement>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="120" width="129" height="18"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Other Details:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="12" y="86" width="129" height="18"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SOA / Billing No. / Date:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="141" y="87" width="386" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{soa_bill}]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnFooter>
 </jasperReport>
