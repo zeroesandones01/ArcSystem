@@ -49,7 +49,7 @@ import org.jdesktop.swingx.JXPanel;
 
 import tablemodel.modelCheckStatus;
 import tablemodel.modelCheckStatus_total;
-import Accounting.Disbursements.RequestForPayment;
+import Accounting.Disbursements.DisbursementRequestForm;
 //import Buyers.CreditandCollections._RealTimeDebit;
 import Database.pgSelect;
 import Database.pgUpdate;
@@ -1046,7 +1046,7 @@ public class CheckStatusMonitoring extends _JInternalFrame implements _GUI, Acti
 		co_id = "02";
 		company = "CENQHOMES DEVELOPMENT CORPORATION";
 		tagCompany.setTag(company);
-		company_logo = RequestForPayment.sql_getCompanyLogo();
+//		company_logo = DisbursementRequestForm.sql_getCompanyLogo();
 
 		if (confirmLeaveScreen() == false) {
 

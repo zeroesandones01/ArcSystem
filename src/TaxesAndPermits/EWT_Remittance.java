@@ -56,7 +56,7 @@ import Functions.FncLookAndFeel;
 import Functions.FncReport;
 import Functions.FncTables;
 import Functions.UserInfo;
-import Home.Home_JSystem;
+import Home.Home_ArcSystem;
 import Lookup.LookupEvent;
 import Lookup.LookupListener;
 import Lookup._JLookup;
@@ -1930,7 +1930,7 @@ public class EWT_Remittance extends _JInternalFrame implements _GUI, ActionListe
 	public void openDRF(){
 
 		RequestForPayment drf = new RequestForPayment();
-		Home_JSystem.addWindow(drf);
+		Home_ArcSystem.addWindow(drf);
 
 		if(co_id.equals(""))
 		{
@@ -1986,7 +1986,7 @@ public class EWT_Remittance extends _JInternalFrame implements _GUI, ActionListe
 	public void openJV(){
 
 		JournalVoucher jv = new JournalVoucher();
-		Home_JSystem.addWindow(jv);
+		Home_ArcSystem.addWindow(jv);
 
 		if(co_id.equals(""))
 		{
@@ -2045,7 +2045,7 @@ public class EWT_Remittance extends _JInternalFrame implements _GUI, ActionListe
 	public void openPV(){
 
 		PayableVoucher pv = new PayableVoucher();
-		Home_JSystem.addWindow(pv);
+		Home_ArcSystem.addWindow(pv);
 
 		if(co_id.equals(""))
 		{

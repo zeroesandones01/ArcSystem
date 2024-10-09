@@ -72,7 +72,7 @@ import Functions.FncReport;
 import Functions.FncSystem;
 import Functions.FncTables;
 import Functions.UserInfo;
-import Home.Home_JSystem;
+import Home.Home_ArcSystem;
 import Lookup.LookupEvent;
 import Lookup.LookupListener;
 import Lookup._JLookup;
@@ -4804,7 +4804,7 @@ public class JournalVoucher extends _JInternalFrame implements _GUI, ActionListe
 	private void openPV() {
 
 		PayableVoucher pv = new PayableVoucher();
-		Home_JSystem.addWindow(pv);
+		Home_ArcSystem.addWindow(pv);
 
 		if (co_id.equals("")) {
 
@@ -4829,7 +4829,7 @@ public class JournalVoucher extends _JInternalFrame implements _GUI, ActionListe
 	private void openDRF() {
 
 		RequestForPayment drf = new RequestForPayment();
-		Home_JSystem.addWindow(drf);
+		Home_ArcSystem.addWindow(drf);
 
 		if (co_id.equals("")) {
 
@@ -4852,7 +4852,7 @@ public class JournalVoucher extends _JInternalFrame implements _GUI, ActionListe
 	private void openCV() {
 
 		CheckVoucher chk_vchr = new CheckVoucher();
-		Home_JSystem.addWindow(chk_vchr);
+		Home_ArcSystem.addWindow(chk_vchr);
 
 		if (co_id.equals("")) {
 		} else {
@@ -4873,7 +4873,7 @@ public class JournalVoucher extends _JInternalFrame implements _GUI, ActionListe
 	private void openDP() {
 
 		DocsProcessing doc_proc = new DocsProcessing();
-		Home_JSystem.addWindow(doc_proc);
+		Home_ArcSystem.addWindow(doc_proc);
 
 		DocsProcessing.co_id = co_id;
 		DocsProcessing.company = company;

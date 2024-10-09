@@ -5,7 +5,7 @@ import Functions.FncLookAndFeel;
 
 import components._JXLoginPane;
 
-public class _JSystem3 {
+public class _ArcSystem {
 
 	public static void main(String[] args) {
 		FncLookAndFeel.initialize();

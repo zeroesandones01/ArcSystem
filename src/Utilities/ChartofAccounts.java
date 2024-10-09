@@ -49,7 +49,7 @@ import org.jdesktop.swingx.JXTextField;
 
 import tablemodel.modelChartofAcctsMain;
 import tablemodel.modelContractorOtherDeductions;
-import Accounting.Disbursements.RequestForPayment;
+import Accounting.Disbursements.DisbursementRequestForm;
 import Database.pgSelect;
 import Database.pgUpdate;
 import Functions.FncGlobal;
@@ -1190,7 +1190,7 @@ public class ChartofAccounts extends _JInternalFrame implements _GUI, ActionList
 		co_id 		= "02";	
 		company		= "CENQHOMES DEVELOPMENT CORPORATION";			
 		tagCompany.setTag(company);
-		company_logo = RequestForPayment.sql_getCompanyLogo();	
+//		company_logo = DisbursementRequestForm.sql_getCompanyLogo();	
 
 		KEYBOARD_MANAGER.focusNextComponent();							
 

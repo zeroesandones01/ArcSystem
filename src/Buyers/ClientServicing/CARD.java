@@ -90,7 +90,7 @@ import Functions.FncReport;
 import Functions.FncSystem;
 import Functions.FncTables;
 import Functions.UserInfo;
-import Home.Home_JSystem;
+import Home.Home_ArcSystem;
 import Lookup.LookupEvent;
 import Lookup.LookupListener;
 import Lookup._JLookup;
@@ -2126,7 +2126,7 @@ public class CARD extends _JInternalFrame implements _GUI, AncestorListener, Sea
 													public void actionPerformed(ActionEvent arg0) {
 														if(FncGlobal.homeMDI.isNotExisting("OrderOfPayment")){
 															OrderOfPayment oop = new OrderOfPayment();
-															Home_JSystem.addWindow(oop, null);
+															Home_ArcSystem.addWindow(oop, null);
 
 															oop.displayFromCARD(entity_id, entity_name, proj_id, proj_name, pbl_id, unit_description, seq_no, model_id, model_name, selling_price, data);
 														}
@@ -2489,7 +2489,7 @@ public class CARD extends _JInternalFrame implements _GUI, AncestorListener, Sea
 											public void actionPerformed(ActionEvent arg0) {
 												if(FncGlobal.homeMDI.isNotExisting("CashReceiptBook")){
 													CashReceiptBook crb = new CashReceiptBook(final_receipt_type, final_receipt_no, pbl_id, seq_no);
-													Home_JSystem.addWindow(crb, null);
+													Home_ArcSystem.addWindow(crb, null);
 												}
 											}
 										});
@@ -6951,7 +6951,7 @@ public class CARD extends _JInternalFrame implements _GUI, AncestorListener, Sea
 
 						if(FncGlobal.homeMDI.isNotExisting("BuyersRequestforTechnicalDocuments")){
 							BuyersRequestforTechnicalDocuments brt = new BuyersRequestforTechnicalDocuments(entity_id, entity_name, proj_id, proj_name, pbl_id, unit_desc, Integer.toString(seq_no), model_desc, true);
-							Home_JSystem.addWindow(brt, null);
+							Home_ArcSystem.addWindow(brt, null);
 						}
 					}else{
 						JOptionPane.showMessageDialog(CARD.this, "Please select a client first.", arg0.getActionCommand(), JOptionPane.INFORMATION_MESSAGE);
@@ -6975,7 +6975,7 @@ public class CARD extends _JInternalFrame implements _GUI, AncestorListener, Sea
 
 						if(FncGlobal.homeMDI.isNotExisting("DocumentsMonitoring")){
 							DocumentsMonitoring dm = new DocumentsMonitoring(entity_id, proj_id, pbl_id, seq_no);
-							Home_JSystem.addWindow(dm, null);
+							Home_ArcSystem.addWindow(dm, null);
 						}
 					}else{
 						JOptionPane.showMessageDialog(CARD.this, "Please select a client first.", arg0.getActionCommand(), JOptionPane.INFORMATION_MESSAGE);
@@ -6999,7 +6999,7 @@ public class CARD extends _JInternalFrame implements _GUI, AncestorListener, Sea
 
 						if(FncGlobal.homeMDI.isNotExisting("DocumentsMonitoring")){
 							RegularBillingAndNotices rbn = new RegularBillingAndNotices(entity_id, proj_id, pbl_id, seq_no);
-							Home_JSystem.addWindow(rbn, null);
+							Home_ArcSystem.addWindow(rbn, null);
 						}
 					}else{
 						JOptionPane.showMessageDialog(CARD.this, "Please select a client first.", arg0.getActionCommand(), JOptionPane.INFORMATION_MESSAGE);
@@ -7022,7 +7022,7 @@ public class CARD extends _JInternalFrame implements _GUI, AncestorListener, Sea
 
 						if(FncGlobal.homeMDI.isNotExisting("ClientInformation")){
 							ClientInformation ci = new ClientInformation("Client Information", entity_id, entity_name);
-							Home_JSystem.addWindow(ci, null);
+							Home_ArcSystem.addWindow(ci, null);
 						}
 					}else{
 						JOptionPane.showMessageDialog(CARD.this, "Please select a client first.", arg0.getActionCommand(), JOptionPane.INFORMATION_MESSAGE);
@@ -7046,7 +7046,7 @@ public class CARD extends _JInternalFrame implements _GUI, AncestorListener, Sea
 
 						if(FncGlobal.homeMDI.isNotExisting("ClientFeedback")){
 							ClientFeedback cf = new ClientFeedback(entity_id, proj_id, pbl_id, Integer.toString(seq_no));
-							Home_JSystem.addWindow(cf, null);
+							Home_ArcSystem.addWindow(cf, null);
 						}
 					}else{
 						JOptionPane.showMessageDialog(CARD.this, "Please select a client first.", arg0.getActionCommand(), JOptionPane.INFORMATION_MESSAGE);
@@ -7076,7 +7076,7 @@ public class CARD extends _JInternalFrame implements _GUI, AncestorListener, Sea
 						if(FncGlobal.homeMDI.isNotExisting("ClientFollowUp")){
 							System.out.println("Dumaan dito");
 							ClientFollowUp cfu = new ClientFollowUp(entity_id, proj_id, pbl_id, seq_no.toString());
-							Home_JSystem.addWindow(cfu, null);
+							Home_ArcSystem.addWindow(cfu, null);
 						}
 					}else{
 						JOptionPane.showMessageDialog(CARD.this, "Please select a client first", arg0.getActionCommand(), JOptionPane.INFORMATION_MESSAGE);
@@ -7108,7 +7108,7 @@ public class CARD extends _JInternalFrame implements _GUI, AncestorListener, Sea
 						System.out.println("************CARD" + seq_no);
 						if(FncGlobal.homeMDI.isNotExisting("PromissryNote_v2")){
 							PromissryNote_v2 pn = new PromissryNote_v2(entity_id,proj_id,pbl_id,seq_no,buyertypeID);
-							Home_JSystem.addWindow(pn, null);
+							Home_ArcSystem.addWindow(pn, null);
 
 						}
 					}else{
@@ -7135,7 +7135,7 @@ public class CARD extends _JInternalFrame implements _GUI, AncestorListener, Sea
 
 						if(FncGlobal.homeMDI.isNotExisting("LoanReleased")){
 							LoanReleased lnrel = new LoanReleased(entity_id, proj_id, pbl_id, seq_no);
-							Home_JSystem.addWindow(lnrel, null);
+							Home_ArcSystem.addWindow(lnrel, null);
 						}
 					}else{
 						JOptionPane.showMessageDialog(CARD.this, "Please select a client first.", arg0.getActionCommand(), JOptionPane.INFORMATION_MESSAGE);

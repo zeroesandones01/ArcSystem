@@ -37,7 +37,7 @@ import org.jdesktop.swingx.JXTextField;
 import Admin.AddEditEntityType;
 import Database.pgSelect;
 import Functions.FncGlobal;
-import Home.Home_JSystem;
+import Home.Home_ArcSystem;
 import Lookup.LookupEvent;
 import Lookup.LookupListener;
 import Lookup._JLookup;
@@ -403,7 +403,7 @@ public class HoldingAndReservation extends _JInternalFrame implements ActionList
 			}else{
 				if(FncGlobal.homeMDI.isNotExisting("AddEditEntityType")){
 					AddEditEntityType add_edit_entity_type = new AddEditEntityType(lookupClient.getValue());
-					Home_JSystem.addWindow(add_edit_entity_type);
+					Home_ArcSystem.addWindow(add_edit_entity_type);
 				}
 			}
 		}

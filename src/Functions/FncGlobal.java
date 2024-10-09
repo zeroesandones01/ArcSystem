@@ -50,7 +50,7 @@ import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.auth.UserNameStore;
 
 import Database.pgSelect;
-import Home.Home_JSystem;
+import Home.Home_ArcSystem;
 import Login.Login;
 import Lookup._JSearch;
 import components.SortableValueMap;
@@ -104,7 +104,7 @@ import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.auth.UserNameStore;
 
 import Database.pgSelect;
-import Home.Home_JSystem;
+import Home.Home_ArcSystem;
 import Login.Login;
 import Lookup._JSearch;
 import components.SortableValueMap;
@@ -118,14 +118,14 @@ public class FncGlobal {
 	
 	
 	//Changes in Fnc Global hindi ksma sa push
-	public static String ORIGINAL_TITLE = "JSystem 3.0"; 
+	public static String ORIGINAL_TITLE = "ArcSystem"; 
 
 	public static Properties properties = new Properties();	
 	public static UserNameStore usernameStore; 
 	public static boolean isRememberPassword;  																																																									
 	public static String server; 																																																																																																																																
 	public static Border lineBorder = BorderFactory.createLineBorder(Color.GRAY);  
-	public static Home_JSystem homeMDI; 
+	public static Home_ArcSystem homeMDI; 
 	public static Connection connection; 
 
 	
@@ -223,7 +223,7 @@ public class FncGlobal {
 		/**	Server Settings	**/ /**	Server Settings	**/ /**	Server Settings	**/
 		/*********************/ /*********************/ /*********************/
 		//Servers to be deployed in 7th Floor (Live)
-		mapURL.put("Summit - Terraverde Live", "jdbc:postgresql://jsystemdb.cenqhomes.com/acerland?ApplicationName=JSystem3.0");
+		mapURL.put("Summit - ArcSystem Live", "jdbc:postgresql://jsystemdb.cenqhomes.com/acerland?ApplicationName=ArcSystem");
 		//mapURL.put("Summit - Terraverde Live", "jdbc:postgresql://localhost/terraverde_summit_local?ApplicationName=JSystem3.0");
 		//mapURL.put("Site - Open House", "jdbc:postgresql://177.177.176.179:5432/terraverde?ApplicationName=JSystem2.2 (Open House)"); //XXX OPEN HOUSE DATABASE 
 		/*********************/ /*********************/ /*********************/

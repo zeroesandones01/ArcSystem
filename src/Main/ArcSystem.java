@@ -7,7 +7,7 @@ import Functions.FncLookAndFeel;
 
 import components._JXLoginPane;
 
-public class JSystem3 {
+public class ArcSystem {
 
 	public static void main(String[] args) {
 		//FncGlobal.lpsOut = Functions.LoggedPrintStream.create(System.out);

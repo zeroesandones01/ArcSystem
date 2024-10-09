@@ -86,8 +86,9 @@ import Accounting.Commissions.Commission_Schedule_Generator;
 import Accounting.ContractorsPayment.BackchargeUtilities;
 import Accounting.ContractorsPayment.ContractorsBilling;
 import Accounting.Disbursements.CheckVoucher;
+import Accounting.Disbursements.DisbursementRequestForm;
 import Accounting.Disbursements.DocsProcessing;
-import Accounting.Disbursements.RequestForPayment;
+//import Accounting.Disbursements.RequestForPayment;
 import Accounting.Disbursements.reversalProccessing;
 import Accounting.FixedAssets.AssetMonitoring;
 import Accounting.FixedAssets.AssetMonitoring2;
@@ -139,6 +140,7 @@ import Utilities.TemporaryCheckVoucher;
 import Utilities.ZipCodes;
 import Utilities.fixedasset_peripheral;
 import System.Add_Edit_Holidays;
+import Transaction.PettyCash;
 
 //import System.DcrfInactivePayments;
 
@@ -153,7 +155,7 @@ import components._JInternalFrame;
 import components._JMenuToolbarButton;
 
 @SuppressWarnings("unused")
-public class Home_JSystem extends JXFrame implements ActionListener, WindowListener {
+public class Home_ArcSystem extends JXFrame implements ActionListener, WindowListener {
 
 	private static final long serialVersionUID = 1L;
 
@@ -203,29 +205,29 @@ public class Home_JSystem extends JXFrame implements ActionListener, WindowListe
 
 	//private User_Queuing pnlQueue;
 
-	public Home_JSystem() throws HeadlessException {
+	public Home_ArcSystem() throws HeadlessException {
 		initGUI();
 		DesktopPane.requestFocus();
 	}
 
-	public Home_JSystem(GraphicsConfiguration gc) {
+	public Home_ArcSystem(GraphicsConfiguration gc) {
 		super(gc);
 		initGUI();
 		DesktopPane.requestFocus();
 	}
 
-	public Home_JSystem(String title,String Image) throws HeadlessException {
+	public Home_ArcSystem(String title,String Image) throws HeadlessException {
 		super(title);
 		this.Image = Image;
 		initGUI();
 	}
 
-	public Home_JSystem(String title) throws HeadlessException {
+	public Home_ArcSystem(String title) throws HeadlessException {
 		super(title);
 		initGUI();
 	}
 
-	public Home_JSystem(String title, GraphicsConfiguration gc) {
+	public Home_ArcSystem(String title, GraphicsConfiguration gc) {
 		super(title, gc);
 		initGUI();
 		DesktopPane.requestFocus();
@@ -723,7 +725,7 @@ public class Home_JSystem extends JXFrame implements ActionListener, WindowListe
 									System.out.println(comp.getClass().getSimpleName());
 								}
 								System.out.println("Dumaan dito sa Logout");
-								if(JOptionPane.showConfirmDialog(Home_JSystem.this, "Are you sure you want to logout?", "Logout", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null) == JOptionPane.YES_OPTION){
+								if(JOptionPane.showConfirmDialog(Home_ArcSystem.this, "Are you sure you want to logout?", "Logout", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null) == JOptionPane.YES_OPTION){
 									pgSelect db = new pgSelect();
 									String SQL = "SELECT sp_audit_log_details('"+UserInfo.EmployeeCode+"', false)";
 									db.select(SQL);
@@ -832,13 +834,25 @@ public class Home_JSystem extends JXFrame implements ActionListener, WindowListe
 						{
 							JMenu menuDisbursement = new JMenu("Disbursements");
 							menuAccounting.add(menuDisbursement);
+//							{
+//								JMenuItem menuitemRequestForPayment = new JMenuItem("Request for Payments");
+//								menuDisbursement.add(menuitemRequestForPayment);
+//								menuitemRequestForPayment.addActionListener(new ActionListener() {
+//									public void actionPerformed(ActionEvent e) {
+//										if(isNotExisting("RequestForPayment")){
+//											RequestForPayment drf = new RequestForPayment();
+//											addWindow(drf, e);
+//										}
+//									}
+//								});
+//							}
 							{
-								JMenuItem menuitemRequestForPayment = new JMenuItem("Request for Payments");
-								menuDisbursement.add(menuitemRequestForPayment);
-								menuitemRequestForPayment.addActionListener(new ActionListener() {
+								JMenuItem menuitemDisbursementRequestForm = new JMenuItem("Disbursement Request Form (Request for Payment)");
+								menuDisbursement.add(menuitemDisbursementRequestForm);
+								menuitemDisbursementRequestForm.addActionListener(new ActionListener() {
 									public void actionPerformed(ActionEvent e) {
-										if(isNotExisting("RequestForPayment")){
-											RequestForPayment drf = new RequestForPayment();
+										if(isNotExisting("DisbursementRequestForm")){
+											DisbursementRequestForm drf = new DisbursementRequestForm();
 											addWindow(drf, e);
 										}
 									}
@@ -1207,6 +1221,20 @@ public class Home_JSystem extends JXFrame implements ActionListener, WindowListe
 								}
 							}
 						}
+					}
+					{
+						JMenuItem menuitemPettyCash = new JMenuItem("Petty Cash");
+						menuTransaction.add(menuitemPettyCash);
+						menuitemPettyCash.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent arg0) {
+								if(isNotExisting("PettyCashFund")) {
+									PettyCash pc = new PettyCash();
+									addWindow(pc);
+								}
+							}
+						});
 					}
 					{
 						JMenuItem menuitemCARD = new JMenuItem("CARD");
@@ -1944,7 +1972,7 @@ public class Home_JSystem extends JXFrame implements ActionListener, WindowListe
 								System.out.printf("Display class_name: %s%n", class_name);
 								addWindowFromBookmark(class_location, module_name, class_name, e);
 							}else{
-								JOptionPane.showMessageDialog(Home_JSystem.this, String.format("%s is already open.", module_name), module_name, JOptionPane.INFORMATION_MESSAGE);
+								JOptionPane.showMessageDialog(Home_ArcSystem.this, String.format("%s is already open.", module_name), module_name, JOptionPane.INFORMATION_MESSAGE);
 							}
 
 						}
@@ -2007,7 +2035,7 @@ public class Home_JSystem extends JXFrame implements ActionListener, WindowListe
 			if(isNotExisting(class_name)){
 				addWindow(internalFrame, e);
 			}else{
-				JOptionPane.showMessageDialog(Home_JSystem.this, String.format("%s is already open.", module_name), module_name, JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(Home_ArcSystem.this, String.format("%s is already open.", module_name), module_name, JOptionPane.INFORMATION_MESSAGE);
 			}
 		} catch (ClassNotFoundException e1) {
 			e1.printStackTrace();
@@ -2030,7 +2058,7 @@ public class Home_JSystem extends JXFrame implements ActionListener, WindowListe
 			if(isNotExisting(class_name)){
 				addWindowMouse(internalFrame, e);
 			}else{
-				JOptionPane.showMessageDialog(Home_JSystem.this, String.format("%s is already open.", module_name), module_name, JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(Home_ArcSystem.this, String.format("%s is already open.", module_name), module_name, JOptionPane.INFORMATION_MESSAGE);
 			}
 		} catch (ClassNotFoundException e1) {
 			e1.printStackTrace();

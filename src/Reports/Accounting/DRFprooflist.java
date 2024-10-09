@@ -32,7 +32,7 @@ import javax.swing.event.AncestorListener;
 
 import org.jdesktop.swingx.JXTextField;
 
-import Accounting.Disbursements.RequestForPayment;
+import Accounting.Disbursements.DisbursementRequestForm;
 import DateChooser._JDateChooser;
 import Functions.FncFocusTraversalPolicy;
 import Functions.FncGlobal;
@@ -1412,7 +1412,7 @@ public class DRFprooflist extends _JInternalFrame implements ActionListener, Anc
 		
 		co_id 		= "02";	
 		company		= "CENQHOMES DEVELOPMENT CORPORATION";
-		company_logo = RequestForPayment.sql_getCompanyLogo();		
+//		company_logo = DisbursementRequestForm.sql_getCompanyLogo();		
 		txtCompany.setText(company);
 
 		enabledFields(true);
