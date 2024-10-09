@@ -32,7 +32,7 @@ import tablemodel.modelpurchase_order;
 public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	private _JLookup lookupterms;
+	public static _JLookup lookupterms;
 	private _JDateChooser date_PO;
 	private JScrollPane scrollPO;
 	public static modelpurchase_order modelPO;

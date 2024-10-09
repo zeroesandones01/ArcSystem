@@ -6,13 +6,16 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.table.DefaultTableModel;
 
 import Database.pgSelect;
 import Functions.FncTables;
@@ -88,7 +91,7 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 						{
 							lookupcompany = new _JLookup();
 							pnlcompany.add(lookupcompany, BorderLayout.CENTER);
-							lookupcompany.setLookupSQL(SQL_COMPANY());
+							lookupcompany.setLookupSQL( get_company());
 							lookupcompany.setReturnColumn(0);
 							lookupcompany.setEditable(false);
 							lookupcompany.addLookupListener(new LookupListener() {
@@ -249,6 +252,8 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 	public void actionPerformed(ActionEvent e) {
 		
 		if ( e.getActionCommand().equals("generate")){
+			generate_supplies_po(PurchaseOrderTab.modelPO, PurchaseOrderTab.rowheaderPO);
+			PurchaseOrderTab.modelPO.setEditable(true);
 			enable_buttons(false, false, false, false, true);
 			
 		}
@@ -263,6 +268,7 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 			lookupcompany.setEditable(true);
 			lookuprequester.setEnabled(true);
 			PurchaseOrderTab.lookuppono.setText(getpo_no());
+			PurchaseOrderTab.lookupterms.setEditable(true);
 			enable_buttons(false, false, false, true, true);
 			
 		}
@@ -312,4 +318,33 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 		db.select(sql);
 		return db.getResult()[0][0].toString();
 	}
+	
+	public static String get_company() {//XXX Company
+		String SQL = "SELECT TRIM(co_id)::VARCHAR as \"ID\", TRIM(company_name) as \"Company Name\", " +
+				"/*TRIM(company_alias)::VARCHAR as \"Alias\",*/ company_logo as \"Logo\" FROM mf_company order by co_id ";
+		return SQL;
+	}
+	
+	public void generate_supplies_po( DefaultTableModel modelMain, JList rowHeader ) {
+		FncTables.clearTable(modelMain);
+		DefaultListModel listModel = new DefaultListModel();
+		rowHeader.setModel(listModel);
+		
+		String sql = "select false,null,ofc_supply_id, ofc_supply_name, null, null, null, null, null, null \n"
+				+ "from mf_office_supplies a \n"
+				+ "where status_id = 'A' and min_supply_count <= supply_count ";
+		
+		System.out.printf("generate_supplies_po: %s", sql);
+		pgSelect db = new pgSelect();
+		db.select(sql);
+		
+		if (db.isNotNull()) {
+			for (int x = 0; x < db.getRowCount(); x++) {
+				modelMain.addRow(db.getResult()[x]);
+				listModel.addElement(modelMain.getRowCount());
+			}
+			
+		}
+	}
+	
 }
