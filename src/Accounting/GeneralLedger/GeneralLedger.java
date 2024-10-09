@@ -312,9 +312,8 @@ public class GeneralLedger extends _JInternalFrame implements _GUI, ActionListen
 		pnlMain.add(pnlNorth_main, BorderLayout.NORTH);
 		pnlNorth_main.setLayout(new BorderLayout(5, 5));
 		pnlNorth_main.setBorder(lineBorder);		
-		pnlNorth_main.setPreferredSize(new java.awt.Dimension(920, 183));
-
-
+		//pnlNorth_main.setPreferredSize(new java.awt.Dimension(920, 183));
+		pnlNorth_main.setPreferredSize(new java.awt.Dimension(920, 200));
 		//start of north_main
 		{
 			pnlNorth = new JPanel();
@@ -322,425 +321,227 @@ public class GeneralLedger extends _JInternalFrame implements _GUI, ActionListen
 			pnlNorth.setLayout(new BorderLayout(5, 5));
 			pnlNorth.setBorder(lineBorder);		
 			pnlNorth.setPreferredSize(new java.awt.Dimension(516, 236));
-
-			pnlComp = new JPanel(new BorderLayout(5, 5));
-			pnlNorth.add(pnlComp, BorderLayout.NORTH);	
-			pnlComp.setPreferredSize(new java.awt.Dimension(658, 178));
-
+			//pnlNorth.setBackground(Color.CYAN);
 			{
-				//company
-				pnlComp_a = new JPanel(new BorderLayout(5, 5));
-				pnlComp.add(pnlComp_a, BorderLayout.NORTH);	
-				pnlComp_a.setPreferredSize(new java.awt.Dimension(514, 122));	
-
+				pnlComp = new JPanel(new BorderLayout(5, 5));
+				pnlNorth.add(pnlComp, BorderLayout.NORTH);	
+				//pnlNorth.add(pnlComp, BorderLayout.CENTER);	
+				//pnlComp.setPreferredSize(new java.awt.Dimension(658, 178));
+				pnlComp.setPreferredSize(new java.awt.Dimension(658, 195));
 				{
-					pnlComp_a1 = new JPanel(new GridLayout(4, 2, 5, 5));
-					pnlComp_a.add(pnlComp_a1, BorderLayout.WEST);	
-					pnlComp_a1.setPreferredSize(new java.awt.Dimension(184, 94));
-					pnlComp_a1.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
+					//company
+					pnlComp_a = new JPanel(new BorderLayout(5, 5));
+					pnlComp.add(pnlComp_a, BorderLayout.NORTH);	
+					//pnlComp_a.setPreferredSize(new java.awt.Dimension(514, 122));
+					pnlComp_a.setPreferredSize(new java.awt.Dimension(514, 140));
+					//pnlComp_a.setBackground(Color.BLACK);
 
 					{
-						lblCompany = new JLabel("        COMPANY", JLabel.TRAILING);
-						pnlComp_a1.add(lblCompany);
-						lblCompany.setBounds(8, 11, 62, 12);
-						lblCompany.setPreferredSize(new java.awt.Dimension(81, 25));
-						lblCompany.setFont(new java.awt.Font("Segoe UI",Font.BOLD,12));
-					}
-					{
-						lookupCompany = new _JLookup(null, "Company",0,2);
-						pnlComp_a1.add(lookupCompany);
-						lookupCompany.setLookupSQL(SQL_COMPANY());
-						lookupCompany.setReturnColumn(0);
-						lookupCompany.addLookupListener(new LookupListener() {
-							public void lookupPerformed(LookupEvent event) {
-								Object[] data = ((_JLookup)event.getSource()).getDataSet();
-								if(data != null){
+						pnlComp_a1 = new JPanel(new GridLayout(5, 2, 5, 5));
+						pnlComp_a.add(pnlComp_a1, BorderLayout.WEST);	
+						pnlComp_a1.setPreferredSize(new java.awt.Dimension(184, 94));
+						pnlComp_a1.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
 
-									co_id 		= (String) data[0];	
-									tagCompany.setTag((String) data[1]);
-									company		= (String) data[1];	
-									company_logo = (String) data[3];
+						{
+							lblCompany = new JLabel("        COMPANY", JLabel.TRAILING);
+							pnlComp_a1.add(lblCompany);
+							//lblCompany.setPreferredSize(new java.awt.Dimension(81, 25));
+							lblCompany.setFont(new java.awt.Font("Segoe UI",Font.BOLD,12));
+						}
+						{
+							lookupCompany = new _JLookup(null, "Company",0,2);
+							pnlComp_a1.add(lookupCompany);
+							lookupCompany.setLookupSQL(SQL_COMPANY());
+							lookupCompany.setReturnColumn(0);
+							lookupCompany.addLookupListener(new LookupListener() {
+								public void lookupPerformed(LookupEvent event) {
+									Object[] data = ((_JLookup)event.getSource()).getDataSet();
+									if(data != null){
 
-									enable_fields(true);
-									lookupProject.setLookupSQL(getProject());									
-									lookupAccount.setLookupSQL(getChartofAccount());
+										co_id 		= (String) data[0];	
+										tagCompany.setTag((String) data[1]);
+										company		= (String) data[1];	
+										company_logo = (String) data[3];
 
-									lblPhase.setEnabled(false);	
-									lookupPhase.setEnabled(false);	
-									tagPhase.setEnabled(false);	
+										enable_fields(true);
+										lookupProject.setLookupSQL(getProject());									
+										lookupAccount.setLookupSQL(getChartofAccount());
 
-									btnPreview.setEnabled(false);
-									btnCancel.setEnabled(true);
+										lblPhase.setEnabled(false);	
+										lookupPhase.setEnabled(false);	
+										tagPhase.setEnabled(false);	
+
+										btnPreview.setEnabled(false);
+										btnCancel.setEnabled(true);
+									}
 								}
+							});
+						}
+						{
+							lblProject = new JLabel("        Project", JLabel.TRAILING);
+							pnlComp_a1.add(lblProject);
+							lblProject.setEnabled(false);	
+							lblProject.setFont(new java.awt.Font("Segoe UI",Font.PLAIN,12));
+						}					
+						{
+							lookupProject = new _JLookup(null, "Project",0,2);
+							pnlComp_a1.add(lookupProject);
+							lookupProject.setLookupSQL(SQL_COMPANY());
+							lookupProject.setReturnColumn(0);
+							lookupProject.setEnabled(false);	
+							lookupProject.addLookupListener(new LookupListener() {
+								public void lookupPerformed(LookupEvent event) {
+									Object[] data = ((_JLookup)event.getSource()).getDataSet();
+									if(data != null){
+
+										proj_id 	= (String) data[0];	
+										proj_name   = (String) data[1];
+										tagProject.setTag((String) data[1]);	
+
+										lblPhase.setEnabled(true);	
+										lookupPhase.setEnabled(true);
+										tagPhase.setEnabled(true);	
+
+										lookupPhase.setLookupSQL(getSubproject());
+										btnExport.setEnabled(false);
+										refreshTable();
+									}
+								}
+							});
+						}
+						{
+							lblPhase = new JLabel("       Phase", JLabel.TRAILING);
+							pnlComp_a1.add(lblPhase);
+							lblPhase.setEnabled(false);	
+							lblPhase.setFont(new java.awt.Font("Segoe UI",Font.PLAIN,12));
+						}
+						{
+							lookupPhase = new _JLookup(null, "Phase",0,2);
+							pnlComp_a1.add(lookupPhase);
+							lookupPhase.setReturnColumn(0);
+							lookupPhase.setEnabled(false);	
+							lookupPhase.addLookupListener(new LookupListener() {
+								public void lookupPerformed(LookupEvent event) {
+									Object[] data = ((_JLookup)event.getSource()).getDataSet();
+									if(data != null){
+
+										ph_no 		= (String) data[0];	
+										phase 		= (String) data[1];	
+										phasename  = (String) data[4];
+										tagPhase.setTag(phasename); //Edited by Erick Bituen 09-23-2020
+										refreshTable();
+									}
+								}
+							});
+						}
+						{
+							lblAccount = new JLabel("Account", JLabel.TRAILING);
+							pnlComp_a1.add(lblAccount);
+							lblAccount.setEnabled(false);	
+							lblAccount.setFont(new java.awt.Font("Segoe UI",Font.PLAIN,12));
+						}
+						{
+							lookupAccount = new _JLookup(null, "Account", 2, 2);
+							pnlComp_a1.add(lookupAccount);
+							lookupAccount.setBounds(20, 27, 20, 25);
+							lookupAccount.setReturnColumn(0);
+							lookupAccount.setFilterName(true);
+							lookupAccount.setEnabled(false);	
+							lookupAccount.setPreferredSize(new java.awt.Dimension(112, 26));
+							lookupAccount.addLookupListener(new LookupListener() {
+								public void lookupPerformed(LookupEvent event) {
+									Object[] data = ((_JLookup)event.getSource()).getDataSet();
+									if(data != null){								
+										acct_id 		= (String) data[0];	
+										acct_name 		= (String) data[1];	
+										tagAccount.setTag((String) data[1]);
+										refreshTable();
+									}
+								}
+							});
+						}
+						{
+							JLabel lblsubacct = new JLabel("Sub Acct.", JLabel.TRAILING);
+							pnlComp_a1.add(lblsubacct);
+							lblsubacct.setFont(new java.awt.Font("Segoe UI",Font.PLAIN,12));
+						}
+						{
+							lookupsubacc = new _JLookup(null, "Sub Acct",0);
+							pnlComp_a1.add(lookupsubacc);
+						}
+
+						pnlComp_a2 = new JPanel(new GridLayout(5, 1, 5, 5));
+						pnlComp_a.add(pnlComp_a2, BorderLayout.CENTER);	
+						pnlComp_a2.setPreferredSize(new java.awt.Dimension(423, 20));	
+						pnlComp_a2.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
+						{
+							{
+								tagCompany = new _JTagLabel("[ ]");
+								pnlComp_a2.add(tagCompany);
+								tagCompany.setBounds(209, 27, 700, 22);
+								tagCompany.setEnabled(true);	
+								tagCompany.setPreferredSize(new java.awt.Dimension(27, 33));
+							}	
+							{
+								tagProject = new _JTagLabel("[ ]");
+								pnlComp_a2.add(tagProject);
+								tagProject.setBounds(209, 27, 700, 22);
+								tagProject.setEnabled(false);							
+								tagProject.setPreferredSize(new java.awt.Dimension(27, 33));
+							}	
+							{
+								tagPhase = new _JTagLabel("[ ]");
+								pnlComp_a2.add(tagPhase);
+								tagPhase.setBounds(209, 27, 700, 22);
+								tagPhase.setEnabled(false);	
+								tagPhase.setPreferredSize(new java.awt.Dimension(27, 33));
+							}	
+							{
+								tagAccount = new _JTagLabel("[ ]");
+								pnlComp_a2.add(tagAccount);
+								tagAccount.setBounds(209, 27, 700, 22);
+								tagAccount.setEnabled(false);	
+								tagAccount.setPreferredSize(new java.awt.Dimension(27, 33));
+							}	
+							{
+								tagsubacc = new _JTagLabel("[ ]");
+								pnlComp_a2.add(tagsubacc);
 							}
-						});
-					}
-					{
-						lblProject = new JLabel("        Project", JLabel.TRAILING);
-						pnlComp_a1.add(lblProject);
-						lblProject.setBounds(8, 11, 62, 12);
-						lblProject.setEnabled(false);	
-						lblProject.setPreferredSize(new java.awt.Dimension(81, 25));
-						lblProject.setFont(new java.awt.Font("Segoe UI",Font.PLAIN,12));
-					}					
-					{
-						lookupProject = new _JLookup(null, "Project",0,2);
-						pnlComp_a1.add(lookupProject);
-						lookupProject.setLookupSQL(SQL_COMPANY());
-						lookupProject.setReturnColumn(0);
-						lookupProject.setEnabled(false);	
-						lookupProject.addLookupListener(new LookupListener() {
-							public void lookupPerformed(LookupEvent event) {
-								Object[] data = ((_JLookup)event.getSource()).getDataSet();
-								if(data != null){
-
-									proj_id 	= (String) data[0];	
-									proj_name   = (String) data[1];
-									tagProject.setTag((String) data[1]);	
-
-									lblPhase.setEnabled(true);	
-									lookupPhase.setEnabled(true);
-									tagPhase.setEnabled(true);	
-
-									lookupPhase.setLookupSQL(getSubproject());
-									btnExport.setEnabled(false);
-									refreshTable();
-								}
-							}
-						});
-					}
-					{
-						lblPhase = new JLabel("       Phase", JLabel.TRAILING);
-						pnlComp_a1.add(lblPhase);
-						lblPhase.setBounds(8, 11, 62, 12);
-						lblPhase.setEnabled(false);	
-						lblPhase.setPreferredSize(new java.awt.Dimension(81, 25));
-						lblPhase.setFont(new java.awt.Font("Segoe UI",Font.PLAIN,12));
-					}
-					{
-						lookupPhase = new _JLookup(null, "Phase",0,2);
-						pnlComp_a1.add(lookupPhase);
-						lookupPhase.setReturnColumn(0);
-						lookupPhase.setEnabled(false);	
-						lookupPhase.addLookupListener(new LookupListener() {
-							public void lookupPerformed(LookupEvent event) {
-								Object[] data = ((_JLookup)event.getSource()).getDataSet();
-								if(data != null){
-
-									ph_no 		= (String) data[0];	
-									phase 		= (String) data[1];	
-									phasename  = (String) data[4];
-									//tagPhase.setTag(phase); comment by Erick Bituen 09-23-2020
-									tagPhase.setTag(phasename); //ericted by Erick Bituen 09-23-2020
-									refreshTable();
-								}
-							}
-						});
-					}
-					{
-						lblAccount = new JLabel("Account", JLabel.TRAILING);
-						pnlComp_a1.add(lblAccount);
-						lblAccount.setEnabled(false);	
-						lblAccount.setPreferredSize(new java.awt.Dimension(88, 42));
-						lblAccount.setFont(new java.awt.Font("Segoe UI",Font.PLAIN,12));
-					}
-					{
-						lookupAccount = new _JLookup(null, "Account", 2, 2);
-						pnlComp_a1.add(lookupAccount);
-						lookupAccount.setBounds(20, 27, 20, 25);
-						lookupAccount.setReturnColumn(0);
-						lookupAccount.setFilterName(true);
-						lookupAccount.setEnabled(false);	
-						lookupAccount.setPreferredSize(new java.awt.Dimension(112, 26));
-						lookupAccount.addLookupListener(new LookupListener() {
-							public void lookupPerformed(LookupEvent event) {
-								Object[] data = ((_JLookup)event.getSource()).getDataSet();
-								if(data != null){								
-									acct_id 		= (String) data[0];	
-									acct_name 		= (String) data[1];	
-									tagAccount.setTag((String) data[1]);
-									refreshTable();
-								}
-							}
-						});
-					}
-
-					pnlComp_a2 = new JPanel(new GridLayout(4, 1, 5, 5));
-					pnlComp_a.add(pnlComp_a2, BorderLayout.CENTER);	
-					pnlComp_a2.setPreferredSize(new java.awt.Dimension(423, 20));	
-					pnlComp_a2.setBorder(BorderFactory.createEmptyBorder(5,0,0,0));
-					{
-						{
-							tagCompany = new _JTagLabel("[ ]");
-							pnlComp_a2.add(tagCompany);
-							tagCompany.setBounds(209, 27, 700, 22);
-							tagCompany.setEnabled(true);	
-							tagCompany.setPreferredSize(new java.awt.Dimension(27, 33));
-						}	
-						{
-							tagProject = new _JTagLabel("[ ]");
-							pnlComp_a2.add(tagProject);
-							tagProject.setBounds(209, 27, 700, 22);
-							tagProject.setEnabled(false);							
-							tagProject.setPreferredSize(new java.awt.Dimension(27, 33));
-						}	
-						{
-							tagPhase = new _JTagLabel("[ ]");
-							pnlComp_a2.add(tagPhase);
-							tagPhase.setBounds(209, 27, 700, 22);
-							tagPhase.setEnabled(false);	
-							tagPhase.setPreferredSize(new java.awt.Dimension(27, 33));
-						}	
-						{
-							tagAccount = new _JTagLabel("[ ]");
-							pnlComp_a2.add(tagAccount);
-							tagAccount.setBounds(209, 27, 700, 22);
-							tagAccount.setEnabled(false);	
-							tagAccount.setPreferredSize(new java.awt.Dimension(27, 33));
-						}	
-					}
-				}
-			}	
-
-			{
-				pnlPeriod = new JPanel(new BorderLayout(5,5));
-				pnlComp.add(pnlPeriod, BorderLayout.CENTER);	
-				pnlPeriod.setPreferredSize(new java.awt.Dimension(658, 24));
-
-				{
-					pnlPeriodFr = new JPanel(new BorderLayout(5,5));
-					pnlPeriod.add(pnlPeriodFr, BorderLayout.WEST);	
-					pnlPeriodFr.setPreferredSize(new java.awt.Dimension(263, 23));
-					pnlPeriodFr.setBorder(BorderFactory.createEmptyBorder(0,0,0, 0));
-
-					{
-						pnlPeriodFr_a = new JPanel(new GridLayout(1, 1, 0, 0));
-						pnlPeriodFr.add(pnlPeriodFr_a, BorderLayout.WEST);	
-						pnlPeriodFr_a.setPreferredSize(new java.awt.Dimension(146, 23));
-						pnlPeriodFr_a.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));		
-
-						{
-							rbtnDate = new JRadioButton();
-							pnlPeriodFr_a.add(rbtnDate);
-							rbtnDate.setText("    Date");
-							rbtnDate.setHorizontalTextPosition(2);
-							//rbtnDate.setBounds(277, 12, 77, 18);
-							rbtnDate.setFont(new java.awt.Font("Segoe UI",Font.PLAIN,12));
-							rbtnDate.setSelected(true);
-							rbtnDate.setEnabled(true);
-							rbtnDate.setPreferredSize(new java.awt.Dimension(79, 23));
-							rbtnDate.addActionListener(new ActionListener() {
-								public void actionPerformed(ActionEvent ae){	
-									
-								if (rbtnDate.isSelected()==true){
-									lbl_date_fr.setEnabled(true);	
-									dte_from.setEnabled(true);
-									lblDate_to.setEnabled(true);
-									dte_to.setEnabled(true);
-									lblInclude.setEnabled(true);
-									cmbInclude.setEnabled(true);
-									
-									rbtnPeriod.setSelected(false);
-									lbl_period_fr2.setEnabled(false);	
-									cmbPeriodFr.setEnabled(false);
-									lblPeriod_to2.setEnabled(false);
-									cmbPeriodTo.setEnabled(false);
-									lblYear.setEnabled(false);
-									cmbYear.setEnabled(false);
-								}
-								else 
-								{									
-									lbl_date_fr.setEnabled(false);	
-									dte_from.setEnabled(false);
-									lblDate_to.setEnabled(false);
-									dte_to.setEnabled(false);
-									lblInclude.setEnabled(false);
-									cmbInclude.setEnabled(false);
-									
-									rbtnPeriod.setSelected(true);
-									lbl_period_fr2.setEnabled(true);	
-									cmbPeriodFr.setEnabled(true);
-									lblPeriod_to2.setEnabled(true);
-									cmbPeriodTo.setEnabled(true);
-									lblYear.setEnabled(true);
-									cmbYear.setEnabled(true);
-								}									
-
-								}});					
-						}			
-						{
-							lbl_date_fr = new JLabel("Date From", JLabel.TRAILING);
-							pnlPeriodFr_a.add(lbl_date_fr);
-							lbl_date_fr.setEnabled(false);	
-							lbl_date_fr.setFont(new java.awt.Font("Segoe UI",Font.PLAIN,12));
-							lbl_date_fr.setPreferredSize(new java.awt.Dimension(66, 23));
 						}
 					}
+				}	
+
+				{
+					pnlPeriod = new JPanel(new BorderLayout(5,5));
+					pnlComp.add(pnlPeriod, BorderLayout.CENTER);	
+					pnlPeriod.setPreferredSize(new java.awt.Dimension(658, 24));
+
 					{
-						pnlPeriodFr_b = new JPanel(new GridLayout(1, 1, 5, 5));
-						pnlPeriodFr.add(pnlPeriodFr_b, BorderLayout.CENTER);	
-						pnlPeriodFr_b.setPreferredSize(new java.awt.Dimension(129, 23));
-						pnlPeriodFr_b.setBorder(BorderFactory.createEmptyBorder(0, 0,0,0));
+						pnlPeriodFr = new JPanel(new BorderLayout(5,5));
+						pnlPeriod.add(pnlPeriodFr, BorderLayout.WEST);	
+						pnlPeriodFr.setPreferredSize(new java.awt.Dimension(263, 23));
+						pnlPeriodFr.setBorder(BorderFactory.createEmptyBorder(0,0,0, 0));
 
 						{
-							dte_from = new _JDateChooser("MM/dd/yyyy", "##/##/####", '_');
-							pnlPeriodFr_b.add(dte_from);
-							dte_from.setBounds(485, 7, 125, 21);
-							dte_from.setDate(null);
-							dte_from.setEnabled(true);  //Modified by Erick through DCRF 1101 enable manual input of date
-							dte_from.setDateFormatString("yyyy-MM-dd");
-							((JTextFieldDateEditor)dte_from.getDateEditor()).setEditable(true); //Modified by Erick through DCRF 1101 enable manual input of date
-							//dte_from.setDate(FncGlobal.dateFormat(FncGlobal.getDateSQL()));   --Comment by Erick through DCRF 1101
-						}	
-					}
-				}
-				{
-					pnlPeriodTo = new JPanel(new BorderLayout(0, 0));
-					pnlPeriod.add(pnlPeriodTo, BorderLayout.CENTER);	
-					pnlPeriodTo.setPreferredSize(new java.awt.Dimension(181, 23));
-					pnlPeriodTo.setBorder(BorderFactory.createEmptyBorder(0,0,0, 0));
+							pnlPeriodFr_a = new JPanel(new GridLayout(1, 1, 0, 0));
+							pnlPeriodFr.add(pnlPeriodFr_a, BorderLayout.WEST);	
+							pnlPeriodFr_a.setPreferredSize(new java.awt.Dimension(146, 23));
+							pnlPeriodFr_a.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));		
 
-					pnlPeriodTo_a = new JPanel(new GridLayout(1, 1, 0, 5));
-					pnlPeriodTo.add(pnlPeriodTo_a, BorderLayout.WEST);	
-					pnlPeriodTo_a.setPreferredSize(new java.awt.Dimension(94, 55));
-					pnlPeriodTo_a.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));		
-
-					{
-						lblDate_to = new JLabel("Date To", JLabel.TRAILING);
-						pnlPeriodTo_a.add(lblDate_to);
-						lblDate_to.setEnabled(false);
-						lblDate_to.setFont(new java.awt.Font("Segoe UI",Font.PLAIN,12));
-						lblDate_to.setPreferredSize(new java.awt.Dimension(67, 55));
-					}
-
-					pnlPeriodTo_b = new JPanel(new GridLayout(1, 1, 5, 5));
-					pnlPeriodTo.add(pnlPeriodTo_b, BorderLayout.CENTER);	
-					pnlPeriodTo_b.setPreferredSize(new java.awt.Dimension(135, 119));
-					pnlPeriodTo_b.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
-
-					{
-						dte_to = new _JDateChooser("MM/dd/yyyy", "##/##/####", '_');
-						pnlPeriodTo_b.add(dte_to);
-						dte_to.setBounds(485, 7, 125, 21);
-						dte_to.setDate(null);
-						dte_to.setEnabled(true); //Modified by Erick through DCRF 1101 enable manual input of date
-						dte_to.setDateFormatString("yyyy-MM-dd");
-						((JTextFieldDateEditor)dte_to.getDateEditor()).setEditable(true); //Modified by Erick through DCRF 1101 enable manual input of date
-						//dte_to.setDate(FncGlobal.dateFormat(FncGlobal.getDateSQL()));    --Comment by Erick through DCRF 1101
-						dte_to.addPropertyChangeListener( new PropertyChangeListener() {
-							public void propertyChange(PropertyChangeEvent e) {
-								//Modified by Erick through DCRF 1101
-								try {
-									DateFormat df 	 = new SimpleDateFormat("yyyy-dd-MM");					
-									String end_date	 = df.format(dte_to.getDate());	
-									String end_date_sub = end_date.substring(5);	
-									
-									if(end_date_sub.equals("31-12"))
-									{
-										cmbInclude.setEnabled(true);
-									}
-									else
-									{
-										cmbInclude.setEnabled(false);
-										cmbInclude.setSelectedIndex(0);
-									}
-								}catch (NullPointerException ex){
-									
-								}
-								
-							}
-						});	
-					}
-				}
-				{
-					pnlPeriodFr_c = new JPanel(new BorderLayout(5, 5));
-					pnlPeriod.add(pnlPeriodFr_c, BorderLayout.EAST);	
-					pnlPeriodFr_c.setPreferredSize(new java.awt.Dimension(158, 23));
-					pnlPeriodFr_c.setBorder(BorderFactory.createEmptyBorder(0,0,0, 0));
-					
-					
-					pnlPeriodFr_c1 = new JPanel(new GridLayout(1, 2, 5, 5));
-					pnlPeriodFr_c.add(pnlPeriodFr_c1, BorderLayout.CENTER);	
-					pnlPeriodFr_c1.setPreferredSize(new java.awt.Dimension(82, 23));
-					pnlPeriodFr_c1.setBorder(BorderFactory.createEmptyBorder(0,0,0, 0));
-					
-					{
-						lblInclude = new JLabel("Until", JLabel.TRAILING);
-						pnlPeriodFr_c1.add(lblInclude);
-						lblInclude.setEnabled(true);
-						lblInclude.setPreferredSize(new java.awt.Dimension(67, 55));
-					}
-					
-					pnlPeriodFr_c2 = new JPanel(new GridLayout(1, 2, 5, 5));
-					pnlPeriodFr_c.add(pnlPeriodFr_c2, BorderLayout.EAST);	
-					pnlPeriodFr_c2.setPreferredSize(new java.awt.Dimension(96, 23));
-					pnlPeriodFr_c2.setBorder(BorderFactory.createEmptyBorder(0,0,0, 0));
-					
-					{
-						String status2[] = { "(None)", "13th Month","14th Month","15th Month","99th Month" };
-						cmbInclude = new JComboBox(status2);
-						pnlPeriodFr_c2.add(cmbInclude);
-						cmbInclude.setSelectedItem(null);
-						cmbInclude.setFont(new java.awt.Font("Segoe UI",Font.PLAIN, 13));
-						cmbInclude.setBounds(537, 15, 180, 21);
-						cmbInclude.setEnabled(true);
-						cmbInclude.setSelectedIndex(0);
-						cmbInclude.setPreferredSize(new java.awt.Dimension(119, 26));
-						
-						System.out.println(cmbInclude.getSelectedIndex());
-					}
-					
-				}
-
-			}
-			{
-				pnlPeriod_2 = new JPanel(new BorderLayout(5,5));
-				pnlComp.add(pnlPeriod_2, BorderLayout.SOUTH);	
-				pnlPeriod_2.setPreferredSize(new java.awt.Dimension(514, 23));
-
-				{
-					pnlPeriod_Fr2 = new JPanel(new BorderLayout(5,5));
-					pnlPeriod_2.add(pnlPeriod_Fr2, BorderLayout.WEST);	
-					pnlPeriod_Fr2.setPreferredSize(new java.awt.Dimension(263, 23));
-					pnlPeriod_Fr2.setBorder(BorderFactory.createEmptyBorder(0,0,0, 0));
-
-					{
-						pnlPeriodFr_a2 = new JPanel(new GridLayout(1, 1, 0, 0));
-						pnlPeriod_Fr2.add(pnlPeriodFr_a2, BorderLayout.WEST);	
-						pnlPeriodFr_a2.setPreferredSize(new java.awt.Dimension(146, 23));
-						pnlPeriodFr_a2.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));		
-
-						{
-							rbtnPeriod = new JRadioButton();
-							pnlPeriodFr_a2.add(rbtnPeriod);
-							rbtnPeriod.setText(" Period");
-							rbtnPeriod.setHorizontalTextPosition(2);
-							rbtnPeriod.setFont(new java.awt.Font("Segoe UI",Font.PLAIN,12));
-							rbtnPeriod.setSelected(false);
-							rbtnPeriod.setEnabled(true);
-							rbtnPeriod.setPreferredSize(new java.awt.Dimension(58, 23));
-							rbtnPeriod.addActionListener(new ActionListener() {
-								public void actionPerformed(ActionEvent ae){	
-									
-									if (rbtnDate.isSelected()==true){
-										rbtnDate.setSelected(false);
-										lbl_date_fr.setEnabled(false);	
-										dte_from.setEnabled(false);
-										lblDate_to.setEnabled(false);
-										dte_to.setEnabled(false);
-										lblInclude.setEnabled(false);
-										cmbInclude.setEnabled(false);
+							{
+								rbtnDate = new JRadioButton();
+								pnlPeriodFr_a.add(rbtnDate);
+								rbtnDate.setText("    Date");
+								rbtnDate.setHorizontalTextPosition(2);
+								//rbtnDate.setBounds(277, 12, 77, 18);
+								rbtnDate.setFont(new java.awt.Font("Segoe UI",Font.PLAIN,12));
+								rbtnDate.setSelected(true);
+								rbtnDate.setEnabled(true);
+								rbtnDate.setPreferredSize(new java.awt.Dimension(79, 23));
+								rbtnDate.addActionListener(new ActionListener() {
+									public void actionPerformed(ActionEvent ae){	
 										
-										lbl_period_fr2.setEnabled(true);	
-										cmbPeriodFr.setEnabled(true);
-										lblPeriod_to2.setEnabled(true);
-										cmbPeriodTo.setEnabled(true);
-										lblYear.setEnabled(true);
-										cmbYear.setEnabled(true);
-									}
-									else 
-									{
-										rbtnDate.setSelected(true);
+									if (rbtnDate.isSelected()==true){
 										lbl_date_fr.setEnabled(true);	
 										dte_from.setEnabled(true);
 										lblDate_to.setEnabled(true);
@@ -748,6 +549,7 @@ public class GeneralLedger extends _JInternalFrame implements _GUI, ActionListen
 										lblInclude.setEnabled(true);
 										cmbInclude.setEnabled(true);
 										
+										rbtnPeriod.setSelected(false);
 										lbl_period_fr2.setEnabled(false);	
 										cmbPeriodFr.setEnabled(false);
 										lblPeriod_to2.setEnabled(false);
@@ -755,115 +557,323 @@ public class GeneralLedger extends _JInternalFrame implements _GUI, ActionListen
 										lblYear.setEnabled(false);
 										cmbYear.setEnabled(false);
 									}
-								}});					
-						}	
+									else 
+									{									
+										lbl_date_fr.setEnabled(false);	
+										dte_from.setEnabled(false);
+										lblDate_to.setEnabled(false);
+										dte_to.setEnabled(false);
+										lblInclude.setEnabled(false);
+										cmbInclude.setEnabled(false);
+										
+										rbtnPeriod.setSelected(true);
+										lbl_period_fr2.setEnabled(true);	
+										cmbPeriodFr.setEnabled(true);
+										lblPeriod_to2.setEnabled(true);
+										cmbPeriodTo.setEnabled(true);
+										lblYear.setEnabled(true);
+										cmbYear.setEnabled(true);
+									}									
+
+									}});					
+							}			
+							{
+								lbl_date_fr = new JLabel("Date From", JLabel.TRAILING);
+								pnlPeriodFr_a.add(lbl_date_fr);
+								lbl_date_fr.setEnabled(false);	
+								lbl_date_fr.setFont(new java.awt.Font("Segoe UI",Font.PLAIN,12));
+								lbl_date_fr.setPreferredSize(new java.awt.Dimension(66, 23));
+							}
+						}
 						{
-							lbl_period_fr2 = new JLabel("Period From", JLabel.TRAILING);
-							pnlPeriodFr_a2.add(lbl_period_fr2);
-							lbl_period_fr2.setEnabled(false);	
-							lbl_period_fr2.setFont(new java.awt.Font("Segoe UI",Font.PLAIN,12));
-							lbl_period_fr2.setPreferredSize(new java.awt.Dimension(84, 55));
+							pnlPeriodFr_b = new JPanel(new GridLayout(1, 1, 5, 5));
+							pnlPeriodFr.add(pnlPeriodFr_b, BorderLayout.CENTER);	
+							pnlPeriodFr_b.setPreferredSize(new java.awt.Dimension(129, 23));
+							pnlPeriodFr_b.setBorder(BorderFactory.createEmptyBorder(0, 0,0,0));
+
+							{
+								dte_from = new _JDateChooser("MM/dd/yyyy", "##/##/####", '_');
+								pnlPeriodFr_b.add(dte_from);
+								dte_from.setBounds(485, 7, 125, 21);
+								dte_from.setDate(null);
+								dte_from.setEnabled(true);  //Modified by Erick through DCRF 1101 enable manual input of date
+								dte_from.setDateFormatString("yyyy-MM-dd");
+								((JTextFieldDateEditor)dte_from.getDateEditor()).setEditable(true); //Modified by Erick through DCRF 1101 enable manual input of date
+								//dte_from.setDate(FncGlobal.dateFormat(FncGlobal.getDateSQL()));   --Comment by Erick through DCRF 1101
+							}	
 						}
 					}
 					{
-						pnlPeriodFr_b2 = new JPanel(new GridLayout(1, 1, 5, 5));
-						pnlPeriod_Fr2.add(pnlPeriodFr_b2, BorderLayout.CENTER);	
-						pnlPeriodFr_b2.setPreferredSize(new java.awt.Dimension(135, 119));
-						pnlPeriodFr_b2.setBorder(BorderFactory.createEmptyBorder(0, 0,0,0));
+						pnlPeriodTo = new JPanel(new BorderLayout(0, 0));
+						pnlPeriod.add(pnlPeriodTo, BorderLayout.CENTER);	
+						pnlPeriodTo.setPreferredSize(new java.awt.Dimension(181, 23));
+						pnlPeriodTo.setBorder(BorderFactory.createEmptyBorder(0,0,0, 0));
+
+						pnlPeriodTo_a = new JPanel(new GridLayout(1, 1, 0, 5));
+						pnlPeriodTo.add(pnlPeriodTo_a, BorderLayout.WEST);	
+						pnlPeriodTo_a.setPreferredSize(new java.awt.Dimension(94, 55));
+						pnlPeriodTo_a.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));		
+
+						{
+							lblDate_to = new JLabel("Date To", JLabel.TRAILING);
+							pnlPeriodTo_a.add(lblDate_to);
+							lblDate_to.setEnabled(false);
+							lblDate_to.setFont(new java.awt.Font("Segoe UI",Font.PLAIN,12));
+							lblDate_to.setPreferredSize(new java.awt.Dimension(67, 55));
+						}
+
+						pnlPeriodTo_b = new JPanel(new GridLayout(1, 1, 5, 5));
+						pnlPeriodTo.add(pnlPeriodTo_b, BorderLayout.CENTER);	
+						pnlPeriodTo_b.setPreferredSize(new java.awt.Dimension(135, 119));
+						pnlPeriodTo_b.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+
+						{
+							dte_to = new _JDateChooser("MM/dd/yyyy", "##/##/####", '_');
+							pnlPeriodTo_b.add(dte_to);
+							dte_to.setBounds(485, 7, 125, 21);
+							dte_to.setDate(null);
+							dte_to.setEnabled(true); //Modified by Erick through DCRF 1101 enable manual input of date
+							dte_to.setDateFormatString("yyyy-MM-dd");
+							((JTextFieldDateEditor)dte_to.getDateEditor()).setEditable(true); //Modified by Erick through DCRF 1101 enable manual input of date
+							//dte_to.setDate(FncGlobal.dateFormat(FncGlobal.getDateSQL()));    --Comment by Erick through DCRF 1101
+							dte_to.addPropertyChangeListener( new PropertyChangeListener() {
+								public void propertyChange(PropertyChangeEvent e) {
+									//Modified by Erick through DCRF 1101
+									try {
+										DateFormat df 	 = new SimpleDateFormat("yyyy-dd-MM");					
+										String end_date	 = df.format(dte_to.getDate());	
+										String end_date_sub = end_date.substring(5);	
+										
+										if(end_date_sub.equals("31-12"))
+										{
+											cmbInclude.setEnabled(true);
+										}
+										else
+										{
+											cmbInclude.setEnabled(false);
+											cmbInclude.setSelectedIndex(0);
+										}
+									}catch (NullPointerException ex){
+										
+									}
+									
+								}
+							});	
+						}
+					}
+					{
+						pnlPeriodFr_c = new JPanel(new BorderLayout(5, 5));
+						pnlPeriod.add(pnlPeriodFr_c, BorderLayout.EAST);	
+						pnlPeriodFr_c.setPreferredSize(new java.awt.Dimension(158, 23));
+						pnlPeriodFr_c.setBorder(BorderFactory.createEmptyBorder(0,0,0, 0));
+						
+						
+						pnlPeriodFr_c1 = new JPanel(new GridLayout(1, 2, 5, 5));
+						pnlPeriodFr_c.add(pnlPeriodFr_c1, BorderLayout.CENTER);	
+						pnlPeriodFr_c1.setPreferredSize(new java.awt.Dimension(82, 23));
+						pnlPeriodFr_c1.setBorder(BorderFactory.createEmptyBorder(0,0,0, 0));
+						
+						{
+							lblInclude = new JLabel("Until", JLabel.TRAILING);
+							pnlPeriodFr_c1.add(lblInclude);
+							lblInclude.setEnabled(true);
+							lblInclude.setPreferredSize(new java.awt.Dimension(67, 55));
+						}
+						
+						pnlPeriodFr_c2 = new JPanel(new GridLayout(1, 2, 5, 5));
+						pnlPeriodFr_c.add(pnlPeriodFr_c2, BorderLayout.EAST);	
+						pnlPeriodFr_c2.setPreferredSize(new java.awt.Dimension(96, 23));
+						pnlPeriodFr_c2.setBorder(BorderFactory.createEmptyBorder(0,0,0, 0));
+						
+						{
+							String status2[] = { "(None)", "13th Month","14th Month","15th Month","99th Month" };
+							cmbInclude = new JComboBox(status2);
+							pnlPeriodFr_c2.add(cmbInclude);
+							cmbInclude.setSelectedItem(null);
+							cmbInclude.setFont(new java.awt.Font("Segoe UI",Font.PLAIN, 13));
+							cmbInclude.setBounds(537, 15, 180, 21);
+							cmbInclude.setEnabled(true);
+							cmbInclude.setSelectedIndex(0);
+							cmbInclude.setPreferredSize(new java.awt.Dimension(119, 26));
+							
+							System.out.println(cmbInclude.getSelectedIndex());
+						}
+						
+					}
+
+				}
+				{
+					pnlPeriod_2 = new JPanel(new BorderLayout(5,5));
+					pnlComp.add(pnlPeriod_2, BorderLayout.SOUTH);	
+					pnlPeriod_2.setPreferredSize(new java.awt.Dimension(514, 23));
+
+					{
+						pnlPeriod_Fr2 = new JPanel(new BorderLayout(5,5));
+						pnlPeriod_2.add(pnlPeriod_Fr2, BorderLayout.WEST);	
+						pnlPeriod_Fr2.setPreferredSize(new java.awt.Dimension(263, 23));
+						pnlPeriod_Fr2.setBorder(BorderFactory.createEmptyBorder(0,0,0, 0));
+
+						{
+							pnlPeriodFr_a2 = new JPanel(new GridLayout(1, 1, 0, 0));
+							pnlPeriod_Fr2.add(pnlPeriodFr_a2, BorderLayout.WEST);	
+							pnlPeriodFr_a2.setPreferredSize(new java.awt.Dimension(146, 23));
+							pnlPeriodFr_a2.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));		
+
+							{
+								rbtnPeriod = new JRadioButton();
+								pnlPeriodFr_a2.add(rbtnPeriod);
+								rbtnPeriod.setText(" Period");
+								rbtnPeriod.setHorizontalTextPosition(2);
+								rbtnPeriod.setFont(new java.awt.Font("Segoe UI",Font.PLAIN,12));
+								rbtnPeriod.setSelected(false);
+								rbtnPeriod.setEnabled(true);
+								rbtnPeriod.setPreferredSize(new java.awt.Dimension(58, 23));
+								rbtnPeriod.addActionListener(new ActionListener() {
+									public void actionPerformed(ActionEvent ae){	
+										
+										if (rbtnDate.isSelected()==true){
+											rbtnDate.setSelected(false);
+											lbl_date_fr.setEnabled(false);	
+											dte_from.setEnabled(false);
+											lblDate_to.setEnabled(false);
+											dte_to.setEnabled(false);
+											lblInclude.setEnabled(false);
+											cmbInclude.setEnabled(false);
+											
+											lbl_period_fr2.setEnabled(true);	
+											cmbPeriodFr.setEnabled(true);
+											lblPeriod_to2.setEnabled(true);
+											cmbPeriodTo.setEnabled(true);
+											lblYear.setEnabled(true);
+											cmbYear.setEnabled(true);
+										}
+										else 
+										{
+											rbtnDate.setSelected(true);
+											lbl_date_fr.setEnabled(true);	
+											dte_from.setEnabled(true);
+											lblDate_to.setEnabled(true);
+											dte_to.setEnabled(true);
+											lblInclude.setEnabled(true);
+											cmbInclude.setEnabled(true);
+											
+											lbl_period_fr2.setEnabled(false);	
+											cmbPeriodFr.setEnabled(false);
+											lblPeriod_to2.setEnabled(false);
+											cmbPeriodTo.setEnabled(false);
+											lblYear.setEnabled(false);
+											cmbYear.setEnabled(false);
+										}
+									}});					
+							}	
+							{
+								lbl_period_fr2 = new JLabel("Period From", JLabel.TRAILING);
+								pnlPeriodFr_a2.add(lbl_period_fr2);
+								lbl_period_fr2.setEnabled(false);	
+								lbl_period_fr2.setFont(new java.awt.Font("Segoe UI",Font.PLAIN,12));
+								lbl_period_fr2.setPreferredSize(new java.awt.Dimension(84, 55));
+							}
+						}
+						{
+							pnlPeriodFr_b2 = new JPanel(new GridLayout(1, 1, 5, 5));
+							pnlPeriod_Fr2.add(pnlPeriodFr_b2, BorderLayout.CENTER);	
+							pnlPeriodFr_b2.setPreferredSize(new java.awt.Dimension(135, 119));
+							pnlPeriodFr_b2.setBorder(BorderFactory.createEmptyBorder(0, 0,0,0));
+
+							{
+								String status2[] = { "01","02","03","04","05","06","07","08","09","10","11","12","13","14","15" };
+								cmbPeriodFr = new JComboBox(status2);
+								pnlPeriodFr_b2.add(cmbPeriodFr);
+								cmbPeriodFr.setSelectedItem(null);
+								cmbPeriodFr.setFont(new java.awt.Font("Segoe UI",Font.PLAIN, 13));
+								cmbPeriodFr.setBounds(537, 15, 180, 21);
+								cmbPeriodFr.setEnabled(false);
+								cmbPeriodFr.setSelectedIndex(0);
+								cmbPeriodFr.setPreferredSize(new java.awt.Dimension(95, 23));
+								cmbPeriodFr.addItemListener(new ItemListener() {
+									public void itemStateChanged(ItemEvent evt) 
+									{
+										
+									}
+								});		
+							}	
+						}
+					}
+					{
+						pnlPeriodTo2 = new JPanel(new BorderLayout(0, 0));
+						pnlPeriod_2.add(pnlPeriodTo2, BorderLayout.CENTER);	
+						pnlPeriodTo2.setPreferredSize(new java.awt.Dimension(420, 23));
+						pnlPeriodTo2.setBorder(BorderFactory.createEmptyBorder(0,0,0, 0));
+
+						pnlPeriodTo_a2 = new JPanel(new GridLayout(1, 1, 0, 5));
+						pnlPeriodTo2.add(pnlPeriodTo_a2, BorderLayout.WEST);	
+						pnlPeriodTo_a2.setPreferredSize(new java.awt.Dimension(95, 23));
+						pnlPeriodTo_a2.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));		
+
+						{
+							lblPeriod_to2 = new JLabel("Period To", JLabel.TRAILING);
+							pnlPeriodTo_a2.add(lblPeriod_to2);
+							lblPeriod_to2.setEnabled(false);
+							lblPeriod_to2.setFont(new java.awt.Font("Segoe UI",Font.PLAIN,12));
+							lblPeriod_to2.setPreferredSize(new java.awt.Dimension(89, 23));
+						}
+
+						pnlPeriodTo_b2 = new JPanel(new GridLayout(1, 1, 5, 5));
+						pnlPeriodTo2.add(pnlPeriodTo_b2, BorderLayout.CENTER);	
+						pnlPeriodTo_b2.setPreferredSize(new java.awt.Dimension(135, 119));
+						pnlPeriodTo_b2.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 
 						{
 							String status2[] = { "01","02","03","04","05","06","07","08","09","10","11","12","13","14","15" };
-							cmbPeriodFr = new JComboBox(status2);
-							pnlPeriodFr_b2.add(cmbPeriodFr);
-							cmbPeriodFr.setSelectedItem(null);
-							cmbPeriodFr.setFont(new java.awt.Font("Segoe UI",Font.PLAIN, 13));
-							cmbPeriodFr.setBounds(537, 15, 180, 21);
-							cmbPeriodFr.setEnabled(false);
-							cmbPeriodFr.setSelectedIndex(0);
-							cmbPeriodFr.setPreferredSize(new java.awt.Dimension(95, 23));
-							cmbPeriodFr.addItemListener(new ItemListener() {
+							cmbPeriodTo = new JComboBox(status2);
+							pnlPeriodTo_b2.add(cmbPeriodTo);
+							cmbPeriodTo.setSelectedItem(null);
+							cmbPeriodTo.setFont(new java.awt.Font("Segoe UI",Font.PLAIN, 13));
+							cmbPeriodTo.setBounds(537, 15, 180, 21);
+							cmbPeriodTo.setEnabled(false);
+							cmbPeriodTo.setSelectedIndex(0);
+							cmbPeriodTo.setPreferredSize(new java.awt.Dimension(95, 23));
+							cmbPeriodTo.addItemListener(new ItemListener() {
 								public void itemStateChanged(ItemEvent evt) 
 								{
-									
-								}
+									}
 							});		
 						}	
 					}
-				}
-				{
-					pnlPeriodTo2 = new JPanel(new BorderLayout(0, 0));
-					pnlPeriod_2.add(pnlPeriodTo2, BorderLayout.CENTER);	
-					pnlPeriodTo2.setPreferredSize(new java.awt.Dimension(420, 23));
-					pnlPeriodTo2.setBorder(BorderFactory.createEmptyBorder(0,0,0, 0));
-
-					pnlPeriodTo_a2 = new JPanel(new GridLayout(1, 1, 0, 5));
-					pnlPeriodTo2.add(pnlPeriodTo_a2, BorderLayout.WEST);	
-					pnlPeriodTo_a2.setPreferredSize(new java.awt.Dimension(95, 23));
-					pnlPeriodTo_a2.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));		
-
 					{
-						lblPeriod_to2 = new JLabel("Period To", JLabel.TRAILING);
-						pnlPeriodTo_a2.add(lblPeriod_to2);
-						lblPeriod_to2.setEnabled(false);
-						lblPeriod_to2.setFont(new java.awt.Font("Segoe UI",Font.PLAIN,12));
-						lblPeriod_to2.setPreferredSize(new java.awt.Dimension(89, 23));
-					}
+						pnlPeriodFr_c = new JPanel(new BorderLayout(5, 5));
+						pnlPeriod_2.add(pnlPeriodFr_c, BorderLayout.EAST);	
+						pnlPeriodFr_c.setPreferredSize(new java.awt.Dimension(158, 23));
+						pnlPeriodFr_c.setBorder(BorderFactory.createEmptyBorder(0,0,0, 0));
 
-					pnlPeriodTo_b2 = new JPanel(new GridLayout(1, 1, 5, 5));
-					pnlPeriodTo2.add(pnlPeriodTo_b2, BorderLayout.CENTER);	
-					pnlPeriodTo_b2.setPreferredSize(new java.awt.Dimension(135, 119));
-					pnlPeriodTo_b2.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+						pnlPeriodFr_c1 = new JPanel(new GridLayout(1, 2, 5, 5));
+						pnlPeriodFr_c.add(pnlPeriodFr_c1, BorderLayout.CENTER);	
+						pnlPeriodFr_c1.setPreferredSize(new java.awt.Dimension(82, 23));
+						pnlPeriodFr_c1.setBorder(BorderFactory.createEmptyBorder(0,0,0, 0));
 
-					{
-						String status2[] = { "01","02","03","04","05","06","07","08","09","10","11","12","13","14","15" };
-						cmbPeriodTo = new JComboBox(status2);
-						pnlPeriodTo_b2.add(cmbPeriodTo);
-						cmbPeriodTo.setSelectedItem(null);
-						cmbPeriodTo.setFont(new java.awt.Font("Segoe UI",Font.PLAIN, 13));
-						cmbPeriodTo.setBounds(537, 15, 180, 21);
-						cmbPeriodTo.setEnabled(false);
-						cmbPeriodTo.setSelectedIndex(0);
-						cmbPeriodTo.setPreferredSize(new java.awt.Dimension(95, 23));
-						cmbPeriodTo.addItemListener(new ItemListener() {
-							public void itemStateChanged(ItemEvent evt) 
-							{
-								}
-						});		
-					}	
-				}
-				{
-					pnlPeriodFr_c = new JPanel(new BorderLayout(5, 5));
-					pnlPeriod_2.add(pnlPeriodFr_c, BorderLayout.EAST);	
-					pnlPeriodFr_c.setPreferredSize(new java.awt.Dimension(158, 23));
-					pnlPeriodFr_c.setBorder(BorderFactory.createEmptyBorder(0,0,0, 0));
+						{
+							lblYear = new JLabel("Year", JLabel.TRAILING);
+							pnlPeriodFr_c1.add(lblYear);
+							lblYear.setEnabled(true);
+							lblYear.setPreferredSize(new java.awt.Dimension(67, 55));
+						}
 
-					pnlPeriodFr_c1 = new JPanel(new GridLayout(1, 2, 5, 5));
-					pnlPeriodFr_c.add(pnlPeriodFr_c1, BorderLayout.CENTER);	
-					pnlPeriodFr_c1.setPreferredSize(new java.awt.Dimension(82, 23));
-					pnlPeriodFr_c1.setBorder(BorderFactory.createEmptyBorder(0,0,0, 0));
+						pnlPeriodFr_c2 = new JPanel(new GridLayout(1, 2, 5, 5));
+						pnlPeriodFr_c.add(pnlPeriodFr_c2, BorderLayout.EAST);	
+						pnlPeriodFr_c2.setPreferredSize(new java.awt.Dimension(95, 23));
+						pnlPeriodFr_c2.setBorder(BorderFactory.createEmptyBorder(0,0,0, 0));
 
-					{
-						lblYear = new JLabel("Year", JLabel.TRAILING);
-						pnlPeriodFr_c1.add(lblYear);
-						lblYear.setEnabled(true);
-						lblYear.setPreferredSize(new java.awt.Dimension(67, 55));
-					}
-
-					pnlPeriodFr_c2 = new JPanel(new GridLayout(1, 2, 5, 5));
-					pnlPeriodFr_c.add(pnlPeriodFr_c2, BorderLayout.EAST);	
-					pnlPeriodFr_c2.setPreferredSize(new java.awt.Dimension(95, 23));
-					pnlPeriodFr_c2.setBorder(BorderFactory.createEmptyBorder(0,0,0, 0));
-
-					{
-						String status2[] = { "2023","2022","2021","2020","2019","2018", "2017","2016" };
-						cmbYear = new JComboBox(status2);
-						pnlPeriodFr_c2.add(cmbYear);
-						cmbYear.setSelectedItem(null);
-						cmbYear.setFont(new java.awt.Font("Segoe UI",Font.PLAIN, 13));
-						cmbYear.setBounds(537, 15, 180, 21);
-						cmbYear.setEnabled(false);
-						cmbYear.setSelectedIndex(0);
-						cmbYear.setPreferredSize(new java.awt.Dimension(95, 23));
+						{
+							String status2[] = { "2023","2022","2021","2020","2019","2018", "2017","2016" };
+							cmbYear = new JComboBox(status2);
+							pnlPeriodFr_c2.add(cmbYear);
+							cmbYear.setSelectedItem(null);
+							cmbYear.setFont(new java.awt.Font("Segoe UI",Font.PLAIN, 13));
+							cmbYear.setBounds(537, 15, 180, 21);
+							cmbYear.setEnabled(false);
+							cmbYear.setSelectedIndex(0);
+							cmbYear.setPreferredSize(new java.awt.Dimension(95, 23));
+						}
 					}
 				}
 			}
@@ -1163,174 +1173,174 @@ public class GeneralLedger extends _JInternalFrame implements _GUI, ActionListen
 
 	}	
 
-	public static double getBeginningBalance() {
-
-		double begBal = 0.00;
-
-		String sql = 			
-
-				"select '***', 'Beginnig Bal.', " +
-						"case when coalesce(sum(a.balance),00) >= 0 then coalesce(sum(a.balance),00) else 0.00 end, " +
-						"case when coalesce(sum(a.balance),00) < 0 then coalesce(sum(a.balance),00)*-1 else 0.00 end, " +
-						"0.00 from ( \n\n" + 
-
-				//JV 
-				"select " +
-				//	"a.jv_no,\r\n" + 
-				"( case when c.debit is null then 0 else c.debit end ) - ( case when b.credit is null then 0 else b.credit end ) as balance \r\n" + 
-				//"( case when b.credit is null then 0 else b.credit end ) as credit\r\n" + 
-				"" +
-
-				"from \r\n" + 
-				"\r\n" + 
-				"		( select distinct on (b.jv_no) \r\n" + 
-				"			a.jv_date, b.entry_no, a.fiscal_yr, \r\n" + 
-				"			a.period_id, b.tran_amt, b.jv_no, b.line_no, b.bal_side, a.status_id, b.co_id  \r\n" + 
-				"			from rf_jv_header a, rf_jv_detail b \r\n" + 
-				"			where a.jv_no = b.jv_no and trim(b.acct_id) = '"+lookupAccount.getText().trim()+"' \n" +
-				"			and a.date_posted < '"+dateFormat.format(dte_from.getDate())+"' \n" +
-				"			and a.status_id ='P' and a.co_id = '"+co_id+"' and b.status_id = 'A' \n" ;
-
-		if (lookupProject.getText().trim().equals("")) {} else {sql = sql +	 "			and b.project_id = '"+lookupProject.getText().trim()+"' \n"; }
-		if (lookupPhase.getText().trim().equals("")) {} else {sql = sql +	 "			and b.sub_projectid = '"+lookupPhase.getText().trim()+"' \n"; }		
-		sql = sql +	
-
-				"\r\n" + 
-				"			order by b.jv_no, b.entry_no \r\n" + 
-				"		) as a \n" + 
-				"\r\n" + 
-				"		left join ( select distinct on (jv_no, co_id) jv_no, bal_side, sum(tran_amt) as credit, co_id \r\n" + 
-				"			from rf_jv_detail where bal_side = 'C' and trim(acct_id) = '"+lookupAccount.getText().trim()+"' \r\n" +
-				"			and co_id = '"+co_id+"' and status_id = 'A'  \n" ;
-
-		if (lookupProject.getText().trim().equals("")) {} else {sql = sql +	 "			and project_id = '"+lookupProject.getText().trim()+"' \n"; }
-		if (lookupPhase.getText().trim().equals("")) {} else {sql = sql +	 "			and sub_projectid = '"+lookupPhase.getText().trim()+"' \n"; }		
-		sql = sql +	
-
-				"			 group by jv_no, co_id, bal_side ) as b \r\n" + 
-				"			on a.jv_no = b.jv_no and a.co_id = b.co_id \r\n" + 
-				"\r\n" + 
-				"		left join (select distinct on (jv_no, co_id) jv_no, bal_side, sum(tran_amt) as debit, co_id  \r\n" + 
-				"			from rf_jv_detail where bal_side = 'D' and trim(acct_id) = '"+lookupAccount.getText().trim()+"' \r\n" +
-				"			and co_id = '"+co_id+"' and status_id = 'A'  \n" ;
-
-		if (lookupProject.getText().trim().equals("")) {} else {sql = sql +	 "			and project_id = '"+lookupProject.getText().trim()+"' \n"; }
-		if (lookupPhase.getText().trim().equals("")) {} else {sql = sql +	 "			and sub_projectid = '"+lookupPhase.getText().trim()+"' \n"; }		
-		sql = sql +	
-
-				"			group by jv_no, co_id, bal_side) as c \r\n" + 
-				"			on a.jv_no = c.jv_no and a.co_id = c.co_id \n\n" +
-
-			"UNION ALL \n\n" +
-
-			//CV
-			"select \r\n" + 
-			//"a.cv_no,\r\n" + 
-			"( case when c.debit is null then 0 else c.debit end ) - ( case when b.credit is null then 0 else b.credit end ) as balance \r\n" + 
-			/*"( case when c.debit is null then 0 else c.debit end ) as debit,  \r\n" + 
-			"( case when b.credit is null then 0 else b.credit end ) as credit\r\n" + */
-			""+
-
-			"from \r\n" + 
-			"\r\n" + 
-			"		( select a.cv_date, b.tran_amt, b.cv_no, b.bal_side, a.status_id, a.co_id\r\n" + 
-			"			from rf_cv_header a, rf_cv_detail b \r\n" + 
-			"			where a.cv_no = b.cv_no and trim(b.acct_id) = '"+lookupAccount.getText().trim()+"' \r\n" + 
-			"			and a.date_posted < '"+dateFormat.format(dte_from.getDate())+"'  \r\n" ;
-		if (lookupProject.getText().trim().equals("")) {} else {sql = sql +	 "			and b.acct_id = '00' \n"; }  //this is included to remove all CV (since CV does not proj/subproj details) 
-		if (lookupPhase.getText().trim().equals("")) {} else {sql = sql +	 "			and b.acct_id = '00' \n"; }	 //this is included to remove all CV (since CV does not proj/subproj details) 
-		sql = sql +	
-				"			and a.status_id ='P' and a.co_id = '"+co_id+"' and b.status_id = 'A' ) as a \r\n" + 
-				"			\r\n" + 
-				"		left join (select distinct on (cv_no, co_id) cv_no, bal_side, sum(tran_amt) as credit, co_id  \r\n" + 
-				"			from rf_cv_detail \r\n" + 
-				"			where bal_side = 'C' and trim(acct_id) = '"+lookupAccount.getText().trim()+"' and co_id = '"+co_id+"' and status_id = 'A' \r\n" +
-				"			group by cv_no, co_id, bal_side) as b  \r\n" + 
-				"			on a.cv_no = b.cv_no and a.co_id = b.co_id \r\n" + 
-				"			\r\n" + 
-				"		left join (select distinct on (cv_no, co_id) cv_no, bal_side, sum(tran_amt) as debit, co_id  \r\n" + 
-				"			from rf_cv_detail \r\n" + 
-				"			where bal_side = 'D' and trim(acct_id) = '"+lookupAccount.getText().trim()+"' and co_id = '"+co_id+"' and status_id = 'A' " +
-				"			group by cv_no, co_id, bal_side) as c \n\n" + 
-				"			on a.cv_no = c.cv_no and a.co_id = c.co_id \r\n" + 
-
-			"UNION ALL \n\n " +
-
-			//PV
-			"select \r\n" + 
-			//"a.pv_no,\r\n" + 
-			"( case when c.debit is null then 0 else c.debit end ) - ( case when b.credit is null then 0 else b.credit end ) as balance \r\n" + 
-			/*"( case when c.debit is null then 0 else c.debit end ) as debit,  \r\n" + 
-			"( case when b.credit is null then 0 else b.credit end ) as credit\r\n" + */
-			"" + 
-			"from \r\n" + 
-			"\r\n" + 
-			"		( select a.pv_date, b.tran_amt, b.pv_no, b.bal_side, a.remarks, a.status_id, a.co_id, b.project_id, b.sub_projectid \r\n" + 
-			"			from rf_pv_header a, rf_pv_detail b \r\n" + 
-			"			where a.pv_no = b.pv_no and trim(b.acct_id) = '"+lookupAccount.getText().trim()+"' \r\n" + 
-			"			and a.date_posted < '"+dateFormat.format(dte_from.getDate())+"' \r\n" + 
-			"			and a.status_id ='P' and a.co_id = '"+co_id+"' and b.status_id = 'A' \n" ;
-
-		if (lookupProject.getText().trim().equals("")) {} else {sql = sql +	 "			and b.project_id = '"+lookupProject.getText().trim()+"' \n"; }
-		if (lookupPhase.getText().trim().equals("")) {} else {sql = sql +	 "			and b.sub_projectid = '"+lookupPhase.getText().trim()+"' \n"; }		
-		sql = sql +	
-
-				" 		) as a \r\n" + 
-				"			\r\n" + 
-				"		left join (select distinct on (pv_no, co_id) pv_no, bal_side, sum(tran_amt) as credit, co_id  \r\n" + 
-				"			from rf_pv_detail \r\n" + 	
-				"			where bal_side = 'C' and trim(acct_id) = '"+lookupAccount.getText().trim()+"' and co_id = '"+co_id+"' and status_id = 'A' \n" ;
-
-		if (lookupProject.getText().trim().equals("")) {} else {sql = sql +	 "			and project_id = '"+lookupProject.getText().trim()+"' \n"; }
-		if (lookupPhase.getText().trim().equals("")) {} else {sql = sql +	 "			and sub_projectid = '"+lookupPhase.getText().trim()+"' \n"; }		
-		sql = sql +	
-
-				"			group by pv_no, co_id, bal_side  ) as b \r\n" + 
-				"			on a.pv_no = b.pv_no and a.co_id = b.co_id \r\n" + 
-				"			\r\n" + 
-				"		left join (select distinct on (pv_no, co_id) pv_no, bal_side, sum(tran_amt) as debit, co_id   \r\n" + 
-				"			from rf_pv_detail \r\n" + 
-				"			where bal_side = 'D' and trim(acct_id) = '"+lookupAccount.getText().trim()+"' and co_id = '"+co_id+"' and status_id = 'A' \n" ;
-
-		if (lookupProject.getText().trim().equals("")) {} else {sql = sql +	 "			and project_id = '"+lookupProject.getText().trim()+"' \n"; }
-		if (lookupPhase.getText().trim().equals("")) {} else {sql = sql +	 "			and sub_projectid = '"+lookupPhase.getText().trim()+"' \n"; }		
-		sql = sql +	
-
-				"			group by pv_no, co_id, bal_side) as c \r\n" + 
-				"			on a.pv_no = c.pv_no and a.co_id = c.co_id \n\n" +
-
-			"UNION ALL \n\n" +
-
-			//CRB
-			"select total as crb_amount from (\r\n" + 
-			"\r\n" + 
-			"  select distinct on (a.acct_id) a.acct_id, sum(a.crb_amt) as total  \r\n" + 
-			"	from (select distinct on (rb_id, doc_id, acct_id) rb_id, doc_id, acct_id, sum(trans_amt) as crb_amt from rf_crb_detail \r\n" + 
-			"	where status_id = 'A' and co_id = '"+co_id+"' and trim(acct_id) = '"+lookupAccount.getText().trim()+"' \n" +
-			"	group by rb_id, doc_id, acct_id) a\r\n" + 
-			"	join rf_crb_header b on a.rb_id = b.rb_id and a.doc_id = b.doc_id\r\n" + 
-			"	where b.posted_date < '"+dateFormat.format(dte_from.getDate())+"'  \r\n" ;
-		if (lookupProject.getText().trim().equals("")) {} else {sql = sql +	 "			and b.proj_id = '"+lookupProject.getText().trim()+"' \n"; }
-		if (lookupPhase.getText().trim().equals("")) {} else {sql = sql +	 "			and b.phase = '"+lookupPhase.getText().trim()+"' \n"; }	
-		sql = sql +	
-
-				"	group by acct_id \r\n" +
-				") a \n\n"  +
-				") a  \n\n" ;
-
-		System.out.printf("SQL #2: %s", sql);
-		pgSelect db = new pgSelect();
-		db.select(sql);
-
-		if(db.isNotNull()){
-			begBal = Double.parseDouble(db.getResult()[0][0].toString());
-		}else{
-			begBal = 0.00;
-		}
-
-		return begBal;
-
-	}	
+//	public static double getBeginningBalance() {
+//
+//		double begBal = 0.00;
+//
+//		String sql = 			
+//
+//				"select '***', 'Beginnig Bal.', " +
+//						"case when coalesce(sum(a.balance),00) >= 0 then coalesce(sum(a.balance),00) else 0.00 end, " +
+//						"case when coalesce(sum(a.balance),00) < 0 then coalesce(sum(a.balance),00)*-1 else 0.00 end, " +
+//						"0.00 from ( \n\n" + 
+//
+//				//JV 
+//				"select " +
+//				//	"a.jv_no,\r\n" + 
+//				"( case when c.debit is null then 0 else c.debit end ) - ( case when b.credit is null then 0 else b.credit end ) as balance \r\n" + 
+//				//"( case when b.credit is null then 0 else b.credit end ) as credit\r\n" + 
+//				"" +
+//
+//				"from \r\n" + 
+//				"\r\n" + 
+//				"		( select distinct on (b.jv_no) \r\n" + 
+//				"			a.jv_date, b.entry_no, a.fiscal_yr, \r\n" + 
+//				"			a.period_id, b.tran_amt, b.jv_no, b.line_no, b.bal_side, a.status_id, b.co_id  \r\n" + 
+//				"			from rf_jv_header a, rf_jv_detail b \r\n" + 
+//				"			where a.jv_no = b.jv_no and trim(b.acct_id) = '"+lookupAccount.getText().trim()+"' \n" +
+//				"			and a.date_posted < '"+dateFormat.format(dte_from.getDate())+"' \n" +
+//				"			and a.status_id ='P' and a.co_id = '"+co_id+"' and b.status_id = 'A' \n" ;
+//
+//		if (lookupProject.getText().trim().equals("")) {} else {sql = sql +	 "			and b.project_id = '"+lookupProject.getText().trim()+"' \n"; }
+//		if (lookupPhase.getText().trim().equals("")) {} else {sql = sql +	 "			and b.sub_projectid = '"+lookupPhase.getText().trim()+"' \n"; }		
+//		sql = sql +	
+//
+//				"\r\n" + 
+//				"			order by b.jv_no, b.entry_no \r\n" + 
+//				"		) as a \n" + 
+//				"\r\n" + 
+//				"		left join ( select distinct on (jv_no, co_id) jv_no, bal_side, sum(tran_amt) as credit, co_id \r\n" + 
+//				"			from rf_jv_detail where bal_side = 'C' and trim(acct_id) = '"+lookupAccount.getText().trim()+"' \r\n" +
+//				"			and co_id = '"+co_id+"' and status_id = 'A'  \n" ;
+//
+//		if (lookupProject.getText().trim().equals("")) {} else {sql = sql +	 "			and project_id = '"+lookupProject.getText().trim()+"' \n"; }
+//		if (lookupPhase.getText().trim().equals("")) {} else {sql = sql +	 "			and sub_projectid = '"+lookupPhase.getText().trim()+"' \n"; }		
+//		sql = sql +	
+//
+//				"			 group by jv_no, co_id, bal_side ) as b \r\n" + 
+//				"			on a.jv_no = b.jv_no and a.co_id = b.co_id \r\n" + 
+//				"\r\n" + 
+//				"		left join (select distinct on (jv_no, co_id) jv_no, bal_side, sum(tran_amt) as debit, co_id  \r\n" + 
+//				"			from rf_jv_detail where bal_side = 'D' and trim(acct_id) = '"+lookupAccount.getText().trim()+"' \r\n" +
+//				"			and co_id = '"+co_id+"' and status_id = 'A'  \n" ;
+//
+//		if (lookupProject.getText().trim().equals("")) {} else {sql = sql +	 "			and project_id = '"+lookupProject.getText().trim()+"' \n"; }
+//		if (lookupPhase.getText().trim().equals("")) {} else {sql = sql +	 "			and sub_projectid = '"+lookupPhase.getText().trim()+"' \n"; }		
+//		sql = sql +	
+//
+//				"			group by jv_no, co_id, bal_side) as c \r\n" + 
+//				"			on a.jv_no = c.jv_no and a.co_id = c.co_id \n\n" +
+//
+//			"UNION ALL \n\n" +
+//
+//			//CV
+//			"select \r\n" + 
+//			//"a.cv_no,\r\n" + 
+//			"( case when c.debit is null then 0 else c.debit end ) - ( case when b.credit is null then 0 else b.credit end ) as balance \r\n" + 
+//			/*"( case when c.debit is null then 0 else c.debit end ) as debit,  \r\n" + 
+//			"( case when b.credit is null then 0 else b.credit end ) as credit\r\n" + */
+//			""+
+//
+//			"from \r\n" + 
+//			"\r\n" + 
+//			"		( select a.cv_date, b.tran_amt, b.cv_no, b.bal_side, a.status_id, a.co_id\r\n" + 
+//			"			from rf_cv_header a, rf_cv_detail b \r\n" + 
+//			"			where a.cv_no = b.cv_no and trim(b.acct_id) = '"+lookupAccount.getText().trim()+"' \r\n" + 
+//			"			and a.date_posted < '"+dateFormat.format(dte_from.getDate())+"'  \r\n" ;
+//		if (lookupProject.getText().trim().equals("")) {} else {sql = sql +	 "			and b.acct_id = '00' \n"; }  //this is included to remove all CV (since CV does not proj/subproj details) 
+//		if (lookupPhase.getText().trim().equals("")) {} else {sql = sql +	 "			and b.acct_id = '00' \n"; }	 //this is included to remove all CV (since CV does not proj/subproj details) 
+//		sql = sql +	
+//				"			and a.status_id ='P' and a.co_id = '"+co_id+"' and b.status_id = 'A' ) as a \r\n" + 
+//				"			\r\n" + 
+//				"		left join (select distinct on (cv_no, co_id) cv_no, bal_side, sum(tran_amt) as credit, co_id  \r\n" + 
+//				"			from rf_cv_detail \r\n" + 
+//				"			where bal_side = 'C' and trim(acct_id) = '"+lookupAccount.getText().trim()+"' and co_id = '"+co_id+"' and status_id = 'A' \r\n" +
+//				"			group by cv_no, co_id, bal_side) as b  \r\n" + 
+//				"			on a.cv_no = b.cv_no and a.co_id = b.co_id \r\n" + 
+//				"			\r\n" + 
+//				"		left join (select distinct on (cv_no, co_id) cv_no, bal_side, sum(tran_amt) as debit, co_id  \r\n" + 
+//				"			from rf_cv_detail \r\n" + 
+//				"			where bal_side = 'D' and trim(acct_id) = '"+lookupAccount.getText().trim()+"' and co_id = '"+co_id+"' and status_id = 'A' " +
+//				"			group by cv_no, co_id, bal_side) as c \n\n" + 
+//				"			on a.cv_no = c.cv_no and a.co_id = c.co_id \r\n" + 
+//
+//			"UNION ALL \n\n " +
+//
+//			//PV
+//			"select \r\n" + 
+//			//"a.pv_no,\r\n" + 
+//			"( case when c.debit is null then 0 else c.debit end ) - ( case when b.credit is null then 0 else b.credit end ) as balance \r\n" + 
+//			/*"( case when c.debit is null then 0 else c.debit end ) as debit,  \r\n" + 
+//			"( case when b.credit is null then 0 else b.credit end ) as credit\r\n" + */
+//			"" + 
+//			"from \r\n" + 
+//			"\r\n" + 
+//			"		( select a.pv_date, b.tran_amt, b.pv_no, b.bal_side, a.remarks, a.status_id, a.co_id, b.project_id, b.sub_projectid \r\n" + 
+//			"			from rf_pv_header a, rf_pv_detail b \r\n" + 
+//			"			where a.pv_no = b.pv_no and trim(b.acct_id) = '"+lookupAccount.getText().trim()+"' \r\n" + 
+//			"			and a.date_posted < '"+dateFormat.format(dte_from.getDate())+"' \r\n" + 
+//			"			and a.status_id ='P' and a.co_id = '"+co_id+"' and b.status_id = 'A' \n" ;
+//
+//		if (lookupProject.getText().trim().equals("")) {} else {sql = sql +	 "			and b.project_id = '"+lookupProject.getText().trim()+"' \n"; }
+//		if (lookupPhase.getText().trim().equals("")) {} else {sql = sql +	 "			and b.sub_projectid = '"+lookupPhase.getText().trim()+"' \n"; }		
+//		sql = sql +	
+//
+//				" 		) as a \r\n" + 
+//				"			\r\n" + 
+//				"		left join (select distinct on (pv_no, co_id) pv_no, bal_side, sum(tran_amt) as credit, co_id  \r\n" + 
+//				"			from rf_pv_detail \r\n" + 	
+//				"			where bal_side = 'C' and trim(acct_id) = '"+lookupAccount.getText().trim()+"' and co_id = '"+co_id+"' and status_id = 'A' \n" ;
+//
+//		if (lookupProject.getText().trim().equals("")) {} else {sql = sql +	 "			and project_id = '"+lookupProject.getText().trim()+"' \n"; }
+//		if (lookupPhase.getText().trim().equals("")) {} else {sql = sql +	 "			and sub_projectid = '"+lookupPhase.getText().trim()+"' \n"; }		
+//		sql = sql +	
+//
+//				"			group by pv_no, co_id, bal_side  ) as b \r\n" + 
+//				"			on a.pv_no = b.pv_no and a.co_id = b.co_id \r\n" + 
+//				"			\r\n" + 
+//				"		left join (select distinct on (pv_no, co_id) pv_no, bal_side, sum(tran_amt) as debit, co_id   \r\n" + 
+//				"			from rf_pv_detail \r\n" + 
+//				"			where bal_side = 'D' and trim(acct_id) = '"+lookupAccount.getText().trim()+"' and co_id = '"+co_id+"' and status_id = 'A' \n" ;
+//
+//		if (lookupProject.getText().trim().equals("")) {} else {sql = sql +	 "			and project_id = '"+lookupProject.getText().trim()+"' \n"; }
+//		if (lookupPhase.getText().trim().equals("")) {} else {sql = sql +	 "			and sub_projectid = '"+lookupPhase.getText().trim()+"' \n"; }		
+//		sql = sql +	
+//
+//				"			group by pv_no, co_id, bal_side) as c \r\n" + 
+//				"			on a.pv_no = c.pv_no and a.co_id = c.co_id \n\n" +
+//
+//			"UNION ALL \n\n" +
+//
+//			//CRB
+//			"select total as crb_amount from (\r\n" + 
+//			"\r\n" + 
+//			"  select distinct on (a.acct_id) a.acct_id, sum(a.crb_amt) as total  \r\n" + 
+//			"	from (select distinct on (rb_id, doc_id, acct_id) rb_id, doc_id, acct_id, sum(trans_amt) as crb_amt from rf_crb_detail \r\n" + 
+//			"	where status_id = 'A' and co_id = '"+co_id+"' and trim(acct_id) = '"+lookupAccount.getText().trim()+"' \n" +
+//			"	group by rb_id, doc_id, acct_id) a\r\n" + 
+//			"	join rf_crb_header b on a.rb_id = b.rb_id and a.doc_id = b.doc_id\r\n" + 
+//			"	where b.posted_date < '"+dateFormat.format(dte_from.getDate())+"'  \r\n" ;
+//		if (lookupProject.getText().trim().equals("")) {} else {sql = sql +	 "			and b.proj_id = '"+lookupProject.getText().trim()+"' \n"; }
+//		if (lookupPhase.getText().trim().equals("")) {} else {sql = sql +	 "			and b.phase = '"+lookupPhase.getText().trim()+"' \n"; }	
+//		sql = sql +	
+//
+//				"	group by acct_id \r\n" +
+//				") a \n\n"  +
+//				") a  \n\n" ;
+//
+//		System.out.printf("SQL #2: %s", sql);
+//		pgSelect db = new pgSelect();
+//		db.select(sql);
+//
+//		if(db.isNotNull()){
+//			begBal = Double.parseDouble(db.getResult()[0][0].toString());
+//		}else{
+//			begBal = 0.00;
+//		}
+//
+//		return begBal;
+//
+//	}	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
