@@ -8,31 +8,28 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map.Entry;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.Border;
-import javax.swing.plaf.DimensionUIResource;
+import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
-
 import Database.pgSelect;
-import DateChooser._JDateChooser;
 import FormattedTextField._JXFormattedTextField;
 import Functions.FncGlobal;
 import Functions.FncTables;
@@ -40,18 +37,16 @@ import Functions.UserInfo;
 import Lookup.LookupEvent;
 import Lookup.LookupListener;
 import Lookup._JLookup;
-import components._JButton;
-import components._JFormattedTextField;
+import Lookup._JLookupTable;
 import components._JInternalFrame;
 import components._JTableMain;
-import components._JTagLabel;
 import interfaces._GUI;
 import tablemodel.modelPettyCashRequest;
 
 /**
  * 
  */
-public class PettyCash extends _JInternalFrame implements _GUI, ActionListener {
+public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, MouseListener {
 
 	private static final long serialVersionUID = -4306362386582966144L;
 
@@ -70,16 +65,10 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener {
 	Border lineBorder = BorderFactory.createLineBorder(Color.GRAY);
 
 	private _JLookup lookupCompany;
-
 	private _JLookup lookupPCRNo;
-
-	private JTextField txtPRCStatus;
-
 	private _JLookup lookupPCRType;
 
 	private JDateChooser dteDateCreated;
-
-	private JTextField txtPCRNo;
 
 	private JTextField txtPCRStatus;
 
@@ -97,20 +86,18 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener {
 
 	private _JLookup lookupPCRLiq;
 
-	private _JFormattedTextField txtCashReturned;
-
-	private _JFormattedTextField txtAmtToBeReimbursed;
-
-	private _JFormattedTextField txtTotalAmtOfCA;
-
 	private JButton btnAddRow;
 
 	private JButton btnRemoveRow;
 
-	private JList rowHeaderScroll;
-	
+	private JList<Integer> rowHeaderScroll;
+
 	private String co_id; 
-	private String pcr_type_id; 
+	private String pcr_type_id;
+
+	private _JXFormattedTextField ftxtAmtToBeReimbursed;
+	private _JXFormattedTextField ftxtTotalAmtOfCA;
+	private _JXFormattedTextField ftxtCashReturned; 
 
 	/**
 	 * 
@@ -156,7 +143,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener {
 				JPanel pnlMainNorth = new JPanel(new BorderLayout(5, 5)); 
 				pnlMain.add(pnlMainNorth, BorderLayout.NORTH); 
 				pnlMainNorth.setPreferredSize(new Dimension(0, 180));
-				pnlMainNorth.setBorder(components._JTBorderFactory.createTitleBorder("Petty Cash Details"));
+				pnlMainNorth.setBorder(components.JTBorderFactory.createTitleBorder("Petty Cash Details"));
 
 				{
 					JPanel pnlNorth = new JPanel(new BorderLayout(10, 10)); 
@@ -183,11 +170,11 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener {
 								pnlNWComp.add(lookupCompany); 
 								lookupCompany.setLookupSQL(FncGlobal.getCompany());
 								lookupCompany.addLookupListener(new LookupListener() {
-									
+
 									@Override
 									public void lookupPerformed(LookupEvent event) {
 										Object [] data = ((_JLookup) event.getSource()).getDataSet(); 
-										
+
 										if(data != null) {
 											co_id = (String) data[0]; 
 										}
@@ -223,6 +210,9 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener {
 							{
 								txtPCRStatus = new JTextField(); 
 								pnlPCRStatus.add(txtPCRStatus, BorderLayout.CENTER);
+								txtPCRStatus.setHorizontalAlignment(JTextField.CENTER);
+								txtPCRStatus.setEditable(false);
+								txtPCRStatus.setFont(new Font("Segoe UI", Font.BOLD, 12));
 							}
 						}
 					}
@@ -267,15 +257,20 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener {
 									lookupPCRType= new _JLookup(null, "Petty Cash Request", 1);
 									pnlCWComp.add(lookupPCRType); 
 									lookupPCRType.addLookupListener(new LookupListener() {
-										
+
 										@Override
 										public void lookupPerformed(LookupEvent event) {
 											Object [] data = ((_JLookup) event.getSource()).getDataSet();
-											
+
 											if (data != null) {
 												pcr_type_id = (String) data[0];
+
+												System.out.println("");
+												System.out.println("Value of pcr_type_id: " + pcr_type_id);
 											}
-											
+
+
+
 										}
 									});
 								}
@@ -316,12 +311,13 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener {
 									txtPayee = new JTextField(); 
 									pnlCEComp.add(txtPayee); 
 									txtPayee.setHorizontalAlignment(JTextField.CENTER);
+									txtPayee.setEditable(false);
 								}
 								{
 									txtDiv = new JTextField();
 									pnlCEComp.add(txtDiv); 
 									txtDiv.setHorizontalAlignment(JTextField.CENTER);
-
+									txtDiv.setEditable(false);
 								}								
 							}
 						}
@@ -343,10 +339,12 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener {
 						modelPettyCashReq = new modelPettyCashRequest(); 
 						tblPettyCash = new _JTableMain(modelPettyCashReq); 
 						tblPettyCash.hideColumns("Rec ID"); 
-						tblPettyCash.getColumnModel().getColumn(1).setPreferredWidth(200);
-						tblPettyCash.getColumnModel().getColumn(4).setPreferredWidth(280);
+						tblPettyCash.getColumnModel().getColumn(0).setPreferredWidth(180);
+						tblPettyCash.getColumnModel().getColumn(2).setPreferredWidth(120);
+						tblPettyCash.getColumnModel().getColumn(4).setPreferredWidth(200);
 						scrollTable.setViewportView(tblPettyCash);
 						tblPettyCash.setSortable(false); 
+						tblPettyCash.addMouseListener(this); 
 						{
 							rowHeaderScroll = tblPettyCash.getRowHeader();
 							rowHeaderScroll.setModel(new DefaultListModel());
@@ -354,14 +352,13 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener {
 							scrollTable.setCorner(ScrollPaneConstants.UPPER_LEFT_CORNER, FncTables.getRowHeader_Header());
 							scrollTable.setCorner(ScrollPaneConstants.LOWER_LEFT_CORNER, displayTableNavigation());
 						}
-			
 					}
 				}
 				{
 					JPanel pnlCenterSouth = new JPanel(new BorderLayout(5, 5)); 
 					pnlMainCenter.add(pnlCenterSouth, BorderLayout.SOUTH); 
 					pnlCenterSouth.setPreferredSize(new Dimension(0, 120)); 
-					pnlCenterSouth.setBorder(components._JTBorderFactory.createTitleBorder("In Case of Liquidation"));
+					pnlCenterSouth.setBorder(components.JTBorderFactory.createTitleBorder("In Case of Liquidation"));
 
 					{
 						JPanel pnlCSWest = new JPanel (new BorderLayout(5, 5)); 
@@ -388,8 +385,11 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener {
 								pnlCSWComp.add(lookupPCRLiq); 
 							}
 							{
-								txtCashReturned = new _JFormattedTextField();
-								pnlCSWComp.add(txtCashReturned); 
+								ftxtCashReturned = new _JXFormattedTextField("0.00");
+								pnlCSWComp.add(ftxtCashReturned); 
+								ftxtCashReturned.setHorizontalAlignment(_JXFormattedTextField.CENTER);
+								ftxtCashReturned.setFont(new Font("Segoe UI", Font.BOLD, 12));
+								ftxtCashReturned.setFormatterFactory(_JXFormattedTextField.DECIMAL);
 							}
 						}
 					}
@@ -413,12 +413,20 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener {
 							JPanel pnlCSEComp = new JPanel(new GridLayout(2, 1, 3, 3)); 
 							pnlCSCenter.add(pnlCSEComp, BorderLayout.CENTER); 
 							{
-								txtAmtToBeReimbursed = new _JFormattedTextField();
-								pnlCSEComp.add(txtAmtToBeReimbursed); 
+								ftxtAmtToBeReimbursed = new _JXFormattedTextField("0.00");
+								pnlCSEComp.add(ftxtAmtToBeReimbursed); 
+								ftxtAmtToBeReimbursed.setHorizontalAlignment(_JXFormattedTextField.CENTER);
+								ftxtAmtToBeReimbursed.setFont(new Font("Segoe UI", Font.BOLD, 12));
+								ftxtAmtToBeReimbursed.setFormatterFactory(_JXFormattedTextField.DECIMAL);
+
 							}
 							{
-								txtTotalAmtOfCA = new _JFormattedTextField();
-								pnlCSEComp.add(txtTotalAmtOfCA); 
+								ftxtTotalAmtOfCA = new _JXFormattedTextField("0.00");
+								pnlCSEComp.add(ftxtTotalAmtOfCA); 
+								ftxtTotalAmtOfCA.setHorizontalAlignment(_JXFormattedTextField.CENTER);
+								ftxtTotalAmtOfCA.setFont(new Font("Segoe UI", Font.BOLD, 12));
+								ftxtTotalAmtOfCA.setFormatterFactory(_JXFormattedTextField.DECIMAL);
+
 							}
 						}
 					}	
@@ -482,29 +490,58 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener {
 				}
 			}
 		}
-		
+
 		initialize_components(); 
 
 	}//XXX END OF INIT GUI
 
 	private void initialize_components() {
+		enable_header_comp(false);
+		enable_liquidation_comp(false);
+		lookupCompany.setEnabled(true);
+		lookupPCRNo.setEnabled(true);
 		co_id = "01"; 
 		lookupCompany.setValue("ACERLAND REALTY CORPORATION"); //default value
-		txtPCRStatus.setText("ACTIVE"); //initial value
+		btnState(true, false, false, false, false, false, true, false, false);
 		lookupPCRType.setLookupSQL(getPCR_type());
-		txtPayee.setText(UserInfo.FullName);
-		txtDiv.setText(String.format("%s / %s", UserInfo.Department_Alias, UserInfo.Division_Alias));
+		createPCRTable(modelPettyCashReq, rowHeaderScroll);
 	}
 
-	private void btnState(Boolean add, Boolean edit, Boolean save, Boolean preview, Boolean pay, Boolean process) {
+	public void actionPerformed(ActionEvent e) {
+
+		if (e.getActionCommand().equals("Add New")) {
+			if(JOptionPane.showConfirmDialog(getContentPane(), "Is Cash Fund Liquidation?", "Petty Cash Request", 
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+				addNewLiq(); 
+			} else {
+				addNew();
+			}
+		}
+
+		if(e.getActionCommand().equals("Add Row")) {
+			addRow();
+		} else if (e.getActionCommand().equals("Remove Row")) {
+			if (tblPettyCash.getSelectedRows().length == 1) {
+				removeRow();
+			} else {
+				JOptionPane.showMessageDialog(getContentPane(), "Please select row to remove", "Remove",
+						JOptionPane.WARNING_MESSAGE);
+			}
+		}
+	}
+
+	private void btnState(Boolean add, Boolean edit, Boolean save, Boolean preview, Boolean pay, Boolean process, Boolean cancel, Boolean AddRow, Boolean RemoveRow) {
 		btnAddNew.setEnabled(add);
 		btnEdit.setEnabled(edit);
 		btnSave.setEnabled(save);
 		btnPreview.setEnabled(preview);
 		btnPay.setEnabled(pay);
 		btnProcess.setEnabled(process);
+		btnCancel.setEnabled(cancel);
+		btnAddRow.setEnabled(AddRow);
+		btnRemoveRow.setEnabled(RemoveRow);
 	}
-	
+
 	private JPanel displayTableNavigation() {
 		btnAddRow = new JButton(
 				new ImageIcon(this.getClass().getClassLoader().getResource("Images/Science-Plus2-Math-icon.png")));
@@ -526,27 +563,53 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener {
 
 		return pnl;
 	}
-	
+
 	private void enable_header_comp(Boolean x) {
 		lookupCompany.setEnabled(x);
 		lookupPCRNo.setEnabled(x);
 		dteDateCreated.setEnabled(x);
 		dteTransDate.setEnabled(x);
 		lookupPCRType.setEnabled(x);
+		txtPCRStatus.setEnabled(x);
+		txtPayee.setEnabled(x);
+		txtDiv.setEnabled(x);
 	}
-	
+
 	private void enable_liquidation_comp(Boolean x) {
 		lookupPCRLiq.setEnabled(x);
-		txtCashReturned.setEnabled(x);
-		txtCashReturned.setEditable(x);
-		txtAmtToBeReimbursed.setEnabled(x);
-		txtAmtToBeReimbursed.setEditable(x);
-		txtTotalAmtOfCA.setEnabled(x);
+		ftxtCashReturned.setEnabled(x);
+		ftxtCashReturned.setEditable(x);
+		ftxtAmtToBeReimbursed.setEnabled(x);
+		ftxtAmtToBeReimbursed.setEditable(x);
+		ftxtTotalAmtOfCA.setEnabled(x);
 	}
-	
+
+	public void addNew() {
+		enable_header_comp(true);
+		lookupPCRNo.setEnabled(false);
+		txtPCRStatus.setText("ACTIVE"); //initial value
+		txtPayee.setText(UserInfo.FullName);
+		txtDiv.setText(String.format("%s / %s", UserInfo.Department_Alias, UserInfo.Division_Alias));
+		btnState(false, false, true, false, false, false, true, true, true); 
+	}
+
+	public void addNewLiq() {
+		enable_header_comp(true);
+		enable_liquidation_comp(true);
+		lookupPCRNo.setEnabled(false);
+		lookupPCRType.setValue("Cash Fund Liquidation");
+		pcr_type_id = "03"; //Req. Type ID for Cash Fund Liquidation
+		lookupPCRType.setEditable(false);
+		txtPCRStatus.setText("ACTIVE"); //initial value
+		txtPayee.setText(UserInfo.FullName);
+		txtDiv.setText(String.format("%s / %s", UserInfo.Department_Alias, UserInfo.Division_Alias));
+		btnState(false, false, true, false, false, false, true, true, true); 
+	}
+
+
 	public static String getPCR_no(String co_id) {
 		String SQL = "";
-		
+
 		System.out.println("getPCR_no: "+ SQL);
 
 		return SQL; 
@@ -558,15 +621,142 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener {
 				+ ", status_id \n"
 				+ "FROM \n"
 				+ "mf_petty_cash_req_type\n"
-				+ "WHERE status_id = 'A'; ";
-		
+				+ "WHERE status_id = 'A'"
+				+ "AND pc_req_id != '03'; ";
+
 		System.out.println("getPCR_type: "+ SQL);
 
 		return SQL; 
 	}
 
+	public static String getPCR_acct() {
+		String SQL = "SELECT pc_accnt_id AS \"ID\"\n"
+				+ ", pc_accnt_desc AS \"ACCOUNT DESCRIPTION\"\n"
+				+ ", status_id\n"
+				+ "FROM mf_petty_cash_accounts\n"
+				+ "WHERE status_id = 'A';";
+
+		System.out.println("getPCR_acct: "+ SQL);
+
+		return SQL; 
+	}
+
+	public static String getProject() {
+		String SQL = "SELECT proj_id AS \"PROJECT ID\"\n"
+				+ ", proj_name AS \"PROJECT NAME\"\n"
+				+ ", proj_alias AS \"PROJ_ALIAS\"\n"
+				+ "FROM mf_project\n"
+				+ "WHERE status_id = 'A';";
+
+		System.out.println("getProject: "+ SQL);
+
+		return SQL; 
+	}
+
+	public static String getProjCostID() {
+		String SQL = "SELECT proj_cost_accnt_id AS \"PROJECT COST ACCT. ID\"\n"
+				+ ", proj_cost_accnt_desc AS \"DECRIPTION\"\n"
+				+ ", status_id AS \"STATUS\"\n"
+				+ "FROM mf_project_cost_accnts\n"
+				+ "WHERE boi_acct_id = ''\n"
+				+ "AND status_id = 'A'; ";
+
+		System.out.println("getProjCostID: "+ SQL);
+
+		return SQL; 
+	}
 
 
+	public void createPCRTable(DefaultTableModel mainModel, JList<Integer> rowHeader) {
+		FncTables.clearTable(mainModel);
+		DefaultListModel<Integer> listModel = new DefaultListModel<Integer>(); 
+		rowHeader.setModel(listModel);
 
+		String sql = "Select '', '', '', '', '', '', 0.00 union all \n"
+				+ "Select '', '', '', '', '', '', 0.00 union all \n"
+				+ "Select '', '', '', '', '', '', 0.00 union all \n"
+				+ "Select '', '', '', '', '', '', 0.00"; 
 
+		pgSelect db = new pgSelect();
+		db.select(sql);
+		if (db.isNotNull()) {
+			for (int x = 0; x < db.getRowCount(); x++) {
+				// Adding of row in table
+				mainModel.addRow(db.getResult()[x]);
+				listModel.addElement(mainModel.getRowCount());
+			}
+
+		}
+	}
+
+	private void addRow() {
+		modelPettyCashReq.addRow(
+				new Object[] { null, null, null, null, null, null, 0.00 });
+		((DefaultListModel<Integer>) rowHeaderScroll.getModel()).addElement(modelPettyCashReq.getRowCount());
+	}
+
+	private void removeRow() {
+		modelPettyCashReq.removeRow(tblPettyCash.getSelectedRow());
+		rowHeaderScroll.setModel(new DefaultListModel<Integer>());
+		for (int x = 0; x < modelPettyCashReq.getRowCount(); x++) {
+
+			((DefaultListModel<Integer>) rowHeaderScroll.getModel()).addElement(x + 1);
+		}
+	}
+
+	private void AddPCRDetails() {
+		int selected_row = tblPettyCash.convertRowIndexToModel(tblPettyCash.getSelectedRow());
+		int selected_column = tblPettyCash.convertColumnIndexToModel(tblPettyCash.getSelectedColumn()); 
+
+		System.out.println("Selected Row: " + selected_row);
+		System.out.println("Selected Column: " + selected_column);
+
+		if (selected_row == -1 || selected_column == -1) {
+			JOptionPane.showMessageDialog(FncGlobal.homeMDI, "Please select a valid row and column.");
+			return;
+		}
+
+		Integer x[] = { 0, 1, 2, 3, 4, 5, 6 };
+		String sql[] = { "", getPCR_acct(), getProject(), getProjCostID(), "", "", "" };
+		String lookup_name[] = { "", "Petty Cash Account", "Project", "Project Cost Acct", "", "", "" };
+
+		if (selected_column >= 0 && selected_column < x.length && selected_column == x[selected_column]) {
+			_JLookupTable dlg = new _JLookupTable(FncGlobal.homeMDI, null, lookup_name[selected_column], sql[selected_column], false); 
+			dlg.setLocationRelativeTo(FncGlobal.homeMDI);
+			dlg.setVisible(true);
+		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+
+		System.out.println("Value ng clicked count: " + e.getClickCount());
+		if((e.getClickCount() >= 2)) {
+			AddPCRDetails();
+		}
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
 }

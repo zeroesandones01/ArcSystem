@@ -2032,7 +2032,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		String SQL = "SELECT proj_cost_accnt_id\n"
 				+ ", proj_cost_accnt_desc\n"
 				+ "FROM mf_project_cost_accnts\n"
-				+ "WHERE boi_accnt_id = '"+boi_acct_id+"'\n"
+				+ "WHERE boi_acct_id = '"+boi_acct_id+"'\n"
 				+ "AND status_id = 'A'; ";
 		
 		System.out.println("SQL-getProjCostAccount: "+ SQL);

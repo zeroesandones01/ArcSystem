@@ -6,6 +6,7 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
 import Functions.FncTables;
+import Lookup._JLookup;
 
 public class modelPettyCashRequest extends DefaultTableModel{
 
@@ -45,6 +46,7 @@ public class modelPettyCashRequest extends DefaultTableModel{
 			"Rec ID", 
 			"Acct. Description", 	
 			"Proj.", 	
+			"Proj. Cost ID", 
 			"Div.",
 			"Nature / Purpose of Expenditure", 
 			"Amount"
@@ -52,8 +54,9 @@ public class modelPettyCashRequest extends DefaultTableModel{
 			
 	Class [] CLASS_TYPES = new Class []{
 			Integer.class,	// Rec ID
-			String.class,	// Acct. Description
-			String.class,	// Proj.
+			_JLookup.class,	// Acct. Description
+			_JLookup.class,	// Proj.
+			_JLookup.class,	// Proj. Cost ID
 			String.class,	// Div.
 			String.class,	// Nature / Purpose of Expenditure
 			BigDecimal.class// Amount
@@ -62,8 +65,9 @@ public class modelPettyCashRequest extends DefaultTableModel{
 	
 	Boolean [] COLUMNS_EDITABLE = new Boolean [] {
 			false,
-			true, 
-			true, 
+			false, 
+			false,
+			false, 
 			true, 
 			true,
 			true			
