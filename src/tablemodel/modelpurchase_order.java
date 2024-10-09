@@ -71,7 +71,7 @@ private static final long serialVersionUID = 1L;
 			String.class, //MODEL
 			String.class, //BRAND
 			String.class, //UNIT
-			String.class, //QTY
+			Integer.class, //QTY
 			String.class, //PURPOSE
 			BigDecimal.class, //UNIT PRICE
 			//String.class, //terms
@@ -124,7 +124,7 @@ private static final long serialVersionUID = 1L;
 					false, //4
 					false, //5
 					false, //6
-					false, //7
+					true, //7
 					false, //8
 					false, //9
 					//false, //10

@@ -190,15 +190,15 @@ public class OfficeSupplies extends _JInternalFrame implements _GUI, ActionListe
 				}
 			}
 			{
-				JPanel pnlsouth = new JPanel(new GridLayout(1, 4, 3, 3));
+				JPanel pnlsouth = new JPanel(new GridLayout(1, 3, 3, 3));
 				pnlmain.add(pnlsouth, BorderLayout.SOUTH);
 				pnlsouth.setPreferredSize(new Dimension(0, 45));
-				{
-					btngen_order = new _JButton("Generate");
-					pnlsouth.add(btngen_order);
-					btngen_order.setActionCommand("generate");
-					btngen_order.addActionListener(this);
-				}
+//				{
+//					btngen_order = new _JButton("Generate");
+//					pnlsouth.add(btngen_order);
+//					btngen_order.setActionCommand("generate");
+//					btngen_order.addActionListener(this);
+//				}
 				{
 					btnnew = new _JButton("New");
 					pnlsouth.add(btnnew);
