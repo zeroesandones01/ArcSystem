@@ -211,6 +211,8 @@ public class GeneralLedger extends _JInternalFrame implements _GUI, ActionListen
 	static JComboBox cmbPeriodTo;
 	private JPanel pnlPeriodTo_b2;
 	private JButton btnExport;
+	private _JLookup lookupsubacc;
+	private _JTagLabel tagsubacc;
 	public static String phasename;
 	static JComboBox cmbInclude;
 	static JLabel lblYear;
