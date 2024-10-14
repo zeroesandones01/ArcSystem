@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -18,6 +20,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
 import Database.pgSelect;
+import Functions.FncReport;
 import Functions.FncTables;
 import Lookup.LookupEvent;
 import Lookup.LookupListener;
@@ -42,7 +45,7 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 	private JTextField txtcompany;
 	private _JLookup lookupcompany;
 	private PurchaseOrderTab pnlpurchaseordertab;
-	private JButton btnpreview;
+	private static JButton btnpreview;
 	private static JButton btngenerate;
 
 	public PurchaseOrder() {
@@ -252,14 +255,24 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 	public void actionPerformed(ActionEvent e) {
 		
 		if ( e.getActionCommand().equals("generate")){
-			generate_supplies_po(PurchaseOrderTab.modelPO, PurchaseOrderTab.rowheaderPO);
-			PurchaseOrderTab.modelPO.setEditable(true);
-			enable_buttons(false, false, false, false, true);
 			
+			if ( PurchaseOrderTab.cmbtype.getSelectedIndex() == 0) {// For Supplies
+				
+				generate_supplies_po(PurchaseOrderTab.modelPO, PurchaseOrderTab.rowheaderPO);
+				PurchaseOrderTab.tblPO.setEditable(false);
+				PurchaseOrderTab.tblPO.setEnabled(false);
+				
+			}else {// For Fixed Assets
+				
+			}
+			enable_buttons(false, false, false, false, true, true);
 		}
 		
 		if ( e.getActionCommand().equals("Add")){
 			
+			PurchaseOrderTab.tblPO.setEditable(true);
+			PurchaseOrderTab.tblPO.setEnabled(true);
+			PurchaseOrderTab.modelPO.setEditable(true);
 			FncTables.clearTable(PurchaseOrderTab.modelPO);
 			PurchaseOrderTab.btnAddAcct.setEnabled(true);
 			PurchaseOrderTab.cleartable_rowheader();
@@ -269,7 +282,7 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 			lookuprequester.setEnabled(true);
 			PurchaseOrderTab.lookuppono.setText(getpo_no());
 			PurchaseOrderTab.lookupterms.setEditable(true);
-			enable_buttons(false, false, false, true, true);
+			enable_buttons(false, false, false, true, true, false);
 			
 		}
 		
@@ -278,29 +291,34 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 		}
 		
 		if ( e.getActionCommand().equals("save")){
-			enable_buttons(true, true, false, false, true);
+			enable_buttons(true, true, false, false, true, true);
 		}
 		
 		if ( e.getActionCommand().equals("cancel")){
 			
+			PurchaseOrderTab.tblPO.setEditable(false);
+			PurchaseOrderTab.tblPO.setEnabled(false);
 			FncTables.clearTable(PurchaseOrderTab.modelPO);
 			PurchaseOrderTab.cleartable_rowheader();
 			PurchaseOrderTab.btnAddAcct.setEnabled(false);
-			enable_buttons(true, true, false, false, true);
+			PurchaseOrderTab.cmbtype.setSelectedIndex(0);
+			enable_buttons(true, true, false, false, true, false);
 		}
 		
 		if(e.getActionCommand().equals("preview")) {
-			enable_buttons(true, true, false, false, true);
+			preview_supplies();
+			enable_buttons(true, true, false, false, true,false);
 		}
 	}
 	
-	public static void enable_buttons(Boolean bgenerate,Boolean badd, Boolean bedit, Boolean bsave, Boolean bcancel ) {
+	public static void enable_buttons(Boolean bgenerate,Boolean badd, Boolean bedit, Boolean bsave, Boolean bcancel, Boolean bpreview ) {
 		
 		btngenerate.setEnabled(bgenerate);
 		btnadd.setEnabled(badd);
 		btnedit.setEnabled(bedit);
 		btnsave.setEnabled(bsave);
 		btncancel.setEnabled(bcancel);
+		btnpreview.setEnabled(bpreview);
 	}
 	
 	public static String get_requester() {
@@ -330,7 +348,7 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 		DefaultListModel listModel = new DefaultListModel();
 		rowHeader.setModel(listModel);
 		
-		String sql = "select false,null,ofc_supply_id, ofc_supply_name, null, null, null, null, null, null \n"
+		String sql = "select true,null,ofc_supply_id, ofc_supply_name, null, null, null, null, null, null \n"
 				+ "from mf_office_supplies a \n"
 				+ "where status_id = 'A' and min_supply_count <= supply_count ";
 		
@@ -347,4 +365,12 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 		}
 	}
 	
+	private void preview_supplies () {
+		
+		System.out.println("preview_supplies");
+		
+		Map<String, Object> mapParameters = new HashMap<String, Object>();
+		
+		//FncReport.generateReport("", "Purchase Order Supplies", mapParameters);
+	}
 }
