@@ -207,14 +207,17 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 							public void mousePressed(MouseEvent e) {
 								if ((e.getClickCount() >= 2)) {	
 									int column 	= tblPO.getSelectedColumn();
-									if( column == 2) {selectitem();}
+									System.out.println("column:: "+ column);
+									if( column == 2) { selectitem(); }
+									tblPO.packAll();
 								}
 							}
 							public void mouseReleased(MouseEvent e) {
-//								if ((e.getClickCount() >= 2)) {	
-//									int column 	= tblPO.getSelectedColumn();
-//									if( column == 2) {selectitem();}
-//								}
+								if ((e.getClickCount() >= 2)) {	
+									int column 	= tblPO.getSelectedColumn();
+									if( column == 2) {selectitem();}
+									tblPO.packAll();
+								}
 							}
 						});
 						
@@ -227,7 +230,6 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 						tblPO.getColumnModel().getColumn(7).setPreferredWidth(50);
 						tblPO.getColumnModel().getColumn(8).setPreferredWidth(100);
 						tblPO.getColumnModel().getColumn(9).setPreferredWidth(100);
-						//tblPO.getColumnModel().getColumn(10).setPreferredWidth(100);
 					}
 					{
 						rowheaderPO = tblPO.getRowHeader();
@@ -251,6 +253,10 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 	
 	public static void add_row() {
 		
+		modelPO.addRow(new Object [] {null,null,null,null,});
+		modelPO.addRow(new Object [] {null,null,null,null,});
+		modelPO.addRow(new Object [] {null,null,null,null,});
+		modelPO.addRow(new Object [] {null,null,null,null,});
 		modelPO.addRow(new Object [] {null,null,null,null,});
 		((DefaultListModel) PurchaseOrderTab.rowheaderPO.getModel()).addElement(PurchaseOrderTab.modelPO.getRowCount());
 	}
@@ -303,13 +309,13 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 			if (data != null) {
 				
 				System.out.println("");
+				System.out.println("row: "+row);
 				System.out.println("column: "+column);
 				System.out.println("item_id:"+data[0]);
-				System.out.println("row: "+row);
 				System.out.println("item_name:"+data[1]);
 				
-				modelPO.setValueAt(data[0], row, 2);
-				modelPO.setValueAt(data[1], row, 3);
+				modelPO.setValueAt(data[0], row, column);
+				modelPO.setValueAt(data[1], row, column+1);
 			}
 			tblPO.packAll();
 		}

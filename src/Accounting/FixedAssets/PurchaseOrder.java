@@ -261,7 +261,6 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 				generate_supplies_po(PurchaseOrderTab.modelPO, PurchaseOrderTab.rowheaderPO);
 				PurchaseOrderTab.tblPO.setEditable(false);
 				PurchaseOrderTab.tblPO.setEnabled(false);
-				//PurchaseOrderTab.modelPO.setEditable(false);
 				
 			}else {// For Fixed Assets
 				
