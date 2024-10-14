@@ -51,6 +51,7 @@ import Database.pgSelect;
 import Functions.FncGlobal;
 import Functions.FncLookAndFeel;
 import Functions.UserInfo;
+import components.CustomJPasswordField;
 
 public class ArcSystemLogin extends JDialog {
 
@@ -62,7 +63,7 @@ public class ArcSystemLogin extends JDialog {
 	private static JPanel panPlaceholder; 
 
 	private static JTextField txtUserName;
-	private static JPasswordField txtPassword;
+	private static CustomJPasswordField txtPassword;
 
 	private static JCheckBox chkRemember; 
 
@@ -82,7 +83,8 @@ public class ArcSystemLogin extends JDialog {
 	private static Color color_orange = new Color(255, 165, 0);
 	private static Color color_drakorange = new Color(255, 140, 0);
 	public static Color systemColor = new Color(0, 132, 188);
-	public static Color arcgreen = new Color(29, 191, 83);
+	//public static Color arcgreen = new Color(29, 191, 83);
+	public static Color arcgreen = new Color(255, 255, 255);
 	//public static Color arcgreen = new Color(29, 191, 83);
 	
 	private static String font_name = "SansSerif";
@@ -281,12 +283,14 @@ public class ArcSystemLogin extends JDialog {
 								lblPassword.setFont(font4); 
 							}
 							{
-								txtPassword = new JPasswordField("Input password"); 
+								//txtPassword = new JPasswordField("Input password");
+								txtPassword = new CustomJPasswordField(0);
 								panCenter.add(txtPassword); 
 								txtPassword.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
 								txtPassword.setBackground(null);
-								txtPassword.setForeground(Color.GRAY);
+								txtPassword.setFontColor(Color.BLACK);
 								txtPassword.addFocusListener(focus);
+								txtPassword.setRadius(35);
 								txtPassword.setName("password");
 								txtPassword.setOpaque(false);
 								txtPassword.setHorizontalAlignment(JPasswordField.CENTER);
