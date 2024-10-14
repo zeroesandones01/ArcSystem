@@ -39,14 +39,13 @@ public class modelPettyCashRequest extends DefaultTableModel{
 
 	public modelPettyCashRequest(Object[][] data, Object[] columnNames) {
 		super(data, columnNames);
-		// TODO Auto-generated constructor stub
+		// TODO Auto-generated constructor stub52
 	}
 	
 	String [] COLUMNS = new String [] {
 			"Rec ID", 
 			"Acct. Description", 	
 			"Proj.", 	
-			"Proj. Cost ID", 
 			"Div.",
 			"Nature / Purpose of Expenditure", 
 			"Amount"
@@ -56,7 +55,6 @@ public class modelPettyCashRequest extends DefaultTableModel{
 			Integer.class,	// Rec ID
 			_JLookup.class,	// Acct. Description
 			_JLookup.class,	// Proj.
-			_JLookup.class,	// Proj. Cost ID
 			String.class,	// Div.
 			String.class,	// Nature / Purpose of Expenditure
 			BigDecimal.class// Amount
@@ -67,7 +65,6 @@ public class modelPettyCashRequest extends DefaultTableModel{
 			false,
 			false, 
 			false,
-			false, 
 			true, 
 			true,
 			true			
@@ -95,5 +92,21 @@ public class modelPettyCashRequest extends DefaultTableModel{
 
 	public void setEditable(boolean editable) {
 		this.editable = editable;
+	}
+	
+	@Override
+	public Object getValueAt(int row, int column) {
+	    Object value = super.getValueAt(row, column);
+	    
+	    // Ensure that BigDecimal columns return as BigDecimal
+	    if (column == 5) {
+	        if (value instanceof Number) {
+	            return BigDecimal.valueOf(((Number) value).doubleValue());
+	        } else if (value instanceof Long) {
+	        	 return BigDecimal.valueOf(((Long) value).doubleValue());
+			}
+	    }
+	    
+	    return value;
 	}
 }
