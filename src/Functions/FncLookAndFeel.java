@@ -67,7 +67,7 @@ public class FncLookAndFeel {
 	public static Font systemFont_Plain = new Font(font_name, Font.PLAIN, font_size);//SansSerif
 	public static Font systemFont_Bold = new Font(font_name, Font.BOLD, font_size);//SansSerif
 
-	public static Image iconSystem = new ImageIcon(FncLookAndFeel.class.getClassLoader().getResource("Images/blue-home-icon.png")).getImage();
+	public static Image iconSystem = new ImageIcon(FncLookAndFeel.class.getClassLoader().getResource("Images/arc-logo.png")).getImage();
 	public static Image iconSearch = new ImageIcon(FncLookAndFeel.class.getClassLoader().getResource("Images/blue-search-icon.png")).getImage();
 	
 	public static Image refreshbutton = new ImageIcon(FncLookAndFeel.class.getClassLoader().getResource("Images/Refresh-icon.png")).getImage();

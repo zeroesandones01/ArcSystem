@@ -22,10 +22,12 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -137,7 +139,7 @@ public class FncGlobal {
 	/**	Server Settings	**/ /**	Server Settings	**/ /**	Server Settings	**/
 	/*********************/ /*********************/ /*********************/
 	
-	public static String connectionURL = "jdbc:postgresql://jsystemdb.cenqhomes.com/acerland?ApplicationName=JSystem3.0";
+	public static String connectionURL = "jdbc:postgresql://jsystemdb.cenqhomes.com:5432/acerland?ApplicationName=ArcSystem";
 	//public static String connectionURL = "jdbc:postgresql://localhost/terraverde_summit_local?ApplicationName=JSystem3.0";
 	/*********************/ /*********************/ /*********************/
 	/**	Server Settings	**/ /**	Server Settings	**/ /**	Server Settings	**/
@@ -223,7 +225,7 @@ public class FncGlobal {
 		/**	Server Settings	**/ /**	Server Settings	**/ /**	Server Settings	**/
 		/*********************/ /*********************/ /*********************/
 		//Servers to be deployed in 7th Floor (Live)
-		mapURL.put("Summit - ArcSystem Live", "jdbc:postgresql://jsystemdb.cenqhomes.com/acerland?ApplicationName=ArcSystem");
+		mapURL.put("Summit - ArcSystem Live", "jdbc:postgresql://jsystemdb.cenqhomes.com:5432/acerland?ApplicationName=ArcSystem");
 		//mapURL.put("Summit - Terraverde Live", "jdbc:postgresql://localhost/terraverde_summit_local?ApplicationName=JSystem3.0");
 		//mapURL.put("Site - Open House", "jdbc:postgresql://177.177.176.179:5432/terraverde?ApplicationName=JSystem2.2 (Open House)"); //XXX OPEN HOUSE DATABASE 
 		/*********************/ /*********************/ /*********************/
@@ -247,13 +249,6 @@ public class FncGlobal {
 		System.out.printf("Display ip_address: %s%n", ip_address);
 		
 		System.out.println("connectionURL: "+connectionURL);
-		
-		if(ip_address.equals("177.177.178.199") || ip_address.equals("177.177.178.19") || ip_address.equals("177.177.178.164") || ip_address.equals("177.177.178.119") || ip_address.equals("177.177.178.144") || ip_address.equals("177.177.178.79") || ip_address.equals("177.177.178.165") || ip_address.equals("177.177.176.90") || ip_address.equals("177.177.177.13") 
-				|| ip_address.equals("192.168.10.170")) {
-			mapURL.put("Summit - Terraverde Live", "jdbc:postgresql://192.168.10.15:5432/terraverde_summit?ApplicationName=JSystem2.2");
-			System.out.println("Not Reachable");
-			connectionURL = "jdbc:postgresql://192.168.10.15:5432/terraverde_summit?ApplicationName=JSystem2.2";
-		}
         
 		int currentYear = Calendar.getInstance().get(Calendar.YEAR) + 4;
 
@@ -327,6 +322,7 @@ public class FncGlobal {
 	}
 
 	/********** SQL's **********/
+	
 
 	public static String getCompany() {
 		return "select co_id as \"ID\", trim(company_name) as \"Company Name\", trim(company_alias) as \"Alias\" from mf_company";
