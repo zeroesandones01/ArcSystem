@@ -408,7 +408,6 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 						pnlCenterTable.add(scrollTableTotal, BorderLayout.SOUTH);
 						{
 							modelPettyCashReqTotal = new modelPettyCashRequest(); 
-							modelPettyCashReqTotal.addRow(new Object [] {null, "Total", null, null, null, new BigDecimal(0.00)}); 
 							tblPettyCashTotal = new _JTableTotal(modelPettyCashReqTotal, tblPettyCash); 
 							tblPettyCashTotal.setFont(dialog11Bold);
 							scrollTableTotal.setViewportView(tblPettyCashTotal);
@@ -568,7 +567,6 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 		lookupCompany.setValue("ACERLAND REALTY CORPORATION"); //default value
 		btnState(true, false, false, false, false, false, true, false, false);
 		lookupPCRType.setLookupSQL(getPCR_type());
-		createPCRTable(modelPettyCashReq, rowHeaderScroll);
 		tblPettyCash.setEnabled(false);
 		tblPettyCashTotal.setEnabled(false);
 	}
@@ -605,6 +603,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 			FncTables.clearTable(modelPettyCashReq);
 			FncTables.clearTable(modelPettyCashReqTotal);
 			lookupPCRLiq.setValue("");
+			lookupPCRLiq.setEnabled(true);;
 			ftxtCashReturned.setValue(new BigDecimal(0.00));
 			ftxtAmtToBeReimbursed.setValue(new BigDecimal(0.00));
 			ftxtTotalAmtOfCA.setValue(new BigDecimal(0.00));
@@ -672,6 +671,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 
 	public void addNew() {
 		enable_header_comp(true);
+		createPCRTable(modelPettyCashReq, rowHeaderScroll);
 		lookupPCRNo.setEnabled(false);
 		txtPCRStatus.setText("ACTIVE"); //initial value
 		txtPayee.setText(UserInfo.FullName);
@@ -689,6 +689,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 	public void addNewLiq() {
 		enable_header_comp(true);
 		enable_liquidation_comp(true);
+		createPCRTable(modelPettyCashReq, rowHeaderScroll);
 		lookupPCRNo.setEnabled(false);
 		lookupPCRType.setValue("Cash Fund Liquidation");
 		pcr_type_id = "03"; //Req. Type ID for Cash Fund Liquidation
@@ -786,8 +787,9 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 				mainModel.addRow(db.getResult()[x]);
 				listModel.addElement(mainModel.getRowCount());
 			}
-
 		}
+		modelPettyCashReqTotal.addRow(new Object [] {null, "Total", null, null, null, new BigDecimal(0.00)}); 
+
 	}
 
 	private void addRow() {
