@@ -7,6 +7,7 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
 import Functions.FncTables;
+import Lookup._JLookup;
 
 public class modelpurchase_order extends DefaultTableModel {
 private static final long serialVersionUID = 1L;
@@ -66,7 +67,7 @@ private static final long serialVersionUID = 1L;
 			
 			Boolean.class, //Selected
 			String.class,  //Supplier ID
-			String.class, //ITEM ID
+			_JLookup.class, //ITEM ID
 			String.class, //DESCRIPTION
 			String.class, //MODEL
 			String.class, //BRAND
@@ -119,7 +120,7 @@ private static final long serialVersionUID = 1L;
 			COLUMNS_EDITABLE = new Boolean[]{
 					true, //0
 					false, //1
-					false, //2
+					true, //2
 					false, //3
 					false, //4
 					false, //5

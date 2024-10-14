@@ -6,11 +6,18 @@ import java.awt.GridLayout;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -21,24 +28,27 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import DateChooser._JDateChooser;
+import Functions.FncGlobal;
 import Functions.FncTables;
 import Lookup.LookupEvent;
 import Lookup.LookupListener;
 import Lookup._JLookup;
+import Lookup._JLookupTable;
 import components._JTableMain;
 import interfaces._GUI;
 import tablemodel.modelpurchase_order;
 
-public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener {
+public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, MouseListener, KeyListener {
 
 	private static final long serialVersionUID = 1L;
 	public static _JLookup lookupterms;
 	private _JDateChooser date_PO;
 	private JScrollPane scrollPO;
 	public static modelpurchase_order modelPO;
-	private _JTableMain tblPO;
+	public static _JTableMain tblPO;
 	public static _JLookup lookuppono;
 	private JTextField txtrplfno;
+	public static JComboBox cmbtype;
 	public static JList rowheaderPO;
 	public static JButton btnAddAcct;
 
@@ -75,17 +85,38 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener {
 				 panelpurchaseorder.add(pnlPO_north, BorderLayout.NORTH);
 				 pnlPO_north.setPreferredSize(new Dimension(0,90));
 				 {
-					 JPanel pnlcanvassid= new JPanel(new BorderLayout(5, 5));
-					 pnlPO_north.add(pnlcanvassid);
+					 JPanel pnlcombo = new JPanel(new BorderLayout(5, 5));
+					 pnlPO_north.add(pnlcombo);
+					 {
+						 JLabel lblcombo = new JLabel("Type");
+						 pnlcombo.add(lblcombo, BorderLayout.WEST);
+						 lblcombo.setPreferredSize(new Dimension(70, 0));
+					 }
+					 {
+						 String [] types = {"Supplies","Fixed Asset"};
+						 cmbtype = new JComboBox(types);
+						 cmbtype.setSelectedIndex(0);
+						 pnlcombo.add(cmbtype, BorderLayout.CENTER);
+					 }
+					 {
+						 JPanel pnlcombo_east = new JPanel(new BorderLayout(5, 5));
+						 pnlcombo.add(pnlcombo_east, BorderLayout.EAST);
+						 pnlcombo_east.setPreferredSize(new Dimension(480, 0));
+					 }
+					 
+				 }
+				 {
+					 JPanel pnlpono= new JPanel(new BorderLayout(5, 5));
+					 pnlPO_north.add(pnlpono);
 					 {
 						 JLabel lblpono = new JLabel("PO NO.");
-						 pnlcanvassid.add(lblpono, BorderLayout.WEST);
+						 pnlpono.add(lblpono, BorderLayout.WEST);
 						 lblpono.setPreferredSize(new Dimension(70, 0));
 					 }
 					 {
 						 lookuppono = new _JLookup();
 						 lookuppono.setReturnColumn(0);
-						 pnlcanvassid.add(lookuppono, BorderLayout.CENTER);
+						 pnlpono.add(lookuppono, BorderLayout.CENTER);
 						 lookuppono.addLookupListener(new LookupListener() {
 							public void lookupPerformed(LookupEvent event) {
 								Object [] data = ((_JLookup)event.getSource()).getDataSet();
@@ -96,9 +127,10 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener {
 							}
 						});
 					 }
-					 { JPanel pnlcanvassid_east = new JPanel(new BorderLayout(5, 5));
-					  pnlcanvassid.add(pnlcanvassid_east, BorderLayout.EAST);
-					  pnlcanvassid_east.setPreferredSize(new Dimension(500, 0)); 
+					 { 
+						  JPanel pnlcanvassid_east = new JPanel(new BorderLayout(5, 5));
+						  pnlpono.add(pnlcanvassid_east, BorderLayout.EAST);
+						  pnlcanvassid_east.setPreferredSize(new Dimension(500, 0)); 
 						  {
 							  	
 							  JPanel pnlcanvassid_east_west = new JPanel(new BorderLayout(5, 5));
@@ -115,21 +147,21 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener {
 								 pnlcanvassid_east.add(txtrplfno, BorderLayout.EAST);
 								 txtrplfno.setPreferredSize(new Dimension(110, 0)); 
 						  }
-					  }
+					}
 				 }
-				  {
-					 JPanel pnlsupplier = new JPanel(new BorderLayout(5, 5));
-					 pnlPO_north.add(pnlsupplier);
+				 {
+					 JPanel pnlterm = new JPanel(new BorderLayout(5, 5));
+					 pnlPO_north.add(pnlterm);
 					 {
 						 JLabel lblPR_No = new JLabel("Terms   ", JLabel.LEADING);
-						 pnlsupplier.add(lblPR_No, BorderLayout.WEST);
+						 pnlterm.add(lblPR_No, BorderLayout.WEST);
 						 lblPR_No.setPreferredSize(new Dimension(70, 0));
 					 }
 					 {
 						 lookupterms = new _JLookup();
 						 lookupterms.setReturnColumn(0);
 						 lookupterms.setEditable(false);
-						 pnlsupplier.add(lookupterms, BorderLayout.CENTER);
+						 pnlterm.add(lookupterms, BorderLayout.CENTER);
 						 lookupterms.addLookupListener(new LookupListener() {
 							public void lookupPerformed(LookupEvent event) {
 								Object [] data = ((_JLookup)event.getSource()).getDataSet();
@@ -142,7 +174,7 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener {
 					 }
 					 {
 						 JPanel pnlsupplier_east = new JPanel(new BorderLayout(5, 5));
-						 pnlsupplier.add(pnlsupplier_east, BorderLayout.EAST);
+						 pnlterm.add(pnlsupplier_east, BorderLayout.EAST);
 						 pnlsupplier_east.setPreferredSize(new Dimension(500, 0));
 						 {
 							 JLabel lbldate = new JLabel("Date   ", JLabel.TRAILING);
@@ -154,7 +186,7 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener {
 							 date_PO.setPreferredSize(new Dimension(110, 0));
 						 }
 					 }
-				 }
+				}
 			}
 			{
 				JPanel pnlPO_center = new JPanel(new BorderLayout(5,5));
@@ -168,33 +200,27 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener {
 						tblPO = new _JTableMain(modelPO);
 						scrollPO.setViewportView(tblPO);
 						tblPO.getTableHeader().setEnabled(false);
-						tblPO.packAll();
 						tblPO.setHorizontalScrollEnabled(true);
-						tblPO.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-							public void valueChanged(ListSelectionEvent e) {
-								
-								if(!e.getValueIsAdjusting()) {
-									
-									if(tblPO.getSelectedRows().length > 0) {
-										
-//									try {
-//											int row= tblPO.getSelectedRow();
-//											
-//											print_po = (String) modelPO.getValueAt(row, 10);
-//											
-//										}catch (ArrayIndexOutOfBoundsException ex) { }
-//										
-//										if(po_no != null ) {
-//											 procurement.enable_buttons(false, false, false, false, true, true);
-//											 
-//										 }else {
-//											 procurement.enable_buttons(false, false, false, true, true, false);
-//										 }
-									}
+						tblPO.setEditable(false);
+						tblPO.setEnabled(false);
+						tblPO.addMouseListener(new MouseAdapter() {
+							public void mousePressed(MouseEvent e) {
+								if ((e.getClickCount() >= 2)) {	
+									int column 	= tblPO.getSelectedColumn();
+									System.out.println("column:: "+ column);
+									if( column == 2) { selectitem(); }
+									tblPO.packAll();
 								}
 							}
-
+							public void mouseReleased(MouseEvent e) {
+								if ((e.getClickCount() >= 2)) {	
+									int column 	= tblPO.getSelectedColumn();
+									if( column == 2) {selectitem();}
+									tblPO.packAll();
+								}
+							}
 						});
+						
 						tblPO.getColumnModel().getColumn(1).setPreferredWidth(100);
 						tblPO.getColumnModel().getColumn(2).setPreferredWidth(75);
 						tblPO.getColumnModel().getColumn(3).setPreferredWidth(250);
@@ -204,7 +230,6 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener {
 						tblPO.getColumnModel().getColumn(7).setPreferredWidth(50);
 						tblPO.getColumnModel().getColumn(8).setPreferredWidth(100);
 						tblPO.getColumnModel().getColumn(9).setPreferredWidth(100);
-						//tblPO.getColumnModel().getColumn(10).setPreferredWidth(100);
 					}
 					{
 						rowheaderPO = tblPO.getRowHeader();
@@ -228,6 +253,10 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener {
 	
 	public static void add_row() {
 		
+		modelPO.addRow(new Object [] {null,null,null,null,});
+		modelPO.addRow(new Object [] {null,null,null,null,});
+		modelPO.addRow(new Object [] {null,null,null,null,});
+		modelPO.addRow(new Object [] {null,null,null,null,});
 		modelPO.addRow(new Object [] {null,null,null,null,});
 		((DefaultListModel) PurchaseOrderTab.rowheaderPO.getModel()).addElement(PurchaseOrderTab.modelPO.getRowCount());
 	}
@@ -265,5 +294,86 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener {
 		 
 
 		return pnl;
+	}
+	
+	public void selectitem() {
+		int column = tblPO.getSelectedColumn();
+		int row = tblPO.getSelectedRow();
+		
+		if(column == 2) {
+			_JLookupTable dlg = new _JLookupTable(FncGlobal.homeMDI, null, "Items", getitem(), false);
+			dlg.setLocationRelativeTo(FncGlobal.homeMDI);
+			dlg.setVisible(true);
+			
+			Object[] data = dlg.getReturnDataSet();
+			if (data != null) {
+				
+				System.out.println("");
+				System.out.println("row: "+row);
+				System.out.println("column: "+column);
+				System.out.println("item_id:"+data[0]);
+				System.out.println("item_name:"+data[1]);
+				
+				modelPO.setValueAt(data[0], row, column);
+				modelPO.setValueAt(data[1], row, column+1);
+			}
+			tblPO.packAll();
+		}
+		
+	}
+	
+	private String getitem() {
+		String sql = " select ofc_supply_id, ofc_supply_name \n"
+				+ " from mf_office_supplies \n"
+				+ " where status_id = 'A'";
+		return sql;
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
