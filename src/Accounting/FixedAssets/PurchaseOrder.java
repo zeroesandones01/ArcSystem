@@ -12,6 +12,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
@@ -282,6 +283,7 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 			lookuprequester.setEnabled(true);
 			PurchaseOrderTab.lookuppono.setText(getpo_no());
 			PurchaseOrderTab.lookupterms.setEditable(true);
+			System.out.println("Date: "+ PurchaseOrderTab.date_PO.getDate());
 			enable_buttons(false, false, false, true, true, false);
 			
 		}
@@ -291,6 +293,9 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 		}
 		
 		if ( e.getActionCommand().equals("save")){
+			if (PurchaseOrderTab.checkdetails ()) {
+				JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please check details.");
+			}
 			enable_buttons(true, true, false, false, true, true);
 		}
 		
@@ -302,6 +307,7 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 			PurchaseOrderTab.cleartable_rowheader();
 			PurchaseOrderTab.btnAddAcct.setEnabled(false);
 			PurchaseOrderTab.cmbtype.setSelectedIndex(0);
+			PurchaseOrderTab.lookuppono.setValue("");
 			enable_buttons(true, true, false, false, true, false);
 		}
 		
