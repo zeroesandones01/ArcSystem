@@ -1,6 +1,7 @@
 package Accounting.FixedAssets;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.LayoutManager;
@@ -35,6 +36,7 @@ import Lookup.LookupListener;
 import Lookup._JLookup;
 import Lookup._JLookupTable;
 import components._JTableMain;
+import components._JTagLabel;
 import interfaces._GUI;
 import tablemodel.modelpurchase_order;
 
@@ -42,12 +44,14 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 
 	private static final long serialVersionUID = 1L;
 	public static _JLookup lookupterms;
-	private _JDateChooser date_PO;
+	public static _JDateChooser date_PO;
 	private JScrollPane scrollPO;
 	public static modelpurchase_order modelPO;
 	public static _JTableMain tblPO;
 	public static _JLookup lookuppono;
 	private JTextField txtrplfno;
+	private _JLookup lookupsupplier;
+	private _JTagLabel tagsupplier;
 	public static JComboBox cmbtype;
 	public static JList rowheaderPO;
 	public static JButton btnAddAcct;
@@ -81,9 +85,9 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 			this.add(panelpurchaseorder, BorderLayout.CENTER);
 			
 			{
-				 JPanel pnlPO_north = new JPanel(new GridLayout(3, 1, 5, 5));
+				 JPanel pnlPO_north = new JPanel(new GridLayout(4, 1, 5, 5));
 				 panelpurchaseorder.add(pnlPO_north, BorderLayout.NORTH);
-				 pnlPO_north.setPreferredSize(new Dimension(0,90));
+				 pnlPO_north.setPreferredSize(new Dimension(0,110));
 				 {
 					 JPanel pnlcombo = new JPanel(new BorderLayout(5, 5));
 					 pnlPO_north.add(pnlcombo);
@@ -102,8 +106,17 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 						 JPanel pnlcombo_east = new JPanel(new BorderLayout(5, 5));
 						 pnlcombo.add(pnlcombo_east, BorderLayout.EAST);
 						 pnlcombo_east.setPreferredSize(new Dimension(480, 0));
+						 {
+							 JLabel lbldate = new JLabel("Date   ", JLabel.TRAILING);
+							 pnlcombo_east.add(lbldate, BorderLayout.CENTER);
+						 }
+						 {
+							 date_PO = new _JDateChooser("MM/dd/yyyy", "##/##/#####", '_');
+							 pnlcombo_east.add(date_PO, BorderLayout.EAST);
+							 date_PO.setPreferredSize(new Dimension(110, 0));
+						 }
+						 
 					 }
-					 
 				 }
 				 {
 					 JPanel pnlpono= new JPanel(new BorderLayout(5, 5));
@@ -150,6 +163,28 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 					}
 				 }
 				 {
+					 JPanel pnlsupplier = new JPanel(new BorderLayout(5, 5));
+					 pnlPO_north.add(pnlsupplier);
+					 {
+						 JLabel lblsupplier = new JLabel("Supplier");
+						 pnlsupplier.add(lblsupplier, BorderLayout.WEST);
+						 lblsupplier.setPreferredSize(new Dimension(70, 0));
+					 }
+					 {
+						 lookupsupplier = new _JLookup();
+						 pnlsupplier.add(lookupsupplier, BorderLayout.CENTER);
+					 }
+					 {
+						 JPanel pnlsupplier_east = new JPanel(new BorderLayout(5, 5));
+						 pnlsupplier.add(pnlsupplier_east, BorderLayout.EAST);
+						 pnlsupplier_east.setPreferredSize(new Dimension(500, 0));
+						 {
+							 tagsupplier = new _JTagLabel("[ ]");
+							 pnlsupplier_east.add(tagsupplier, BorderLayout.CENTER);
+						 }
+					 }
+				 }
+				 {
 					 JPanel pnlterm = new JPanel(new BorderLayout(5, 5));
 					 pnlPO_north.add(pnlterm);
 					 {
@@ -176,15 +211,15 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 						 JPanel pnlsupplier_east = new JPanel(new BorderLayout(5, 5));
 						 pnlterm.add(pnlsupplier_east, BorderLayout.EAST);
 						 pnlsupplier_east.setPreferredSize(new Dimension(500, 0));
-						 {
-							 JLabel lbldate = new JLabel("Date   ", JLabel.TRAILING);
-							 pnlsupplier_east.add(lbldate, BorderLayout.CENTER);
-						 }
-						 {
-							 date_PO = new _JDateChooser("MM/dd/yyyy", "##/##/#####", '_');
-							 pnlsupplier_east.add(date_PO, BorderLayout.EAST);
-							 date_PO.setPreferredSize(new Dimension(110, 0));
-						 }
+//						 {
+//							 JLabel lbldate = new JLabel("Date   ", JLabel.TRAILING);
+//							 pnlsupplier_east.add(lbldate, BorderLayout.CENTER);
+//						 }
+//						 {
+//							 date_PO = new _JDateChooser("MM/dd/yyyy", "##/##/#####", '_');
+//							 pnlsupplier_east.add(date_PO, BorderLayout.EAST);
+//							 date_PO.setPreferredSize(new Dimension(110, 0));
+//						 }
 					 }
 				}
 			}
@@ -251,12 +286,16 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 		}
 	}
 	
+	public static boolean checkdetails () {
+		if (date_PO.getDate().equals("null")){
+			return false;
+		}else {
+			return true;
+		}
+	}
+	
 	public static void add_row() {
 		
-		modelPO.addRow(new Object [] {null,null,null,null,});
-		modelPO.addRow(new Object [] {null,null,null,null,});
-		modelPO.addRow(new Object [] {null,null,null,null,});
-		modelPO.addRow(new Object [] {null,null,null,null,});
 		modelPO.addRow(new Object [] {null,null,null,null,});
 		((DefaultListModel) PurchaseOrderTab.rowheaderPO.getModel()).addElement(PurchaseOrderTab.modelPO.getRowCount());
 	}

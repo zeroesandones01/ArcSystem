@@ -120,7 +120,7 @@ private static final long serialVersionUID = 1L;
 			COLUMNS_EDITABLE = new Boolean[]{
 					true, //0
 					false, //1
-					true, //2
+					false, //2
 					false, //3
 					false, //4
 					false, //5
