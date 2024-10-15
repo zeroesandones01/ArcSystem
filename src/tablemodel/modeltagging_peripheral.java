@@ -148,7 +148,7 @@ public class modeltagging_peripheral extends DefaultTableModel {
 					true,//"Description",
 					true,//"Serial",
 					true,//"License Key",
-					true,//Supplier
+					false,//Supplier
 					false,//"Status",
 					false,//"Prev Custodian",
 					false,//"Date Retired",
