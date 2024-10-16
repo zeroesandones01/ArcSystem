@@ -85,6 +85,9 @@ public class ArcSystemLogin extends JDialog {
 	private static Color color_drakorange = new Color(255, 140, 0);
 	public static Color systemColor = new Color(0, 132, 188);
 	public static Color arcgreen = new Color(29, 191, 83);
+	
+	public static Color login_color_left = new Color(0, 155, 119);
+	public static Color login_color_right = new Color(17, 70, 60);
 	//public static Color arcgreen = new Color(255, 255, 255);
 	
 	private static String font_name = "SansSerif";
@@ -124,7 +127,7 @@ public class ArcSystemLogin extends JDialog {
 		frame.setResizable(false);
 		{
 			{
-				Banner panLeft = new Banner(new BorderLayout(5, 5), Color.WHITE, arcgreen);
+				Banner panLeft = new Banner(new BorderLayout(5, 5), Color.WHITE, login_color_left);
 				panMain.add(panLeft, BorderLayout.CENTER); 
 				{
 					{
@@ -191,7 +194,7 @@ public class ArcSystemLogin extends JDialog {
 				JXPanel panRight = new JXPanel(new BorderLayout(0, 0)); 
 				panMain.add(panRight, BorderLayout.EAST);
 				panRight.setPreferredSize(new Dimension(250, 0));
-				panRight.setBackground(arcgreen);
+				panRight.setBackground(Color.WHITE);
 				{
 					{
 						JXPanel panPage = new JXPanel(new BorderLayout(5, 5)); 

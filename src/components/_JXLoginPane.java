@@ -705,8 +705,10 @@ public class _JXLoginPane extends JXPanel {
 	 * Create all of the UI components for the login panel
 	 */
 	private void initComponents() {//XXX initComponents
+		this.setSize(new Dimension(500, 500));
+		this.setPreferredSize(new Dimension(500, 500));
 		//create the default banner
-		banner.setImage(createLoginBanner());
+		//banner.setImage(createLoginBanner());
 
 		//create the default label
 		messageLabel = new JLabel(" ");
@@ -750,8 +752,9 @@ public class _JXLoginPane extends JXPanel {
 
 		//layout the panel
 		setLayout(new BorderLayout());
-		add(banner, BorderLayout.NORTH);
+		//add(banner, BorderLayout.NORTH);
 		contentCardPane = new JPanel(new CardLayout());
+		//contentCardPane.setBorder(Border.LI);
 		contentCardPane.setOpaque(false);
 		contentCardPane.add(contentPanel, "0");
 		contentCardPane.add(progressPanel, "1");
