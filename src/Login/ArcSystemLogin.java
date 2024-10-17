@@ -20,7 +20,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Year;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Properties;
