@@ -16,12 +16,14 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormatSymbols;
+import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -33,6 +35,7 @@ import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
@@ -50,7 +53,10 @@ import javax.swing.event.InternalFrameListener;
 import javax.swing.plaf.InternalFrameUI;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
+import org.jdesktop.swingx.JXFormattedTextField;
 import org.jdesktop.swingx.JXTable;
+
+import com.toedter.calendar.JDateChooser;
 
 import Database.pgSelect;
 import FormattedTextField._JXFormattedTextField;
@@ -82,6 +88,8 @@ public class _JInternalFrame extends JInternalFrame implements ComponentListener
 	protected static BorderLayout BORDER_LAYOUT = new BorderLayout();
 
 	protected static Border LINE_BORDER = BorderFactory.createLineBorder(Color.GRAY);
+
+	SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
 	private String TITLE_MENU = null;
 
@@ -651,7 +659,6 @@ public class _JInternalFrame extends JInternalFrame implements ComponentListener
 			if (comp instanceof JXTable) {
 				return;
 			}
-
 			if (comp instanceof JPanel) {
 				panelLooper((JPanel) comp, enable);
 			} else if (comp instanceof JScrollPane) {
@@ -724,6 +731,38 @@ public class _JInternalFrame extends JInternalFrame implements ComponentListener
 					((_JXFormattedTextField)comp).setValue(null);
 				}
 				
+			}
+		}
+	}
+	
+	//ADDED BY MONIQUE DTD 2024-10-16; DEFAULT VALUE FOR EACH TYPE OF COMPONENT ON CLEAR 
+	public void setComponentsClear(JPanel panel) {
+		panelLooperClear(panel);
+	}
+
+	public void panelLooperClear(Container panel) {
+		for (Component comp : panel.getComponents()) {
+			if (comp instanceof JPanel) {
+				panelLooperClear((JPanel) comp, null);
+			} else {
+				if(comp instanceof JTextField){
+					((JTextField)comp).setText("");
+				}
+				if(comp instanceof _JLookup){
+					((_JLookup)comp).setValue(null);
+				}
+				if(comp instanceof JTextArea){
+					((JTextArea)comp).setText("");
+				}
+				if(comp instanceof _JXFormattedTextField){
+					((_JXFormattedTextField)comp).setValue(new BigDecimal(0.00));
+				}
+				if(comp instanceof JComboBox) {
+					((JComboBox)comp).setSelectedIndex(0);
+				}	
+				if(comp instanceof JDateChooser) {
+					((JDateChooser)comp).setDate(null);
+				}
 			}
 		}
 	}
