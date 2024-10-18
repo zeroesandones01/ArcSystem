@@ -35,6 +35,7 @@ import Lookup.LookupEvent;
 import Lookup.LookupListener;
 import Lookup._JLookup;
 import Lookup._JLookupTable;
+import components.JTBorderFactory;
 import components._JTableMain;
 import components._JTagLabel;
 import interfaces._GUI;
@@ -87,7 +88,8 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 			{
 				 JPanel pnlPO_north = new JPanel(new GridLayout(4, 1, 5, 5));
 				 panelpurchaseorder.add(pnlPO_north, BorderLayout.NORTH);
-				 pnlPO_north.setPreferredSize(new Dimension(0,110));
+				 pnlPO_north.setBorder(JTBorderFactory.createTitleBorder(""));
+				 pnlPO_north.setPreferredSize(new Dimension(0,130));
 				 {
 					 JPanel pnlcombo = new JPanel(new BorderLayout(5, 5));
 					 pnlPO_north.add(pnlcombo);

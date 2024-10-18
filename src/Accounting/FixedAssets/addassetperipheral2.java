@@ -22,6 +22,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -51,7 +52,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 
 	private static final long serialVersionUID = 1L;
 	static String title = "Add Asset Peripherals";
-	public static Dimension frameSize = new Dimension(900, 500);
+	public static Dimension frameSize = new Dimension(900, 700);
 	private _JLookup lookupcomp;
 	private _JTagLabel tagcomp;
 	private JScrollPane scrollassetperipheral;
@@ -66,17 +67,23 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 	private JButton btnsave;
 	private JButton btnedit;
 	private JButton btncancel;
-	protected String co_name;
+	protected String co_name = "ACERLAND REALTY CORPORATION";
 	private _JScrollPane scrolltagged_peripheral;
 	private modeltagged_peripheral modeltagged;
 	private _JTableMain tbltagged;
 	private JList rowheadertagged;
-	public static Integer asset_no;
+	protected String co_id = "01";
 	protected static ButtonGroup grpNE = new ButtonGroup();
+	private String to_do = "";
 
 	public addassetperipheral2() {
 		super(title, true, true, true, true);
 		initGUI();
+		lookupcomp.setValue(co_id);
+		tagcomp.setTag(co_name);
+		modelasset.setEditable(true);
+		tblasset.setEnabled(true);
+		display_assets(co_id);
 	}
 
 	public addassetperipheral2(String title) {
@@ -123,12 +130,15 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 						lookupcomp.addLookupListener(new LookupListener() {
 
 
+
 							public void lookupPerformed(LookupEvent event) {
 								Object[] data = ((_JLookup) event.getSource()).getDataSet();
 								if(data != null) {
+									co_id = (String)data[0];
 									co_name = (String)data[1];
 									
 									tagcomp.setTag(co_name);
+									lookupcomp.setValue(co_id);
 									display_assets(lookupcomp.getValue());
 									modelasset.setEditable(true);
 									tblasset.setEnabled(true);
@@ -171,30 +181,28 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 								modelasset.setEditable(false);
 								tblasset.getTableHeader().setEnabled(false);
 								scrollassetperipheral.setViewportView(tblasset);
+								tblasset.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 								tblasset.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-
-									@Override
 									public void valueChanged(ListSelectionEvent e) {
 										if(!e.getValueIsAdjusting()) {
-											try {
-												int row = tblasset.getSelectedRow();
-												asset_no = (Integer) modelasset.getValueAt(row, 1);
+											if(tblasset.getSelectedRows().length ==1){
+												int row = tblasset.convertRowIndexToModel(tblasset.getSelectedRow());
+												Integer asset_no = (Integer) modelasset.getValueAt(row, 0);
 												System.out.println("Value of Asset No.: "+asset_no);
 												displaytagged_peripherals(modeltagged, rowheadertagged, asset_no);
-												
-											} catch (ArrayIndexOutOfBoundsException ex) {
-												
 											}
+												
+												
 										}
 										buttonstate(true, false, true, true);
 									}
 								});
 								
-								tblasset.getColumnModel().getColumn(0).setPreferredWidth(50);//Select
-								tblasset.getColumnModel().getColumn(1).setPreferredWidth(150);//Asset No.
-								tblasset.getColumnModel().getColumn(2).setPreferredWidth(250);//Asset Name
-								tblasset.getColumnModel().getColumn(3).setPreferredWidth(350);//Custodian
-								tblasset.getColumnModel().getColumn(4).setPreferredWidth(150);//Date Acquired
+								//tblasset.getColumnModel().getColumn(0).setPreferredWidth(50);//Select
+								tblasset.getColumnModel().getColumn(0).setPreferredWidth(150);//Asset No.
+								tblasset.getColumnModel().getColumn(1).setPreferredWidth(250);//Asset Name
+								tblasset.getColumnModel().getColumn(2).setPreferredWidth(350);//Custodian
+								tblasset.getColumnModel().getColumn(3).setPreferredWidth(150);//Date Acquired
 								
 							}
 							{
@@ -313,23 +321,80 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 		}
 	}
 	public void actionPerformed(ActionEvent e) {
+		int row = tblasset.convertRowIndexToModel(tblasset.getSelectedRow());
+		Integer asset_no = (Integer) modelasset.getValueAt(row, 0);
+		
 		if (e.getActionCommand().equals("new")) {
-			grpNE.setSelected(btnnew.getModel(), true);
-			if(hasCheckedAssets()) {
-				
-				display_peripherals(modeltagging, rowheadertagging, asset_no);
-				modeltagging.setEditable(true);
-				modelasset.setEditable(false);
-				tblasset.setEnabled(false);
-				buttonstate(false, true, false, true);
-				
-			}else {
-				JOptionPane.showMessageDialog(this, "Please check the box of selected asset.", "", JOptionPane.PLAIN_MESSAGE);
-			}
+			
+			display_peripherals(modeltagging, rowheadertagging, asset_no);
+			modeltagging.setEditable(true);
+			modelasset.setEditable(false);
+			tblasset.setEnabled(false);
+			buttonstate(false, true, false, true);
+			to_do = "new";
+			grpNE.setSelected(btnnew.getModel(), false);
+			//System.out.println("button:  "+grpNE.getSelection().equals(btnnew.getModel()));
+			
+			
+			
+//			if(hasCheckedAssets()) {
+//				
+//				display_peripherals(modeltagging, rowheadertagging, asset_no);
+//				modeltagging.setEditable(true);
+//				modelasset.setEditable(false);
+//				tblasset.setEnabled(false);
+//				buttonstate(false, true, false, true);
+//				
+//			}else {
+//				JOptionPane.showMessageDialog(this, "Please check the box of selected asset.", "", JOptionPane.PLAIN_MESSAGE);
+//			}
 		}
 		
 		if (e.getActionCommand().equals("save")) {
-			if(grpNE.isSelected(btnnew.getModel())) {
+			
+			System.out.println("row: "+row);
+			System.out.println("asset_no: "+asset_no);
+			
+			System.out.println(""+grpNE.getSelection());
+			if( to_do == "new") {
+				if(checkdetails()) {
+					if(JOptionPane.showConfirmDialog(this, "Are you sure you want to save new peripheral?", "Save", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+						
+						save_peripherals();
+						displaytagged_peripherals(modeltagged, rowheadertagged, asset_no);
+						FncTables.clearTable(modeltagging);
+						modelasset.setEditable(true);
+						tblasset.setEnabled(true);
+						buttonstate(true, false, false, true);
+						to_do = "";
+						
+						JOptionPane.showMessageDialog(this, "New peripheral is saved.", "", JOptionPane.PLAIN_MESSAGE);
+					}
+				}else {
+					System.out.println("Check all details");
+					JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please check all details.", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				
+			}else if(to_do == "edit") {
+			
+				System.out.println("Edit");
+				if(JOptionPane.showConfirmDialog(this, "Are all entries correct?", "Save", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+					
+					pgUpdate db = new pgUpdate();
+					updateperipheral(db);
+					save_edit();
+					db.commit();
+					
+					displaytagged_peripherals(modeltagged, rowheadertagged, asset_no);
+					buttonstate(true, false, false, true);
+					JOptionPane.showMessageDialog(this, "New peripheral is saved.", "", JOptionPane.PLAIN_MESSAGE);
+					System.out.println("Save Edit Peripheral");
+					to_do = "";
+				}
+			}
+			
+			
+			/*if(grpNE.isSelected(btnnew.getModel())) {
 				System.out.println("hasCheckedAssets_tagging(): "+hasCheckedAssets_tagging());
 				if(hasCheckedAssets_tagging()) {
 					
@@ -367,17 +432,14 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 					JOptionPane.showMessageDialog(this, "New peripheral is saved.", "", JOptionPane.PLAIN_MESSAGE);
 					System.out.println("Save Edit Peripheral");
 				}
-			}
+			}*/
 		}
 		
 		if(e.getActionCommand().equals("edit")) {
-			grpNE.setSelected(btnedit.getModel(), true);
-			if(hasCheckedAssets()) {
-				modeltagged.setEditable(true);
-				buttonstate(false, true, false, true);
-			}else {
-				JOptionPane.showMessageDialog(this, "Please check the box of selected asset.", "", JOptionPane.PLAIN_MESSAGE);
-			}
+			to_do = "edit";
+			
+			modeltagged.setEditable(true);
+			buttonstate(false, true, false, true);
 			
 		}
 		
@@ -399,12 +461,10 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 			
 			Object[] data = dlg.getReturnDataSet();
 			if (data != null) {
-				String test = (String) data[0];
-				modeltagging.setValueAt(data[0], row, 11);
 				
-				System.out.println("Valueof data:: "+data[0]);
-				System.out.println("column:: "+column);
-				System.out.println("row:: "+row);
+				modeltagging.setValueAt(data[0], row, 11);
+				modeltagging.setValueAt(data[1], row, 16);
+				
 			}		
 			tbltagperipheral.packAll();
 		}
@@ -469,7 +529,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 		DefaultListModel listModel = new DefaultListModel();// Creating listModel for rowHeader.
 		rowheaderassetperipheral.setModel(listModel);// Setting of listModel into rowHeader.
 		
-		String strSQL = "select false, a.asset_no, a.asset_name, c.entity_name, a.date_acquired \n"
+		String strSQL = "select /*false,*/ a.asset_no, a.asset_name, c.entity_name, a.date_acquired \n"
 				+ "from rf_asset a\n"
 				+"left join rf_employee b on a.current_cust::varchar = b.emp_code \n"
 				+"left join rf_entity c on b.entity_id = c.entity_id \n"
@@ -544,6 +604,9 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 		tbltagged.packAll();
 	}
 	private static void save_peripherals() {
+		int row = tblasset.convertRowIndexToModel(tblasset.getSelectedRow());
+		Integer asset_no = (Integer) modelasset.getValueAt(row, 0);
+		
 		
 		for(int x = 0; x < modeltagging.getRowCount(); x++) {
 			
@@ -631,8 +694,8 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 	public Boolean hasCheckedAssets(){
 		
 		ArrayList<Boolean> checkTable = new ArrayList<Boolean>();
-		for(int x=0; x<modelasset.getRowCount(); x++){
-			if(modelasset.getValueAt(x, 0).equals(true))
+		for(int x=0; x<modeltagged.getRowCount(); x++){
+			if(modeltagged.getValueAt(x, 0).equals(true))
 				checkTable.add(true);
 		}
 		return checkTable.contains(true);
@@ -663,6 +726,7 @@ public class addassetperipheral2 extends _JInternalFrame implements _GUI, Action
 		scrolltagperipheral.setRowHeaderView(rowheadertagging);
 		rowheadertagged = tbltagged.getRowHeader();
 		scrolltagged_peripheral.setRowHeaderView(rowheadertagged);
+		to_do = "";
 		buttonstate(false, false, false, false);
 	}
 }

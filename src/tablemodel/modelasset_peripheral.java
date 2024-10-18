@@ -48,7 +48,7 @@ public class modelasset_peripheral extends DefaultTableModel {
 	}
 	
 	String[] COLUMNS = new String[] {
-			"Selected",
+			//"Selected",
 			"Asset No.", 
 			"Asset Name",
 			"Custodian",
@@ -56,7 +56,7 @@ public class modelasset_peripheral extends DefaultTableModel {
 	};
 	
 	Class[] CLASS_TYPES = new Class[] {
-			Boolean.class,	//checkbox
+			//Boolean.class,	//checkbox
 			Integer.class, 	//Asset No.
 			Object.class, 	//Asset Name
 			Object.class, 	//Custodian
@@ -69,7 +69,7 @@ public class modelasset_peripheral extends DefaultTableModel {
 	}
 	
 	Boolean[] COLUMNS_EDITABLE = new Boolean[] {
-			false, //0 checkbox
+			//false, //0 checkbox
 			false, //1 Asset No.
 			false, //2 Asset Name
 			false, //3 Custodian
@@ -98,7 +98,7 @@ public class modelasset_peripheral extends DefaultTableModel {
 		this.editable = editable;
 		if(editable){
 			COLUMNS_EDITABLE = new Boolean[]{
-					true,  //0 checkbox
+					//true,  //0 checkbox
 					false, //1 Asset No.
 					false, //2 Asset Name
 					false, //3 Custodian
@@ -106,7 +106,7 @@ public class modelasset_peripheral extends DefaultTableModel {
 			};
 		}else{
 			COLUMNS_EDITABLE = new Boolean[]{
-					false,  //0 checkbox
+					//false,  //0 checkbox
 					false, //1 Asset No.
 					false, //2 Asset Name
 					false, //3 Custodian
