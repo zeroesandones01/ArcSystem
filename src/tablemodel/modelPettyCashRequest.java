@@ -43,17 +43,21 @@ public class modelPettyCashRequest extends DefaultTableModel{
 	}
 	
 	String [] COLUMNS = new String [] {
-			"Rec ID", 
-			"Acct. Description", 	
-			"Proj.", 	
-			"Div.",
-			"Nature / Purpose of Expenditure", 
-			"Amount"
+			"Rec ID", 							// 0
+			"Acct. ID", 						// 1
+			"Acct. Description", 				// 2
+			"Proj. ID", 						// 3
+			"Proj.", 							// 4
+			"Div.",								// 5
+			"Nature / Purpose of Expenditure", 	// 6
+			"Amount"							// 7
 		};
 			
 	Class [] CLASS_TYPES = new Class []{
 			Integer.class,	// Rec ID
+			String.class, 	// Acct. ID
 			_JLookup.class,	// Acct. Description
+			String.class,	// Proj_ID
 			_JLookup.class,	// Proj.
 			String.class,	// Div.
 			String.class,	// Nature / Purpose of Expenditure
@@ -62,6 +66,8 @@ public class modelPettyCashRequest extends DefaultTableModel{
 	};
 	
 	Boolean [] COLUMNS_EDITABLE = new Boolean [] {
+			false,
+			false,
 			false,
 			false, 
 			false,
@@ -99,14 +105,20 @@ public class modelPettyCashRequest extends DefaultTableModel{
 	    Object value = super.getValueAt(row, column);
 	    
 	    // Ensure that BigDecimal columns return as BigDecimal
-	    if (column == 5) {
+	    if (column == 7) {
 	        if (value instanceof Number) {
 	            return BigDecimal.valueOf(((Number) value).doubleValue());
 	        } else if (value instanceof Long) {
 	        	 return BigDecimal.valueOf(((Long) value).doubleValue());
 			}
+	    } else if (column == 0 && value instanceof String) {
+	        try {
+	            return Integer.valueOf((String) value); 
+	        } catch (NumberFormatException e) {
+	            // Return null if the string cannot be converted to an Integer
+	            return null;
+	        }
 	    }
-	    
 	    return value;
 	}
 }

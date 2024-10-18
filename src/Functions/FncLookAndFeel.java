@@ -382,9 +382,9 @@ public class FncLookAndFeel {
 		props.put("windowTitleColorDark", windowString_Dark); 
 		props.put("windowBorderColor", windowString_Dark);
 
-		props.put("windowInactiveTitleColorLight", windowInactiveString_Light);
-		props.put("windowInactiveTitleColorDark", windowInactiveString_Dark);
-		props.put("windowInactiveBorderColor", windowInactiveString_Dark);
+//		props.put("windowInactiveTitleColorLight", windowInactiveString_Light);
+//		props.put("windowInactiveTitleColorDark", windowInactiveString_Dark);
+//		props.put("windowInactiveBorderColor", windowInactiveString_Dark);
 
 		props.put("controlTextFont", String.format("%s %s %s", font_name, "PLAIN", font_size));
 		props.put("systemTextFont", String.format("%s %s %s", font_name, "PLAIN", font_size));
