@@ -111,19 +111,34 @@ public class ArcSystemLogin extends JDialog {
 		FncGlobal.initialize(false);
 		//FncGlobal.initialize2();
 
-		frame = new JFrame("Login"); 
-		LoginGUI();
+		frame = new JFrame("Login");
+		frame.setUndecorated(true);
+		frame.setSize(new Dimension(450, 500));
+		frame.setLocationRelativeTo(null);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+		frame.setResizable(false);
+		//LoginGUI();
+		LoginUI();
 		
+	}
+	
+	private static void LoginUI() {
+		panMain = new JXPanel(new BorderLayout(3, 3));
+		frame.add(panMain);
 	}
 
 	private static void LoginGUI() {
 		panMain = new JXPanel(new BorderLayout(0, 0));
 		frame.add(panMain);
-		frame.setSize(new Dimension(600, 400));
-		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
-		frame.setResizable(false);
+//		frame.setUndecorated(true);
+//		frame.setSize(new Dimension(600, 400));
+//		frame.setLocationRelativeTo(null);
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		frame.setVisible(true);
+
+		
+
 		{
 			{
 				Banner panLeft = new Banner(new BorderLayout(5, 5), Color.WHITE, login_color_left);
