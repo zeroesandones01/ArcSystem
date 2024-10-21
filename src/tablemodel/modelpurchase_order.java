@@ -50,7 +50,7 @@ private static final long serialVersionUID = 1L;
 	
 	String[] COLUMNS = new String[] {
 			"Selected",
-			"SUPPLIER ID",
+			"SUPPLIER NAME",
 			"ITEM ID",
 			"DESCRIPTION", 
 			"MODEL",
@@ -58,7 +58,8 @@ private static final long serialVersionUID = 1L;
 			"UNIT",
 			"QTY",
 			"PURPOSE",
-			"UNIT PRICE"
+			"UNIT PRICE",
+			"SUPPLIER ID"
 			//"PO NO"
 			
 	};
@@ -66,7 +67,7 @@ private static final long serialVersionUID = 1L;
 	Class[] CLASS_TYPES = new Class[] {
 			
 			Boolean.class, //Selected
-			String.class,  //Supplier ID
+			_JLookup.class,  //Supplier name
 			_JLookup.class, //ITEM ID
 			String.class, //DESCRIPTION
 			String.class, //MODEL
@@ -75,6 +76,7 @@ private static final long serialVersionUID = 1L;
 			Integer.class, //QTY
 			String.class, //PURPOSE
 			BigDecimal.class, //UNIT PRICE
+			String.class, //Supplier ID
 			//String.class, //terms
 	};
 	
@@ -93,7 +95,7 @@ private static final long serialVersionUID = 1L;
 			false, //7
 			false, //8
 			false, //9
-			//false, //10
+			false, //10
 	};
 	
 	
@@ -128,7 +130,7 @@ private static final long serialVersionUID = 1L;
 					true, //7
 					false, //8
 					false, //9
-					//false, //10
+					false, //10
 			};
 		}else{
 			COLUMNS_EDITABLE = new Boolean[]{
@@ -142,7 +144,7 @@ private static final long serialVersionUID = 1L;
 					false, //7
 					false, //8
 					false, //9
-					//false, //10
+					false, //10
 			};
 	}
 		

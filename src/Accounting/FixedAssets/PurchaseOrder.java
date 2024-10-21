@@ -266,7 +266,7 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 			}else {// For Fixed Assets
 				
 			}
-			enable_buttons(false, false, false, false, true, true);
+			enable_buttons(false, false, false, true, true, true);
 		}
 		
 		if ( e.getActionCommand().equals("Add")){

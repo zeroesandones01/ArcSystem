@@ -245,6 +245,7 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 								if ((e.getClickCount() >= 2)) {	
 									int column 	= tblPO.getSelectedColumn();
 									System.out.println("column:: "+ column);
+									if (column == 1) {selectsupplier();}
 									if( column == 2) { selectitem(); }
 									tblPO.packAll();
 								}
@@ -252,6 +253,7 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 							public void mouseReleased(MouseEvent e) {
 								if ((e.getClickCount() >= 2)) {	
 									int column 	= tblPO.getSelectedColumn();
+									if (column == 1) { selectsupplier();}
 									if( column == 2) {selectitem();}
 									tblPO.packAll();
 								}
@@ -298,7 +300,7 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 	
 	public static void add_row() {
 		
-		modelPO.addRow(new Object [] {null,null,null,null,});
+		modelPO.addRow(new Object [] {true,null,null,null,});
 		((DefaultListModel) PurchaseOrderTab.rowheaderPO.getModel()).addElement(PurchaseOrderTab.modelPO.getRowCount());
 	}
 	
@@ -337,6 +339,32 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 		return pnl;
 	}
 	
+	public void selectsupplier() {
+		int column = tblPO.getSelectedColumn();
+		int row = tblPO.getSelectedRow();
+		
+		if(column == 1) {
+			_JLookupTable dlg = new _JLookupTable(FncGlobal.homeMDI, null, "Items", getsupplier(), false);
+			dlg.setLocationRelativeTo(FncGlobal.homeMDI);
+			dlg.setVisible(true);
+			
+			Object[] data = dlg.getReturnDataSet();
+			if (data != null) {
+				
+				System.out.println("");
+				System.out.println("row: "+row);
+				System.out.println("column: "+column);
+				System.out.println("item_id:"+data[0]);
+				System.out.println("item_name:"+data[1]);
+				
+				modelPO.setValueAt(data[1], row, column);
+				modelPO.setValueAt(data[0], row, column+9);
+			}
+			tblPO.packAll();
+		}
+		
+	}
+	
 	public void selectitem() {
 		int column = tblPO.getSelectedColumn();
 		int row = tblPO.getSelectedRow();
@@ -361,6 +389,11 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 			tblPO.packAll();
 		}
 		
+	}
+	
+	private String getsupplier() {
+		String sql = " select  entity_id, entity_name from rf_entity where status_id = 'A' ";
+		return sql;
 	}
 	
 	private String getitem() {
