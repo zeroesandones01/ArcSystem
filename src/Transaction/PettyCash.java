@@ -18,6 +18,8 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -38,6 +40,7 @@ import com.toedter.calendar.JDateChooser;
 import Database.pgSelect;
 import FormattedTextField._JXFormattedTextField;
 import Functions.FncGlobal;
+import Functions.FncReport;
 import Functions.FncSystem;
 import Functions.FncTables;
 import Functions.UserInfo;
@@ -125,13 +128,16 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 	private String payee;
 	private Boolean cash_liq = false;
 	private JPanel pnlCenterSouth;
-	protected String pcr_no;
+	private String pcr_no;
+	private String pcr_no_liq;
 
 	private JPanel pnlMainNorth;
 
 	private JLabel lblCompany;
 
-	private JLabel lblPCRNo; 
+	private JLabel lblPCRNo;
+
+	private Object company_logo; 
 
 	/**
 	 * 
@@ -237,22 +243,30 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 								lookupPCRNo.setFont(new Font("Segoe UI", Font.BOLD, 12));
 								lookupPCRNo.addLookupListener(new LookupListener() {
 
+									private String pcr_status;
+
 									@Override
 									public void lookupPerformed(LookupEvent event) {
 										Object [] data = ((_JLookup)event.getSource()).getDataSet();
 
 										if (data != null) {
 											pcr_no = (String) data[0]; 
+											pcr_status = (String) data[2]; 
 										}
-										
+
 										displayPCR_header(co_id, pcr_no);
 										displayPCR_details(modelPettyCashReq, rowHeaderScroll, modelPettyCashReqTotal, co_id, pcr_no);
-										btnState(false, true, false, true, false, false, false, false, false); 
 										lookupPCRNo.setEnabled(false);
 										setCompEnabled(pnlMainNorth);
 										setCompEditable(pnlMainNorth, false);
-								        dteDateCreated.getCalendarButton().setVisible(false);
-								        dteTransDate.getCalendarButton().setVisible(false);
+										dteDateCreated.getCalendarButton().setVisible(false);
+										dteTransDate.getCalendarButton().setVisible(false);
+
+										if (pcr_status.equals("ACTIVE")) {
+											btnState(false, true, false, true, false, false, true, false, false); 
+										} else {
+											btnState(false, false, false, true, false, false, true, false, false); 
+										}
 
 									}
 								});
@@ -329,7 +343,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 
 											modelPettyCashReq.setEditable(true);
 											setDiv();
-											
+
 											if(pcr_type_id.equals("03")){ //CASH FUND LIQUIDATION
 												cash_liq = true;
 												addNewLiquidation(); 
@@ -489,13 +503,11 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 								lookupPCRLiq = new _JLookup(null, "PCR Liquidation", 0); 
 								pnlCSWComp.add(lookupPCRLiq); 
 								lookupPCRLiq.addLookupListener(new LookupListener() {
-									
-									private String pcr_no_liq;
 
 									@Override
 									public void lookupPerformed(LookupEvent event) {
 										Object [] data = ((_JLookup)event.getSource()).getDataSet(); 
-										
+
 										if(data != null) {
 											pcr_no_liq = (String) data[0]; 
 										}
@@ -618,21 +630,24 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 
 	private void initialize_components() {
 		this.setComponentsEnabled(pnlMainNorth, false);
+		lookupPCRNo.setEnabled(true);
+		lookupPCRNo.setEditable(true);
+		lookupPCRNo.setLookupSQL(getPCR_no(lookupCompany.getValue()));
 		this.setComponentsEnabled(pnlCenterSouth, false);
 		lblCompany.setEnabled(true);
 		lblPCRNo.setEnabled(true);
 		lookupCompany.setEnabled(true);
-		lookupPCRNo.setEnabled(true);
 		co_id = "01"; 
 		lookupCompany.setValue("ACERLAND REALTY CORPORATION"); //default value
 		btnState(true, false, false, false, false, false, false, false, false);
-		lookupPCRNo.setLookupSQL(getPCR_no(lookupCompany.getValue()));
 		lookupPCRType.setLookupSQL(getPCR_type());
 		tblPettyCash.setEnabled(false);
 		tblPettyCashTotal.setEnabled(false);
 		FncTables.clearTable(modelPettyCashReq);
 		FncTables.clearTable(modelPettyCashReqTotal);
 		user = UserInfo.EmployeeCode;
+		company_logo = getCompanyLogo(co_id);
+
 
 	}
 
@@ -641,16 +656,20 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 		if (e.getActionCommand().equals("Add New")) {
 			addNew();
 		}
-		
+
 		if(e.getActionCommand().equals("Edit")) {
-			
+
 			btnState(false, false, true, false, false, false, true, false, false);
 			lookupPCRType.setEditable(true);
 			tblPettyCash.setEnabled(true);
 			modelPettyCashReq.setEditable(true);
 			tblPettyCashTotal.setEditable(false);
-	        dteDateCreated.getCalendarButton().setVisible(true);
-	        dteTransDate.getCalendarButton().setVisible(true);
+			dteDateCreated.getCalendarButton().setVisible(true);
+			dteTransDate.getCalendarButton().setVisible(true);
+		}
+
+		if (e.getActionCommand().equals("Preview")) {
+			preview();
 		}
 
 		if(e.getActionCommand().equals("Add Row")) {
@@ -679,7 +698,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 			modelPettyCashReq.setEditable(false);
 			lookupPCRLiq.setEnabled(false);
 			this.setCompEditable(pnlCenterSouth, false);
-			
+
 		}
 	}
 
@@ -757,7 +776,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 
 		return SQL; 
 	}
-	
+
 	public static String getPCRLiq_no(String co_id) {
 		String SQL = "SELECT a.pcr_no AS \"PCR No.\"\n"
 				+ ", fn_get_entity_name(a.payee) as \"Payee\"\n"
@@ -766,7 +785,8 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 				+ "FROM rf_petty_cash_header a\n"
 				+ "LEFT JOIN mf_record_status b ON b.status_id = a.status_id AND a.rec_status = 'A'\n"
 				+ "WHERE a.status_id = 'B'\n" 
-				+ "and a.rec_status = 'A'";	
+				+ "AND NOT a.is_ca_liquidated \n"
+				+ "AND a.rec_status = 'A'";	
 
 		System.out.println("getPCRLiq_no: "+ SQL);
 
@@ -784,19 +804,19 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 
 		return SQL; 
 	}
-	
+
 	public static String getPCR_type_id(String pcr_type_desc) {
 		pgSelect db = new pgSelect(); 
 		String pcr_type_id = ""; 
-		
+
 		String SQL = "SELECT pc_req_id\n"
 				+ "FROM mf_petty_cash_req_type \n"
 				+ "WHERE TRIM(pc_req_type_desc) = '"+pcr_type_desc+"'\n"
 				+ "AND status_id = 'A';";
-		
+
 		System.out.println("getPCR_type_ID: "+ SQL);
 		db.select(SQL);
-		
+
 		if(db.isNotNull()) {
 			pcr_type_id = (String) db.getResult()[0][0];
 		} else {
@@ -819,15 +839,35 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 	}
 
 	public static String getProjCostID() {
-		String SQL = "SELECT proj_cost_accnt_desc AS \"Description\"\n"
-				+ ", proj_cost_accnt_id AS \"Project Cost ID\"\n"
-				+ ", status_id AS \"Status \"\n"
-				+ "FROM mf_project_cost_accnts\n"
-				+ "WHERE status_id = 'A'";
+		String SQL = "SELECT a.proj_cost_accnt_desc AS \"Description\"\n"
+				+ ", a.proj_cost_accnt_id AS \"Proj. Cost ID\"\n"
+				+ ", a.status_id AS \"Status\"\n"
+				+ "FROM mf_project_cost_accnts a\n"
+				+ "WHERE a.mother_acct_id IS NOT NULL\n"
+				+ "AND a.status_id = 'A'\n"
+				+ "AND a.rec_status = 'A'\n"
+				+ "AND NOT EXISTS (SELECT *\n"
+				+ "				FROM mf_project_cost_accnts\n"
+				+ "			    WHERE mother_acct_id = a.proj_cost_accnt_id\n"
+				+ "			   	AND a.status_id = 'A'\n"
+				+ "				AND a.rec_status = 'A')";
 
 		System.out.println("getProjCostID: "+ SQL);	
 
 		return SQL; 
+	}
+
+	public static String getCompanyLogo(String co_id) {
+		pgSelect db = new pgSelect(); 
+		String company_logo = "";
+
+		db.select("SELECT company_logo FROM mf_company where co_id = '"+co_id+"';");
+
+		if (db.isNotNull()) {
+			company_logo = (String) db.getResult()[0][0];
+		}
+
+		return company_logo;
 	}
 
 
@@ -913,14 +953,14 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 		System.out.println("Value ng selected_column: " + selected_column);
 
 		if(!lookupPCRType.getText().equals("")) {
-			
+
 			if((selected_column == 2 || selected_column == 4) && (e.getClickCount() >= 2)) {
 				AddPCRDetails();
 			}
 		} else {
 			JOptionPane.showMessageDialog(getContentPane(), "Please select request type first.", "Message", JOptionPane.WARNING_MESSAGE);
 		}
-		
+
 	}
 
 	private void setDiv() {
@@ -1034,19 +1074,19 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 					//SAVING OF NEW DRF
 					if (pcr_no.equals("")) { 
 
-						pcr_no =  savePCR(co_id, modelPettyCashReq, pcr_no, div_id, payee, cash_liq); 
+						pcr_no =  savePCR(co_id, modelPettyCashReq, pcr_no, div_id, payee, cash_liq, pcr_no_liq); 
 						System.out.println("Value of pcr_no: " + pcr_no);
 						lookupPCRNo.setValue(pcr_no);
 						JOptionPane.showMessageDialog(getContentPane(), "New payment request saved.", "Information",
 								JOptionPane.INFORMATION_MESSAGE);
 						displayPCR_details(modelPettyCashReq, rowHeaderScroll, modelPettyCashReqTotal, co_id, pcr_no);	
 					}
-					
+
 					else { //SAVING FROM EDIT 
 						pcr_type_id = getPCR_type_id(lookupPCRType.getValue().trim());
 						payee = getPayeeID(UserInfo.EmployeeCode);
 						div_id = UserInfo.Department; 
-						savePCR(co_id, modelPettyCashReq, pcr_no, div_id, payee, cash_liq); 
+						savePCR(co_id, modelPettyCashReq, pcr_no, div_id, payee, cash_liq, pcr_no_liq); 
 						displayPCR_details(modelPettyCashReq, rowHeaderScroll, modelPettyCashReqTotal, co_id, pcr_no);
 						JOptionPane.showMessageDialog(getContentPane(), "Payment reqsuest updated.", "Information",
 								JOptionPane.INFORMATION_MESSAGE);
@@ -1059,7 +1099,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 		}
 	}
 
-	public String savePCR(String co_id, modelPettyCashRequest model, String pcr_no, String div_id, String payee, Boolean cash_liq) {
+	public String savePCR(String co_id, modelPettyCashRequest model, String pcr_no, String div_id, String payee, Boolean cash_liq, String pcr_no_liq) {
 		// FOR PCR DETAIL
 		ArrayList<String> listAcctIDs = new ArrayList<String>();
 		ArrayList<String> listProjIDs = new ArrayList<String>();
@@ -1107,7 +1147,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 		try {
 
 			String SQL = "Select fn_save_petty_cash_req('"+pcr_no+"', '"+co_id+"', '"+dateFormat.format(dteDateCreated.getDate())+"', '"+dateFormat.format(dteTransDate.getDate())+"'\n"
-					+ ", '"+pcr_type_id+"', '"+payee+"', '"+div_id+"', "+totalPCRAmt+", "+cash_liq+", '"+user+"', ARRAY["+acct_id+"]::VARCHAR[] \n"
+					+ ", '"+pcr_type_id+"', '"+payee+"', '"+div_id+"', "+totalPCRAmt+", "+cash_liq+", '"+pcr_no_liq+"','"+user+"', ARRAY["+acct_id+"]::VARCHAR[] \n"
 					+ ", ARRAY["+proj_id+"]::VARCHAR[], ARRAY["+div_IDs+"]::VARCHAR[], ARRAY["+purpose_of_exp+"]::VARCHAR[], ARRAY["+amt+"]::NUMERIC[], ARRAY["+rec_id+"]::INT[] \n"
 					+ ", "+ftxtAmtToBeReimbursed.getValue()+", "+ftxtCashReturned.getValue()+", "+totalPCRAmt+");"; 
 
@@ -1127,10 +1167,10 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 		FncSystem.out("PCR No: ", pcr_no);
 		return pcr_no;
 	}
-	
+
 	public void displayPCR_header(String co_id, String pcr_no) {
 		pgSelect db = new pgSelect();
-		
+
 		String SQL = "SELECT fn_get_company_name(a.co_id) as company\n"
 				+ ", c.status_desc as status\n"
 				+ ", a.pcr_date_created::DATE\n"
@@ -1138,17 +1178,22 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 				+ ", a.pcr_trans_date::DATE\n"
 				+ ", fn_get_entity_name(a.payee) as payee\n"
 				+ ", FORMAT('%s / %s', fn_get_div_alias(a.div_id), fn_get_exec_ofc_alias_div(a.div_id)) as division\n"
+				+ ", a.is_ca_liquidated \n"
+				+ ", a.liquidated_pcr_no\n"
+				+ ", TRIM(to_char(a.cash_returned, '99,999,990D99')) as cash_returned \n"
+				+ ", TRIM(to_char(a.amount_to_be_reimbursed, '99,999,990D99')) as amount_to_be_reimbursed \n"
+				+ ", (CASE WHEN a.is_ca_liquidated THEN TRIM(to_char(a.pcr_total_amt, '99,999,990D99')) ELSE null END) as ca_total_amt \n"
 				+ "FROM rf_petty_cash_header a\n"
 				+ "LEFT JOIN mf_petty_cash_req_type b ON b.pc_req_id = a.pcr_type AND b.status_id = 'A'\n"
 				+ "LEFT JOIN mf_record_status c ON c.status_id = a.status_id\n"
 				+ "WHERE a.co_id = '"+co_id+"'\n"
 				+ "AND a.pcr_no = '"+pcr_no+"'\n"
 				+ "AND a.rec_status = 'A'; ";
-		
+
 		db.select(SQL);
-		
+
 		System.out.println("displayPCR_header: "+ SQL);	
-		
+
 		if(db.isNotNull()) {
 			lookupCompany.setValue((String) db.getResult()[0][0]); 
 			txtPCRStatus.setText((String) db.getResult()[0][1]);
@@ -1157,8 +1202,12 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 			dteTransDate.setDate((Date) db.getResult()[0][4]);
 			txtPayee.setText((String) db.getResult()[0][5]);
 			txtDiv.setText((String) db.getResult()[0][6]);
+			lookupPCRLiq.setValue((String) db.getResult()[0][8]);
+			ftxtCashReturned.setText((String) db.getResult()[0][9]);
+			ftxtAmtToBeReimbursed.setText((String) db.getResult()[0][10]);
+			ftxtTotalAmtOfCA.setText((String) db.getResult()[0][11]);
 		}
-	
+
 	}
 
 	public static void displayPCR_details(modelPettyCashRequest model, JList <Integer> rowHeader, modelPettyCashRequest modelTotal,
@@ -1215,15 +1264,15 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 		modelTotal.addRow(new Object [] {null, null, "Total", null, null, null, null, total_pcr_amt}); 
 
 	}
-	
+
 	private void setCompEnabled(JPanel panel) {
 		this.setComponentsEnabled(panel, true);
 	}
-	
+
 	private void setCompEditable(JPanel panel, Boolean editable) {
 		this.setComponentsEditable(panel, editable);
 	}
-	
+
 	public static Boolean isPettyCashCustodian(String process_no, String emp_code) {
 
 		Boolean isPettyCashCustodian = false;
@@ -1247,6 +1296,24 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 		return isPettyCashCustodian;
 
 	}
+
+	public void preview() {
+
+		Map<String, Object> mapParameters = new HashMap<String, Object>();
+		mapParameters.put("co_id", co_id);
+		mapParameters.put("logo", this.getClass().getClassLoader().getResourceAsStream("Images/" + company_logo));
+		mapParameters.put("user", UserInfo.FullName);
+		mapParameters.put("pcr_no", lookupPCRNo.getValue());
+
+		System.out.println("");
+		System.out.println("Value of co_id:" +  co_id);
+		System.out.println("Value of logo:" +  company_logo);
+		System.out.println("Value of user:" +  UserInfo.FullName);
+		System.out.println("Value of drf_no:" +  pcr_no);
+
+		FncReport.generateReport("/Reports/rptPettyCashRequest.jasper", title, mapParameters);
+	}
+
 
 
 

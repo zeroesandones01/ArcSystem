@@ -1934,9 +1934,6 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 
 	public void preview() {
 
-		String criteria = "Disbursement Request Form";
-		String reportTitle = String.format("%s (%s)", title.replace(" Report", ""), criteria.toUpperCase());
-
 		Map<String, Object> mapParameters = new HashMap<String, Object>();
 		mapParameters.put("co_id", lookupCompany.getText().trim());
 		mapParameters.put("logo", this.getClass().getClassLoader().getResourceAsStream("Images/" + company_logo));
@@ -1949,8 +1946,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		System.out.println("Value of user:" +  UserInfo.FullName);
 		System.out.println("Value of drf_no:" +  drf_no);
 
-
-		FncReport.generateReport("/Reports/rptDisbursementRequestForm.jasper", reportTitle, mapParameters);
+		FncReport.generateReport("/Reports/rptDisbursementRequestForm.jasper", title, mapParameters);
 	}
 
 	public void executeSave() {
