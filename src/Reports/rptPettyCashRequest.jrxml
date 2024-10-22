@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptPettyCashRequest" pageWidth="612" pageHeight="936" columnWidth="540" leftMargin="36" rightMargin="36" topMargin="36" bottomMargin="36">
 	<property name="ireport.zoom" value="1.1000000000000232"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="42"/>
 	<subDataset name="Table Dataset 1"/>
 	<parameter name="co_id" class="java.lang.String"/>
 	<parameter name="pcr_no" class="java.lang.String"/>
@@ -228,7 +228,7 @@ AND a.pcr_no = $P{pcr_no}]]>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{date_requested}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField evaluationTime="Report" isBlankWhenNull="true">
 				<reportElement x="450" y="63" width="89" height="18"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
 					<font fontName="DejaVu Sans" size="9" isBold="false"/>
@@ -255,14 +255,14 @@ AND a.pcr_no = $P{pcr_no}]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="31" splitType="Stretch">
+		<band height="31">
 			<subreport>
 				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="540" height="30" isPrintWhenDetailOverflows="true"/>
 				<subreportParameter name="co_id">
 					<subreportParameterExpression><![CDATA[$P{co_id}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="pcr_no">
-					<subreportParameterExpression><![CDATA[( $F{request_type}.equals("01") ? $F{ca_pcr_no} : $F{pcr_no} )]]></subreportParameterExpression>
+					<subreportParameterExpression><![CDATA[$P{pcr_no}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<subreportExpression class="java.io.InputStream"><![CDATA[this.getClass().getResourceAsStream("/Reports/rptPettyCashRequest_subreport1.jasper")]]></subreportExpression>
@@ -589,7 +589,7 @@ AND a.pcr_no = $P{pcr_no}]]>
 					<font fontName="DejaVu Sans" size="8" isBold="false"/>
 					<paragraph leftIndent="10" rightIndent="10"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["By dating and signing this form, I hereby agree that I, <b><u> " +$F{payee}+ " </u></b>, have received the amount of <b><u>(P"+String.format("%, .2f", $F{ca_total_amt})+")</u></b> for business purposes. I understand that after making the purchase, I must submit invoice(s) to support the expensitures. Also, I agree that I will be personable liable to repay the amount received or be subject to salary deduction based on company policy if there is any amount unliquidated, not supported by appropriate invoice(s), or amount not used for the intended business purpose."]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["By dating and signing this form, I hereby agree that I, <b><u> " +$F{payee}+ " </u></b>, have received the amount of <b><u>(P"+String.format("%, .2f", $F{ca_total_amt})+")</u></b> for business purposes. I understand that after making the purchase, I must submit invoice(s) to support the expenditures. Also, I agree that I will be personally liable to repay the amount received or be subject to salary deduction based on company policy if there is any amount unliquidated, not supported by appropriate invoice(s), or amount not used for the intended business purpose."]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="347" y="94" width="192" height="18"/>
