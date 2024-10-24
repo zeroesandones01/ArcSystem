@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptPettyCashRequest" pageWidth="612" pageHeight="936" columnWidth="540" leftMargin="36" rightMargin="36" topMargin="36" bottomMargin="36">
+	<property name="ireport.zoom" value="1.1000000000000232"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="42"/>
+	<subDataset name="Table Dataset 1"/>
+	<parameter name="co_id" class="java.lang.String"/>
+	<parameter name="pcr_no" class="java.lang.String"/>
+	<parameter name="user" class="java.lang.String"/>
+	<parameter name="logo" class="java.io.InputStream" isForPrompting="false"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/monique/Documents/git/JSystem3.0/"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT b.company_name
+, b.company_address
+, UPPER(e.pc_req_type_desc) as request_type
+, fn_get_entity_name(a.payee) AS payee
+, fn_get_div_alias(g.div_code) AS div_alias
+, (CASE WHEN a.pcr_type IN ('01', '03') THEN a.pcr_no ELSE null END) AS ca_pcr_no
+, d.status_desc as pcr_status
+, TO_CHAR(a.pcr_date_created, 'Mon-dd-yyyy') AS date_requested
+, (CASE WHEN a.pcr_type NOT IN ('01') THEN a.pcr_no ELSE null END) AS pcr_no
+, COALESCE(a.cash_returned, 0.00) AS cash_returned
+, COALESCE(a.amount_to_be_reimbursed, 0.00) AS amount_to_be_reimbursed
+, COALESCE(a.pcr_total_amt, 0.00) AS ca_total_amt
+FROM rf_petty_cash_header a
+LEFT JOIN mf_company b ON b.co_id = a.co_id AND b.status_id = 'A'
+LEFT JOIN rf_entity c ON c.entity_id = b.co_entity_id AND c.status_id = 'A'
+LEFT JOIN mf_record_status d ON d.status_id = a.status_id
+LEFT JOIN mf_petty_cash_req_type e ON e.pc_req_id = a.pcr_type AND e.status_id = 'A'
+LEFT JOIN rf_employee g ON g.entity_id = a.payee AND g.status_id = 'A'
+WHERE a.rec_status = 'A'
+AND a.co_id = $P{co_id}
+AND a.pcr_no = $P{pcr_no}]]>
+	</queryString>
+	<field name="company_name" class="java.lang.String"/>
+	<field name="company_address" class="java.lang.String"/>
+	<field name="request_type" class="java.lang.String"/>
+	<field name="payee" class="java.lang.String"/>
+	<field name="div_alias" class="java.lang.String"/>
+	<field name="ca_pcr_no" class="java.lang.String"/>
+	<field name="pcr_status" class="java.lang.String"/>
+	<field name="date_requested" class="java.lang.String"/>
+	<field name="pcr_no" class="java.lang.String"/>
+	<field name="cash_returned" class="java.math.BigDecimal"/>
+	<field name="amount_to_be_reimbursed" class="java.math.BigDecimal"/>
+	<field name="ca_total_amt" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="57" splitType="Stretch">
+			<textField>
+				<reportElement x="98" y="0" width="442" height="20"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{company_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="98" y="19" width="330" height="24"/>
+				<textElement>
+					<font fontName="DejaVu Sans" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{company_address}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="FillFrame" hAlign="Center" vAlign="Top" isUsingCache="true">
+				<reportElement x="18" y="0" width="77" height="48"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<imageExpression class="java.io.InputStream"><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="113" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="540" height="22"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PETTY CASH REQUEST]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="29" width="98" height="18"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ Request Type:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="46" width="98" height="18"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ Payee:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="63" width="98" height="18"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ Dept/Div:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="98" y="63" width="98" height="18"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{div_alias}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="98" y="46" width="207" height="18"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{payee}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="98" y="29" width="207" height="18"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{request_type}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="347" y="29" width="90" height="18"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Status:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="347" y="46" width="90" height="18"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date Requested:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="347" y="63" width="90" height="18"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PCR No. :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="98" y="80" width="176" height="18"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ca_pcr_no}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="80" width="98" height="33"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ Cash Advance
+ PCR No.:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="450" y="29" width="89" height="18"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{pcr_status}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="450" y="46" width="89" height="18"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{date_requested}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" isBlankWhenNull="true">
+				<reportElement x="450" y="63" width="89" height="18"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{pcr_no}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="18" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="540" height="18"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ REQUEST DETAILS]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="31">
+			<subreport>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="540" height="30" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="co_id">
+					<subreportParameterExpression><![CDATA[$P{co_id}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="pcr_no">
+					<subreportParameterExpression><![CDATA[$P{pcr_no}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression class="java.io.InputStream"><![CDATA[this.getClass().getResourceAsStream("/Reports/rptPettyCashRequest_subreport1.jasper")]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="130" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="104" width="109" height="18"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Requested By:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="87" width="109" height="21"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom" markup="none">
+					<font fontName="DejaVu Sans" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{user} +" "+ new SimpleDateFormat("MM-dd-yy").format(new Date())]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="109" y="104" width="103" height="18"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Approved By:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="109" y="87" width="103" height="18"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+			</textField>
+			<staticText>
+				<reportElement x="212" y="104" width="103" height="18"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Approved By:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="315" y="104" width="97" height="18"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Paid / Processed By:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="315" y="87" width="97" height="18"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+			</textField>
+			<textField>
+				<reportElement x="412" y="87" width="39" height="8"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="6" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" Print Date: "]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="212" y="87" width="103" height="18"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+			</textField>
+			<textField>
+				<reportElement x="412" y="95" width="39" height="9"/>
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="6" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" Print Time: "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="412" y="104" width="128" height="10"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="6" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" Printed by: " + $P{user}]]></textFieldExpression>
+			</textField>
+			<elementGroup/>
+			<textField>
+				<reportElement x="412" y="114" width="47" height="8"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left">
+					<font fontName="DejaVu Sans" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" Page No.: "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="459" y="114" width="81" height="8"/>
+				<box>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font fontName="DejaVu Sans" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MM/dd/yyyy">
+				<reportElement x="451" y="87" width="89" height="8"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="6" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="h:mm a">
+				<reportElement x="451" y="95" width="89" height="9"/>
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="6" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="22" width="442" height="18"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[  Cash Returned:]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="442" y="22" width="97" height="18"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{cash_returned}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="40" width="442" height="18"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[  Amount to be Reimbursed:]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="442" y="40" width="97" height="18"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{amount_to_be_reimbursed}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="442" y="58" width="97" height="18"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ca_total_amt}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="58" width="442" height="18"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[  Total Amount (Cash Advance):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="-1" width="442" height="18"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[  TOTAL:]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="442" y="-1" width="97" height="18"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="DejaVu Sans" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{ca_total_amt}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="112" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="0" width="540" height="112"/>
+				<graphicElement>
+					<pen lineWidth="1.5"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="0" y="5" width="540" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="9" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[REQUESTER CONSENT]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="24" width="540" height="58"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" markup="styled">
+					<font fontName="DejaVu Sans" size="8" isBold="false"/>
+					<paragraph leftIndent="10" rightIndent="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["By dating and signing this form, I hereby agree that I, <b><u> " +$F{payee}+ " </u></b>, have received the amount of <b><u>(P"+String.format("%, .2f", $F{ca_total_amt})+")</u></b> for business purposes. I understand that after making the purchase, I must submit invoice(s) to support the expenditures. Also, I agree that I will be personally liable to repay the amount received or be subject to salary deduction based on company policy if there is any amount unliquidated, not supported by appropriate invoice(s), or amount not used for the intended business purpose."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="347" y="94" width="192" height="18"/>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Printed Name and Signature]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>
