@@ -1633,7 +1633,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		}
 
 		if (e.getActionCommand().equals("Add New")) {
-			if (UserInfo.Department == "009") {
+			if (UserInfo.Department == "010") {
 				lookupRequestType.setLookupSQL(getRequestTypeAcctng());
 				add();
 			} else {
@@ -2025,11 +2025,19 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 	}
 	
 	public static String getProjCostAccount(String boi_acct_id) {
-		String SQL = "SELECT proj_cost_accnt_id\n"
-				+ ", proj_cost_accnt_desc\n"
-				+ "FROM mf_project_cost_accnts\n"
-				+ "WHERE boi_acct_id = '"+boi_acct_id+"'\n"
-				+ "AND status_id = 'A'; ";
+		String SQL = " SELECT a.proj_cost_accnt_desc AS \"Description\"\n"
+				+ ", a.proj_cost_accnt_id AS \"Proj. Cost ID\"\n"
+				+ ", a.status_id AS \"Status\"\n"
+				+ "FROM mf_project_cost_accnts a\n"
+				+ "WHERE a.mother_acct_id IS NOT NULL\n"
+				+ "AND a.status_id = 'A'\n"
+				+ "AND a.rec_status = 'A'\n"
+				+ "AND NOT EXISTS (SELECT *\n"
+				+ "				FROM mf_project_cost_accnts\n"
+				+ "			    WHERE mother_acct_id = a.proj_cost_accnt_id\n"
+				+ "			   	AND a.status_id = 'A'\n"
+				+ "				AND a.rec_status = 'A')\n"
+				+ "//AND boi_acct_id = '"+boi_acct_id+"'";
 		
 		System.out.println("SQL-getProjCostAccount: "+ SQL);
 

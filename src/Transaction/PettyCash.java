@@ -38,7 +38,9 @@ import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
 import Database.pgSelect;
+import Database.pgUpdate;
 import FormattedTextField._JXFormattedTextField;
+import Functions.FncAcounting;
 import Functions.FncGlobal;
 import Functions.FncReport;
 import Functions.FncSystem;
@@ -137,7 +139,9 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 
 	private JLabel lblPCRNo;
 
-	private Object company_logo; 
+	private Object company_logo;
+
+	private String process_id; 
 
 	/**
 	 * 
@@ -244,6 +248,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 								lookupPCRNo.addLookupListener(new LookupListener() {
 
 									private String pcr_status;
+									private String pcr_type;
 
 									@Override
 									public void lookupPerformed(LookupEvent event) {
@@ -251,7 +256,8 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 
 										if (data != null) {
 											pcr_no = (String) data[0]; 
-											pcr_status = (String) data[2]; 
+											pcr_type = (String) data[2]; 
+											pcr_status = (String) data[3]; 
 										}
 
 										displayPCR_header(co_id, pcr_no);
@@ -262,12 +268,27 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 										dteDateCreated.getCalendarButton().setVisible(false);
 										dteTransDate.getCalendarButton().setVisible(false);
 
-										if (pcr_status.equals("ACTIVE")) {
+										if(FncAcounting.EmpPettyCashCustodian(UserInfo.EmployeeCode, "17") == true) {
+											if(pcr_status.equals("ACTIVE")) { 
+												if(isToPay(pcr_type)) { // TO PAY	
+													btnState(false, false, false, false, true, false, true, false, false);
+
+												} else { // TO PROCESS
+													btnState(false, false, false, false, false, true, true, false, false);
+												}
+
+											} else if(pcr_status.equals("PAID") && pcr_type.equals("04")) { // TO PROCESS PAID SET-UP/ REPLENISHMENT REQUEST
+												btnState(false, false, false, true, false, true, true, false, false); 
+
+											} else { // TO PREVIEW ONLY
+												btnState(false, false, false, true, false, false, true, false, false); 
+											}	
+											
+										} else if(pcr_status.equals("ACTIVE")) {
 											btnState(false, true, false, true, false, false, true, false, false); 
 										} else {
 											btnState(false, false, false, true, false, false, true, false, false); 
 										}
-
 									}
 								});
 							}
@@ -324,6 +345,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 								{
 									dteDateCreated = new JDateChooser(FncGlobal.getDateToday(), "MM/dd/yy");
 									pnlCWComp.add(dteDateCreated); 
+									
 								}
 								{
 									lookupPCRType= new _JLookup(null, "Petty Cash Request", 1);
@@ -349,7 +371,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 												addNewLiquidation(); 
 												tblPettyCash.setEnabled(false);
 												modelPettyCashReq.setEditable(false);
-												lookupPCRLiq.setLookupSQL(getPCRLiq_no(lookupCompany.getValue())); 
+												lookupPCRLiq.setLookupSQL(getPCRLiq_no(co_id, user)); 
 											}
 
 										}
@@ -632,12 +654,12 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 		this.setComponentsEnabled(pnlMainNorth, false);
 		lookupPCRNo.setEnabled(true);
 		lookupPCRNo.setEditable(true);
-		lookupPCRNo.setLookupSQL(getPCR_no(lookupCompany.getValue()));
 		this.setComponentsEnabled(pnlCenterSouth, false);
 		lblCompany.setEnabled(true);
 		lblPCRNo.setEnabled(true);
 		lookupCompany.setEnabled(true);
 		co_id = "01"; 
+		process_id = "17"; 
 		lookupCompany.setValue("ACERLAND REALTY CORPORATION"); //default value
 		btnState(true, false, false, false, false, false, false, false, false);
 		lookupPCRType.setLookupSQL(getPCR_type());
@@ -647,8 +669,14 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 		FncTables.clearTable(modelPettyCashReqTotal);
 		user = UserInfo.EmployeeCode;
 		company_logo = getCompanyLogo(co_id);
-
-
+		dteDateCreated.getCalendarButton().setVisible(true);
+		dteTransDate.getCalendarButton().setVisible(true);
+		
+		if(FncAcounting.EmpPettyCashCustodian(user, process_id)) {
+			lookupPCRNo.setLookupSQL(getPCR_no_Custodian(co_id));
+		} else {
+			lookupPCRNo.setLookupSQL(getPCR_no(co_id, user));
+		}
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -670,6 +698,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 
 		if (e.getActionCommand().equals("Preview")) {
 			preview();
+			btnState(false, false, false, false, false, false, false, false, false);
 		}
 
 		if(e.getActionCommand().equals("Add Row")) {
@@ -691,14 +720,19 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 
 		if(e.getActionCommand().equals("Save")) {
 			executeSave();
-			lookupPCRNo.setEnabled(true);
-			dteDateCreated.getCalendarButton().setVisible(false);
-			dteTransDate.getCalendarButton().setVisible(false);
-			tblPettyCash.setEnabled(false);
-			modelPettyCashReq.setEditable(false);
-			lookupPCRLiq.setEnabled(false);
-			this.setCompEditable(pnlCenterSouth, false);
 
+		}
+
+		if(e.getActionCommand().equals("Pay")) {
+			payPCR();
+			displayPCR_header(co_id, pcr_no);
+			btnState(false, false, false, true, false, false, false, false, false);
+		}
+		
+		if(e.getActionCommand().equals("Process")) {
+			processPCR();
+			displayPCR_header(co_id, pcr_no);
+			btnState(false, false, false, true, false, false, false, false, false);
 		}
 	}
 
@@ -762,14 +796,34 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 	}
 
 
-	public static String getPCR_no(String co_id) {
+	public static String getPCR_no(String co_id, String user) {
 		String SQL = "SELECT a.pcr_no AS \"PCR No\"\n"
 				+ ", b.pc_req_type_desc as \"Description\"\n"
+				+ ", a.pcr_type AS \"PCR Type ID\" \n"
 				+ ", c.status_desc AS \"Status\"\n"
 				+ "FROM rf_petty_cash_header a\n"
 				+ "LEFT JOIN mf_petty_cash_req_type b ON b.pc_req_id = a.pcr_type AND b.status_id = 'A'\n"
 				+ "LEFT JOIN mf_record_status c ON c.status_id = a.status_id \n"
 				+ "WHERE a.rec_status = 'A'\n"
+				+ "AND a.co_id = '"+co_id+"' \n"
+				+ "AND a.created_by = '"+user+"' \n"
+				+ "ORDER by a.date_created";	
+
+		System.out.println("getPCR_no: "+ SQL);
+
+		return SQL; 
+	}
+	
+	public static String getPCR_no_Custodian(String co_id) {
+		String SQL = "SELECT a.pcr_no AS \"PCR No\"\n"
+				+ ", b.pc_req_type_desc as \"Description\"\n"
+				+ ", a.pcr_type AS \"PCR Type ID\" \n"
+				+ ", c.status_desc AS \"Status\"\n"
+				+ "FROM rf_petty_cash_header a\n"
+				+ "LEFT JOIN mf_petty_cash_req_type b ON b.pc_req_id = a.pcr_type AND b.status_id = 'A'\n"
+				+ "LEFT JOIN mf_record_status c ON c.status_id = a.status_id \n"
+				+ "WHERE a.rec_status = 'A'\n"
+				+ "AND a.co_id = '"+co_id+"' \n"
 				+ "ORDER by a.date_created";	
 
 		System.out.println("getPCR_no: "+ SQL);
@@ -777,7 +831,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 		return SQL; 
 	}
 
-	public static String getPCRLiq_no(String co_id) {
+	public static String getPCRLiq_no(String co_id, String user) {
 		String SQL = "SELECT a.pcr_no AS \"PCR No.\"\n"
 				+ ", fn_get_entity_name(a.payee) as \"Payee\"\n"
 				+ ", a.pcr_total_amt AS \"Amount\"\n"
@@ -786,6 +840,8 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 				+ "LEFT JOIN mf_record_status b ON b.status_id = a.status_id AND a.rec_status = 'A'\n"
 				+ "WHERE a.status_id = 'B'\n" 
 				+ "AND NOT a.is_ca_liquidated \n"
+				+ "AND a.co_id = '"+co_id+"' \n"
+				+ "AND a.created_by = '"+user+"' \n"
 				+ "AND a.rec_status = 'A'";	
 
 		System.out.println("getPCRLiq_no: "+ SQL);
@@ -1077,7 +1133,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 						pcr_no =  savePCR(co_id, modelPettyCashReq, pcr_no, div_id, payee, cash_liq, pcr_no_liq); 
 						System.out.println("Value of pcr_no: " + pcr_no);
 						lookupPCRNo.setValue(pcr_no);
-						JOptionPane.showMessageDialog(getContentPane(), "New payment request saved.", "Information",
+						JOptionPane.showMessageDialog(getContentPane(), "Petty cash request saved.", "Information",
 								JOptionPane.INFORMATION_MESSAGE);
 						displayPCR_details(modelPettyCashReq, rowHeaderScroll, modelPettyCashReqTotal, co_id, pcr_no);	
 					}
@@ -1088,12 +1144,21 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 						div_id = UserInfo.Department; 
 						savePCR(co_id, modelPettyCashReq, pcr_no, div_id, payee, cash_liq, pcr_no_liq); 
 						displayPCR_details(modelPettyCashReq, rowHeaderScroll, modelPettyCashReqTotal, co_id, pcr_no);
-						JOptionPane.showMessageDialog(getContentPane(), "Payment reqsuest updated.", "Information",
+						JOptionPane.showMessageDialog(getContentPane(), "Petty cash request updated.", "Information",
 								JOptionPane.INFORMATION_MESSAGE);
 					}
 
 					this.setComponentsEditable(pnlMainNorth, false);
 					btnState(false, false, false, true, false, false, false, false, false);
+					
+					lookupPCRNo.setEnabled(true);
+					dteDateCreated.getCalendarButton().setVisible(false);
+					dteTransDate.getCalendarButton().setVisible(false);
+					tblPettyCash.setEnabled(false);
+					modelPettyCashReq.setEditable(false);
+					lookupPCRLiq.setEnabled(false);
+					this.setCompEditable(pnlCenterSouth, false);
+					
 				}
 			}
 		}
@@ -1265,6 +1330,44 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 
 	}
 
+	public void payPCR() {
+		if (JOptionPane.showConfirmDialog(getContentPane(), "Are you sure to pay this request?", "Confirmation",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+			
+			pgUpdate db = new pgUpdate();
+			String query = "UPDATE rf_petty_cash_header \n"
+					+ "SET status_id = 'B'\n"
+					+ "WHERE co_id = '"+co_id+"'\n"
+					+ "AND pcr_no = '"+pcr_no+"'\n"
+					+ "AND rec_status = 'A';"; 
+			
+			db.executeUpdate(query, true, true);
+			
+			JOptionPane.showMessageDialog(getContentPane(), "PCR No. " + pcr_no + " was successfully paid."  , "Information",
+					JOptionPane.INFORMATION_MESSAGE);
+		}
+		
+		
+	}
+	
+	public void processPCR() {
+		if (JOptionPane.showConfirmDialog(getContentPane(), "Are you sure to process this request?", "Confirmation",
+				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+			
+			pgUpdate db = new pgUpdate();
+			String query = "UPDATE rf_petty_cash_header \n"
+					+ "SET status_id = 'G'\n"
+					+ "WHERE co_id = '"+co_id+"'\n"
+					+ "AND pcr_no = '"+lookupPCRNo.getText().trim()+"'\n"
+					+ "AND rec_status = 'A';"; 
+			
+			db.executeUpdate(query, true, true);
+			
+			JOptionPane.showMessageDialog(getContentPane(), "PCR No. " + pcr_no + " was successfully processed."  , "Information",
+					JOptionPane.INFORMATION_MESSAGE);
+		}
+	}
+
 	private void setCompEnabled(JPanel panel) {
 		this.setComponentsEnabled(panel, true);
 	}
@@ -1273,28 +1376,25 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 		this.setComponentsEditable(panel, editable);
 	}
 
-	public static Boolean isPettyCashCustodian(String process_no, String emp_code) {
+	public static Boolean isToPay(String pcr_type) {
 
-		Boolean isPettyCashCustodian = false;
+		Boolean isToPay = false;
 
-		String SQL = "SELECT EXISTS (\n"
-				+ "SELECT 1 FROM mf_fad_process_access\n"
-				+ "WHERE process_no = '"+process_no+"'\n"
-				+ "AND authority_no IN (6,7)\n"
-				+ "AND emp_code = '"+emp_code+"' \n"
-				+ "AND status_id = 'A')";
+		String SQL = "Select EXISTS (\n"
+				+ "	Select 1 FROM mf_petty_cash_req_type\n"
+				+ "	WHERE pc_req_id IN ('01', '02', '04')\n"
+				+ "	AND status_id = 'A'\n"
+				+ "	AND pc_req_id = '"+pcr_type+"'\n"
+				+ ")";
 
 		pgSelect db = new pgSelect();
 		db.select(SQL);
 
 		if (db.isNotNull()) {
-			isPettyCashCustodian = true;
-		} else {
-			isPettyCashCustodian = false;
+			isToPay = (Boolean) db.getResult()[0][0];
 		}
 
-		return isPettyCashCustodian;
-
+		return isToPay;
 	}
 
 	public void preview() {
