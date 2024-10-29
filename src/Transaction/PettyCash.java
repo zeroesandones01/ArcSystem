@@ -39,6 +39,7 @@ import javax.swing.table.DefaultTableModel;
 import com.toedter.calendar.JDateChooser;
 import Database.pgSelect;
 import Database.pgUpdate;
+import Dialogs.dlg_CR_PW_Entry;
 import FormattedTextField._JXFormattedTextField;
 import Functions.FncAcounting;
 import Functions.FncGlobal;
@@ -267,6 +268,11 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 										setCompEditable(pnlMainNorth, false);
 										dteDateCreated.getCalendarButton().setVisible(false);
 										dteTransDate.getCalendarButton().setVisible(false);
+										
+										if(pcr_type.equals("03")) {
+											setCompEnabled(pnlCenterSouth);
+											setCompEditable(pnlCenterSouth, false);
+										}
 
 										if(FncAcounting.EmpPettyCashCustodian(UserInfo.EmployeeCode, "17") == true) {
 											if(pcr_status.equals("ACTIVE")) { 
@@ -698,7 +704,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 
 		if (e.getActionCommand().equals("Preview")) {
 			preview();
-			btnState(false, false, false, false, false, false, false, false, false);
+//			btnState(false, false, false, true, false, false, false, false, false);
 		}
 
 		if(e.getActionCommand().equals("Add Row")) {
@@ -772,6 +778,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 	public void addNew() {
 
 		this.setComponentsEnabled(pnlMainNorth, true);
+		lookupPCRType.setEditable(true);
 		createPCRTable(modelPettyCashReq, rowHeaderScroll);
 		lookupPCRNo.setEnabled(false);
 		txtPCRStatus.setText("ACTIVE"); //initial value
@@ -783,6 +790,8 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 		modelPettyCashReq.setEditable(false);
 		tblPettyCashTotal.setEnabled(true);
 		tblPettyCashTotal.setEditable(false); 
+		dteDateCreated.setDate(FncGlobal.getDateToday());
+		dteTransDate.setDate(FncGlobal.getDateToday());
 		btnState(false, false, true, false, false, false, true, true, true); 
 	}
 
@@ -1333,18 +1342,30 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 	public void payPCR() {
 		if (JOptionPane.showConfirmDialog(getContentPane(), "Are you sure to pay this request?", "Confirmation",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-			
-			pgUpdate db = new pgUpdate();
-			String query = "UPDATE rf_petty_cash_header \n"
-					+ "SET status_id = 'B'\n"
-					+ "WHERE co_id = '"+co_id+"'\n"
-					+ "AND pcr_no = '"+pcr_no+"'\n"
-					+ "AND rec_status = 'A';"; 
-			
-			db.executeUpdate(query, true, true);
-			
-			JOptionPane.showMessageDialog(getContentPane(), "PCR No. " + pcr_no + " was successfully paid."  , "Information",
-					JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(getContentPane(), "Please input password to pay request", "Pay", JOptionPane.INFORMATION_MESSAGE);
+
+			dlg_CR_PW_Entry pw = new dlg_CR_PW_Entry(FncGlobal.homeMDI, "Password");
+			pw.setLocationRelativeTo(null);
+			pw.setVisible(true);
+
+			String pw_entered = pw.getPassword();
+
+			if(pw_entered.equals(FncGlobal.connectionPassword)){
+				
+				pgUpdate db = new pgUpdate();
+				String query = "UPDATE rf_petty_cash_header \n"
+						+ "SET status_id = 'B'\n"
+						+ ", pcr_trans_date = now() \n"
+						+ "WHERE co_id = '"+co_id+"'\n"
+						+ "AND pcr_no = '"+pcr_no+"'\n"
+						+ "AND rec_status = 'A';"; 
+				
+				db.executeUpdate(query, true, true);
+				
+				JOptionPane.showMessageDialog(getContentPane(), "PCR No. " + pcr_no + " was successfully paid."  , "Information",
+						JOptionPane.INFORMATION_MESSAGE);
+				
+			}
 		}
 		
 		
@@ -1353,18 +1374,30 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 	public void processPCR() {
 		if (JOptionPane.showConfirmDialog(getContentPane(), "Are you sure to process this request?", "Confirmation",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-			
-			pgUpdate db = new pgUpdate();
-			String query = "UPDATE rf_petty_cash_header \n"
-					+ "SET status_id = 'G'\n"
-					+ "WHERE co_id = '"+co_id+"'\n"
-					+ "AND pcr_no = '"+lookupPCRNo.getText().trim()+"'\n"
-					+ "AND rec_status = 'A';"; 
-			
-			db.executeUpdate(query, true, true);
-			
-			JOptionPane.showMessageDialog(getContentPane(), "PCR No. " + pcr_no + " was successfully processed."  , "Information",
-					JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(getContentPane(), "Please input password to process request", "Process", JOptionPane.INFORMATION_MESSAGE);
+
+			dlg_CR_PW_Entry pw = new dlg_CR_PW_Entry(FncGlobal.homeMDI, "Password");
+			pw.setLocationRelativeTo(null);
+			pw.setVisible(true);
+
+			String pw_entered = pw.getPassword();
+
+			if(pw_entered.equals(FncGlobal.connectionPassword)){
+				
+				pgUpdate db = new pgUpdate();
+				String query = "UPDATE rf_petty_cash_header \n"
+						+ "SET status_id = 'G'\n"
+						+ ", pcr_trans_date = now() \n"
+						+ "WHERE co_id = '"+co_id+"'\n"
+						+ "AND pcr_no = '"+lookupPCRNo.getText().trim()+"'\n"
+						+ "AND rec_status = 'A';"; 
+				
+				db.executeUpdate(query, true, true);
+				
+				JOptionPane.showMessageDialog(getContentPane(), "PCR No. " + pcr_no + " was successfully processed."  , "Information",
+						JOptionPane.INFORMATION_MESSAGE);
+				
+			}
 		}
 	}
 
