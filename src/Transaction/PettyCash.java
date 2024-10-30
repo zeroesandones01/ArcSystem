@@ -277,10 +277,10 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 										if(FncAcounting.EmpPettyCashCustodian(UserInfo.EmployeeCode, "17") == true) {
 											if(pcr_status.equals("ACTIVE")) { 
 												if(isToPay(pcr_type)) { // TO PAY	
-													btnState(false, false, false, false, true, false, true, false, false);
+													btnState(false, false, false, true, true, false, true, false, false);
 
 												} else { // TO PROCESS
-													btnState(false, false, false, false, false, true, true, false, false);
+													btnState(false, false, false, true, false, true, true, false, false);
 												}
 
 											} else if(pcr_status.equals("PAID") && pcr_type.equals("04")) { // TO PROCESS PAID SET-UP/ REPLENISHMENT REQUEST
@@ -664,6 +664,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 		lblCompany.setEnabled(true);
 		lblPCRNo.setEnabled(true);
 		lookupCompany.setEnabled(true);
+		lookupCompany.setEditable(true);
 		co_id = "01"; 
 		process_id = "17"; 
 		lookupCompany.setValue("ACERLAND REALTY CORPORATION"); //default value

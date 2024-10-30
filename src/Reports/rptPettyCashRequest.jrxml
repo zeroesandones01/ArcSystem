@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptPettyCashRequest" pageWidth="612" pageHeight="936" columnWidth="540" leftMargin="36" rightMargin="36" topMargin="36" bottomMargin="36">
 	<property name="ireport.zoom" value="1.4641000000000333"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="180"/>
+	<property name="ireport.y" value="163"/>
 	<subDataset name="Table Dataset 1"/>
 	<parameter name="co_id" class="java.lang.String"/>
 	<parameter name="pcr_no" class="java.lang.String"/>
@@ -270,7 +270,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Bottom" markup="none">
 					<font fontName="Tahoma" size="7" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{user} +" "+ new SimpleDateFormat("MM-dd-yy").format(new Date())]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{c_payee} +" "+ new SimpleDateFormat("MM-dd-yy").format(new Date())]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="109" y="56" width="103" height="18"/>
