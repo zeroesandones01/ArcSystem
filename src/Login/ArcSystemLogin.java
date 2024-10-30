@@ -118,8 +118,8 @@ public class ArcSystemLogin extends JDialog {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.setResizable(false);
-		//LoginGUI();
-		LoginUI();
+		LoginGUI();
+		//LoginUI();
 		
 	}
 	

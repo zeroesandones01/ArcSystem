@@ -15,8 +15,8 @@ public class ArcSystem {
 
 		ArcSystemLogin.showLogin();
 		
-		FncLookAndFeel.initialize();
-		FncGlobal.initialize(false);
+//		FncLookAndFeel.initialize();
+//		FncGlobal.initialize(false);
 //
 //		/*UIDefaults defaults = UIManager.getLookAndFeelDefaults();
 //		for (Enumeration enumm = defaults.keys(); enumm.hasMoreElements();) {
@@ -30,12 +30,12 @@ public class ArcSystem {
 //		
 //		//JOptionPane.showMessageDialog(null, "Cannot login system is under maintenance", "Login", JOptionPane.WARNING_MESSAGE);
 //
-		FncGlobal.parentFrame = _JXLoginPane.showLoginFrame(FncGlobal.login);
-		//FncGlobal.parentFrame = JXLoginPane.showLoginFrame(FncGlobal.login);
-		FncGlobal.parentFrame.setTitle(FncGlobal.ORIGINAL_TITLE);
-		FncGlobal.parentFrame.setIconImage(FncLookAndFeel.iconSystem);
-		FncGlobal.parentFrame.pack();
-		FncGlobal.parentFrame.setVisible(true);
+//		FncGlobal.parentFrame = _JXLoginPane.showLoginFrame(FncGlobal.login);
+//		//FncGlobal.parentFrame = JXLoginPane.showLoginFrame(FncGlobal.login);
+//		FncGlobal.parentFrame.setTitle(FncGlobal.ORIGINAL_TITLE);
+//		FncGlobal.parentFrame.setIconImage(FncLookAndFeel.iconSystem);
+//		FncGlobal.parentFrame.pack();
+//		FncGlobal.parentFrame.setVisible(true);
 		
 		
 	}
