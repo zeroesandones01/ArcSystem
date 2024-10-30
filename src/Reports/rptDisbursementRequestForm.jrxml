@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptDisbursementRequestForm" pageWidth="612" pageHeight="936" columnWidth="540" leftMargin="36" rightMargin="36" topMargin="36" bottomMargin="36">
-	<property name="ireport.zoom" value="1.2100000000000255"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="88"/>
+	<property name="ireport.zoom" value="1.6105100000000343"/>
+	<property name="ireport.x" value="20"/>
+	<property name="ireport.y" value="288"/>
 	<subDataset name="Table Dataset 1"/>
 	<parameter name="co_id" class="java.lang.String"/>
 	<parameter name="drf_no" class="java.lang.String"/>
@@ -98,7 +98,7 @@ AND a.drf_no = $P{drf_no}]]>
 				<textElement>
 					<font fontName="DejaVu Sans" size="9" isBold="false"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["Tin No.:" + $F{tin_no}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["Tin No.: " + $F{tin_no}]]></textFieldExpression>
 			</textField>
 			<image scaleImage="FillFrame" hAlign="Center" vAlign="Top" isUsingCache="true">
 				<reportElement x="18" y="0" width="77" height="48"/>
@@ -114,15 +114,15 @@ AND a.drf_no = $P{drf_no}]]>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="131" splitType="Stretch">
+		<band height="126" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="540" height="22"/>
+				<reportElement mode="Opaque" x="0" y="0" width="540" height="22" backcolor="#B4B1B1"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
 					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 					<font fontName="DejaVu Sans" size="12" isBold="true"/>
@@ -130,7 +130,7 @@ AND a.drf_no = $P{drf_no}]]>
 				<text><![CDATA[DISBURSEMENT REQUEST FORM]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="396" y="36" width="69" height="22"/>
+				<reportElement x="396" y="36" width="69" height="15"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid"/>
@@ -138,12 +138,12 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="8" isBold="true"/>
+					<font fontName="Tahoma" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ DRF NO.:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="465" y="36" width="75" height="22"/>
+				<reportElement x="465" y="36" width="75" height="15"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -151,12 +151,12 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="9" isBold="false"/>
+					<font fontName="Tahoma" size="9" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{drf_no}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="29" width="98" height="18"/>
+				<reportElement x="13" y="36" width="86" height="15"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid"/>
@@ -164,12 +164,12 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ Request Type:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="46" width="98" height="18"/>
+				<reportElement x="13" y="51" width="86" height="15"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid"/>
@@ -177,12 +177,12 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ Due Date:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="80" width="98" height="18"/>
+				<reportElement x="13" y="81" width="86" height="15"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid"/>
@@ -190,12 +190,12 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ Availer:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="63" width="98" height="18"/>
+				<reportElement x="13" y="66" width="86" height="15"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid"/>
@@ -203,12 +203,12 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ Payee:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="97" width="98" height="18"/>
+				<reportElement x="13" y="96" width="86" height="15"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid"/>
@@ -216,47 +216,47 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ Dept/Div:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="98" y="80" width="207" height="18"/>
+				<reportElement x="98" y="81" width="240" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{availer}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="98" y="46" width="98" height="18"/>
+				<reportElement x="98" y="51" width="98" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="9" isBold="false"/>
+					<font fontName="Tahoma" size="9" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{drf_date}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="98" y="97" width="98" height="18"/>
+				<reportElement x="98" y="96" width="98" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{div_alias}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="98" y="63" width="207" height="18"/>
+				<reportElement x="98" y="66" width="240" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{payee}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="98" y="29" width="207" height="18"/>
+				<reportElement x="98" y="36" width="240" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="9" isBold="false"/>
+					<font fontName="Tahoma" size="9" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{request_type}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="465" y="58" width="75" height="17"/>
+				<reportElement x="465" y="51" width="75" height="15"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -264,12 +264,12 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="9" isBold="false"/>
+					<font fontName="Tahoma" size="9" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{drf_date}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="396" y="58" width="69" height="17"/>
+				<reportElement x="396" y="51" width="69" height="15"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid"/>
@@ -277,12 +277,12 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="8" isBold="true"/>
+					<font fontName="Tahoma" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ Request Date:]]></text>
 			</staticText>
 			<textField pattern="#,##0.00">
-				<reportElement x="465" y="75" width="75" height="17"/>
+				<reportElement x="465" y="66" width="75" height="15"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -290,12 +290,12 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="9" isBold="false"/>
+					<font fontName="Tahoma" size="9" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{drf_total_amt}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="396" y="75" width="69" height="17"/>
+				<reportElement x="396" y="66" width="69" height="15"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid"/>
@@ -303,12 +303,12 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="8" isBold="true"/>
+					<font fontName="Tahoma" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ Amount:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="465" y="92" width="75" height="17"/>
+				<reportElement x="465" y="81" width="75" height="15"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -316,12 +316,12 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="9" isBold="false"/>
+					<font fontName="Tahoma" size="9" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{drf_status}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="396" y="92" width="69" height="17"/>
+				<reportElement x="396" y="81" width="69" height="15"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid"/>
@@ -329,12 +329,12 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="8" isBold="true"/>
+					<font fontName="Tahoma" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ Status:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="465" y="109" width="75" height="17"/>
+				<reportElement x="465" y="96" width="75" height="15"/>
 				<box>
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -342,12 +342,12 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="9" isBold="false"/>
+					<font fontName="Tahoma" size="9" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{payment_type}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="396" y="109" width="69" height="17"/>
+				<reportElement x="396" y="96" width="69" height="15"/>
 				<box>
 					<topPen lineWidth="1.0" lineStyle="Solid"/>
 					<leftPen lineWidth="1.0" lineStyle="Solid"/>
@@ -355,7 +355,7 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="8" isBold="true"/>
+					<font fontName="Tahoma" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ Payment Type:]]></text>
 			</staticText>
@@ -372,7 +372,7 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ REQUEST DETAILS]]></text>
 			</staticText>
@@ -422,9 +422,9 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Justifications / Remarks / Notes:]]></text>
+				<text><![CDATA[  Justifications / Remarks / Notes:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="115" width="109" height="18"/>
@@ -435,7 +435,7 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="7" isBold="true"/>
+					<font fontName="Tahoma" size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Requested By:]]></text>
 			</staticText>
@@ -447,7 +447,7 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Bottom" markup="none">
-					<font fontName="DejaVu Sans" size="7" isBold="true"/>
+					<font fontName="Tahoma" size="7" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{user}]]></textFieldExpression>
 			</textField>
@@ -460,7 +460,7 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="7" isBold="true"/>
+					<font fontName="Tahoma" size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Approved By:]]></text>
 			</staticText>
@@ -472,7 +472,7 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 			</textField>
 			<staticText>
@@ -484,7 +484,7 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="7" isBold="true"/>
+					<font fontName="Tahoma" size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Approved By:]]></text>
 			</staticText>
@@ -497,7 +497,7 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="7" isBold="true"/>
+					<font fontName="Tahoma" size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[DRF Received By:]]></text>
 			</staticText>
@@ -509,7 +509,7 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 			</textField>
 			<textField>
@@ -521,7 +521,7 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="6" isBold="false"/>
+					<font fontName="Tahoma" size="6" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[" Print Date: "]]></textFieldExpression>
 			</textField>
@@ -533,7 +533,7 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 			</textField>
 			<textField>
@@ -545,7 +545,7 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="6" isBold="false"/>
+					<font fontName="Tahoma" size="6" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[" Print Time: "]]></textFieldExpression>
 			</textField>
@@ -558,7 +558,7 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="6" isBold="false"/>
+					<font fontName="Tahoma" size="6" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[" Printed by: " + $P{user}]]></textFieldExpression>
 			</textField>
@@ -587,7 +587,7 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Left">
-					<font fontName="DejaVu Sans" size="6"/>
+					<font fontName="Tahoma" size="6"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[" Page No.: "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
 			</textField>
@@ -599,7 +599,7 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement>
-					<font fontName="DejaVu Sans" size="6"/>
+					<font fontName="Tahoma" size="6"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
@@ -612,7 +612,7 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="6" isBold="false"/>
+					<font fontName="Tahoma" size="6" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
@@ -625,7 +625,7 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="6" isBold="false"/>
+					<font fontName="Tahoma" size="6" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
@@ -642,16 +642,17 @@ AND a.drf_no = $P{drf_no}]]>
 			<staticText>
 				<reportElement x="0" y="5" width="540" height="20"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="9" isBold="true" isUnderline="true"/>
+					<font fontName="Tahoma" size="9" isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[AUTHORITY TO DEDUCT]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="0" y="24" width="540" height="26"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled">
-					<font fontName="DejaVu Sans" size="8" isBold="false"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle" markup="styled">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+					<paragraph leftIndent="10" rightIndent="10"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["I hereby authorize <b>"+$F{company_name}+"</b> to deduct from my salary the amount of P<b>"+String.format("%, .2f", $F{drf_total_amt})+"</b> upon non-liquidation of my cash advances for DRF No. <b><u>"+$F{drf_no}+"</u></b> as specified in the company policy."]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA["I hereby authorize <b>"+$F{company_name}+"</b> to deduct from my salary the amount of <b><u>P"+String.format("%, .2f", $F{drf_total_amt})+"</u></b> upon non-liquidation of my cash advances for DRF No. <b><u>"+$F{drf_no}+"</u></b> as specified in the company policy."]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="338" y="63" width="192" height="18"/>
@@ -662,7 +663,7 @@ AND a.drf_no = $P{drf_no}]]>
 					<rightPen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="8" isBold="false"/>
+					<font fontName="Tahoma" size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Printed Name and Signature]]></text>
 			</staticText>

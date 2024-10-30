@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptPettyCashRequest" pageWidth="612" pageHeight="936" columnWidth="540" leftMargin="36" rightMargin="36" topMargin="36" bottomMargin="36">
-	<property name="ireport.zoom" value="1.3310000000000282"/>
+	<property name="ireport.zoom" value="1.4641000000000333"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="114"/>
+	<property name="ireport.y" value="163"/>
 	<subDataset name="Table Dataset 1"/>
 	<parameter name="co_id" class="java.lang.String"/>
 	<parameter name="pcr_no" class="java.lang.String"/>
@@ -31,7 +31,7 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="57" splitType="Stretch">
+		<band height="56" splitType="Stretch">
 			<textField>
 				<reportElement x="98" y="0" width="442" height="20"/>
 				<textElement>
@@ -60,15 +60,15 @@
 		</band>
 	</title>
 	<pageHeader>
-		<band height="113" splitType="Stretch">
+		<band height="126" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="540" height="22"/>
+				<reportElement mode="Opaque" x="0" y="0" width="540" height="22" backcolor="#B4B1B1"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="1.0"/>
+					<leftPen lineWidth="0.0"/>
 					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
 					<font fontName="DejaVu Sans" size="12" isBold="true"/>
@@ -76,7 +76,7 @@
 				<text><![CDATA[PETTY CASH REQUEST]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="29" width="98" height="18"/>
+				<reportElement x="7" y="35" width="83" height="15"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid"/>
@@ -84,12 +84,12 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ Request Type:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="46" width="98" height="18"/>
+				<reportElement x="7" y="50" width="83" height="15"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid"/>
@@ -97,12 +97,12 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ Payee:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="63" width="98" height="18"/>
+				<reportElement x="7" y="65" width="83" height="15"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid"/>
@@ -110,33 +110,33 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ Dept/Div:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="98" y="63" width="98" height="18"/>
+				<reportElement x="90" y="65" width="106" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="9" isBold="false"/>
+					<font fontName="Tahoma" size="9" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{c_div_alias}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="98" y="46" width="207" height="18"/>
+				<reportElement x="90" y="50" width="215" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{c_payee}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="98" y="29" width="207" height="18"/>
+				<reportElement x="90" y="35" width="215" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{c_request_type}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="347" y="29" width="90" height="18"/>
+				<reportElement x="347" y="35" width="90" height="15"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid"/>
@@ -144,12 +144,12 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Status:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="347" y="46" width="90" height="18"/>
+				<reportElement x="347" y="50" width="90" height="15"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid"/>
@@ -157,12 +157,12 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Date Requested:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="347" y="63" width="90" height="18"/>
+				<reportElement x="347" y="65" width="90" height="15"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid"/>
@@ -170,71 +170,54 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[PCR No. :]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="98" y="80" width="176" height="18"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="90" y="80" width="184" height="26"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{c_ca_pcr_no}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="80" width="98" height="33"/>
+				<reportElement x="7" y="80" width="83" height="26"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid"/>
 					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Top">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ Cash Advance
  PCR No.:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="450" y="29" width="89" height="18"/>
+				<reportElement x="436" y="35" width="102" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{c_pcr_status}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="450" y="46" width="89" height="18"/>
+				<reportElement x="436" y="50" width="102" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="9" isBold="false"/>
+					<font fontName="Tahoma" size="9" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{c_date_requested}]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report" isBlankWhenNull="true">
-				<reportElement x="450" y="63" width="89" height="18"/>
+				<reportElement x="436" y="65" width="102" height="15"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{c_pcr_no}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
-	<columnHeader>
-		<band height="18" splitType="Stretch">
-			<staticText>
-				<reportElement x="0" y="0" width="540" height="18"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid"/>
-					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[ REQUEST DETAILS]]></text>
-			</staticText>
-		</band>
-	</columnHeader>
 	<detail>
 		<band height="31">
 			<subreport>
@@ -263,7 +246,7 @@
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="88" splitType="Stretch">
+		<band height="81" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="56" width="109" height="18"/>
 				<box>
@@ -273,7 +256,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="7" isBold="true"/>
+					<font fontName="Tahoma" size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Requested By:]]></text>
 			</staticText>
@@ -285,9 +268,9 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Bottom" markup="none">
-					<font fontName="DejaVu Sans" size="7" isBold="true"/>
+					<font fontName="Tahoma" size="7" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{user} +" "+ new SimpleDateFormat("MM-dd-yy").format(new Date())]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{c_payee} +" "+ new SimpleDateFormat("MM-dd-yy").format(new Date())]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="109" y="56" width="103" height="18"/>
@@ -298,7 +281,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="7" isBold="true"/>
+					<font fontName="Tahoma" size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Approved By:]]></text>
 			</staticText>
@@ -310,7 +293,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 			</textField>
 			<staticText>
@@ -322,7 +305,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="7" isBold="true"/>
+					<font fontName="Tahoma" size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Approved By:]]></text>
 			</staticText>
@@ -335,7 +318,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="7" isBold="true"/>
+					<font fontName="Tahoma" size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Paid / Processed By:]]></text>
 			</staticText>
@@ -347,7 +330,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 			</textField>
 			<textField>
@@ -359,7 +342,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="6" isBold="false"/>
+					<font fontName="Tahoma" size="6" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[" Print Date: "]]></textFieldExpression>
 			</textField>
@@ -371,7 +354,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="9" isBold="true"/>
+					<font fontName="Tahoma" size="9" isBold="true"/>
 				</textElement>
 			</textField>
 			<textField>
@@ -383,7 +366,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="6" isBold="false"/>
+					<font fontName="Tahoma" size="6" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[" Print Time: "]]></textFieldExpression>
 			</textField>
@@ -396,7 +379,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="6" isBold="false"/>
+					<font fontName="Tahoma" size="6" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[" Printed by: " + $P{user}]]></textFieldExpression>
 			</textField>
@@ -409,7 +392,7 @@
 					<rightPen lineWidth="0.0"/>
 				</box>
 				<textElement textAlignment="Left">
-					<font fontName="DejaVu Sans" size="6"/>
+					<font fontName="Tahoma" size="6"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[" Page No.: "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
 			</textField>
@@ -421,7 +404,7 @@
 					<rightPen lineWidth="1.0"/>
 				</box>
 				<textElement>
-					<font fontName="DejaVu Sans" size="6"/>
+					<font fontName="Tahoma" size="6"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
@@ -434,7 +417,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="6" isBold="false"/>
+					<font fontName="Tahoma" size="6" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
@@ -447,7 +430,7 @@
 					<rightPen lineWidth="1.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="DejaVu Sans" size="6" isBold="false"/>
+					<font fontName="Tahoma" size="6" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
@@ -471,7 +454,7 @@
 			<textField>
 				<reportElement x="0" y="24" width="540" height="58"/>
 				<textElement textAlignment="Justified" verticalAlignment="Middle" markup="styled">
-					<font fontName="DejaVu Sans" size="8" isBold="false"/>
+					<font fontName="Tahoma" size="8" isBold="false"/>
 					<paragraph leftIndent="10" rightIndent="10"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["By dating and signing this form, I hereby agree that I, <b><u> " +$F{c_payee}+ " </u></b>, have received the amount of <b><u>(P"+String.format("%, .2f", $F{ca_total_amt})+")</u></b> for business purposes. I understand that after making the purchase, I must submit invoice(s) to support the expenditures. Also, I agree that I will be personally liable to repay the amount received or be subject to salary deduction based on company policy if there is any amount unliquidated, not supported by appropriate invoice(s), or amount not used for the intended business purpose."]]></textFieldExpression>
@@ -485,7 +468,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans" size="8" isBold="false"/>
+					<font fontName="Tahoma" size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Printed Name and Signature]]></text>
 			</staticText>
