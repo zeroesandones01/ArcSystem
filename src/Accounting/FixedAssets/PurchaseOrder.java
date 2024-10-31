@@ -41,10 +41,10 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 	private static JButton btnadd;
 	private JTabbedPane tabcenter;
 	private JTextField txtdivdept;
-	private JTextField txtrequester_name;
-	private _JLookup lookuprequester;
-	private JTextField txtcompany;
-	private _JLookup lookupcompany;
+	public static JTextField txtrequester_name;
+	public static _JLookup lookuprequester;
+	public static JTextField txtcompany;
+	public static _JLookup lookupcompany;
 	private PurchaseOrderTab pnlpurchaseordertab;
 	private static JButton btnpreview;
 	private static JButton btngenerate;
@@ -286,6 +286,9 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 			System.out.println("Date: "+ PurchaseOrderTab.date_PO.getDate());
 			enable_buttons(false, false, false, true, true, false);
 			
+			PurchaseOrderTab.lookuppono.setEditable(false);
+			PurchaseOrderTab.cmbtype.setEditable(false);
+			
 		}
 		
 		if ( e.getActionCommand().equals("edit")){
@@ -293,9 +296,19 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 		}
 		
 		if ( e.getActionCommand().equals("save")){
-			if (PurchaseOrderTab.checkdetails ()) {
-				JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please check details.");
-			}
+//			if (PurchaseOrderTab.checkdetails ()) {
+//				JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please check details.");
+//			}
+			
+			PurchaseOrderTab.save_purchase_order();
+			PurchaseOrderTab.tblPO.setEditable(false);
+			PurchaseOrderTab.tblPO.setEnabled(false);
+			FncTables.clearTable(PurchaseOrderTab.modelPO);
+			PurchaseOrderTab.cleartable_rowheader();
+			PurchaseOrderTab.btnAddAcct.setEnabled(false);
+			PurchaseOrderTab.lookuppono.setValue("");
+			PurchaseOrderTab.lookuppono.setEditable(true);
+			PurchaseOrder.enable_buttons(true, true, false, false, true, false);
 			enable_buttons(true, true, false, false, true, true);
 		}
 		
@@ -308,12 +321,17 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 			PurchaseOrderTab.btnAddAcct.setEnabled(false);
 			PurchaseOrderTab.cmbtype.setSelectedIndex(0);
 			PurchaseOrderTab.lookuppono.setValue("");
+			PurchaseOrderTab.lookuppono.setEditable(true);
+			PurchaseOrderTab.lookupsupplier.setValue("");
+			PurchaseOrderTab.tagsupplier.setTag("");
+			PurchaseOrderTab.date_PO.setDate(null);
 			enable_buttons(true, true, false, false, true, false);
+			
 		}
 		
 		if(e.getActionCommand().equals("preview")) {
 			preview_supplies();
-			enable_buttons(true, true, false, false, true,false);
+			enable_buttons(true, true, false, false, true,true);
 		}
 	}
 	
@@ -367,7 +385,6 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 				modelMain.addRow(db.getResult()[x]);
 				listModel.addElement(modelMain.getRowCount());
 			}
-			
 		}
 	}
 	
@@ -376,7 +393,18 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 		System.out.println("preview_supplies");
 		
 		Map<String, Object> mapParameters = new HashMap<String, Object>();
+		mapParameters.put("co_logo", this.getClass().getClassLoader().getResourceAsStream("Images/arc-logo.png"));
+		mapParameters.put("co_name", txtcompany.getText());
+		mapParameters.put("req_id", "");
+		mapParameters.put("po_no", PurchaseOrderTab.lookuppono.getValue());
+		mapParameters.put("po_date", PurchaseOrderTab.date_PO.getDate());
+		mapParameters.put("prepared_by", "");
 		
-		//FncReport.generateReport("", "Purchase Order Supplies", mapParameters);
+		System.out.println("co_name: "+ txtcompany.getText());
+		System.out.println("po_no: "+ PurchaseOrderTab.lookuppono.getValue());
+		System.out.println("po_date: "+ PurchaseOrderTab.date_PO.getDate());
+		
+		//FncReport.generateReport("/Reports/rptPO.jasper", "Purchase Order Supplies", mapParameters);
+		FncReport.generateReport("/Reports/rptPurchaseOrder.jasper", "Purchase Order Supplies", mapParameters);
 	}
 }
