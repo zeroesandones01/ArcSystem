@@ -66,7 +66,7 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 
 	public PurchaseOrderTab() {
 		initGUI();
-		lookuppono.setLookupSQL(get_po(0));
+		lookuppono.setLookupSQL(get_po(0, PurchaseOrder.lookupcompany.getValue(), PurchaseOrder.lookuprequester.getValue()));
 	}
 
 	public PurchaseOrderTab(LayoutManager layout) {
@@ -117,7 +117,7 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 							public void itemStateChanged(ItemEvent e) {
 								// TODO Auto-generated method stub
 								System.out.println("Index: "+cmbtype.getSelectedIndex());
-								lookuppono.setLookupSQL(get_po(cmbtype.getSelectedIndex()));
+								lookuppono.setLookupSQL(get_po(cmbtype.getSelectedIndex(), PurchaseOrder.lookupcompany.getValue(), PurchaseOrder.lookuprequester.getValue()));
 								
 								tblPO.setEditable(false);
 								tblPO.setEnabled(false);
@@ -297,6 +297,7 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 									System.out.println("column:: "+ column);
 									if (column == 1) {selectsupplier();}
 									if( column == 2) { selectitem(); }
+									if( column == 6) {selectunit();}
 									tblPO.packAll();
 								}
 							}
@@ -363,7 +364,8 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 				+ "from rf_purchase_order a\n"
 				+ "left join rf_entity b on a.supplier = b.entity_id\n"
 				+ "where a.status_id = 'A' \n"
-				+ "and a.po_no = '"+po_no+"' and a.classification_type = '"+class_type+"' order by rec_id ";
+				+ "and a.po_no = '"+po_no+"' and a.classification_type = '"+class_type+"' \n"
+				+ "order by rec_id ";
 		
 		System.out.printf("display_po: %s", sql);
 		pgSelect db = new pgSelect();
@@ -511,14 +513,17 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 		
 	}
 	
-	private String get_po ( Integer class_type) {
-		String sql = "select a.po_no, a.requester, c.entity_name,  NULLIF(a.supplier,'null') as supplier, c.entity_name, NULLIF(a.terms,'null') as terms, a.po_date, a.co_id, e.company_name, a.rplf_no \n"
+	public static String get_po ( Integer class_type, String co_id, String requester) {
+		String sql = "select distinct on(a.po_no)  a.po_no, a.requester, c.entity_name,  NULLIF(a.supplier,'null') as supplier, c.entity_name, NULLIF(a.terms,'null') as terms, a.po_date, a.co_id, e.company_name, a.rplf_no \n"
 				+ "from rf_purchase_order a\n"
 				+ "left join rf_employee b on a.requester = b.emp_code\n"
 				+ "left join rf_entity c on b.entity_id = c.entity_id\n"
 				+ "left join rf_entity d on a.supplier = d.entity_id \n" 
 				+ "left join mf_company e on a.co_id = e.co_id\n"
-				+ "where a.classification_type = '"+class_type+"' ";
+				+ "where a.classification_type = '"+class_type+"' \n"
+				+ "and case when '"+co_id+"'= '' or '"+co_id+"' = 'null' then true else a.co_id = '"+co_id+"' end \n"
+				+ "and case when '"+requester+"'= '' or '"+requester+"' = 'null'  then true else a.requester = '"+requester+"' end\n"
+						+ "";
 		
 		System.out.printf("get_po: %s", sql);
 		return sql;

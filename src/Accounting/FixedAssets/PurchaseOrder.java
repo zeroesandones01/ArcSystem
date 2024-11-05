@@ -97,13 +97,14 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 							pnlcompany.add(lookupcompany, BorderLayout.CENTER);
 							lookupcompany.setLookupSQL( get_company());
 							lookupcompany.setReturnColumn(0);
-							lookupcompany.setEditable(false);
+							//lookupcompany.setEditable(true);
 							lookupcompany.addLookupListener(new LookupListener() {
 								public void lookupPerformed(LookupEvent event) {
 									Object[] data = ((_JLookup)event.getSource()).getDataSet();
 									if(data != null) {
 										txtcompany.setText((String) data [1]);
 										lookuprequester.setLookupSQL(get_requester());
+										PurchaseOrderTab.lookuppono.setLookupSQL(PurchaseOrderTab.get_po(PurchaseOrderTab.cmbtype.getSelectedIndex(),lookupcompany.getValue(), lookuprequester.getValue()));
 									}
 								}
 							});
@@ -128,13 +129,16 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 							lookuprequester = new _JLookup();
 							pnlrequester.add(lookuprequester, BorderLayout.CENTER);
 							lookuprequester.setReturnColumn(0);
-							lookuprequester.setEnabled(false);
+							//lookuprequester.setEnabled(false);
+							lookuprequester.setLookupSQL(get_requester());
 							lookuprequester.addLookupListener(new LookupListener() {
 								public void lookupPerformed(LookupEvent event) {
 									Object [] data = ((_JLookup)event.getSource()).getDataSet();
 									if(data != null) {
 										txtrequester_name.setText((String) data[1]);
 										txtdivdept.setText((String)data[4]);
+										
+										PurchaseOrderTab.lookuppono.setLookupSQL(PurchaseOrderTab.get_po(PurchaseOrderTab.cmbtype.getSelectedIndex(),lookupcompany.getValue(), lookuprequester.getValue()));
 									}
 								}
 							});
@@ -320,12 +324,16 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 			PurchaseOrderTab.cleartable_rowheader();
 			PurchaseOrderTab.btnAddAcct.setEnabled(false);
 			PurchaseOrderTab.cmbtype.setSelectedIndex(0);
-			PurchaseOrderTab.lookuppono.setValue("");
+			PurchaseOrderTab.lookuppono.setValue(null);
 			PurchaseOrderTab.lookuppono.setEditable(true);
-			PurchaseOrderTab.lookupsupplier.setValue("");
+			PurchaseOrderTab.lookupsupplier.setValue(null);
 			PurchaseOrderTab.tagsupplier.setTag("");
 			PurchaseOrderTab.date_PO.setDate(null);
 			enable_buttons(true, true, false, false, true, false);
+			lookupcompany.setValue(null);
+			txtcompany.setText("");
+			lookuprequester.setValue(null);
+			txtrequester_name.setText("");
 			
 		}
 		
