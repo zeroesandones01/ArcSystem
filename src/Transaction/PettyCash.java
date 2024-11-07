@@ -69,10 +69,14 @@
 	public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, MouseListener {
 	
 		private static final long serialVersionUID = -4306362386582966144L;
-	
 		private static String title = "PETTY CASH";
+		Border lineBorder = BorderFactory.createLineBorder(Color.GRAY);
+		protected static Font dialog11Bold = new Font("DIALOG", Font.BOLD, 11);
+		private static BigDecimal total_pcr_amt;
+		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 	
 		private JPanel pnlMain;
+		private JPanel pnlMainNorth;
 	
 		private JButton btnAddNew;
 		private JButton btnEdit;
@@ -81,76 +85,51 @@
 		private JButton btnPay;
 		private JButton btnProcess;
 		private JButton btnCancel;
-	
-		Border lineBorder = BorderFactory.createLineBorder(Color.GRAY);
-		protected static Font dialog11Bold = new Font("DIALOG", Font.BOLD, 11);
-	
-		private static BigDecimal total_pcr_amt;
-		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-	
+		private JButton btnAddRow;
+		private JButton btnRemoveRow;
+
 		private _JLookup lookupCompany;
 		private _JLookup lookupPCRNo;
 		private _JLookup lookupPCRType;
-	
-		private JDateChooser dteDateCreated;
-	
-		private JTextField txtPCRStatus;
-	
-		private JDateChooser dteTransDate;
-	
-		private JTextField txtPayee;
-	
-		private JTextField txtDiv;
-	
-		private _JScrollPaneMain scrollTable;
-	
-		private modelPettyCashRequest modelPettyCashReq;
-	
-		private _JTableMain tblPettyCash;
-	
 		private _JLookup lookupPCRLiq;
 	
-		private JButton btnAddRow;
+		private JDateChooser dteDateCreated;
+		private JDateChooser dteTransDate;
 	
-		private JButton btnRemoveRow;
+		private JTextField txtPCRStatus;
+		private JTextField txtPayee;
+		private JTextField txtDiv;
 	
+		private _JScrollPaneMain scrollTable;	
+		private modelPettyCashRequest modelPettyCashReq;	
+		private _JTableMain tblPettyCash;
 		private JList<Integer> rowHeaderScroll;
-	
-		private String co_id; 
-		private String pcr_type_id;
-		private String pcr_acct_id; 
+		private _JScrollPaneTotal scrollTableTotal;
+		private modelPettyCashRequest modelPettyCashReqTotal;
+		private _JTableTotal tblPettyCashTotal;
 	
 		private _JXFormattedTextField ftxtAmtToBeReimbursed;
 		private _JXFormattedTextField ftxtTotalAmtOfCA;
 		private _JXFormattedTextField ftxtCashReturned;
+		
+		private JLabel lblCompany;
+		private JLabel lblPCRNo;
 	
+		private String co_id; 
+		private String pcr_type_id;
 		private String div_id;
-		private _JScrollPaneTotal scrollTableTotal;
-		private modelPettyCashRequest modelPettyCashReqTotal;
-		private _JTableTotal tblPettyCashTotal;
 		private String user;
 		private String payee;
 		private Boolean cash_liq = false;
 		private JPanel pnlCenterSouth;
 		private String pcr_no;
 		private String pcr_no_liq;
-	
-		private JPanel pnlMainNorth;
-	
-		private JLabel lblCompany;
-	
-		private JLabel lblPCRNo;
-	
+
 		private Object company_logo;
-	
 		private String process_id;
-	
 		protected BigDecimal pcr_liq_amt;
-	
 		private BigDecimal totalPCRAmt;
-	
 		private BigDecimal cashRetamt;
-	
 		private BigDecimal reimbursementAmt; 
 	
 		/**
@@ -738,7 +717,6 @@
 	
 			if (e.getActionCommand().equals("Preview")) {
 				preview();
-				//			btnState(false, false, false, true, false, false, false, false, false);
 			}
 	
 			if(e.getActionCommand().equals("Add Row")) {
