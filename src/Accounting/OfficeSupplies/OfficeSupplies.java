@@ -81,7 +81,6 @@ public class OfficeSupplies extends _JInternalFrame implements _GUI, ActionListe
 				JPanel pnlnorth = new JPanel(new GridLayout(1, 2, 3, 3));
 				pnlmain.add(pnlnorth, BorderLayout.NORTH);
 				pnlnorth.setPreferredSize(new Dimension(0, 100));
-				//pnlnorth.setBorder(JTBorderFactory.createTitleBorder("S"));
 				{
 					JPanel pnlnorth_left = new JPanel(new GridLayout(2, 1, 3, 3));
 					pnlnorth.add(pnlnorth_left);
@@ -108,8 +107,8 @@ public class OfficeSupplies extends _JInternalFrame implements _GUI, ActionListe
 										String category_name = (String) data[1];
 										tagcategory.setTag(category_name);
 										displaysupplies(modelofc_supply, rowheaderofc_supply, cat_id);
-										txtsearch.setEditable(true);
-										btnstate(false, true, false, true);
+										//txtsearch.setEditable(true);
+										btnstate(true, false, true);
 									}
 								}
 							});
@@ -135,31 +134,31 @@ public class OfficeSupplies extends _JInternalFrame implements _GUI, ActionListe
 					JPanel pnlnorth_rigth = new JPanel(new GridLayout(2, 1, 3, 3));
 					pnlnorth.add(pnlnorth_rigth);
 					pnlnorth_rigth.setBorder(JTBorderFactory.createTitleBorder(""));
-					{
-						JPanel pnlnorth_rigth_1 = new JPanel(new BorderLayout(3, 3));
-						pnlnorth_rigth.add(pnlnorth_rigth_1);
-						{
-							JLabel lblsearch = new JLabel("<html><font color='red'>Search</font></html>");
-							pnlnorth_rigth_1.add(lblsearch, BorderLayout.WEST);
-							lblsearch.setFont( new Font("Serif", Font.BOLD, 12) );
-							lblsearch.setPreferredSize(new Dimension(70, 0));
-						}
-						{
-							txtsearch = new JXTextField();
-							pnlnorth_rigth_1.add(txtsearch, BorderLayout.CENTER);
-							txtsearch.setHorizontalAlignment(JTextField.CENTER);
-							txtsearch.setEditable(false);
-							txtsearch.addKeyListener(new KeyAdapter() {
-								public void keyReleased(KeyEvent e) {
-									checkAllsupplies();
-								}
-							});
-						}
-					}
-					{
-						JPanel pnlnorth_rigth_2 = new JPanel(new BorderLayout(3, 3));
-						pnlnorth_rigth.add(pnlnorth_rigth_2);
-					}
+//					{
+//						JPanel pnlnorth_rigth_1 = new JPanel(new BorderLayout(3, 3));
+//						pnlnorth_rigth.add(pnlnorth_rigth_1);
+//						{
+//							JLabel lblsearch = new JLabel("<html><font color='red'>Search</font></html>");
+//							pnlnorth_rigth_1.add(lblsearch, BorderLayout.WEST);
+//							lblsearch.setFont( new Font("Serif", Font.BOLD, 12) );
+//							lblsearch.setPreferredSize(new Dimension(70, 0));
+//						}
+//						{
+//							txtsearch = new JXTextField();
+//							pnlnorth_rigth_1.add(txtsearch, BorderLayout.CENTER);
+//							txtsearch.setHorizontalAlignment(JTextField.CENTER);
+//							txtsearch.setEditable(false);
+//							txtsearch.addKeyListener(new KeyAdapter() {
+//								public void keyReleased(KeyEvent e) {
+//									checkAllsupplies();
+//								}
+//							});
+//						}
+//					}
+//					{
+//						JPanel pnlnorth_rigth_2 = new JPanel(new BorderLayout(3, 3));
+//						pnlnorth_rigth.add(pnlnorth_rigth_2);
+//					}
 				}
 			}
 			{
@@ -228,27 +227,27 @@ public class OfficeSupplies extends _JInternalFrame implements _GUI, ActionListe
 		if (e.getActionCommand().equals("new")) {
 			lookupcategory.setEditable(true);
 			modelofc_supply.setEditable(true);
-			btnstate(false, false, true, true);
+			btnstate(false, true, true);
 		}
 		if (e.getActionCommand().equals("save")) {
-			btnstate(true, true, false, true);
+			btnstate(true, false, true);
 		}
 		if (e.getActionCommand().equals("cancel")) {
 			lookupcategory.setValue(null);
 			lookupcategory.setEditable(true);
 			tagcategory.setTag("");
-			txtsearch.setText("");
-			txtsearch.setEditable(false);
+			//txtsearch.setText("");
+			//txtsearch.setEditable(false);
 			FncTables.clearTable(modelofc_supply);
 			rowheaderofc_supply = tblofc_supply.getRowHeader(); 
 			scrollofc_supply.setRowHeaderView(rowheaderofc_supply);
 			modelofc_supply.setEditable(false);
-			btnstate(true, true, false, true);
+			btnstate(true, false, true);
 		}
 	}
 	
-	private void btnstate (Boolean gen, Boolean addnew, Boolean save, Boolean cancel) {
-		btngen_order.setEnabled(gen);
+	private void btnstate (/*Boolean gen,*/ Boolean addnew, Boolean save, Boolean cancel) {
+		//btngen_order.setEnabled(gen);
 		btnnew.setEnabled(addnew);
 		btnsave.setEnabled(save);
 		btncancel.setEnabled(cancel);
@@ -286,7 +285,7 @@ public class OfficeSupplies extends _JInternalFrame implements _GUI, ActionListe
 		tblofc_supply.packAll();
 	}
 	
-	private void checkAllsupplies() {
+	/*private void checkAllsupplies() {
 
 		int rw = tblofc_supply.getModel().getRowCount();
 		int x = 0;
@@ -318,5 +317,5 @@ public class OfficeSupplies extends _JInternalFrame implements _GUI, ActionListe
 			x++;
 
 		}
-	}
+	}*/
 }

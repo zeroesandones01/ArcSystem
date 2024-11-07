@@ -207,10 +207,10 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 							  pnlcanvassid_east.add(lblrplfno,BorderLayout.CENTER); 
 						  } 
 						  {
-								 txtrplfno = new JTextField();
-								 txtrplfno.setEnabled(false);
-								 pnlcanvassid_east.add(txtrplfno, BorderLayout.EAST);
-								 txtrplfno.setPreferredSize(new Dimension(110, 0)); 
+							 txtrplfno = new JTextField();
+							 txtrplfno.setEnabled(false);
+							 pnlcanvassid_east.add(txtrplfno, BorderLayout.EAST);
+							 txtrplfno.setPreferredSize(new Dimension(110, 0)); 
 						  }
 					}
 				 }
@@ -432,12 +432,6 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 			Object[] data = dlg.getReturnDataSet();
 			if (data != null) {
 				
-				System.out.println("");
-				System.out.println("row: "+row);
-				System.out.println("column: "+column);
-				System.out.println("item_id:"+data[0]);
-				System.out.println("item_name:"+data[1]);
-				
 				modelPO.setValueAt(data[1], row, column);
 				modelPO.setValueAt(data[0], row, column+9);
 			}
@@ -565,14 +559,15 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 	public static void save_purchase_order() {
 		
 		int row = tblPO.convertRowIndexToModel(tblPO.getSelectedRow());
-//		Integer asset_no = (Integer) modelPO.getValueAt(row, 0);
-		System.out.println("rowcount:"+modelPO.getRowCount());		
+		String po_no = PurchaseOrder.getpo_no();
+		
 		for(int x = 0; x < modelPO.getRowCount(); x++) {
 			
 			
 			Boolean selected = (Boolean) modelPO.getValueAt(x, 0);
 			
 			if(selected) {
+				
 				
 				String supplier_name = (String) modelPO.getValueAt(x, 1);
 				Integer item_id = (Integer) modelPO.getValueAt(x, 2);
@@ -609,7 +604,7 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 				System.out.println("price: "+price);
 				System.out.println("supp_id: "+supp_id);
 				
-				String sql = " select sp_save_purchase_order('"+comp_id+"', '"+requested_id+"', '"+cmbtype.getSelectedIndex()+"','"+item_id+"', '"+item_name+"',  NULLIF('"+model+"','null'), NULLIF('"+brand+"','null'), NULLIF('"+unit+"','null'), '"+qty+"', NULLIF('"+purpose+"','null'), '"+price+"', NULLIF('"+supp_id+"','null'), NULLIF('"+term+"','null'), null)\n"
+				String sql = " select sp_save_purchase_order('"+comp_id+"', '"+requested_id+"', '"+cmbtype.getSelectedIndex()+"','"+item_id+"', '"+item_name+"',  NULLIF('"+model+"','null'), NULLIF('"+brand+"','null'), NULLIF('"+unit+"','null'), '"+qty+"', NULLIF('"+purpose+"','null'), '"+price+"', NULLIF('"+supp_id+"','null'), NULLIF('"+term+"','null'), null, '"+po_no+"')\n"
 						+ " ";
 				
 				FncSystem.out("save_purchase_order: ", sql);
