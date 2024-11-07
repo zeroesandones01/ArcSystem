@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.BorderFactory;
@@ -155,6 +156,32 @@ public class dlg_CR_PW_Entry extends JDialog implements ActionListener, _GUI {
 						pnlPassword.add(txtPassword, BorderLayout.CENTER);
 						txtPassword.setBounds(157, 39, 205, 25);
 						txtPassword.setName("txtNewPassword");
+						// ADDED BY MONIQUE DTD 10-31-2024
+						txtPassword.addKeyListener(new KeyAdapter() {
+							public void keyTyped(KeyEvent evt) {
+								if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+									setPassword();
+									dispose();
+								}
+
+							}
+
+							public void keyReleased(KeyEvent evt) {
+								if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+									setPassword();
+									dispose();
+								}
+
+							}
+
+							public void keyPressed(KeyEvent e) {
+								if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+									setPassword();
+									dispose();
+								}
+							}
+							
+						});
 					}
 				}
 			}
