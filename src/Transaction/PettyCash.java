@@ -39,7 +39,6 @@
 	import com.toedter.calendar.JDateChooser;
 	import Database.pgSelect;
 	import Database.pgUpdate;
-	import DateChooser._JDateChooser;
 	import Dialogs.dlg_CR_PW_Entry;
 	import FormattedTextField._JXFormattedTextField;
 	import Functions.FncAcounting;
@@ -58,10 +57,8 @@
 	import components._JTableMain;
 	import components._JTableTotal;
 	import interfaces._GUI;
-	import tablemodel.modelDRF_particulars;
-	import tablemodel.modelDRF_particulars_total;
 	import tablemodel.modelPettyCashRequest;
-	import tablemodel.modelPettyCashRequest_total;
+
 	
 	/**
 	 * @author Monique Boriga
@@ -77,6 +74,7 @@
 	
 		private JPanel pnlMain;
 		private JPanel pnlMainNorth;
+		private JPanel pnlCenterSouth;
 	
 		private JButton btnAddNew;
 		private JButton btnEdit;
@@ -120,17 +118,18 @@
 		private String div_id;
 		private String user;
 		private String payee;
-		private Boolean cash_liq = false;
-		private JPanel pnlCenterSouth;
 		private String pcr_no;
 		private String pcr_no_liq;
-
-		private Object company_logo;
+		private String pcr_status;
 		private String process_id;
+		
 		protected BigDecimal pcr_liq_amt;
 		private BigDecimal totalPCRAmt;
 		private BigDecimal cashRetamt;
-		private BigDecimal reimbursementAmt; 
+		private BigDecimal reimbursementAmt;
+		
+		private Boolean cash_liq = false;
+		private Object company_logo;
 	
 		/**
 		 * 
@@ -236,8 +235,6 @@
 									lookupPCRNo.setFont(new Font("Segoe UI", Font.BOLD, 12));
 									lookupPCRNo.addLookupListener(new LookupListener() {
 	
-										private String pcr_status;
-	
 										@Override
 										public void lookupPerformed(LookupEvent event) {
 											Object [] data = ((_JLookup)event.getSource()).getDataSet();
@@ -289,7 +286,7 @@
 												} else if(pcr_status.equals("PAID") && pcr_type_id.equals("04")) { // TO PROCESS PAID SET-UP/ REPLENISHMENT REQUEST
 													btnState(false, false, false, true, false, true, true, false, false); 
 	
-												} else { // TO PREVIEW ONLY
+												} else { // TO PREVIEW REQUEST ONLY
 													btnState(false, false, false, true, false, false, true, false, false); 
 	
 													// ENABLE THIS COMPONENT FOR DISPLAY OF DATE PAID OR PROCESSED DATE
@@ -725,8 +722,7 @@
 				if (tblPettyCash.getSelectedRows().length == 1) {
 					removeRow();
 				} else {
-					JOptionPane.showMessageDialog(getContentPane(), "Please select row to remove", "Remove",
-							JOptionPane.WARNING_MESSAGE);
+					showWarningMessage( "Please select row to remove", "Remove");
 				}
 			}
 	
@@ -742,14 +738,12 @@
 			}
 	
 			if(e.getActionCommand().equals("Pay")) {
-				String pcr_status = txtPCRStatus.getText().trim(); 
 				pay_process_PCR(pcr_status);
 				displayPCR_header(co_id, pcr_no);
 	
 			}
 	
 			if(e.getActionCommand().equals("Process")) {
-				String pcr_status = txtPCRStatus.getText().trim(); 
 				pay_process_PCR(pcr_status);
 				displayPCR_header(co_id, pcr_no);
 			}
@@ -1042,7 +1036,7 @@
 					AddPCRDetails();
 				}
 			} else {
-				JOptionPane.showMessageDialog(getContentPane(), "Please select request type first.", "Message", JOptionPane.WARNING_MESSAGE);
+				showWarningMessage("Please select request type first.", "Message");
 			}
 	
 		}
@@ -1080,14 +1074,16 @@
 	
 			modelPettyCashReqTotal.setValueAt(totalAmt, 0, 7);
 	
-			// AUTO ADJUST AMOUNT FOR LIQUIDATION
+			// Checker if liquidation requires cash return or amount to be reimbursed
 			if(pcr_type_id.equals("03")) {
+			
 				if(totalAmt.compareTo(pcr_liq_amt) < 0) {
 					ftxtCashReturned.setEnabled(true);
 					ftxtCashReturned.setEditable(true);
 					ftxtAmtToBeReimbursed.setEnabled(false);
 					ftxtAmtToBeReimbursed.setValue(BigDecimal.ZERO);
 				} else {
+				
 					ftxtCashReturned.setEnabled(false);
 					ftxtAmtToBeReimbursed.setEnabled(true);
 					ftxtAmtToBeReimbursed.setEditable(true);
@@ -1100,15 +1096,15 @@
 		private Boolean checkPCRAmount() {
 		    boolean isValid = false; 
 	
-		    int rowCount = tblPettyCash.getModel().getRowCount();  // Get the number of rows in the table
+		    int rowCount = tblPettyCash.getModel().getRowCount();  
 		    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) { 
-		        String acctId = modelPettyCashReq.getValueAt(rowIndex, 2).toString().trim();  // Get account ID from the table
+		        String acctId = modelPettyCashReq.getValueAt(rowIndex, 2).toString().trim();  
 	
 		        // Only proceed if the account ID is not empty
 		        if (!acctId.isEmpty()) {
 	
 		            try {
-		                // Get the Petty Cash amount from the table, handling possible invalid data
+		            	
 		                String pcrAmtStr = modelPettyCashReq.getValueAt(rowIndex, 7).toString().trim();
 		                
 		                if (!pcrAmtStr.isEmpty()) {
@@ -1137,7 +1133,7 @@
 		private Boolean checkAcctID_ifcomplete() {
 		    boolean isComplete = true; 
 	
-		    int rowCount = tblPettyCash.getModel().getRowCount();  // Get the number of rows in the table
+		    int rowCount = tblPettyCash.getModel().getRowCount(); 
 		    for (int rowIndex = 0; rowIndex < rowCount; rowIndex++) {
 	
 		        try {
@@ -1149,8 +1145,7 @@
 		                String acctId = modelPettyCashReq.getValueAt(rowIndex, 2).toString().trim();
 		                if (acctId.isEmpty()) {
 		                    isComplete = false;  // If account ID is missing, return false
-		                    break;  // No need to continue checking further rows
-		                }
+		                    break;  		                }
 		            }
 		        } catch (NumberFormatException e) {
 		            System.out.println("Invalid Petty Cash amount at row " + rowIndex + ": " + e.getMessage());
@@ -1219,13 +1214,13 @@
 				// Check if the PCR amount is valid
 				if (!checkPCRAmount()) {
 					showWarningMessage("Amount must be greater than zero.", "Petty Cash Amount");
-					return; // Exit early if PCR amount is invalid
+					return;
 				}
 	
 				// Check if an account ID is selected
 				if (!checkAcctID_ifcomplete()) {
 					showWarningMessage("Please select account ID.", "Account ID");
-					return; // Exit early if account ID is missing
+					return; 
 				}
 	
 				// Retrieve the total amount of CA (Cash Advanced Request) to be liquidated
@@ -1238,10 +1233,7 @@
 				if ("03".equals(pcr_type_id) && totalPCRAmt.compareTo(totalAmtOfCA) != 0) {
 	
 					// Handle Cash Return and Reimbursement scenarios
-					// Retrieve the cash returned amount (if applicable)
 					cashRetamt = (BigDecimal) ftxtCashReturned.getValued(); 
-	
-					// Retrieve the reimbursement amount (if applicable)
 					reimbursementAmt = (BigDecimal) ftxtAmtToBeReimbursed.getValued(); 
 	
 					System.out.println("Cash Return Amount: " + cashRetamt);
@@ -1366,7 +1358,7 @@
 	
 					}		
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Something went wrong.", "Save", JOptionPane.INFORMATION_MESSAGE);
+					showWarningMessage("Something went wrong.", "Save");
 				}
 	
 				FncSystem.out("PCR No: ", pcr_no);
@@ -1500,6 +1492,7 @@
 				}
 	
 				System.out.println("Is to pay? " + isToPay);
+				
 				return isToPay;
 			}
 	
@@ -1546,18 +1539,6 @@
 				FncReport.generateReport("/Reports/rptPettyCashRequest.jasper", title, mapParameters);
 			}
 	
-			private void showWarningMessage(String message, String title) {
-				JOptionPane.showMessageDialog(getContentPane(), message, title, JOptionPane.WARNING_MESSAGE);
-			}
-	
-			private void confirmAndSaveRequest() {
-				int response = JOptionPane.showConfirmDialog(getContentPane(), 
-						"Are all entries correct?", "Confirmation", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-				if (response == JOptionPane.YES_OPTION) {
-					saveRequest();
-				}
-			}
-	
 			private void pay_process_PCR(String pcr_status) {
 	
 				// Validation for transaction date 
@@ -1569,6 +1550,7 @@
 				if (JOptionPane.showConfirmDialog(getContentPane(), "Are you sure to pay / process this request?", "Confirmation",
 						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
 	
+					// Password validation for custodian
 					dlg_CR_PW_Entry pw = new dlg_CR_PW_Entry(FncGlobal.homeMDI, "Password");
 					pw.setLocationRelativeTo(null);
 					pw.setVisible(true);
@@ -1582,6 +1564,7 @@
 	
 						System.out.println("Value of pcr_type_id: " + pcr_type_id);
 	
+						// Applicable to Cash Advance, Reimbursement and Set-Up/Replenishment Requests 
 						if (!pcr_type_id.equals("03") && !pcr_type_id.equals("05")) {
 							if(pcr_status.equals("ACTIVE")) {
 								System.out.println("TO PAY PCR!");
@@ -1593,8 +1576,9 @@
 										+ "AND rec_status = 'A';"; 
 	
 								pcr_status = "PAID";
-							} else {
-								System.out.println("TO PROCESS SET-UP / REPLENISHMENT!");
+								
+							} else { // To process PAID - Set-Up/Replenishment Request
+		
 								query = "UPDATE rf_petty_cash_header \n"
 										+ "SET status_id = 'G'\n"
 										+ ", pcr_date_processed = '"+dateFormat.format(dteTransDate.getDate())+"' \n"
@@ -1605,8 +1589,8 @@
 								pcr_status = "PROCESSED";
 							}
 	
-						} else {
-							System.out.println("TO PROCESS PCR!");
+						} else { // Applicable to Cash Fund Liquidation & Closing Request 	
+		
 							query = "UPDATE rf_petty_cash_header \n"
 									+ "SET status_id = 'G'\n"
 									+ ", pcr_date_processed = '"+dateFormat.format(dteTransDate.getDate())+"' \n"
@@ -1629,8 +1613,18 @@
 						return; 
 					}
 				}
+			}
+			
+			private void showWarningMessage(String message, String title) {
+				JOptionPane.showMessageDialog(getContentPane(), message, title, JOptionPane.WARNING_MESSAGE);
+			}
 	
-	
+			private void confirmAndSaveRequest() {
+				int response = JOptionPane.showConfirmDialog(getContentPane(), 
+						"Are all entries correct?", "Confirmation", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+				if (response == JOptionPane.YES_OPTION) {
+					saveRequest();
+				}
 			}
 	
 			@Override
