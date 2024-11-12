@@ -287,6 +287,7 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 			lookuprequester.setEnabled(true);
 			PurchaseOrderTab.lookuppono.setText(getpo_no());
 			PurchaseOrderTab.lookupterms.setEditable(true);
+			PurchaseOrderTab.lookupsupplier.setEditable(false);
 			System.out.println("Date: "+ PurchaseOrderTab.date_PO.getDate());
 			enable_buttons(false, false, false, true, true, false);
 			

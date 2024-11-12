@@ -581,11 +581,11 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 				String supp_id = (String) modelPO.getValueAt(x, 10);
 				
 				String comp_id = PurchaseOrder.lookupcompany.getValue();
-				String comp_name = PurchaseOrder.txtcompany.getText();
+				//String comp_name = PurchaseOrder.txtcompany.getText();
 				String requested_id = PurchaseOrder.lookuprequester.getValue();
-				String requested_name = PurchaseOrder.txtrequester_name.getText();
+				//String requested_name = PurchaseOrder.txtrequester_name.getText();
 				
-				String supplier_id =lookupsupplier.getValue();
+				//String supplier_id =lookupsupplier.getValue();
 				//String supplier_name =tagsupplier.setTag("");
 				String term =lookupterms.getValue();
 				String rplf_no =txtrplfno.getText();
@@ -604,7 +604,7 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 				System.out.println("price: "+price);
 				System.out.println("supp_id: "+supp_id);
 				
-				String sql = " select sp_save_purchase_order('"+comp_id+"', '"+requested_id+"', '"+cmbtype.getSelectedIndex()+"','"+item_id+"', '"+item_name+"',  NULLIF('"+model+"','null'), NULLIF('"+brand+"','null'), NULLIF('"+unit+"','null'), '"+qty+"', NULLIF('"+purpose+"','null'), '"+price+"', NULLIF('"+supp_id+"','null'), NULLIF('"+term+"','null'), null, '"+po_no+"')\n"
+				String sql = " select sp_save_purchase_order('"+comp_id+"', '"+requested_id+"', '"+cmbtype.getSelectedIndex()+"','"+item_id+"', '"+item_name+"',  NULLIF('"+model+"','null'), NULLIF('"+brand+"','null'), NULLIF('"+unit+"','null'), '"+qty+"', NULLIF('"+purpose+"','null'), '"+price+"', NULLIF('"+supp_id+"','null'), NULLIF('"+term+"','null'), null, '"+po_no+"', '"+po_date+"')\n"
 						+ " ";
 				
 				FncSystem.out("save_purchase_order: ", sql);
