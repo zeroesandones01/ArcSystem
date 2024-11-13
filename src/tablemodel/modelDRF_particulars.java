@@ -1,12 +1,21 @@
 package tablemodel;
 
+import java.awt.Component;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 
 import DateChooser._JDateChooser;
 import Lookup._JLookup;
@@ -48,7 +57,7 @@ public class modelDRF_particulars extends DefaultTableModel {
 
 	public String[] COLUMNS = new String[] {
 			"Account ID",		// 0
-			"Cost ID",			// 1
+			"Proj. Cost ID",	// 1
 			"Div",				// 2	
 			"Proj",				// 3			
 			"<html><center>Account<html><br><html><center>Description<html>", // 4
@@ -89,7 +98,7 @@ public class modelDRF_particulars extends DefaultTableModel {
 	public Class[] CLASS_TYPES = new Class[] {
 			
 			_JLookup.class,		// 0 Account ID
-			_JLookup.class,		// 1 Cost ID
+			_JLookup.class,		// 1 Proj. Cost ID
 			String.class,		// 2 Div		
 			_JLookup.class,		// 3 Proj
 			Object.class, 		// 4 Account Desc
@@ -133,12 +142,12 @@ public class modelDRF_particulars extends DefaultTableModel {
 		COLUMN_EDITABLE = new boolean[] {
 			
 				false,	// 0 Account ID
-				false,	// 1 Cost ID
+				false,	// 1 Proj. Cost ID
 				false,	// 2 Div							
 				false,	// 3 Proj
 				false, 	// 4 Account Desc
 				false,	// 5 Amount	
-				true,	// 6 Within
+				false,	// 6 Within
 				false,	// 7 Payee ID
 				false,	// 8 Payee Type			
 				false,	// 9 Payee Name
@@ -190,12 +199,12 @@ public class modelDRF_particulars extends DefaultTableModel {
 			COLUMN_EDITABLE = new boolean[] {
 					
 					false,	// 0 Account ID
-					false,	// 1 Cost ID
+					false,	// 1 Proj. Cost ID
 					true,	// 2 Div
-					true,	// 3 Proj
+					false,	// 3 Proj
 					false, 	// 4 Account Desc
 					true,	// 5 Amount
-					true,	// 6 Within
+					false,	// 6 Within
 					false,	// 7 Payee ID
 					false,	// 8 Payee Type			
 					false,	// 9 Payee Name
@@ -230,7 +239,7 @@ public class modelDRF_particulars extends DefaultTableModel {
 		}else{
 			COLUMN_EDITABLE = new boolean[] {
 					false,	// Account ID
-					false,	// Cost ID
+					false,	// Proj. Cost ID
 					false,	// Div							
 					false,	// Proj
 					false, 	// Account Desc
@@ -274,12 +283,18 @@ public class modelDRF_particulars extends DefaultTableModel {
 	    Object value = super.getValueAt(row, column);
 	    
 	    // Ensure that BigDecimal columns return as BigDecimal
-	    if (column == 4 || column == 22 || column == 23 || column == 24 || column == 25 ||
-	    	column == 27 ||column == 28 ||column == 29 || column == 30 || column == 31 || column == 32 ||
-	        column == 33 || column == 34) { // Adjust indices as needed
+	    if (column == 5 || column == 23 || column == 24 || column == 25 || column == 26 || column == 27 ||
+	    	column == 28 ||column == 29 ||column == 30 || column == 31 || column == 32 || column == 33 ||
+	        column == 34 || column == 35) { // Adjust indices as needed
 	        if (value instanceof Number) {
 	            return BigDecimal.valueOf(((Number) value).doubleValue());
-	        }
+	        } else if (value instanceof Long) {
+	        	 return BigDecimal.valueOf(((Long) value).doubleValue());
+			}
+	     
+	    // Converting null cells into empty string
+	    } else if (column == 0 || column == 1 || column == 7) {
+	    	return value == null ? "" : value; 
 	    }
 	    
 	    return value;
@@ -297,4 +312,5 @@ public class modelDRF_particulars extends DefaultTableModel {
 	        
 	        return null; 
 	    }
+	 
 }

@@ -4,13 +4,16 @@
 	package Transaction;
 	
 	import java.awt.BorderLayout;
-	import java.awt.Color;
+import java.awt.Checkbox;
+import java.awt.Color;
 	import java.awt.Dimension;
 	import java.awt.Font;
 	import java.awt.GridLayout;
 	import java.awt.event.ActionEvent;
 	import java.awt.event.ActionListener;
-	import java.awt.event.KeyEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
 	import java.awt.event.KeyListener;
 	import java.awt.event.MouseEvent;
 	import java.awt.event.MouseListener;
@@ -26,7 +29,8 @@
 	import javax.swing.DefaultListModel;
 	import javax.swing.ImageIcon;
 	import javax.swing.JButton;
-	import javax.swing.JLabel;
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 	import javax.swing.JList;
 	import javax.swing.JOptionPane;
 	import javax.swing.JPanel;
@@ -130,6 +134,8 @@
 		
 		private Boolean cash_liq = false;
 		private Object company_logo;
+		private JCheckBox chkCurrYear;
+		protected String curr_year;
 	
 		/**
 		 * 
@@ -241,28 +247,114 @@
 	
 											if (data != null) {
 												pcr_no = (String) data[0]; 
-												pcr_type_id = (String) data[2]; 
-												pcr_status = (String) data[3]; 
+												pcr_type_id = (String) data[3]; 
+												pcr_status = (String) data[2]; 
 											}
 	
 											displayPCR_header(co_id, pcr_no);
 											displayPCR_details(modelPettyCashReq, rowHeaderScroll, modelPettyCashReqTotal, co_id, pcr_no);
-											lookupPCRNo.setEnabled(false);
+											lookupPCRNo.setEnabled(true);
+						
 											setCompEnabled(pnlMainNorth);
 											setCompEditable(pnlMainNorth, false);
+											lookupPCRNo.setEditable(true);
 											dteDateCreated.getCalendarButton().setVisible(false);
 											dteTransDate.getCalendarButton().setVisible(false);
 	
 											if(pcr_type_id.equals("03")) {
 												setCompEnabled(pnlCenterSouth);
+												JPanel pnlPCR = new JPanel(new BorderLayout(3, 3)); 
+												pnlNorthCenter.add(pnlPCR, BorderLayout.WEST); 
+												pnlPCR.setPreferredSize(new Dimension(220, 0));
+												{
+													lblPCRNo = new JLabel("PCR No.: ", JLabel.TRAILING);
+													pnlPCR.add(lblPCRNo, BorderLayout.WEST); 
+												}
+												{
+													lookupPCRNo = new _JLookup(null, "Petty Cash No.", 0); 
+													pnlPCR.add(lookupPCRNo, BorderLayout.CENTER);
+													lookupPCRNo.setFont(new Font("Segoe UI", Font.BOLD, 12));
+													lookupPCRNo.addLookupListener(new LookupListener() {
+					
+														@Override
+														public void lookupPerformed(LookupEvent event) {
+															Object [] data = ((_JLookup)event.getSource()).getDataSet();
+					
+															if (data != null) {
+																pcr_no = (String) data[0]; 
+																pcr_type_id = (String) data[3]; 
+																pcr_status = (String) data[2]; 
+															}
+					
+															displayPCR_header(co_id, pcr_no);
+															displayPCR_details(modelPettyCashReq, rowHeaderScroll, modelPettyCashReqTotal, co_id, pcr_no);
+															lookupPCRNo.setEnabled(true);
+															setCompEnabled(pnlMainNorth);
+															setCompEditable(pnlMainNorth, false);
+															lookupPCRNo.setEditable(true);
+															dteDateCreated.getCalendarButton().setVisible(false);
+															dteTransDate.getCalendarButton().setVisible(false);
+					
+															if(pcr_type_id.equals("03")) {
+																setCompEnabled(pnlCenterSouth);
+																setCompEditable(pnlCenterSouth, false);
+															}
+					
+															if(FncAcounting.EmpPettyCashCustodian(UserInfo.EmployeeCode, "17") == true) {
+					
+																// AUTO DATE PAID / PROCESSED as CURRENT DATE
+																dteTransDate.setEnabled(true); 
+																dteTransDate.setDate(FncGlobal.getDateToday());
+																dteTransDate.getCalendarButton().setVisible(false);
+					
+																if(pcr_status.equals("ACTIVE")) { 
+																	// TO ENABLE EDIT BUTTON FOR REQUESTS CREATED BY THE CUSTODIAN
+																	if(isCustodianRequest(co_id, pcr_no, user)) {
+					
+																		if(isToPay(pcr_type_id)) { // TO PAY	
+																			btnState(false, true, false, true, true, false, true, false, false);
+					
+																		} else { // TO PROCESS
+																			btnState(false, true, false, true, false, true, true, false, false);
+																		}
+																	} else {
+																		if(isToPay(pcr_type_id)) { // TO PAY	
+																			btnState(false, false, false, true, true, false, true, false, false);
+					
+																		} else { // TO PROCESS
+																			btnState(false, false, false, true, false, true, true, false, false);
+																		}
+																	}
+					
+																} else if(pcr_status.equals("PAID") && pcr_type_id.equals("04")) { // TO PROCESS PAID SET-UP/ REPLENISHMENT REQUEST
+																	btnState(false, false, false, true, false, true, true, false, false); 
+					
+																} else { // TO PREVIEW REQUEST ONLY
+																	btnState(false, false, false, true, false, false, true, false, false); 
+					
+																	// ENABLE THIS COMPONENT FOR DISPLAY OF DATE PAID OR PROCESSED DATE
+																	dteTransDate.setEnabled(true); 
+																	dteTransDate.getCalendarButton().setVisible(false);
+																}	
+					
+															} else if(pcr_status.equals("ACTIVE")) {
+																btnState(false, true, false, true, false, false, true, false, false); 
+															} else {
+																btnState(false, false, false, true, false, false, true, false, false); 
+															}
+														}
+													});
+												}
+											
 												setCompEditable(pnlCenterSouth, false);
 											}
 	
 											if(FncAcounting.EmpPettyCashCustodian(UserInfo.EmployeeCode, "17") == true) {
 	
-												// Date chooser component available only for custodian's input of DATE PAID / PROCESSED 
+												// AUTO DATE PAID / PROCESSED as CURRENT DATE
 												dteTransDate.setEnabled(true); 
-												dteTransDate.getCalendarButton().setVisible(true);
+												dteTransDate.setDate(FncGlobal.getDateToday());
+												dteTransDate.getCalendarButton().setVisible(false);
 	
 												if(pcr_status.equals("ACTIVE")) { 
 													// TO ENABLE EDIT BUTTON FOR REQUESTS CREATED BY THE CUSTODIAN
@@ -320,9 +412,37 @@
 							}
 						}
 						{
-							JPanel pnlExtra = new JPanel(new BorderLayout(5, 5)); 
-							pnlNorth.add(pnlExtra, BorderLayout.SOUTH); 
-							pnlExtra.setPreferredSize(new Dimension(0, 10));
+							JPanel pnlCheckBox = new JPanel(new BorderLayout(5, 5)); 
+							pnlNorth.add(pnlCheckBox, BorderLayout.SOUTH); 
+							pnlCheckBox.setPreferredSize(new Dimension(0, 15));
+							{
+								JPanel pnlExtra = new JPanel();
+								pnlCheckBox.add(pnlExtra, BorderLayout.WEST); 
+								pnlExtra.setPreferredSize(new Dimension(380, 0));
+							}
+							{
+								chkCurrYear = new JCheckBox("current year only?"); 
+								pnlCheckBox.add(chkCurrYear, BorderLayout.CENTER);
+								chkCurrYear.addItemListener(new ItemListener() {
+									
+									@Override
+									public void itemStateChanged(ItemEvent arg0) {
+										if(chkCurrYear.isSelected()){
+											curr_year = getCurrentYear(); 
+											System.out.println(curr_year);
+										} else {
+											curr_year = ""; 
+											System.out.println(curr_year);
+										}
+									}
+								});
+
+							}
+							{
+								JPanel pnlExtra = new JPanel();
+								pnlCheckBox.add(pnlExtra, BorderLayout.EAST);
+								pnlExtra.setPreferredSize(new Dimension(200, 0));
+							}
 						}
 					}
 					{
@@ -355,6 +475,7 @@
 									{
 										dteDateCreated = new JDateChooser(FncGlobal.getDateToday(), "MM/dd/yy");
 										pnlCWComp.add(dteDateCreated); 
+										dteDateCreated.setMaxSelectableDate(FncGlobal.getDateToday()); 
 	
 									}
 									{
@@ -667,6 +788,8 @@
 			this.setComponentsEnabled(pnlMainNorth, false);
 			lookupPCRNo.setEnabled(true);
 			lookupPCRNo.setEditable(true);
+			chkCurrYear.setEnabled(true);
+			chkCurrYear.setSelected(true);
 			this.setComponentsEnabled(pnlCenterSouth, false);
 			lblCompany.setEnabled(true);
 			lblPCRNo.setEnabled(true);
@@ -687,9 +810,9 @@
 			dteTransDate.getCalendarButton().setVisible(true);
 	
 			if(FncAcounting.EmpPettyCashCustodian(user, process_id)) {
-				lookupPCRNo.setLookupSQL(getPCR_no_Custodian(co_id));
+				lookupPCRNo.setLookupSQL(getPCR_no_Custodian(co_id, curr_year));
 			} else {
-				lookupPCRNo.setLookupSQL(getPCR_no(co_id, user));
+				lookupPCRNo.setLookupSQL(getPCR_no(co_id, user, curr_year));
 			}
 		}
 	
@@ -700,7 +823,9 @@
 			}
 	
 			if(e.getActionCommand().equals("Edit")) {
-	
+				
+				lookupPCRNo.setEnabled(true);
+				lookupPCRNo.setEditable(false);
 				btnState(false, false, true, false, false, false, true, true, true);
 				lookupPCRType.setEditable(false);
 				tblPettyCash.setEnabled(true);
@@ -800,6 +925,7 @@
 			tblPettyCashTotal.setEditable(false); 
 			dteTransDate.setEnabled(true); 
 			dteDateCreated.setDate(FncGlobal.getDateToday());
+			dteDateCreated.setMaxSelectableDate(FncGlobal.getDateToday()); 
 			dteTransDate.setEnabled(false); 
 			dteTransDate.getCalendarButton().setVisible(false);
 			btnState(false, false, true, false, false, false, true, true, true); 
@@ -818,37 +944,39 @@
 		}
 	
 	
-		public static String getPCR_no(String co_id, String user) {
+		public static String getPCR_no(String co_id, String user, String curr_year) {
 			String SQL = "SELECT a.pcr_no AS \"PCR No\"\n"
 					+ ", b.pc_req_type_desc as \"Description\"\n"
-					+ ", a.pcr_type AS \"PCR Type ID\" \n"
 					+ ", c.status_desc AS \"Status\"\n"
+					+ ", a.pcr_type AS \"PCR Type ID\" \n"
 					+ "FROM rf_petty_cash_header a\n"
 					+ "LEFT JOIN mf_petty_cash_req_type b ON b.pc_req_id = a.pcr_type AND b.status_id = 'A'\n"
 					+ "LEFT JOIN mf_record_status c ON c.status_id = a.status_id \n"
 					+ "WHERE a.rec_status = 'A'\n"
 					+ "AND a.co_id = '"+co_id+"' \n"
 					+ "AND a.created_by = '"+user+"' \n"
-					+ "ORDER by a.date_created";	
+					+ "AND ('"+curr_year+"' IS NULL OR '"+curr_year+"' = '' OR date_part('year', a.date_created::DATE)::VARCHAR = '"+curr_year+"')\n"
+					+ "ORDER by a.date_created DESC";	
 	
 			System.out.println("getPCR_no: "+ SQL);
 	
 			return SQL; 
 		}
 	
-		public static String getPCR_no_Custodian(String co_id) {
+		public static String getPCR_no_Custodian(String co_id, String curr_year) {
 			String SQL = "SELECT a.pcr_no AS \"PCR No\"\n"
 					+ ", b.pc_req_type_desc as \"Description\"\n"
-					+ ", a.pcr_type AS \"PCR Type ID\" \n"
 					+ ", c.status_desc AS \"Status\"\n"
+					+ ", a.pcr_type AS \"PCR Type ID\" \n"
 					+ "FROM rf_petty_cash_header a\n"
 					+ "LEFT JOIN mf_petty_cash_req_type b ON b.pc_req_id = a.pcr_type AND b.status_id = 'A'\n"
 					+ "LEFT JOIN mf_record_status c ON c.status_id = a.status_id \n"
 					+ "WHERE a.rec_status = 'A'\n"
 					+ "AND a.co_id = '"+co_id+"' \n"
-					+ "ORDER by a.date_created";	
+					+ "AND ('"+curr_year+"' IS NULL OR '"+curr_year+"' = '' OR date_part('year', a.date_created::DATE)::VARCHAR = '"+curr_year+"')\n"
+					+ "ORDER by a.date_created DESC";	
 	
-			System.out.println("getPCR_no: "+ SQL);
+			System.out.println("getPCR_no_Custodian: "+ SQL);
 	
 			return SQL; 
 		}
@@ -861,6 +989,7 @@
 					+ "FROM rf_petty_cash_header a\n"
 					+ "LEFT JOIN mf_record_status b ON b.status_id = a.status_id AND a.rec_status = 'A'\n"
 					+ "WHERE a.status_id = 'B'\n" 
+					+ "AND a.pcr_type = '01'\n" 
 					+ "AND NOT a.is_ca_liquidated \n"
 					+ "AND a.co_id = '"+co_id+"' \n"
 					+ "AND a.created_by = '"+user+"' \n"
@@ -974,8 +1103,9 @@
 	
 		private void addRow() {
 			modelPettyCashReq.addRow(
-					new Object[] { null, null, null, null, null, div_id, "", 0.00 });
+					new Object[] { null, null, null, null, null, "", "", 0.00 });
 			((DefaultListModel<Integer>) rowHeaderScroll.getModel()).addElement(modelPettyCashReq.getRowCount());
+			setDiv();
 		}
 	
 		private void removeRow() {
@@ -1156,6 +1286,21 @@
 	
 		    return isComplete;
 		}
+		
+		private Boolean isValidDate() {
+			Boolean isValid = true; 
+			
+			Date req_date = dteDateCreated.getDate();
+			Date curr_date = FncGlobal.getDateToday(); 
+			
+			if(req_date.after(curr_date)) {
+				isValid = false;
+			} else {
+				isValid = true; 
+			}
+			
+			return isValid;
+		}
 	
 			private void validateCashReturned(BigDecimal pcr_liq_amt) {
 	
@@ -1210,17 +1355,26 @@
 			}
 	
 			public void executeSave() {
+		
+				// Auto compute total before saving
+				computeTotal();
+				
+				// Validate request date 
+				if(!isValidDate()) {
+					showWarningMessage("Request date is invalid.", "Invalid Date");
+					return;
+				}
+				
+				// Check if an account ID is selected
+				if (!checkAcctID_ifcomplete()) {
+					showWarningMessage("Please select account ID.", "Account ID");
+					return; 
+				}
 	
 				// Check if the PCR amount is valid
 				if (!checkPCRAmount()) {
 					showWarningMessage("Amount must be greater than zero.", "Petty Cash Amount");
 					return;
-				}
-	
-				// Check if an account ID is selected
-				if (!checkAcctID_ifcomplete()) {
-					showWarningMessage("Please select account ID.", "Account ID");
-					return; 
 				}
 	
 				// Retrieve the total amount of CA (Cash Advanced Request) to be liquidated
@@ -1521,6 +1675,17 @@
 	
 				return isCustodianRequest; 
 			}
+			
+			private static String getCurrentYear() {
+				pgSelect db = new pgSelect();
+				db.select("SELECT EXTRACT(YEAR FROM now())::VARCHAR");
+
+				if (db.getResult() != null) {
+					return db.Result[0][0].toString();
+				} else {
+					return String.format("%s", getCurrentYear());
+				}
+			}
 	
 			public void preview() {
 	
@@ -1540,12 +1705,6 @@
 			}
 	
 			private void pay_process_PCR(String pcr_status) {
-	
-				// Validation for transaction date 
-				if (dteTransDate.getDate() == null) {
-					showWarningMessage("Please input transaction date.", "Transaction Date");
-					return;
-				} 
 	
 				if (JOptionPane.showConfirmDialog(getContentPane(), "Are you sure to pay / process this request?", "Confirmation",
 						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {

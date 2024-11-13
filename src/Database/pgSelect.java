@@ -690,5 +690,83 @@ public class pgSelect {
 			e.printStackTrace();
 		}
 	}
+	
+	//Added by Monique dtd 11-11-2024
+	public void select(String SQL, Object[] params) {
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+
+	    try {
+	        con = DriverManager.getConnection(FncGlobal.connectionURL, FncGlobal.connectionUsername, FncGlobal.connectionPassword);
+	        
+	        // Prepare the SQL statement
+	        ps = con.prepareStatement(SQL, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+	        
+	        // Set the parameters for the PreparedStatement
+	        if (params != null) {
+	            for (int i = 0; i < params.length; i++) {
+	                ps.setObject(i + 1, params[i]);  // Set each parameter dynamically
+	            }
+	        }
+
+	        // Execute the query
+	        rs = ps.executeQuery();
+
+	        // Retrieve the metadata
+	        ResultSetMetaData rsMetaData = rs.getMetaData();
+	        int getColumnCount = rsMetaData.getColumnCount();
+	        setColumnCount(getColumnCount);
+
+	        rs.last();
+	        int getRowCount = rs.getRow();
+	        setRowCount(getRowCount);
+
+	        rs.beforeFirst();  // Move the cursor to the beginning
+
+	        // Prepare the result array
+	        setResult(new Object[getRowCount][getColumnCount]);
+
+	        int x = 0;
+	        if (getRowCount == 0) {
+	            setResult(null);
+	        } else {
+	            String[] columnNames = new String[getColumnCount];
+	            for (int i = 1; i <= getColumnCount; i++) {
+	                columnNames[i - 1] = rsMetaData.getColumnName(i);
+	            }
+
+	            while (rs.next()) {
+	                for (int y = 0; y < getColumnCount; y++) {
+	                    if (rs.getString(y + 1) == null)
+	                        getResult()[x][y] = null;
+	                    else
+	                        getResult()[x][y] = rs.getObject(y + 1);
+	                }
+	                x++;
+	            }
+	        }
+	    } catch (SQLException sE) {
+	        System.out.printf("SQL: %s%n%n", SQL);
+	        printWarnings(ps);
+	        showException(sE);
+	        return;
+	    } finally {
+	        try {
+	            if (rs != null) {
+	                rs.close();
+	            }
+	            if (ps != null) {
+	                ps.close();
+	            }
+	            if (con != null) {
+	                con.close();
+	            }
+	        } catch (SQLException ex) {
+	            JOptionPane.showMessageDialog(null, ex.getMessage(), ex.getMessage(), JOptionPane.WARNING_MESSAGE);
+	        }
+	    }
+	}
+
 
 }

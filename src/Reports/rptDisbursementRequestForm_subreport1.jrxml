@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptDisbursementRequestForm_subreport1" pageWidth="540" pageHeight="500" columnWidth="540" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
-	<property name="ireport.zoom" value="1.2100000000000255"/>
+	<property name="ireport.zoom" value="1.610510000000041"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="co_id" class="java.lang.String"/>
@@ -13,17 +13,19 @@
 	<parameter name="soa_bill" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT FORMAT('%s / %s', fn_get_div_alias(a.div_id), fn_get_exec_ofc_alias(b.exec_office_code)) as cost_center
-, c.acct_name
+, COALESCE(c.proj_cost_accnt_desc, d.acct_name) as acct_desc
 , fn_get_proj_alias(a.proj_id) AS proj_alias
 , a.amount
 FROM rf_drf_detail a
-LEFT JOIN mf_division b ON b.div_code = a.div_id
-LEFT JOIN mf_boi_chart_of_accounts c ON c.acct_id = a.acct_id AND c.status_id = 'A'
-WHERE a.co_id = $P{co_id}
+LEFT JOIN mf_division b ON b.div_code = a.div_id and b.status_id = 'A'
+left join mf_project_cost_accnts c on c.proj_cost_accnt_id = a.proj_cost_accnt_id and c.status_id ='A'
+left join mf_boi_chart_of_accounts d on trim(d.acct_id) = trim(a.acct_id) and d.status_id = 'A'
+WHERE a.status_id ='A'
+AND a.co_id = $P{co_id}
 AND a.drf_no = $P{drf_no}]]>
 	</queryString>
 	<field name="cost_center" class="java.lang.String"/>
-	<field name="acct_name" class="java.lang.String"/>
+	<field name="acct_desc" class="java.lang.String"/>
 	<field name="proj_alias" class="java.lang.String"/>
 	<field name="amount" class="java.math.BigDecimal"/>
 	<variable name="v_total_drf_amt" class="java.math.BigDecimal" calculation="Sum">
@@ -101,13 +103,10 @@ AND a.drf_no = $P{drf_no}]]>
 				<text><![CDATA[PARTICULARS:]]></text>
 			</staticText>
 			<line>
-				<reportElement x="0" y="0" width="1" height="27"/>
+				<reportElement x="0" y="0" width="1" height="49"/>
 			</line>
 			<line>
-				<reportElement x="0" y="27" width="1" height="22"/>
-			</line>
-			<line>
-				<reportElement x="539" y="0" width="1" height="47"/>
+				<reportElement x="540" y="0" width="1" height="49"/>
 			</line>
 		</band>
 	</columnHeader>
@@ -125,9 +124,9 @@ AND a.drf_no = $P{drf_no}]]>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Tahoma" size="9"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{acct_name}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{acct_desc}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="326" y="0" width="117" height="15"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Tahoma" size="9"/>
@@ -141,6 +140,12 @@ AND a.drf_no = $P{drf_no}]]>
 				</textElement>
 				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{amount}]]></textFieldExpression>
 			</textField>
+			<line>
+				<reportElement x="0" y="0" width="1" height="15"/>
+			</line>
+			<line>
+				<reportElement x="540" y="0" width="1" height="15"/>
+			</line>
 		</band>
 	</detail>
 	<columnFooter>
@@ -180,7 +185,7 @@ AND a.drf_no = $P{drf_no}]]>
 					<font fontName="Tahoma" size="9" isBold="false"/>
 				</textElement>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="141" y="154" width="386" height="18"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
 					<font fontName="Tahoma" size="9" isBold="false"/>
@@ -220,14 +225,14 @@ AND a.drf_no = $P{drf_no}]]>
 				</textElement>
 				<text><![CDATA[Requester's Remarks:]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="141" y="103" width="386" height="18"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
 					<font fontName="Tahoma" size="9" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{attachments}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="141" y="120" width="386" height="18"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
 					<font fontName="Tahoma" size="9" isBold="false"/>
@@ -292,7 +297,7 @@ AND a.drf_no = $P{drf_no}]]>
 				</textElement>
 				<text><![CDATA[SOA / Billing No. / Date:]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="141" y="87" width="386" height="16"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Tahoma" size="9"/>
@@ -300,10 +305,10 @@ AND a.drf_no = $P{drf_no}]]>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{soa_bill}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="-37" width="1" height="92"/>
+				<reportElement x="0" y="0" width="1" height="55"/>
 			</line>
 			<line>
-				<reportElement x="539" y="-37" width="1" height="92"/>
+				<reportElement x="540" y="0" width="1" height="55"/>
 			</line>
 		</band>
 	</columnFooter>

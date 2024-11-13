@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptDisbursementRequestForm" pageWidth="612" pageHeight="936" columnWidth="540" leftMargin="36" rightMargin="36" topMargin="36" bottomMargin="36">
 	<property name="ireport.zoom" value="1.6105100000000343"/>
 	<property name="ireport.x" value="20"/>
-	<property name="ireport.y" value="288"/>
+	<property name="ireport.y" value="96"/>
 	<subDataset name="Table Dataset 1"/>
 	<parameter name="co_id" class="java.lang.String"/>
 	<parameter name="drf_no" class="java.lang.String"/>
@@ -32,11 +32,15 @@
 , (SELECT STRING_AGG(FORMAT('%s, %s', invoice_no, invoice_date::DATE), '; ')
 	FROM rf_drf_detail
 	WHERE drf_no = a.drf_no
-	AND co_id = a.co_id) AS invoice
+	AND co_id = a.co_id
+	AND NULLIF(invoice_no, '') IS NOT NULL
+	AND invoice_date IS NOT NULL) AS invoice
 , (SELECT STRING_AGG(FORMAT('%s, %s', soa_bill_no, soa_bill_date::DATE), '; ')
 	FROM rf_drf_detail
 	WHERE drf_no = a.drf_no
-	AND co_id = a.co_id) AS soa_bill
+	AND co_id = a.co_id
+	AND NULLIF(soa_bill_no, '') IS NOT NULL
+	AND soa_bill_date IS NOT NULL) AS soa_bill
 FROM rf_drf_header a
 LEFT JOIN mf_company b ON b.co_id = a.co_id AND b.status_id = 'A'
 LEFT JOIN rf_entity c ON c.entity_id = b.co_entity_id AND c.status_id = 'A'
