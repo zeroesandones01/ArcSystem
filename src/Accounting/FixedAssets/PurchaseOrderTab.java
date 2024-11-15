@@ -54,10 +54,11 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 	public static _JLookup lookupterms;
 	public static _JDateChooser date_PO;
 	private JScrollPane scrollPO;
+	public static JTextField txtqoute;
 	public static modelpurchase_order modelPO;
 	public static _JTableMain tblPO;
 	public static _JLookup lookuppono;
-	private static JTextField txtrplfno;
+	public static JTextField txtrplfno;
 	public static _JLookup lookupsupplier;
 	public static _JTagLabel tagsupplier;
 	public static JComboBox cmbtype;
@@ -153,6 +154,7 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 							 date_PO = new _JDateChooser("MM/dd/yyyy", "##/##/#####", '_');
 							 pnlcombo_east.add(date_PO, BorderLayout.EAST);
 							 date_PO.setPreferredSize(new Dimension(110, 0));
+							 date_PO.setMaxSelectableDate(FncGlobal.getDateToday());
 						 }
 						 
 					 }
@@ -208,7 +210,7 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 						  } 
 						  {
 							 txtrplfno = new JTextField();
-							 txtrplfno.setEnabled(false);
+							 txtrplfno.setEditable(false);
 							 pnlcanvassid_east.add(txtrplfno, BorderLayout.EAST);
 							 txtrplfno.setPreferredSize(new Dimension(110, 0)); 
 						  }
@@ -232,7 +234,19 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 						 pnlsupplier_east.setPreferredSize(new Dimension(500, 0));
 						 {
 							 tagsupplier = new _JTagLabel("[ ]");
-							 pnlsupplier_east.add(tagsupplier, BorderLayout.CENTER);
+							 pnlsupplier_east.add(tagsupplier, BorderLayout.WEST);
+							 tagsupplier.setPreferredSize(new Dimension(300, 0));
+							 //tagsupplier.setBackground(Color.blue);
+						 }
+						 {
+							 JLabel lblqoute = new JLabel("Quotation No.", JLabel.TRAILING);
+							 pnlsupplier_east.add(lblqoute, BorderLayout.CENTER);
+						 }
+						 {
+							 txtqoute = new JTextField();
+							 txtqoute.setEditable(false);
+							 pnlsupplier_east.add(txtqoute, BorderLayout.EAST);
+							 txtqoute.setPreferredSize(new Dimension(110, 0));
 						 }
 					 }
 				 }
@@ -249,6 +263,7 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 						 lookupterms.setReturnColumn(0);
 						 lookupterms.setEditable(false);
 						 pnlterm.add(lookupterms, BorderLayout.CENTER);
+						 lookupterms.setLookupSQL(get_terms());						 
 						 lookupterms.addLookupListener(new LookupListener() {
 							public void lookupPerformed(LookupEvent event) {
 								Object [] data = ((_JLookup)event.getSource()).getDataSet();
@@ -264,8 +279,8 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 						 pnlterm.add(pnlsupplier_east, BorderLayout.EAST);
 						 pnlsupplier_east.setPreferredSize(new Dimension(500, 0));
 //						 {
-//							 JLabel lbldate = new JLabel("Date   ", JLabel.TRAILING);
-//							 pnlsupplier_east.add(lbldate, BorderLayout.CENTER);
+//							 JLabel lblqoute = new JLabel("Qoute No.", JLabel.TRAILING);
+//							 pnlsupplier_east.add(lblqoute, BorderLayout.CENTER);
 //						 }
 //						 {
 //							 date_PO = new _JDateChooser("MM/dd/yyyy", "##/##/#####", '_');
@@ -342,24 +357,28 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 		}
 	}
 	
-//	public static boolean checkdetails () {
-//		if (date_PO.getDate() == null){
-//			return false;
-//		}else {
-//			return true;
-//		}
-//	}
+	public static boolean checkdetails () {
+		if (date_PO.getDate() == null
+				|| PurchaseOrder.lookupcompany.getValue() == null
+				|| PurchaseOrder.lookuprequester.getValue()== null
+				|| lookupterms.getValue() == null
+				){
+			return true;
+		}else {
+			return false;
+		}
+	}
 	
-	public void display_po( DefaultTableModel modelMain, JList rowHeader, String po_no, Integer class_type) {
+	public static void  display_po( DefaultTableModel modelMain, JList rowHeader, String po_no, Integer class_type) {
 		FncTables.clearTable(modelMain);
 		DefaultListModel listModel = new DefaultListModel();
 		rowHeader.setModel(listModel);
 		
 		String sql = "select true, b.entity_name, \n"
-				+ "a.item_id,\n"
+				+ "a.item_id::int,\n"
 				+ "a.description,\n"
 				+ "nullif(a.model,'null') as model, NULLIF(a.brand,'null') as brand, \n"
-				+ "NULLIF(a.unit,'null') as unit, NULLIF(a.quantity,'null'), NULLIF(a.purpose,'null') as purpose, a.unit_price, \n"
+				+ "NULLIF(a.unit,'null') as unit, a.quantity::int, NULLIF(a.purpose,'null') as purpose, a.unit_price, \n"
 				+ "NULLIF(a.supplier,'null') as supplier, a.rec_id \n"
 				+ "from rf_purchase_order a\n"
 				+ "left join rf_entity b on a.supplier = b.entity_id\n"
@@ -556,10 +575,10 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 	
 	}
 	
-	public static void save_purchase_order() {
+	public static void save_purchase_order(String po_no) {
 		
-		int row = tblPO.convertRowIndexToModel(tblPO.getSelectedRow());
-		String po_no = PurchaseOrder.getpo_no();
+		//int row = tblPO.convertRowIndexToModel(tblPO.getSelectedRow());
+		
 		
 		for(int x = 0; x < modelPO.getRowCount(); x++) {
 			
@@ -590,6 +609,7 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 				String term =lookupterms.getValue();
 				String rplf_no =txtrplfno.getText();
 				Date po_date =date_PO.getDate();
+				String qoutation_no = txtqoute.getText();
 				
 				System.out.println("row_save: "+x);
 				System.out.println("selected: "+selected);
@@ -598,13 +618,14 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 				System.out.println("item_name: "+item_name);
 				System.out.println("model: "+model);
 				System.out.println("brand: "+brand);
+				
 				System.out.println("unit: "+unit);
 				System.out.println("qty: "+qty);
 				System.out.println("purpose: "+purpose);
 				System.out.println("price: "+price);
 				System.out.println("supp_id: "+supp_id);
 				
-				String sql = " select sp_save_purchase_order('"+comp_id+"', '"+requested_id+"', '"+cmbtype.getSelectedIndex()+"','"+item_id+"', '"+item_name+"',  NULLIF('"+model+"','null'), NULLIF('"+brand+"','null'), NULLIF('"+unit+"','null'), '"+qty+"', NULLIF('"+purpose+"','null'), '"+price+"', NULLIF('"+supp_id+"','null'), NULLIF('"+term+"','null'), null, '"+po_no+"', '"+po_date+"')\n"
+				String sql = " select sp_save_purchase_order('"+comp_id+"', '"+requested_id+"', '"+cmbtype.getSelectedIndex()+"','"+item_id+"', '"+item_name+"',  NULLIF('"+model+"','null'), NULLIF('"+brand+"','null'), NULLIF('"+unit+"','null'), '"+qty+"', NULLIF('"+purpose+"','null'), '"+price+"', NULLIF('"+supp_id+"','null'), NULLIF('"+term+"','null'), null, '"+po_no+"', '"+po_date+"', NULLIF('"+qoutation_no+"',''), NULLIF('"+rplf_no+"',''))\n"
 						+ " ";
 				
 				FncSystem.out("save_purchase_order: ", sql);
@@ -612,6 +633,17 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 				db.select(sql);
 			}
 		}
+		
+	}
+	
+	private String get_terms() {
+		
+		String strsql=	"select 	'COD',			'01'   			union all	\n" + 
+						"select 	'INSTALLMENT', 	'02'  			union all	\n" + 
+						"select 	'CHEQUE', 		'03' 			union all 	\n" + 
+						"select 	'7 DAYS', 		'04' 			union all 	\n" + 
+						"select 	'15 DAYS', 		'05' 			";
+		return strsql;
 		
 	}
 

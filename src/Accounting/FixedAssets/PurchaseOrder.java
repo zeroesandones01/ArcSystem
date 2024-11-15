@@ -21,8 +21,10 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
 import Database.pgSelect;
+import Database.pgUpdate;
 import Functions.FncReport;
 import Functions.FncTables;
+import Functions.UserInfo;
 import Lookup.LookupEvent;
 import Lookup.LookupListener;
 import Lookup._JLookup;
@@ -278,63 +280,149 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 			PurchaseOrderTab.tblPO.setEditable(true);
 			PurchaseOrderTab.tblPO.setEnabled(true);
 			PurchaseOrderTab.modelPO.setEditable(true);
-			FncTables.clearTable(PurchaseOrderTab.modelPO);
 			PurchaseOrderTab.btnAddAcct.setEnabled(true);
+			FncTables.clearTable(PurchaseOrderTab.modelPO);
 			PurchaseOrderTab.cleartable_rowheader();
 			PurchaseOrderTab.add_row(); 
+			
 			lookupcompany.setEnabled(true);
 			lookupcompany.setEditable(true);
 			lookuprequester.setEnabled(true);
-			PurchaseOrderTab.lookuppono.setText(getpo_no());
+			
+			
+			//PurchaseOrderTab.lookuppono.setText(getpo_no());
+			PurchaseOrderTab.lookupsupplier.setValue(null);
+			PurchaseOrderTab.date_PO.setEnabled(true);
+			PurchaseOrderTab.date_PO.setEditable(true);
+			PurchaseOrderTab.date_PO.setDate(null);
+			PurchaseOrderTab.txtrplfno.setText("");
+			PurchaseOrderTab.txtqoute.setText("");
+			
+			PurchaseOrderTab.cmbtype.setEditable(false);
+			PurchaseOrderTab.lookuppono.setEditable(false);
 			PurchaseOrderTab.lookupterms.setEditable(true);
-			PurchaseOrderTab.lookupsupplier.setEditable(false);
-			System.out.println("Date: "+ PurchaseOrderTab.date_PO.getDate());
+			PurchaseOrderTab.lookupsupplier.setEditable(true);
+			PurchaseOrderTab.txtrplfno.setEditable(true);
+			PurchaseOrderTab.txtqoute.setEditable(true);
+			
 			enable_buttons(false, false, false, true, true, false);
 			
-			PurchaseOrderTab.lookuppono.setEditable(false);
-			PurchaseOrderTab.cmbtype.setEditable(false);
+			
 			
 		}
 		
 		if ( e.getActionCommand().equals("edit")){
 			
+			PurchaseOrderTab.tblPO.setEditable(true);
+			PurchaseOrderTab.tblPO.setEnabled(true);
+			PurchaseOrderTab.modelPO.setEditable(true);
+			PurchaseOrderTab.btnAddAcct.setEnabled(true);
+			
+			enable_buttons(false, false, false, true, true, false);
+			
 		}
 		
 		if ( e.getActionCommand().equals("save")){
-//			if (PurchaseOrderTab.checkdetails ()) {
-//				JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please check details.");
-//			}
 			
-			PurchaseOrderTab.save_purchase_order();
-			PurchaseOrderTab.tblPO.setEditable(false);
-			PurchaseOrderTab.tblPO.setEnabled(false);
-			FncTables.clearTable(PurchaseOrderTab.modelPO);
-			PurchaseOrderTab.cleartable_rowheader();
-			PurchaseOrderTab.btnAddAcct.setEnabled(false);
-			PurchaseOrderTab.lookuppono.setValue("");
-			PurchaseOrderTab.lookuppono.setEditable(true);
-			PurchaseOrder.enable_buttons(true, true, false, false, true, false);
-			enable_buttons(true, true, false, false, true, true);
+			if (PurchaseOrderTab.checkdetails ()) {
+				
+				System.out.println("Date: "+PurchaseOrderTab.date_PO.getDate());
+				System.out.println("Co_id: "+lookupcompany.getValue());
+				System.out.println("Requester: "+lookuprequester.getValue());
+				System.out.println("terms: "+ PurchaseOrderTab.lookupterms.getValue());
+				System.out.println("Rplf: "+ PurchaseOrderTab.txtrplfno.getText());
+				
+				JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please check details.");
+				
+				if( PurchaseOrderTab.date_PO.getDate() == null) {
+					JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please check purchase order date.");
+				}
+				if(lookupcompany.getValue() == null) {
+					JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please select company.");
+				}
+				if(lookuprequester.getValue() == null) {
+					JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please select requester.");
+				}
+				if(PurchaseOrderTab.lookupterms.getValue() == null) {
+					JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please select terms.");
+				}
+				
+			}else {
+				
+				String po_no = PurchaseOrderTab.lookuppono.getValue();
+				
+				if( po_no.equals("") || po_no.equals(null)) {
+					System.out.println("Add new P.O.");
+					String set_po_no = getpo_no();
+					PurchaseOrderTab.save_purchase_order( set_po_no );
+					System.out.println("New Po no after saving: "+set_po_no);
+					PurchaseOrderTab.lookuppono.setValue(set_po_no);
+					PurchaseOrderTab.display_po(PurchaseOrderTab.modelPO, PurchaseOrderTab.rowheaderPO, set_po_no, PurchaseOrderTab.cmbtype.getSelectedIndex());
+					
+				}else {
+					
+					System.out.println("Edit P.O.");
+					pgUpdate db = new pgUpdate();
+					updatePO(PurchaseOrderTab.lookuppono.getValue(), db);
+					PurchaseOrderTab.save_purchase_order( PurchaseOrderTab.lookuppono.getValue() );
+					
+					db.commit();
+					System.out.println("Po no after edit: "+po_no);
+					PurchaseOrderTab.lookuppono.setValue(po_no);
+					PurchaseOrderTab.display_po(PurchaseOrderTab.modelPO, PurchaseOrderTab.rowheaderPO, po_no, PurchaseOrderTab.cmbtype.getSelectedIndex());
+					
+				}
+				
+				//PurchaseOrderTab.save_purchase_order(set_po_no);
+				PurchaseOrderTab.tblPO.setEditable(false);
+				PurchaseOrderTab.tblPO.setEnabled(false);
+				//FncTables.clearTable(PurchaseOrderTab.modelPO);
+				//PurchaseOrderTab.cleartable_rowheader();
+				PurchaseOrderTab.btnAddAcct.setEnabled(false);
+				//PurchaseOrderTab.lookuppono.setValue("");
+				PurchaseOrderTab.lookuppono.setEditable(true);
+				PurchaseOrderTab.txtqoute.setEditable(false);
+				PurchaseOrderTab.lookupterms.setEditable(false);
+				PurchaseOrder.enable_buttons(true, true, false, false, true, false);
+				enable_buttons(true, true, false, false, true, true);
+			}
+			
 		}
 		
 		if ( e.getActionCommand().equals("cancel")){
 			
+			
+			
 			PurchaseOrderTab.tblPO.setEditable(false);
 			PurchaseOrderTab.tblPO.setEnabled(false);
+			
 			FncTables.clearTable(PurchaseOrderTab.modelPO);
 			PurchaseOrderTab.cleartable_rowheader();
 			PurchaseOrderTab.btnAddAcct.setEnabled(false);
-			PurchaseOrderTab.cmbtype.setSelectedIndex(0);
-			PurchaseOrderTab.lookuppono.setValue(null);
-			PurchaseOrderTab.lookuppono.setEditable(true);
-			PurchaseOrderTab.lookupsupplier.setValue(null);
-			PurchaseOrderTab.tagsupplier.setTag("");
-			PurchaseOrderTab.date_PO.setDate(null);
-			enable_buttons(true, true, false, false, true, false);
+			
 			lookupcompany.setValue(null);
 			txtcompany.setText("");
 			lookuprequester.setValue(null);
 			txtrequester_name.setText("");
+			
+			PurchaseOrderTab.cmbtype.setSelectedIndex(0);
+			PurchaseOrderTab.cmbtype.setEditable(true);
+			PurchaseOrderTab.lookuppono.setValue(null);
+			PurchaseOrderTab.lookuppono.setEditable(true);
+			PurchaseOrderTab.lookupsupplier.setEditable(false);
+			PurchaseOrderTab.lookupsupplier.setValue(null);
+			PurchaseOrderTab.tagsupplier.setTag("");
+			PurchaseOrderTab.lookupterms.setValue(null);
+			PurchaseOrderTab.lookupterms.setEditable(false);
+			PurchaseOrderTab.date_PO.setEnabled(false);
+			PurchaseOrderTab.date_PO.setEditable(false);
+			PurchaseOrderTab.date_PO.setDate(null);
+			PurchaseOrderTab.txtrplfno.setText("");
+			PurchaseOrderTab.txtrplfno.setEditable(false);
+			PurchaseOrderTab.txtqoute.setText("");
+			PurchaseOrderTab.txtqoute.setEditable(false);
+			
+			enable_buttons(true, true, false, false, true, false);
 			
 		}
 		
@@ -342,6 +430,15 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 			preview_supplies();
 			enable_buttons(true, true, false, false, true,true);
 		}
+	}
+	
+	private void updatePO(String po_no, pgUpdate db) {
+
+		String sqlDetail = "update rf_purchase_order set status_id = 'I', edited_by = '"+UserInfo.EmployeeCode+"', date_edited = now() where status_id = 'A' and po_no = '"+po_no+"' and co_id = '"+lookupcompany.getValue()+"' ";
+		
+		System.out.println("updatePO: " + sqlDetail);
+		db.executeUpdate(sqlDetail, false);
+
 	}
 	
 	public static void enable_buttons(Boolean bgenerate,Boolean badd, Boolean bedit, Boolean bsave, Boolean bcancel, Boolean bpreview ) {
@@ -407,11 +504,13 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 		mapParameters.put("req_id", "");
 		mapParameters.put("po_no", PurchaseOrderTab.lookuppono.getValue());
 		mapParameters.put("po_date", PurchaseOrderTab.date_PO.getDate());
-		mapParameters.put("prepared_by", "");
+		mapParameters.put("prepared_by","");
+		mapParameters.put("printed_by", UserInfo.FullName);
 		
 		System.out.println("co_name: "+ txtcompany.getText());
 		System.out.println("po_no: "+ PurchaseOrderTab.lookuppono.getValue());
 		System.out.println("po_date: "+ PurchaseOrderTab.date_PO.getDate());
+		System.out.println("Printed by: "+ UserInfo.FullName);
 		
 		//FncReport.generateReport("/Reports/rptPO.jasper", "Purchase Order Supplies", mapParameters);
 		FncReport.generateReport("/Reports/rptPurchaseOrder.jasper", "Purchase Order Supplies", mapParameters);
