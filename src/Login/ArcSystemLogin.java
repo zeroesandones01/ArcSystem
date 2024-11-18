@@ -6,9 +6,12 @@ import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -83,11 +86,11 @@ public class ArcSystemLogin extends JDialog {
 	private static Color color_orange = new Color(255, 165, 0);
 	private static Color color_drakorange = new Color(255, 140, 0);
 	public static Color systemColor = new Color(0, 132, 188);
-	public static Color arcgreen = new Color(29, 191, 83);
+	//public static Color arcgreen = new Color(29, 191, 83);
 	
 	public static Color login_color_left = new Color(0, 155, 119);
 	public static Color login_color_right = new Color(17, 70, 60);
-	//public static Color arcgreen = new Color(255, 255, 255);
+	public static Color arcgreen = new Color(34, 67, 46);
 	
 	private static String font_name = "SansSerif";
 	private static Integer font_size = 12;
@@ -105,19 +108,30 @@ public class ArcSystemLogin extends JDialog {
 	@SuppressWarnings("deprecation")
 	private static int getCurrentYear = getCurrentDate.getYear() + 1900;
 
+	@SuppressWarnings("serial")
 	public static void showLogin() {
 		resetLookAndFeel();
 		initialize();
 		FncGlobal.initialize(false);
 		//FncGlobal.initialize2();
 
-		frame = new JFrame("Login");
+		frame = new JFrame() {
+			@Override
+            public void paint(Graphics g) {
+                super.paint(g);
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2d.setColor(getBackground());
+                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 30, 30);
+            }
+		};
+				
 		frame.setUndecorated(true);
 		frame.setSize(new Dimension(450, 500));
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		frame.setResizable(false);
+		//frame.setResizable(false);
 		LoginGUI();
 		//LoginUI();
 		
@@ -141,7 +155,7 @@ public class ArcSystemLogin extends JDialog {
 
 		{
 			{
-				Banner panLeft = new Banner(new BorderLayout(5, 5), Color.WHITE, login_color_left);
+				Banner panLeft = new Banner(new BorderLayout(5, 5), arcgreen, arcgreen);
 				panMain.add(panLeft, BorderLayout.CENTER); 
 				{
 					{
@@ -151,12 +165,12 @@ public class ArcSystemLogin extends JDialog {
 						panPage.setOpaque(false);
 						{
 							{
-								JLabel lblTitle = new JLabel("ARCSYSTEM"); 
+								JLabel lblTitle = new JLabel("A R C S Y S T E M"); 
 								panPage.add(lblTitle, BorderLayout.CENTER); 
 								lblTitle.setHorizontalAlignment(JLabel.CENTER);
 								lblTitle.setVerticalAlignment(JLabel.BOTTOM);
 								lblTitle.setFont(font2);
-								lblTitle.setForeground(Color.BLACK);
+								lblTitle.setForeground(Color.WHITE);
 								lblTitle.setOpaque(false);
 								lblTitle.setFont(new Font("DejaVu Sans", Font.BOLD, 25));
 							}
@@ -204,233 +218,233 @@ public class ArcSystemLogin extends JDialog {
 					}
 				}
 			}
-			{
-				JXPanel panRight = new JXPanel(new BorderLayout(0, 0)); 
-				panMain.add(panRight, BorderLayout.EAST);
-				panRight.setPreferredSize(new Dimension(250, 0));
-				panRight.setBackground(Color.WHITE);
-				{
-					{
-						JXPanel panPage = new JXPanel(new BorderLayout(5, 5)); 
-						panRight.add(panPage, BorderLayout.PAGE_START); 
-						panPage.setPreferredSize(new Dimension(0, 90));
-						panPage.setOpaque(false);
-						{
-							{
-								JLabel lblTitle = new JLabel("Sign In"); 
-								panPage.add(lblTitle, BorderLayout.CENTER); 
-								lblTitle.setHorizontalAlignment(JLabel.CENTER);
-								lblTitle.setVerticalAlignment(JLabel.BOTTOM);
-								lblTitle.setFont(font2);
-								lblTitle.setForeground(Color.BLACK);
-								lblTitle.setOpaque(false);
-							}
-							{
-								panPlaceholder = new JPanel(new BorderLayout(5, 5)); 
-								panPage.add(panPlaceholder, BorderLayout.PAGE_END);
-								panPlaceholder.setPreferredSize(new Dimension(0, 40));
-								{
-									lblSubTitle = new JLabel(""); 
-									panPage.add(lblSubTitle, BorderLayout.PAGE_END); 
-									lblSubTitle.setHorizontalAlignment(JLabel.CENTER);
-									lblSubTitle.setVerticalAlignment(JLabel.TOP);
-									lblSubTitle.setFont(font3);
-									lblSubTitle.setForeground(Color.DARK_GRAY);
-									lblSubTitle.setOpaque(false); 
-								}
-							}
-						}
-					}
-					{
-						JXPanel panLine = new JXPanel(new BorderLayout(5, 5)); 
-						panRight.add(panLine, BorderLayout.LINE_START); 
-						panLine.setPreferredSize(new Dimension(30, 0));
-						panLine.setOpaque(false);
-					}
-					{
-						JXPanel panCenter = new JXPanel(new GridLayout(5, 1, 1, 1)); 
-						panRight.add(panCenter, BorderLayout.CENTER);
-						panCenter.setOpaque(false);
-						{
-							{
-								JLabel lblUsername = new JLabel("Username"); 
-								panCenter.add(lblUsername); 
-								lblUsername.setFont(font4);
-							}
-							{
-								txtUserName = new JTextField("Input username"); 
-								panCenter.add(txtUserName); 
-								txtUserName.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
-								txtUserName.setBackground(null);
-								txtUserName.setForeground(Color.GRAY);
-								txtUserName.addFocusListener(focus);
-								txtUserName.setName("username");
-								txtUserName.setOpaque(false);
-								txtUserName.setFocusable(true);
-								txtUserName.setHorizontalAlignment(JTextField.CENTER);
-								txtUserName.addKeyListener(new KeyListener() {
-									
-									@Override
-									public void keyTyped(KeyEvent e) {
-										// TODO Auto-generated method stub
-										
-									}
-									
-									@Override
-									public void keyReleased(KeyEvent e) {
-										// TODO Auto-generated method stub
-										
-									}
-									
-									@Override
-									public void keyPressed(KeyEvent e) {
-										// TODO Auto-generated method stub
-										if(e.getKeyCode()==10) {
-											txtPassword.requestFocus();
-										}
-										
-									}
-								});
-								
-
-							}
-							{
-								JLabel lblPassword = new JLabel("Password"); 
-								panCenter.add(lblPassword); 
-								lblPassword.setFont(font4); 
-							}
-							{
-								txtPassword = new JPasswordField("Input password");
-								//txtPassword = new CustomJPasswordField(0);
-								panCenter.add(txtPassword); 
-								txtPassword.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
-								txtPassword.setBackground(null);
-								//txtPassword.setFontColor(Color.BLACK);
-								txtPassword.addFocusListener(focus);
-								//txtPassword.setRadius(35);
-								txtPassword.setName("password");
-								txtPassword.setOpaque(false);
-								txtPassword.setHorizontalAlignment(JPasswordField.CENTER);
-								txtPassword.addKeyListener(new KeyListener() {
-									
-									@Override
-									public void keyTyped(KeyEvent e) {
-										// TODO Auto-generated method stub
-										
-									}
-									
-									@Override
-									public void keyReleased(KeyEvent e) {
-										// TODO Auto-generated method stub
-										
-									}
-									
-									@Override
-									public void keyPressed(KeyEvent e) {
-										if(e.getKeyCode()==10) {
-											log();
-										}
-										
-									}
-								});
-								
-								
-							}
+//			{
+//				JXPanel panRight = new JXPanel(new BorderLayout(0, 0)); 
+//				panMain.add(panRight, BorderLayout.EAST);
+//				panRight.setPreferredSize(new Dimension(250, 0));
+//				panRight.setBackground(Color.WHITE);
+//				{
+//					{
+//						JXPanel panPage = new JXPanel(new BorderLayout(5, 5)); 
+//						panRight.add(panPage, BorderLayout.PAGE_START); 
+//						panPage.setPreferredSize(new Dimension(0, 90));
+//						panPage.setOpaque(false);
+//						{
 //							{
-//								chkRemember = new JCheckBox("Remember login"); 
-//								panCenter.add(chkRemember);
-//								chkRemember.setHorizontalAlignment(JCheckBox.RIGHT);
-//								chkRemember.setSelected(false);
-//								chkRemember.setFocusable(false);
-//								chkRemember.setOpaque(false);
-//								chkRemember.setFont(font5);
-//								chkRemember.setEnabled(false);
+//								JLabel lblTitle = new JLabel("Sign In"); 
+//								panPage.add(lblTitle, BorderLayout.CENTER); 
+//								lblTitle.setHorizontalAlignment(JLabel.CENTER);
+//								lblTitle.setVerticalAlignment(JLabel.BOTTOM);
+//								lblTitle.setFont(font2);
+//								lblTitle.setForeground(Color.BLACK);
+//								lblTitle.setOpaque(false);
 //							}
-						}
-					}
-					{
-						JXPanel panLineEnd = new JXPanel(new BorderLayout(5, 5)); 
-						panRight.add(panLineEnd, BorderLayout.LINE_END); 
-						panLineEnd.setPreferredSize(new Dimension(30, 0));
-						panLineEnd.setOpaque(false);
-					}
-					{
-						JXPanel panEnd = new JXPanel(new BorderLayout(0, 0)); 
-						panRight.add(panEnd, BorderLayout.PAGE_END); 
-						panEnd.setPreferredSize(new Dimension(0, 100));
-						panEnd.setOpaque(false);
-						{
-							{
-								JXPanel panButtonPage = new JXPanel(new BorderLayout(5, 5)); 
-								panEnd.add(panButtonPage, BorderLayout.PAGE_START); 
-								panButtonPage.setPreferredSize(new Dimension(0, 30));
-								panButtonPage.setOpaque(false);
-							}
-							{
-								JXPanel panButtonLine = new JXPanel(new BorderLayout(5, 5)); 
-								panEnd.add(panButtonLine, BorderLayout.LINE_START); 
-								panButtonLine.setPreferredSize(new Dimension(20, 0));
-								panButtonLine.setOpaque(false);
-							}
-							{
-								JXPanel panButtonCenter = new JXPanel(new GridLayout(1, 3, 5, 5)); 
-								panEnd.add(panButtonCenter, BorderLayout.CENTER); 
-								panButtonCenter.setOpaque(false);
-								{
-									{
-										btnLogin = new JButton("Login"); 
-										panButtonCenter.add(btnLogin); 
-										btnLogin.setEnabled(true);
-										btnLogin.setFocusPainted(false);
-										btnLogin.addActionListener(new ActionListener() {
-											public void actionPerformed(ActionEvent arg0) {
-												log();
-											}
-										});
-									}
-									{
-										panButtonCenter.add(new JLabel("")); 
-									}
-									{
-										btnCancel = new JButton("Cancel"); 
-										panButtonCenter.add(btnCancel); 
-										btnCancel.setEnabled(true);
-										btnCancel.setFocusPainted(false);
-										btnCancel.addActionListener(new ActionListener() {
-											public void actionPerformed(ActionEvent arg0) {
-												System.exit(0);
-											}
-										});
-									}
-								}
-							}
-							{
-								JXPanel panButtonLine = new JXPanel(new BorderLayout(5, 5)); 
-								panEnd.add(panButtonLine, BorderLayout.LINE_END); 
-								panButtonLine.setPreferredSize(new Dimension(20, 0));
-								panButtonLine.setOpaque(false);
-							}
-							{
-								JXPanel panButtonEnd = new JXPanel(new BorderLayout(5, 5)); 
-								panEnd.add(panButtonEnd, BorderLayout.PAGE_END); 
-								panButtonEnd.setPreferredSize(new Dimension(0, 40));
-								panButtonEnd.setOpaque(false);
-								panButtonEnd.setBorder(new EmptyBorder(10, 20, 10, 20));
-								{
-									progress = new JProgressBar(); 
-									panButtonEnd.add(progress, BorderLayout.CENTER); 
-									progress.setMaximum(10);
-									progress.setValue(progress.getMaximum());
-									progress.setVisible(false);
-									progress.setStringPainted(true);
-									progress.setString("Please wait...");
-									progress.setIndeterminate(true);
-								}
-							}
-						}
-					}
-				}
-			}
+//							{
+//								panPlaceholder = new JPanel(new BorderLayout(5, 5)); 
+//								panPage.add(panPlaceholder, BorderLayout.PAGE_END);
+//								panPlaceholder.setPreferredSize(new Dimension(0, 40));
+//								{
+//									lblSubTitle = new JLabel(""); 
+//									panPage.add(lblSubTitle, BorderLayout.PAGE_END); 
+//									lblSubTitle.setHorizontalAlignment(JLabel.CENTER);
+//									lblSubTitle.setVerticalAlignment(JLabel.TOP);
+//									lblSubTitle.setFont(font3);
+//									lblSubTitle.setForeground(Color.DARK_GRAY);
+//									lblSubTitle.setOpaque(false); 
+//								}
+//							}
+//						}
+//					}
+//					{
+//						JXPanel panLine = new JXPanel(new BorderLayout(5, 5)); 
+//						panRight.add(panLine, BorderLayout.LINE_START); 
+//						panLine.setPreferredSize(new Dimension(30, 0));
+//						panLine.setOpaque(false);
+//					}
+//					{
+//						JXPanel panCenter = new JXPanel(new GridLayout(5, 1, 1, 1)); 
+//						panRight.add(panCenter, BorderLayout.CENTER);
+//						panCenter.setOpaque(false);
+//						{
+//							{
+//								JLabel lblUsername = new JLabel("Username"); 
+//								panCenter.add(lblUsername); 
+//								lblUsername.setFont(font4);
+//							}
+//							{
+//								txtUserName = new JTextField("Input username"); 
+//								panCenter.add(txtUserName); 
+//								txtUserName.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
+//								txtUserName.setBackground(null);
+//								txtUserName.setForeground(Color.GRAY);
+//								txtUserName.addFocusListener(focus);
+//								txtUserName.setName("username");
+//								txtUserName.setOpaque(false);
+//								txtUserName.setFocusable(true);
+//								txtUserName.setHorizontalAlignment(JTextField.CENTER);
+//								txtUserName.addKeyListener(new KeyListener() {
+//									
+//									@Override
+//									public void keyTyped(KeyEvent e) {
+//										// TODO Auto-generated method stub
+//										
+//									}
+//									
+//									@Override
+//									public void keyReleased(KeyEvent e) {
+//										// TODO Auto-generated method stub
+//										
+//									}
+//									
+//									@Override
+//									public void keyPressed(KeyEvent e) {
+//										// TODO Auto-generated method stub
+//										if(e.getKeyCode()==10) {
+//											txtPassword.requestFocus();
+//										}
+//										
+//									}
+//								});
+//								
+//
+//							}
+//							{
+//								JLabel lblPassword = new JLabel("Password"); 
+//								panCenter.add(lblPassword); 
+//								lblPassword.setFont(font4); 
+//							}
+//							{
+//								txtPassword = new JPasswordField("Input password");
+//								//txtPassword = new CustomJPasswordField(0);
+//								panCenter.add(txtPassword); 
+//								txtPassword.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
+//								txtPassword.setBackground(null);
+//								//txtPassword.setFontColor(Color.BLACK);
+//								txtPassword.addFocusListener(focus);
+//								//txtPassword.setRadius(35);
+//								txtPassword.setName("password");
+//								txtPassword.setOpaque(false);
+//								txtPassword.setHorizontalAlignment(JPasswordField.CENTER);
+//								txtPassword.addKeyListener(new KeyListener() {
+//									
+//									@Override
+//									public void keyTyped(KeyEvent e) {
+//										// TODO Auto-generated method stub
+//										
+//									}
+//									
+//									@Override
+//									public void keyReleased(KeyEvent e) {
+//										// TODO Auto-generated method stub
+//										
+//									}
+//									
+//									@Override
+//									public void keyPressed(KeyEvent e) {
+//										if(e.getKeyCode()==10) {
+//											log();
+//										}
+//										
+//									}
+//								});
+//								
+//								
+//							}
+////							{
+////								chkRemember = new JCheckBox("Remember login"); 
+////								panCenter.add(chkRemember);
+////								chkRemember.setHorizontalAlignment(JCheckBox.RIGHT);
+////								chkRemember.setSelected(false);
+////								chkRemember.setFocusable(false);
+////								chkRemember.setOpaque(false);
+////								chkRemember.setFont(font5);
+////								chkRemember.setEnabled(false);
+////							}
+//						}
+//					}
+//					{
+//						JXPanel panLineEnd = new JXPanel(new BorderLayout(5, 5)); 
+//						panRight.add(panLineEnd, BorderLayout.LINE_END); 
+//						panLineEnd.setPreferredSize(new Dimension(30, 0));
+//						panLineEnd.setOpaque(false);
+//					}
+//					{
+//						JXPanel panEnd = new JXPanel(new BorderLayout(0, 0)); 
+//						panRight.add(panEnd, BorderLayout.PAGE_END); 
+//						panEnd.setPreferredSize(new Dimension(0, 100));
+//						panEnd.setOpaque(false);
+//						{
+//							{
+//								JXPanel panButtonPage = new JXPanel(new BorderLayout(5, 5)); 
+//								panEnd.add(panButtonPage, BorderLayout.PAGE_START); 
+//								panButtonPage.setPreferredSize(new Dimension(0, 30));
+//								panButtonPage.setOpaque(false);
+//							}
+//							{
+//								JXPanel panButtonLine = new JXPanel(new BorderLayout(5, 5)); 
+//								panEnd.add(panButtonLine, BorderLayout.LINE_START); 
+//								panButtonLine.setPreferredSize(new Dimension(20, 0));
+//								panButtonLine.setOpaque(false);
+//							}
+//							{
+//								JXPanel panButtonCenter = new JXPanel(new GridLayout(1, 3, 5, 5)); 
+//								panEnd.add(panButtonCenter, BorderLayout.CENTER); 
+//								panButtonCenter.setOpaque(false);
+//								{
+//									{
+//										btnLogin = new JButton("Login"); 
+//										panButtonCenter.add(btnLogin); 
+//										btnLogin.setEnabled(true);
+//										btnLogin.setFocusPainted(false);
+//										btnLogin.addActionListener(new ActionListener() {
+//											public void actionPerformed(ActionEvent arg0) {
+//												log();
+//											}
+//										});
+//									}
+//									{
+//										panButtonCenter.add(new JLabel("")); 
+//									}
+//									{
+//										btnCancel = new JButton("Cancel"); 
+//										panButtonCenter.add(btnCancel); 
+//										btnCancel.setEnabled(true);
+//										btnCancel.setFocusPainted(false);
+//										btnCancel.addActionListener(new ActionListener() {
+//											public void actionPerformed(ActionEvent arg0) {
+//												System.exit(0);
+//											}
+//										});
+//									}
+//								}
+//							}
+//							{
+//								JXPanel panButtonLine = new JXPanel(new BorderLayout(5, 5)); 
+//								panEnd.add(panButtonLine, BorderLayout.LINE_END); 
+//								panButtonLine.setPreferredSize(new Dimension(20, 0));
+//								panButtonLine.setOpaque(false);
+//							}
+//							{
+//								JXPanel panButtonEnd = new JXPanel(new BorderLayout(5, 5)); 
+//								panEnd.add(panButtonEnd, BorderLayout.PAGE_END); 
+//								panButtonEnd.setPreferredSize(new Dimension(0, 40));
+//								panButtonEnd.setOpaque(false);
+//								panButtonEnd.setBorder(new EmptyBorder(10, 20, 10, 20));
+//								{
+//									progress = new JProgressBar(); 
+//									panButtonEnd.add(progress, BorderLayout.CENTER); 
+//									progress.setMaximum(10);
+//									progress.setValue(progress.getMaximum());
+//									progress.setVisible(false);
+//									progress.setStringPainted(true);
+//									progress.setString("Please wait...");
+//									progress.setIndeterminate(true);
+//								}
+//							}
+//						}
+//					}
+//				}
+//			}
 		}
 	}
 
