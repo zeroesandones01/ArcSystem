@@ -55,7 +55,9 @@ import Functions.FncLookAndFeel;
 import Functions.UserInfo;
 import components.CustomJPasswordField;
 
-public class ArcSystemLogin extends JDialog {
+public class ArcSystemLogin2 extends JDialog {
+	public ArcSystemLogin2() {
+	}
 
 
 
@@ -110,9 +112,9 @@ public class ArcSystemLogin extends JDialog {
 
 	@SuppressWarnings("serial")
 	public static void showLogin() {
-		resetLookAndFeel();
-		initialize();
-		FncGlobal.initialize(false);
+		//resetLookAndFeel();
+		//initialize();
+		//FncGlobal.initialize(false);
 		//FncGlobal.initialize2();
 
 		frame = new JFrame() {
@@ -126,12 +128,12 @@ public class ArcSystemLogin extends JDialog {
             }
 		};
 				
-		frame.setUndecorated(true);
-		frame.setSize(new Dimension(450, 500));
+		//frame.setUndecorated(true);
+		frame.setSize(new Dimension(400, 500));
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		//frame.setResizable(false);
+		frame.setResizable(false);
 		LoginGUI();
 		//LoginUI();
 		
@@ -139,24 +141,24 @@ public class ArcSystemLogin extends JDialog {
 	
 	private static void LoginUI() {
 		panMain = new JXPanel(new BorderLayout(3, 3));
-		frame.add(panMain);
+		frame.getContentPane().add(panMain);
 	}
 
 	private static void LoginGUI() {
-		panMain = new JXPanel(new BorderLayout(0, 0));
-		frame.add(panMain);
+		panMain = new JXPanel(new GridLayout(2, 1, 3, 3));
+		panMain.setBackground(arcgreen);
+		frame.getContentPane().add(panMain, BorderLayout.CENTER);
 //		frame.setUndecorated(true);
 //		frame.setSize(new Dimension(600, 400));
 //		frame.setLocationRelativeTo(null);
 //		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //		frame.setVisible(true);
 
-		
-
 		{
 			{
 				Banner panLeft = new Banner(new BorderLayout(5, 5), arcgreen, arcgreen);
-				panMain.add(panLeft, BorderLayout.CENTER); 
+				panMain.add(panLeft, BorderLayout.CENTER);
+				//panMain.setOpaque(true);
 				{
 					{
 						JPanel panPage = new JPanel(new BorderLayout(5, 5)); 
@@ -169,9 +171,9 @@ public class ArcSystemLogin extends JDialog {
 								panPage.add(lblTitle, BorderLayout.CENTER); 
 								lblTitle.setHorizontalAlignment(JLabel.CENTER);
 								lblTitle.setVerticalAlignment(JLabel.BOTTOM);
-								lblTitle.setFont(font2);
+								//lblTitle.setFont(font2);
 								lblTitle.setForeground(Color.WHITE);
-								lblTitle.setOpaque(false);
+								lblTitle.setOpaque(true);
 								lblTitle.setFont(new Font("DejaVu Sans", Font.BOLD, 25));
 							}
 //							{
@@ -202,19 +204,12 @@ public class ArcSystemLogin extends JDialog {
 //					}
 					{
 						//ImageIcon image = new ImageIcon(panMain.getClass().getClassLoader().getResource("Images/clipart.png"));
-						ImageIcon image = new ImageIcon(panMain.getClass().getClassLoader().getResource("Images/arclogologin.png"));
-						
+						ImageIcon image = new ImageIcon(panMain.getClass().getClassLoader().getResource("Images/arc-logo.png"));
+						Image scaledImage = image.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+						image = new ImageIcon(scaledImage);
 						JLabel lblIcon = new JLabel(image); 
 						panLeft.add(lblIcon, BorderLayout.CENTER); 
 						
-					}
-					{
-						JLabel lblCopyright = new JLabel(String.format("ACERLAND REALTY CORPORATION © %s", getCurrentYear)); 
-						panLeft.add(lblCopyright, BorderLayout.PAGE_END); 
-						lblCopyright.setPreferredSize(new Dimension(0, 15));
-						lblCopyright.setForeground(Color.BLACK);
-						lblCopyright.setHorizontalAlignment(JLabel.CENTER);
-						lblCopyright.setFont(font1);
 					}
 				}
 			}
@@ -447,6 +442,9 @@ public class ArcSystemLogin extends JDialog {
 //			}
 		}
 	}
+	
+	
+	
 
 //	public static void main (String[] args) {
 //		initialize();
@@ -578,20 +576,20 @@ public class ArcSystemLogin extends JDialog {
 //			props.put("windowTitleColorDark", windowString_Dark); 
 //			props.put("windowBorderColor", windowString_Dark);
 			
-			props.put("windowTitleForegroundColor", "191, 191, 191");
-			props.put("windowTitleBackgroundColor", "191, 191, 191"); 
-			props.put("windowTitleColorLight", "191, 191, 191"); 
-			props.put("windowTitleColorDark", "191, 191, 191"); 
-			props.put("windowBorderColor", "191, 191, 191");
+//			props.put("windowTitleForegroundColor", "191, 191, 191");
+//			props.put("windowTitleBackgroundColor", "191, 191, 191"); 
+//			props.put("windowTitleColorLight", "191, 191, 191"); 
+//			props.put("windowTitleColorDark", "191, 191, 191"); 
+//			props.put("windowBorderColor", "191, 191, 191");
 			
 
-//			props.put("windowInactiveTitleColorLight", windowString_Light);
-//			props.put("windowInactiveTitleColorDark", windowString_Dark);
-//			props.put("windowInactiveBorderColor", windowString_Dark);
+			props.put("windowInactiveTitleColorLight", windowString_Light);
+			props.put("windowInactiveTitleColorDark", windowString_Dark);
+			props.put("windowInactiveBorderColor", windowString_Dark);
 			
-			props.put("windowInactiveTitleColorLight", "191, 191, 191");
-			props.put("windowInactiveTitleColorDark", "191, 191, 191");
-			props.put("windowInactiveBorderColor", "191, 191, 191");
+//			props.put("windowInactiveTitleColorLight", "191, 191, 191");
+//			props.put("windowInactiveTitleColorDark", "191, 191, 191");
+//			props.put("windowInactiveBorderColor", "191, 191, 191");
 
 			props.put("controlTextFont", String.format("%s %s %s", font_name, "PLAIN", font_size));
 			props.put("systemTextFont", String.format("%s %s %s", font_name, "PLAIN", font_size));
@@ -599,7 +597,7 @@ public class ArcSystemLogin extends JDialog {
 			props.put("menuTextFont", String.format("%s %s %s", font_name, "PLAIN", font_size));
 			props.put("windowTitleFont", String.format("%s %s %s", font_name, "BOLD", font_size));
 			props.put("subTextFont", String.format("%s %s %s", font_name, "PLAIN", font_size));
-			props.put("foregroundColor", windowForeground);
+			//props.put("foregroundColor", windowForeground);
 
 			AcrylLookAndFeel.setCurrentTheme(props);                              
 			UIManager.setLookAndFeel("com.jtattoo.plaf.acryl.AcrylLookAndFeel");

@@ -1,10 +1,12 @@
 package Main;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import Functions.FncGlobal;
 import Functions.FncLookAndFeel;
-import Login.ArcSystemLogin;
+import Login.ArcSysLogin;
+import Login.ArcSystemLogin2;
 import components._JXLoginPane;
 
 public class ArcSystem {
@@ -13,7 +15,7 @@ public class ArcSystem {
 		//FncGlobal.lpsOut = Functions.LoggedPrintStream.create(System.out);
 		//System.setOut(FncGlobal.lpsOut);
 
-		ArcSystemLogin.showLogin();
+		//ArcSystemLogin.showLogin();
 		
 //		FncLookAndFeel.initialize();
 //		FncGlobal.initialize(false);
@@ -36,6 +38,11 @@ public class ArcSystem {
 //		FncGlobal.parentFrame.setIconImage(FncLookAndFeel.iconSystem);
 //		FncGlobal.parentFrame.pack();
 //		FncGlobal.parentFrame.setVisible(true);
+		
+		SwingUtilities.invokeLater(() -> {
+            ArcSysLogin frame = new ArcSysLogin();
+            frame.setVisible(true);
+        });
 		
 		
 	}

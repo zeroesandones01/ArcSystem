@@ -67,6 +67,7 @@ import Lookup.LookupEvent;
 import Lookup.LookupListener;
 import Lookup._JLookup;
 import Lookup._JLookupTable;
+import Transaction.SupplierInfo;
 import components.JTBorderFactory;
 import components._JInternalFrame;
 import components._JTableMain;
@@ -237,9 +238,15 @@ public class pnlClientInformation extends JXPanel implements ActionListener {
 	
 	private ClientInformation ci;
 	private String entity_id;
+	private SupplierInfo si;
 	
 	public pnlClientInformation(ClientInformation ci) {
 		this.ci = ci;
+		initGUI();
+	}
+	
+	public pnlClientInformation(SupplierInfo si) {
+		this.si = si;
 		initGUI();
 	}
 
