@@ -189,6 +189,7 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 									lookupterms.setValue((String)data[5]);
 									txtrplfno.setText((String)data[9]);
 									date_PO.setDate((Date) data[6]);
+									PurchaseOrder.txtdivdept.setText((String) data[10]);
 									
 								}
 							}
@@ -527,15 +528,18 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 	}
 	
 	public static String get_po ( Integer class_type, String co_id, String requester) {
-		String sql = "select distinct on(a.po_no)  a.po_no, a.requester, c.entity_name,  NULLIF(a.supplier,'null') as supplier, c.entity_name, NULLIF(a.terms,'null') as terms, a.po_date, a.co_id, e.company_name, a.rplf_no \n"
+		String sql = "select distinct on(a.po_no)  a.po_no, a.requester, c.entity_name,  NULLIF(a.supplier,'null') as supplier, c.entity_name, NULLIF(a.terms,'null') as terms, a.po_date, a.co_id, e.company_name, a.rplf_no, f.exec_office_alias|| '/' || g.div_alias \n"
 				+ "from rf_purchase_order a\n"
 				+ "left join rf_employee b on a.requester = b.emp_code\n"
 				+ "left join rf_entity c on b.entity_id = c.entity_id\n"
 				+ "left join rf_entity d on a.supplier = d.entity_id \n" 
 				+ "left join mf_company e on a.co_id = e.co_id\n"
+				+ "left join mf_exec_office f on b.exec_off_code = f.exec_office_code \n"
+				+ "left join mf_division g  on b.div_code = g.div_code \n"
 				+ "where a.classification_type = '"+class_type+"' \n"
 				+ "and case when '"+co_id+"'= '' or '"+co_id+"' = 'null' then true else a.co_id = '"+co_id+"' end \n"
 				+ "and case when '"+requester+"'= '' or '"+requester+"' = 'null'  then true else a.requester = '"+requester+"' end\n"
+				+ "and case when '"+lookupsupplier.getValue()+"'= '' or '"+lookupsupplier.getValue()+"' = 'null' then true else a.supplier = '"+lookupsupplier.getValue()+"' end\n"
 						+ "";
 		
 		System.out.printf("get_po: %s", sql);
