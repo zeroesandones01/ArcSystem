@@ -42,7 +42,7 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 	private static JButton btnedit;
 	private static JButton btnadd;
 	private JTabbedPane tabcenter;
-	private JTextField txtdivdept;
+	public static JTextField txtdivdept;
 	public static JTextField txtrequester_name;
 	public static _JLookup lookuprequester;
 	public static JTextField txtcompany;
@@ -352,6 +352,7 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 				String po_no = PurchaseOrderTab.lookuppono.getValue();
 				
 				if( po_no.equals("") || po_no.equals(null)) {
+					
 					System.out.println("Add new P.O.");
 					String set_po_no = getpo_no();
 					PurchaseOrderTab.save_purchase_order( set_po_no );
@@ -404,6 +405,7 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 			txtcompany.setText("");
 			lookuprequester.setValue(null);
 			txtrequester_name.setText("");
+			txtdivdept.setText("");
 			
 			PurchaseOrderTab.cmbtype.setSelectedIndex(0);
 			PurchaseOrderTab.cmbtype.setEditable(true);
@@ -504,7 +506,7 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 		mapParameters.put("req_id", "");
 		mapParameters.put("po_no", PurchaseOrderTab.lookuppono.getValue());
 		mapParameters.put("po_date", PurchaseOrderTab.date_PO.getDate());
-		mapParameters.put("prepared_by","");
+		mapParameters.put("prepared_by",UserInfo.FullName);
 		mapParameters.put("printed_by", UserInfo.FullName);
 		
 		System.out.println("co_name: "+ txtcompany.getText());
