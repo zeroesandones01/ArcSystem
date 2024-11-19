@@ -55,30 +55,20 @@ public class AddEditEntityType extends _JInternalFrame implements ActionListener
 	private JPanel pnlMain;
 
 	private JPanel pnlNorth;
-	private JPanel pnlNorthCenter;
-	private JPanel pnlLabels;
-	private JPanel pnlID;
-	private JPanel pnlTINNo;
-
-	private JLabel lblID;
-	private _JLookup lookupID;
-
-	private JLabel lblName;
+	private _JLookup lookupEntity;
 	private JTextField txtName;
-
-	private JLabel lblTINNo;
 	private JTextField txtTINNo;
 	private JCheckBox chkVATRegistered;
 
 	private JScrollPane scrollTypes;
 	private _JTableMain tblTypes;
 	private modelAddEditEntityType_EntityTypes modelTypes;
-	private JList rowHeaderTypes;
+	private JList<Integer> rowHeaderTypes;
 	
 	private JScrollPane scrollCSTypes;
 	private _JTableMain tblCSTypes;
 	private modelAddEditEntityType_EntityTypes modelCSTypes;
-	private JList rowHeaderCSTypes;
+	private JList<Integer> rowHeaderCSTypes;
 
 	private JPanel pnlSouth;
 
@@ -87,8 +77,6 @@ public class AddEditEntityType extends _JInternalFrame implements ActionListener
 	private JButton btnSave;
 	private JButton btnCancel;
 
-	private Boolean blnBroker; 
-	
 	private _JLookup txtCoID;
 	private JTextField txtCo;
 
@@ -145,13 +133,13 @@ public class AddEditEntityType extends _JInternalFrame implements ActionListener
 												label.setHorizontalAlignment(JLabel.LEADING);
 											}
 											{
-												lookupID = new _JLookup(null, "Name");
-												panLabel.add(lookupID, BorderLayout.WEST);
-												lookupID.setReturnColumn(0);
-												lookupID.setFilterName(true);
-												lookupID.setLookupSQL(_AddEditEntityType.getEntitySQL());
-												lookupID.setPreferredSize(new Dimension(100, 27));
-												lookupID.addLookupListener(new LookupListener() {
+												lookupEntity = new _JLookup(null, "Name");
+												panLabel.add(lookupEntity, BorderLayout.WEST);
+												lookupEntity.setReturnColumn(0);
+												lookupEntity.setFilterName(true);
+												lookupEntity.setLookupSQL(_AddEditEntityType.getEntitySQL());
+												lookupEntity.setPreferredSize(new Dimension(100, 27));
+												lookupEntity.addLookupListener(new LookupListener() {
 													public void lookupPerformed(LookupEvent event) {
 														Object[] data = ((_JLookup) event.getSource()).getDataSet();
 														
@@ -321,7 +309,7 @@ public class AddEditEntityType extends _JInternalFrame implements ActionListener
 	private void displayEntity(String entity_id) {
 		Object[] data = _AddEditEntityType.getEntityDetails(entity_id);
 
-		lookupID.setValue(entity_id);
+		lookupEntity.setValue(entity_id);
 		txtName.setText((String) data[0]);
 		txtTINNo.setText((String) data[1]);
 		chkVATRegistered.setSelected((Boolean) data[2]);
@@ -345,7 +333,7 @@ public class AddEditEntityType extends _JInternalFrame implements ActionListener
 		String action = arg0.getActionCommand();
 
 		if(action.equals("Edit")){
-			lookupID.setEditable(false);
+			lookupEntity.setEditable(false);
 			modelTypes.setEditable(true);
 			modelCSTypes.setEditable(true);
 			btnState(false, true, true);
@@ -355,18 +343,18 @@ public class AddEditEntityType extends _JInternalFrame implements ActionListener
 			if (JOptionPane.showConfirmDialog((JFrame) this.getTopLevelAncestor(), "Are all entries correct?", action, 
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE)==JOptionPane.YES_OPTION) {
 				
-				_AddEditEntityType.saveEntityTypes(modelTypes, lookupID.getValue());
-				_AddEditEntityType.saveCSEntityTypes(modelCSTypes, lookupID.getValue(), txtCoID.getValue()); 
+				_AddEditEntityType.saveEntityTypes(modelTypes, lookupEntity.getValue());
+				_AddEditEntityType.saveCSEntityTypes(modelCSTypes, lookupEntity.getValue(), txtCoID.getValue()); 
 				JOptionPane.showMessageDialog((JFrame) this.getTopLevelAncestor(), "Entity tpyes has been updated.", action, JOptionPane.INFORMATION_MESSAGE);
 				btnCancel.doClick();
 			}
 		}
 
 		if(action.equals("Cancel")){
-			lookupID.setEditable(true);
+			lookupEntity.setEditable(true);
 			modelTypes.setEditable(false);
 
-			displayEntityTypes(lookupID.getValue());
+			displayEntityTypes(lookupEntity.getValue());
 			displayCSEntityTypes(); 
 		}
 	}
@@ -467,7 +455,7 @@ public class AddEditEntityType extends _JInternalFrame implements ActionListener
 			modelCSTypes.clear();
 		} else {
 			rowHeaderCSTypes.setModel(new DefaultListModel());
-			_AddEditEntityType.displayCSEntityTypes(modelCSTypes, lookupID.getValue(), txtCoID.getValue());
+			_AddEditEntityType.displayCSEntityTypes(modelCSTypes, lookupEntity.getValue(), txtCoID.getValue());
 			scrollCSTypes.setCorner(ScrollPaneConstants.LOWER_LEFT_CORNER, FncTables.getRowHeader_Footer(Integer.toString(tblCSTypes.getRowCount())));
 			tblCSTypes.packAll();
 

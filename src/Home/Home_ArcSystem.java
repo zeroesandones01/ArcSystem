@@ -847,18 +847,6 @@ public class Home_ArcSystem extends JXFrame implements ActionListener, WindowLis
 //								});
 //							}
 							{
-								JMenuItem menuitemDisbursementRequestForm = new JMenuItem("Disbursement Request Form (Request for Payment)");
-								menuDisbursement.add(menuitemDisbursementRequestForm);
-								menuitemDisbursementRequestForm.addActionListener(new ActionListener() {
-									public void actionPerformed(ActionEvent e) {
-										if(isNotExisting("DisbursementRequestForm")){
-											DisbursementRequestForm drf = new DisbursementRequestForm();
-											addWindow(drf, e);
-										}
-									}
-								});
-							}
-							{
 								JMenuItem menuitemCheckVoucher = new JMenuItem("Check Voucher");
 								menuDisbursement.add(menuitemCheckVoucher);
 								menuitemCheckVoucher.addActionListener(new ActionListener() {
@@ -1232,6 +1220,18 @@ public class Home_ArcSystem extends JXFrame implements ActionListener, WindowLis
 								if(isNotExisting("PettyCashFund")) {
 									PettyCash pc = new PettyCash();
 									addWindow(pc);
+								}
+							}
+						});
+					}
+					{
+						JMenuItem menuitemDisbursementRequestForm = new JMenuItem("Disbursement Request Form");
+						menuTransaction.add(menuitemDisbursementRequestForm);
+						menuitemDisbursementRequestForm.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								if(isNotExisting("DisbursementRequestForm")){
+									DisbursementRequestForm drf = new DisbursementRequestForm();
+									addWindow(drf, e);
 								}
 							}
 						});

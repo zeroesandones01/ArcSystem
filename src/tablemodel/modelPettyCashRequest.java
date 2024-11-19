@@ -1,8 +1,12 @@
 package tablemodel;
 
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.math.BigDecimal;
 import java.util.Vector;
 
+import javax.swing.DefaultCellEditor;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import Functions.FncTables;
@@ -121,4 +125,46 @@ public class modelPettyCashRequest extends DefaultTableModel{
 	    }
 	    return value;
 	}
+	
+	// Custom cell editor for BigDecimal (used for the "Amount" column)
+		public class BigDecimalCellEditor extends DefaultCellEditor {
+		     public BigDecimalCellEditor() {
+		         super(new JTextField()); // Use JTextField as the editor
+		         JTextField textField = (JTextField) getComponent();
+
+		         // Add a focus listener to move the cursor to the end when editing starts
+		         textField.addFocusListener(new FocusAdapter() {
+		             @Override
+		             public void focusGained(FocusEvent e) {
+		                 // Get the current value of the cell being edited
+		                 BigDecimal value = (BigDecimal) getCellEditorValue();
+
+		                 // If the value is greater than 0, move the cursor to the end of the text
+		                 if (value != null) {
+		                	 if(value.compareTo(BigDecimal.ZERO) > 0) {
+		                		 
+		                		 textField.setSelectionStart(textField.getText().length());
+		 	                     textField.setSelectionEnd(textField.getText().length());
+		 	                     textField.setText(String.valueOf(value.stripTrailingZeros().toPlainString()));
+		                	 } else {
+		                		 textField.setText(null);
+		                	 }
+		                   
+		                 }
+		             }
+		         });
+		     }
+
+		     @Override
+		     public Object getCellEditorValue() {
+		         JTextField textField = (JTextField) getComponent();
+		         try {
+		             // Try to convert the text field value back to BigDecimal
+		             return new BigDecimal(textField.getText());
+		         } catch (NumberFormatException ex) {
+		             // In case of an invalid value, return BigDecimal.ZERO
+		             return BigDecimal.ZERO;
+		         }
+		     }
+		 }
 }

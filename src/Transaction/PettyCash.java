@@ -62,6 +62,7 @@ import javax.swing.JLabel;
 	import components._JTableTotal;
 	import interfaces._GUI;
 	import tablemodel.modelPettyCashRequest;
+import tablemodel.modelDRF_particulars.BigDecimalCellEditor;
 
 	
 	/**
@@ -577,9 +578,8 @@ import javax.swing.JLabel;
 							tblPettyCash.getColumnModel().getColumn(3).setPreferredWidth(280);
 							scrollTable.setViewportView(tblPettyCash);
 							tblPettyCash.setSortable(false); 
+							tblPettyCash.getColumnModel().getColumn(4).setCellEditor(modelPettyCashReq.new BigDecimalCellEditor());
 							tblPettyCash.addMouseListener(this); 
-	
-	
 							tblPettyCash.addKeyListener(new KeyListener() {
 	
 								@Override
@@ -1700,8 +1700,12 @@ import javax.swing.JLabel;
 				System.out.println("Value of logo:" +  company_logo);
 				System.out.println("Value of user:" +  UserInfo.FullName);
 				System.out.println("Value of drf_no:" +  pcr_no);
-	
-				FncReport.generateReport("/Reports/rptPettyCashRequest.jasper", title, mapParameters);
+				
+				if(lookupPCRType.getText().trim().equals("Cash Fund Advance")) {
+					FncReport.generateReport("/Reports/rptPettyCashRequest_with_Consent.jasper", title, mapParameters);
+				} else {
+					FncReport.generateReport("/Reports/rptPettyCashRequest.jasper", title, mapParameters);
+				}
 			}
 	
 			private void pay_process_PCR(String pcr_status) {
