@@ -646,7 +646,8 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 						"select 	'INSTALLMENT', 	'02'  			union all	\n" + 
 						"select 	'CHEQUE', 		'03' 			union all 	\n" + 
 						"select 	'7 DAYS', 		'04' 			union all 	\n" + 
-						"select 	'15 DAYS', 		'05' 			";
+						"select 	'15 DAYS', 		'05' 			union all 	\n" + 
+						"select 	'30 DAYS', 		'06' 			";
 		return strsql;
 		
 	}
