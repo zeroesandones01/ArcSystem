@@ -141,6 +141,7 @@ import Utilities.ZipCodes;
 import Utilities.fixedasset_peripheral;
 import System.Add_Edit_Holidays;
 import Transaction.PettyCash;
+import Transaction.SupplierInfo;
 
 //import System.DcrfInactivePayments;
 
@@ -1209,6 +1210,21 @@ public class Home_ArcSystem extends JXFrame implements ActionListener, WindowLis
 								}
 							}
 						}
+					}
+					{
+						JMenuItem menuitemSupplierInfo = new JMenuItem("Supplier Info");
+						menuTransaction.add(menuitemSupplierInfo);
+						menuitemSupplierInfo.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								if(isNotExisting("SupplierInfo")) {
+									SupplierInfo si= new SupplierInfo();
+									addWindow(si);
+								}
+								
+							}
+						});
 					}
 					{
 						JMenuItem menuitemPettyCash = new JMenuItem("Petty Cash");

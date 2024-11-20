@@ -58,11 +58,12 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 
 	private static final long serialVersionUID = -2045289035602315347L;
 	
-	static String title = "Client Information";
+	static String title = "Supplier Information";
 	private Border LINE_BORDER = BorderFactory.createLineBorder(Color.GRAY);
 
 	private static _JTabbedPane tabCenter;
 	public static pnlClientInformation pnlCI;
+	public static pnlSupplierInfo pnlSI;
 	public static ClientSubmittedID pnlSubmittedID;
 	public static pnlAddress pnlADDRESS;
 
@@ -431,34 +432,13 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 			tabCenter = new _JTabbedPane();
 			pnlMain.add(tabCenter, BorderLayout.CENTER);
 			{
-				pnlCI = new pnlClientInformation(this);
-				tabCenter.addTab("Client Information", pnlCI);
+				pnlSI = new pnlSupplierInfo();
+				tabCenter.addTab("Supplier Info", pnlSI);
 			}
-//			{
-//				pnlADDRESS = new pnlAddress(this);
-//				tabCenter.addTab("Address", pnlADDRESS);
-//			}
-//			{
-//				pnlConnect = new pnlConnection(this);
-//				tabCenter.addTab("Connections", pnlConnect);
-//			}
-//			{
-//				pnlDepend = new pnlDependents(this);
-//				tabCenter.addTab("Dependents", pnlDepend);
-//			}
-//			{
-//				pnlWorkExp = new pnlWorkExperience(this);
-//				tabCenter.addTab("Work Experience", pnlWorkExp);
-//			}
-//			{
-//				pnlFinanceInfo = new pnlFinancialInfo(this);
-//				tabCenter.addTab("Financial Info", pnlFinanceInfo);
-//			}
-//			{
-//				pnlRefOther = new pnlReferencesOther(this);
-//				tabCenter.addTab("References/Other Info", pnlRefOther);
-//			}
-			
+			{
+				pnlADDRESS = new pnlAddress(this);
+				tabCenter.addTab("Address", pnlADDRESS);
+			}			
 			tabCenter.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent arg0) {
 					int selectedTab = ((_JTabbedPane)arg0.getSource()).getSelectedIndex();
@@ -521,8 +501,8 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 	}
 	//SET THE PANEL STATE WHEN EDITING OR CREATING NEW DATA
 	public static void pnlState(Boolean CI, Boolean sub_id ,Boolean addr, Boolean conn, Boolean dpend, Boolean FI, Boolean RO, Boolean WE){
-		tabCenter.setEnabledAt(0, CI);
-		tabCenter.setEnabledAt(1, sub_id);
+//		tabCenter.setEnabledAt(0, CI);
+//		tabCenter.setEnabledAt(1, sub_id);
 //		tabCenter.setEnabledAt(2, addr);
 //		tabCenter.setEnabledAt(3, conn);
 //		tabCenter.setEnabledAt(4, dpend);

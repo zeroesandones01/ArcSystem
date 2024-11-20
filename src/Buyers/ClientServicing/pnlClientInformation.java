@@ -1145,6 +1145,7 @@ public class pnlClientInformation extends JXPanel implements ActionListener {
 		}
 
 		ci.btnState(false, true, false, false, false);
+		si.btnState(false, true, false, false, false);
 		disableComponents();
 		//setClientInformationEnabled(false);
 
