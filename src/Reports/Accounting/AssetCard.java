@@ -191,14 +191,12 @@ private static final long serialVersionUID = 652923134846245300L;
 	private void previewAssetCard(String emp_code,  String co_logo, String co_name, String co_alias, String asset_filter ){
 		Map<String, Object> mapParameters = new HashMap<String, Object>();
 		
-		String strsql="";
 		
-		//mapParameters.put("item_found", item_found);
 		mapParameters.put("emp_code", Integer.valueOf(emp_code));
 		mapParameters.put("company_name", co_name);
 		mapParameters.put("co_alias", co_alias);
-		mapParameters.put("co_logo", this.getClass().getClassLoader().getResourceAsStream("Images/"+ co_logo));
-		mapParameters.put("asset_filter", asset_filter); //added by jari cruz 7.8.2022
+		mapParameters.put("co_logo", this.getClass().getClassLoader().getResourceAsStream("Images/arc-logo.png"));
+		mapParameters.put("asset_filter", asset_filter); 
 		
 		//FncSystem.out("co_name", co_name);
 		System.out.println(co_logo);
@@ -208,7 +206,6 @@ private static final long serialVersionUID = 652923134846245300L;
 		System.out.println(asset_filter);
 		
 		
-		//FncReport.generateReport("/Reports/AssetCard.jasper", "Asset Card", mapParameters);
 		FncReport.generateReport("/Reports/AssetCard_v3.jasper", "Asset Card", mapParameters);
 		
 	}

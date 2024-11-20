@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptDisbursementRequestForm_subreport1" pageWidth="540" pageHeight="500" columnWidth="540" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
-	<property name="ireport.zoom" value="1.610510000000041"/>
+	<property name="ireport.zoom" value="1.7715610000000466"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="co_id" class="java.lang.String"/>
 	<parameter name="drf_no" class="java.lang.String"/>
 	<parameter name="particulars" class="java.lang.String"/>
-	<parameter name="attachments" class="java.lang.String"/>
-	<parameter name="other_details" class="java.lang.String"/>
-	<parameter name="requesters_remarks" class="java.lang.String"/>
-	<parameter name="invoice" class="java.lang.String"/>
-	<parameter name="soa_bill" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT FORMAT('%s / %s', fn_get_div_alias(a.div_id), fn_get_exec_ofc_alias(b.exec_office_code)) as cost_center
 , COALESCE(c.proj_cost_accnt_desc, d.acct_name) as acct_desc
@@ -32,7 +27,7 @@ AND a.drf_no = $P{drf_no}]]>
 		<variableExpression><![CDATA[$F{amount}]]></variableExpression>
 	</variable>
 	<columnHeader>
-		<band height="49" splitType="Stretch">
+		<band height="50" splitType="Stretch">
 			<staticText>
 				<reportElement mode="Opaque" x="8" y="27" width="138" height="20" backcolor="#B4B1B1"/>
 				<box>
@@ -102,214 +97,54 @@ AND a.drf_no = $P{drf_no}]]>
 				</textElement>
 				<text><![CDATA[PARTICULARS:]]></text>
 			</staticText>
-			<line>
-				<reportElement x="0" y="0" width="1" height="49"/>
-			</line>
-			<line>
-				<reportElement x="540" y="0" width="1" height="49"/>
-			</line>
+			<frame>
+				<reportElement x="0" y="0" width="540" height="50"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+			</frame>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="15" splitType="Stretch">
-			<textField>
-				<reportElement x="8" y="0" width="138" height="15"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Tahoma" size="9"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{cost_center}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="146" y="0" width="180" height="15"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Tahoma" size="9"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{acct_desc}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="326" y="0" width="117" height="15"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Tahoma" size="9"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{proj_alias}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00">
-				<reportElement x="443" y="0" width="90" height="15"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Tahoma" size="9"/>
-				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{amount}]]></textFieldExpression>
-			</textField>
-			<line>
-				<reportElement x="0" y="0" width="1" height="15"/>
-			</line>
-			<line>
-				<reportElement x="540" y="0" width="1" height="15"/>
-			</line>
+			<frame>
+				<reportElement x="0" y="0" width="540" height="15"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textField>
+					<reportElement x="8" y="0" width="138" height="15"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Tahoma" size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{cost_center}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="146" y="0" width="180" height="15"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Tahoma" size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{acct_desc}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="326" y="0" width="117" height="15"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Tahoma" size="9"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{proj_alias}]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00">
+					<reportElement x="443" y="0" width="90" height="15"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Tahoma" size="9"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{amount}]]></textFieldExpression>
+				</textField>
+			</frame>
 		</band>
 	</detail>
-	<columnFooter>
-		<band height="182">
-			<rectangle>
-				<reportElement x="0" y="62" width="540" height="120"/>
-			</rectangle>
-			<textField pattern="#,##0.00">
-				<reportElement x="440" y="35" width="100" height="20"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="0.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="0.0"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Tahoma" size="9" isBold="true"/>
-				</textElement>
-				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{v_total_drf_amt}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="0" y="35" width="440" height="20"/>
-				<box>
-					<topPen lineWidth="1.0"/>
-					<leftPen lineWidth="0.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="0.0"/>
-				</box>
-				<textElement verticalAlignment="Middle">
-					<font fontName="Tahoma" isBold="true"/>
-				</textElement>
-				<text><![CDATA[  TOTAL]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="141" y="86" width="386" height="18"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="Tahoma" size="9" isBold="false"/>
-				</textElement>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="141" y="154" width="386" height="18"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="Tahoma" size="9" isBold="false"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{requesters_remarks}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="12" y="69" width="129" height="18"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Tahoma" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Invoice No./ Date:]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="141" y="69" width="386" height="18"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="Tahoma" size="9" isBold="false"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{invoice}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="12" y="154" width="129" height="18"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Tahoma" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Requester's Remarks:]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="141" y="103" width="386" height="18"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="Tahoma" size="9" isBold="false"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{attachments}]]></textFieldExpression>
-			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="141" y="120" width="386" height="18"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="Tahoma" size="9" isBold="false"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{other_details}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="12" y="103" width="129" height="18"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Tahoma" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Attachments:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="12" y="137" width="129" height="18"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Tahoma" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Asset No:]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="141" y="137" width="386" height="18"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="Tahoma" size="9" isBold="false"/>
-				</textElement>
-			</textField>
-			<staticText>
-				<reportElement x="12" y="120" width="129" height="18"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Tahoma" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Other Details:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="12" y="86" width="129" height="18"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Middle">
-					<font fontName="Tahoma" size="9" isBold="true"/>
-				</textElement>
-				<text><![CDATA[SOA / Billing No. / Date:]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="141" y="87" width="386" height="16"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="Tahoma" size="9"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{soa_bill}]]></textFieldExpression>
-			</textField>
-			<line>
-				<reportElement x="0" y="0" width="1" height="55"/>
-			</line>
-			<line>
-				<reportElement x="540" y="0" width="1" height="55"/>
-			</line>
-		</band>
-	</columnFooter>
 </jasperReport>

@@ -347,7 +347,7 @@ public class PrintAssetSticker extends _JInternalFrame implements ActionListener
 		Map<String, Object> mapParameters = new HashMap<String, Object>();
 		mapParameters.put("asset_type",filterAssetType);
 		mapParameters.put("emp_code",UserInfo.EmployeeCode);
-		mapParameters.put("co_logo_arc", this.getClass().getClassLoader().getResourceAsStream("Images/arc.png"));
+		mapParameters.put("co_logo_arc", this.getClass().getClassLoader().getResourceAsStream("Images/arc-logo.png"));
 		
 		FncReport.generateReport("/Reports/rptMultipleAssetSticker.jasper", "Assetcode Sticker", mapParameters);
 		

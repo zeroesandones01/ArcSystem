@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptDisbursementRequestForm" pageWidth="612" pageHeight="936" columnWidth="540" leftMargin="36" rightMargin="36" topMargin="36" bottomMargin="36">
-	<property name="ireport.zoom" value="1.331000000000033"/>
-	<property name="ireport.x" value="3"/>
-	<property name="ireport.y" value="291"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptDisbursementRequestForm_with_ATD" pageWidth="612" pageHeight="936" columnWidth="540" leftMargin="36" rightMargin="36" topMargin="36" bottomMargin="36">
+	<property name="ireport.zoom" value="1.2100000000000268"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<subDataset name="Table Dataset 1"/>
 	<parameter name="co_id" class="java.lang.String"/>
 	<parameter name="drf_no" class="java.lang.String"/>
@@ -421,7 +421,7 @@ AND a.drf_no = $P{drf_no}]]>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="219" splitType="Stretch">
+		<band height="222" splitType="Stretch">
 			<frame>
 				<reportElement x="0" y="0" width="540" height="120"/>
 				<box>
@@ -589,8 +589,54 @@ AND a.drf_no = $P{drf_no}]]>
 		</band>
 	</columnFooter>
 	<pageFooter>
-		<band height="52" splitType="Stretch">
+		<band height="159" splitType="Stretch">
 			<printWhenExpression><![CDATA[new Boolean( $V{PAGE_NUMBER}.intValue() == 1 )]]></printWhenExpression>
+			<frame>
+				<reportElement x="0" y="59" width="540" height="95"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<elementGroup>
+					<textField>
+						<reportElement positionType="Float" x="338" y="59" width="192" height="20"/>
+						<textElement textAlignment="Center" verticalAlignment="Top">
+							<font fontName="Tahoma" size="8"/>
+						</textElement>
+						<textFieldExpression class="java.lang.String"><![CDATA[$F{user}]]></textFieldExpression>
+					</textField>
+					<staticText>
+						<reportElement x="338" y="72" width="192" height="23"/>
+						<box>
+							<topPen lineWidth="1.0" lineStyle="Solid"/>
+							<leftPen lineWidth="0.0" lineStyle="Solid"/>
+							<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+							<rightPen lineWidth="0.0" lineStyle="Solid"/>
+						</box>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Tahoma" size="8" isBold="false"/>
+						</textElement>
+						<text><![CDATA[Printed Name and Signature]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="0" y="3" width="540" height="20"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle">
+							<font fontName="Tahoma" size="9" isBold="true" isUnderline="true"/>
+						</textElement>
+						<text><![CDATA[AUTHORITY TO DEDUCT]]></text>
+					</staticText>
+					<textField>
+						<reportElement x="0" y="23" width="540" height="26"/>
+						<textElement textAlignment="Justified" verticalAlignment="Middle" markup="styled">
+							<font fontName="Tahoma" size="8" isBold="false"/>
+							<paragraph leftIndent="10" rightIndent="10"/>
+						</textElement>
+						<textFieldExpression class="java.lang.String"><![CDATA["I hereby authorize <b>"+$F{company_name}+"</b> to deduct from my salary the amount of <b><u>P"+String.format("%, .2f", $F{drf_total_amt})+"</u></b> upon non-liquidation of my cash advances for DRF No. <b><u>"+$F{drf_no}+"</u></b> as specified in the company policy."]]></textFieldExpression>
+					</textField>
+				</elementGroup>
+			</frame>
 			<frame>
 				<reportElement x="0" y="0" width="540" height="48"/>
 				<box>

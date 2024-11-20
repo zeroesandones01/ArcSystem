@@ -26,8 +26,9 @@ left join mf_exec_office f on e.exec_office_code=f.exec_office_code
 --left join tbl_item g on a.item_id=g.item_id
 --left join tbl_category h on g.category_id=h.category_id
 left join rf_asset_location i on a.loc_id= i.loc_id
-where a.current_cust='900767'
-and a.status in('ACTIVE','A')]]>
+where a.current_cust= $P{emp_code}
+and a.status in('ACTIVE','A')
+order by a.asset_no]]>
 	</queryString>
 	<field name="current_cust" class="java.lang.String"/>
 	<field name="div_dept" class="java.lang.String"/>
@@ -66,14 +67,14 @@ and a.status in('ACTIVE','A')]]>
 	</background>
 	<title>
 		<band height="40" splitType="Stretch">
-			<image hAlign="Center" vAlign="Bottom">
+			<image scaleImage="FillFrame" hAlign="Center" vAlign="Bottom">
 				<reportElement x="0" y="1" width="79" height="39"/>
 				<imageExpression class="java.io.InputStream"><![CDATA[$P{co_logo}]]></imageExpression>
 			</image>
 			<textField>
 				<reportElement x="79" y="1" width="677" height="39"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="18" isBold="true" isUnderline="false"/>
+					<font fontName="SansSerif" size="17" isBold="true" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{company_name}]]></textFieldExpression>
 			</textField>
@@ -82,7 +83,7 @@ and a.status in('ACTIVE','A')]]>
 	<pageHeader>
 		<band height="89" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="756" height="35"/>
+				<reportElement x="79" y="0" width="677" height="35"/>
 				<textElement textAlignment="Center" markup="none">
 					<font size="15" isBold="true"/>
 				</textElement>

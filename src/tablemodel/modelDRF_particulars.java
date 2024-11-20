@@ -1,21 +1,29 @@
 package tablemodel;
 
 import java.awt.Component;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
+
+import com.toedter.calendar.JDateChooser;
 
 import DateChooser._JDateChooser;
 import Lookup._JLookup;
@@ -300,17 +308,67 @@ public class modelDRF_particulars extends DefaultTableModel {
 	    return value;
 	}
 	
-	 public String getFormattedDate(int row, int column) {
-	        Object value = super.getValueAt(row, column);
-	        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-	        if (value instanceof Date) {
-	            return dateFormat.format((Date) value);
-	        } else if (value instanceof Timestamp) {
-	            dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-	            return dateFormat.format((Timestamp) value);
-	        }
-	        
-	        return null; 
-	    }
+//	 public String getFormattedDate(int row, int column) {
+//	        Object value = super.getValueAt(row, column);
+//	        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+//	        if (value instanceof Date) {
+//	            return dateFormat.format((Date) value);
+//	        } else if (value instanceof Timestamp) {
+//	            dateFormat = new SimpleDateFormat("MM-dd-yyyy");
+//	            return dateFormat.format((Timestamp) value);
+//	        } if (value instanceof String) {
+//	            try {
+//	                SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd"); // Adjust format as necessary
+//	                Date parsedDate = (Date) originalFormat.parse((String) value);
+//	                return dateFormat.format(parsedDate);
+//	            } catch (ParseException e) {
+//	                e.printStackTrace();
+//	            }
+//	        }
+//
+//	        
+//	        return null; 
+//	    }
 	 
+	// Custom cell editor for BigDecimal (used for the "Amount" column)
+	public class BigDecimalCellEditor extends DefaultCellEditor {
+	     public BigDecimalCellEditor() {
+	         super(new JTextField()); // Use JTextField as the editor
+	         JTextField textField = (JTextField) getComponent();
+
+	         // Add a focus listener to move the cursor to the end when editing starts
+	         textField.addFocusListener(new FocusAdapter() {
+	             @Override
+	             public void focusGained(FocusEvent e) {
+	                 // Get the current value of the cell being edited
+	                 BigDecimal value = (BigDecimal) getCellEditorValue();
+
+	                 // If the value is greater than 0, move the cursor to the end of the text
+	                 if (value != null) {
+	                	 if(value.compareTo(BigDecimal.ZERO) > 0) {
+	                		 
+	                		 textField.setSelectionStart(textField.getText().length());
+	 	                     textField.setSelectionEnd(textField.getText().length());
+	 	                     textField.setText(String.valueOf(value.stripTrailingZeros().toPlainString()));
+	                	 } else {
+	                		 textField.setText(null);
+	                	 }
+	                   
+	                 }
+	             }
+	         });
+	     }
+
+	     @Override
+	     public Object getCellEditorValue() {
+	         JTextField textField = (JTextField) getComponent();
+	         try {
+	             // Try to convert the text field value back to BigDecimal
+	             return new BigDecimal(textField.getText());
+	         } catch (NumberFormatException ex) {
+	             // In case of an invalid value, return BigDecimal.ZERO
+	             return BigDecimal.ZERO;
+	         }
+	     }
+	 }
 }
