@@ -60,14 +60,15 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 
 	private JComboBox cmbCorpType;
 	private _JXTextField txtCorpType;
-	private _JXTextField txtCorpPosition;
-	private _JXTextField txtCorpContactPerson;
+	private _JXTextField txtPosition;
+	private _JXTextField txtAuthorizedPerson;
 	private _JXTextField txtCorpAlias;
 	private _JXTextField txtCorpName;
-	private _JXTextField txtCorpTIN;
+	private _JXTextField txtTIN_No;
 	private JCheckBox chkCorpVAT;
 	private JComboBox cmbCorpBusinessNature;
 	private JComboBox cmbCorpBusinessClass;
+	private JComboBox cmbEntityKind;
 
 	private JPanel pnlCorpContact;
 	private JPanel pnlCorpContactLabel;
@@ -78,10 +79,10 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 	private JLabel lblCorpFacebookAcct;
 
 	private JPanel pnlCorpContactComponents;
-	private _JXTextField txtCorpBusinessTelNo;
+	private _JXTextField txtTelNo;
 	private _JXTextField txtCorpMobileNo;
 	private _JXTextField txtCorpFaxNo;
-	private _JXTextField txtCorpEmail;
+	private _JXTextField txtEmail;
 	private _JXTextField txtCorpFacebookAcct;
 	private JButton btnAddCorpContactInfo;
 
@@ -113,210 +114,180 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 			pnlCorporation.add(pnlCorpMainInfo, BorderLayout.NORTH);
 			pnlCorpMainInfo.setBorder(JTBorderFactory.createTitleBorder("Main Info"));
 			{
-				splitCorpInfo = new JSplitPane();
-				pnlCorpMainInfo.add(splitCorpInfo, BorderLayout.CENTER);
-				splitCorpInfo.setOneTouchExpandable(true);
-				splitCorpInfo.setResizeWeight(.3d);
+				JPanel pnlCorpInfoLeft = new JPanel(new BorderLayout(3, 3));
+				pnlCorpMainInfo.add(pnlCorpInfoLeft);
 				{
-					JPanel pnlCorpInfoLeft = new JPanel(new BorderLayout(3, 3));
-					splitCorpInfo.add(pnlCorpInfoLeft, JSplitPane.LEFT);
+					pnlCorpInfoLabel = new JPanel(new GridLayout(7, 1, 5, 5));
+					pnlCorpInfoLeft.add(pnlCorpInfoLabel, BorderLayout.WEST);
 					{
-						pnlCorpInfoLabel = new JPanel(new GridLayout(7, 1, 5, 5));
-						pnlCorpInfoLeft.add(pnlCorpInfoLabel, BorderLayout.WEST);
-						/*{
-								lblCorpType = new JLabel("Corporation Type");
-								pnlCorpInfoLabel.add(lblCorpType);
-							}*/
-						{
-							lblCorporationName = new JLabel("*Corporation Name");
-							pnlCorpInfoLabel.add(lblCorporationName);
-						}
-						{
-							JLabel lblCorpAlias = new JLabel("Corp Alias");
-							pnlCorpInfoLabel.add(lblCorpAlias);
-						}
-						{
-							lblCorpContactPerson = new JLabel("Authorized Person");
-							pnlCorpInfoLabel.add(lblCorpContactPerson);
-						}
-						{
-							lblCorpPosition = new JLabel("Position");
-							pnlCorpInfoLabel.add(lblCorpPosition);
-						}
-						{
-							lblCorpTIN = new JLabel("TIN");
-							pnlCorpInfoLabel.add(lblCorpTIN);
-						}
-						{
-							lblCorpBusinessNature = new JLabel("Business Nature");
-							pnlCorpInfoLabel.add(lblCorpBusinessNature);
-						}
-						{
-							lblCorpBusinessClass = new JLabel("Business Class");
-							pnlCorpInfoLabel.add(lblCorpBusinessClass);
-						}
+						lblCorporationName = new JLabel("*Registered Name");
+						pnlCorpInfoLabel.add(lblCorporationName);
 					}
 					{
-						pnlCorpInfoComponents = new JPanel(new GridLayout(7, 1, 5, 5));
-						pnlCorpInfoLeft.add(pnlCorpInfoComponents, BorderLayout.CENTER);
-						{
-							txtCorpName = new _JXTextField();
-							pnlCorpInfoComponents.add(txtCorpName);
-						}
-						{
-							txtCorpAlias = new _JXTextField();
-							pnlCorpInfoComponents.add(txtCorpAlias);
-						}
-						{
-							txtCorpContactPerson = new _JXTextField();
-							pnlCorpInfoComponents.add(txtCorpContactPerson);
-						}
-						{
-							txtCorpPosition = new _JXTextField();
-							pnlCorpInfoComponents.add(txtCorpPosition);
-						}
-						{
-							JPanel pnlCorpTIN = new JPanel(new BorderLayout(3, 3));
-							pnlCorpInfoComponents.add(pnlCorpTIN);
-							{
-								txtCorpTIN = new _JXTextField();
-								pnlCorpTIN.add(txtCorpTIN, BorderLayout.WEST);
-								txtCorpTIN.setPreferredSize(new Dimension(150, 0));
-							}
-							{
-								chkCorpVAT = new JCheckBox("VAT Registered");
-								pnlCorpTIN.add(chkCorpVAT, BorderLayout.EAST);
-								chkCorpVAT.setEnabled(false);
-							}
-						}
-						{
-							JPanel pnlCorpBusinessNature = new JPanel(new BorderLayout(3, 3));
-							pnlCorpInfoComponents.add(pnlCorpBusinessNature);
-							{
-								cmbCorpBusinessNature = new JComboBox(getBusinessNature());
-								pnlCorpBusinessNature.add(cmbCorpBusinessNature, BorderLayout.WEST);
-								cmbCorpBusinessNature.setPreferredSize(new Dimension(150, 0));
-								cmbCorpBusinessNature.setEnabled(false);
-							}
-						}
-						{
-							JPanel pnlCorpBusinessClass = new JPanel(new BorderLayout(3, 3));
-							pnlCorpInfoComponents.add(pnlCorpBusinessClass);
-							{
-								cmbCorpBusinessClass = new JComboBox(getBusinessClass());
-								pnlCorpBusinessClass.add(cmbCorpBusinessClass, BorderLayout.WEST);
-								cmbCorpBusinessClass.setPreferredSize(new Dimension(150, 0));
-								cmbCorpBusinessClass.setEnabled(false);
-							}
-						}
+						JLabel lblCorpAlias = new JLabel("Trade Name");
+						pnlCorpInfoLabel.add(lblCorpAlias);
+					}
+					{
+						lblCorpContactPerson = new JLabel("Authorized Person");
+						pnlCorpInfoLabel.add(lblCorpContactPerson);
+					}
+					{
+						lblCorpPosition = new JLabel("Position");
+						pnlCorpInfoLabel.add(lblCorpPosition);
+					}
+					{
+						lblCorpTIN = new JLabel("TIN");
+						pnlCorpInfoLabel.add(lblCorpTIN);
+					}
+					{
+						lblCorpBusinessNature = new JLabel("Business Nature");
+						pnlCorpInfoLabel.add(lblCorpBusinessNature);
+					}
+					{
+						lblCorpBusinessClass = new JLabel("Business Class");
+						pnlCorpInfoLabel.add(lblCorpBusinessClass);
 					}
 				}
 				{
-					pnlCorpTypes = new JPanel(new BorderLayout(3, 3));
-					splitCorpInfo.add(pnlCorpTypes, JSplitPane.RIGHT);
+					pnlCorpInfoComponents = new JPanel(new GridLayout(7, 1, 5, 5));
+					pnlCorpInfoLeft.add(pnlCorpInfoComponents, BorderLayout.CENTER);
+					{
+						txtCorpName = new _JXTextField("Registered Name");
+						pnlCorpInfoComponents.add(txtCorpName);
+					}
+					{
+						JPanel pnlCorpAlias = new JPanel(new BorderLayout(3, 3));
+						pnlCorpInfoComponents.add(pnlCorpAlias);
+						{
+							txtCorpAlias = new _JXTextField("Trade Name");
+							pnlCorpAlias.add(txtCorpAlias, BorderLayout.WEST);
+							txtCorpAlias.setPreferredSize(new Dimension(225, 0));
+						}
+						{
+							JPanel pnlEntityKind = new JPanel(new BorderLayout(3, 3));
+							pnlCorpAlias.add(pnlEntityKind, BorderLayout.CENTER);
+							{
+								JLabel lblEntityKind = new JLabel("Entity Kind", JLabel.TRAILING);
+								pnlEntityKind.add(lblEntityKind);
+							}
+							{
+								cmbEntityKind = new JComboBox(new String[] { "Corporation", "Individual" });
+								pnlEntityKind.add(cmbEntityKind, BorderLayout.EAST);
+								cmbEntityKind.setEnabled(false);
+								cmbEntityKind.setSelectedItem(null);
+								cmbEntityKind.setPreferredSize(new Dimension(200, 0));
+							}
+						}
+					}
 
 					{
-						scrollEntityTypes = new JScrollPane();
-						pnlCorpTypes.add(scrollEntityTypes, BorderLayout.CENTER);
-						scrollEntityTypes.setBorder(JTBorderFactory.createTitleBorder("Entity Types"));
-						scrollEntityTypes.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+						txtAuthorizedPerson = new _JXTextField("Authorized Person");
+						pnlCorpInfoComponents.add(txtAuthorizedPerson);
+					}
+					{
+						txtPosition = new _JXTextField("Position");
+						pnlCorpInfoComponents.add(txtPosition);
+					}
+					{
+						JPanel pnlCorpTIN = new JPanel(new BorderLayout(3, 3));
+						pnlCorpInfoComponents.add(pnlCorpTIN);
 						{
-							modelEntityTypes = new modelCI_EntityTypes();
-
-							tblEntityTypes = new _JTableMain(modelEntityTypes);
-							scrollEntityTypes.setViewportView(tblEntityTypes);
-							tblEntityTypes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-							tblEntityTypes.hideColumns("WTAX ID", "WTAX Description", "WTAX Rate");
-							tblEntityTypes.setSortable(false);
-
-							//Process after row add in tables
-							modelEntityTypes.addTableModelListener(new TableModelListener() {
-								public void tableChanged(TableModelEvent e) {
-
-									((DefaultListModel)rowHeaderEntityTypes.getModel()).addElement(modelEntityTypes.getRowCount());
-
-									if(modelEntityTypes.getRowCount() == 0){
-										rowHeaderEntityTypes.setModel(new DefaultListModel());
-									}
-								}
-							});
+							txtTIN_No = new _JXTextField("TIN");
+							pnlCorpTIN.add(txtTIN_No, BorderLayout.WEST);
+							txtTIN_No.setPreferredSize(new Dimension(150, 0));
+						}
+						{
+							chkCorpVAT = new JCheckBox("VAT Registered");
+							pnlCorpTIN.add(chkCorpVAT, BorderLayout.EAST);
+							chkCorpVAT.setEnabled(false);
+						}
+					}
+					{
+						JPanel pnlCorpBusinessNature = new JPanel(new BorderLayout(3, 3));
+						pnlCorpInfoComponents.add(pnlCorpBusinessNature);
+						{
+							cmbCorpBusinessNature = new JComboBox(getBusinessNature());
+							pnlCorpBusinessNature.add(cmbCorpBusinessNature, BorderLayout.WEST);
+							cmbCorpBusinessNature.setPreferredSize(new Dimension(150, 0));
+							cmbCorpBusinessNature.setEnabled(false);
+						}
+						{
+							JPanel pnlTelNo = new JPanel(new BorderLayout(3, 3));
+							pnlCorpBusinessNature.add(pnlTelNo, BorderLayout.CENTER);
+							{
+								JLabel lblTelNo = new JLabel("Tel. No", JLabel.TRAILING);
+								pnlTelNo.add(lblTelNo);
+							}
+							{
+								txtTelNo = new _JXTextField("Telephone No");
+								pnlTelNo.add(txtTelNo, BorderLayout.EAST);
+								txtTelNo.setPreferredSize(new Dimension(150, 0));
+							}
+						}
+					}
+					{
+						JPanel pnlCorpBusinessClass = new JPanel(new BorderLayout(3, 3));
+						pnlCorpInfoComponents.add(pnlCorpBusinessClass);
+						{
+							cmbCorpBusinessClass = new JComboBox(getBusinessClass());
+							pnlCorpBusinessClass.add(cmbCorpBusinessClass, BorderLayout.WEST);
+							cmbCorpBusinessClass.setPreferredSize(new Dimension(150, 0));
+							cmbCorpBusinessClass.setEnabled(false);
 						}
 
 						{
-							rowHeaderEntityTypes = tblEntityTypes.getRowHeader();
-							rowHeaderEntityTypes.setModel(new DefaultListModel());
-							scrollEntityTypes.setRowHeaderView(rowHeaderEntityTypes);
-							scrollEntityTypes.setCorner(ScrollPaneConstants.UPPER_LEFT_CORNER, FncTables.getRowHeader_Header());
+							JPanel pnlEmail = new JPanel(new BorderLayout(3, 3));
+							pnlCorpBusinessClass.add(pnlEmail, BorderLayout.CENTER);
+							{
+								JLabel lblEmail = new JLabel("Email", JLabel.TRAILING);
+								pnlEmail.add(lblEmail);
+							}
+							{
+								txtEmail = new _JXTextField("Email");
+								pnlEmail.add(txtEmail, BorderLayout.EAST);
+								txtEmail.setPreferredSize(new Dimension(150, 0));
+							}
 						}
 					}
 				}
 			}
+			//				
 		}
 		{
-			pnlCorpContact = new JPanel(new BorderLayout(5, 5));
-			pnlCorporation.add(pnlCorpContact, BorderLayout.SOUTH);
-			pnlCorpContact.setBorder(JTBorderFactory.createTitleBorder("Contact Details"));
+			pnlCorpTypes = new JPanel(new BorderLayout(3, 3));
+			pnlCorporation.add(pnlCorpTypes);
 			{
-				pnlCorpContactLabel = new JPanel(new GridLayout(6, 1, 5, 5));
-				pnlCorpContact.add(pnlCorpContactLabel, BorderLayout.WEST);
+				scrollEntityTypes = new JScrollPane();
+				pnlCorpTypes.add(scrollEntityTypes, BorderLayout.CENTER);
+				scrollEntityTypes.setBorder(JTBorderFactory.createTitleBorder("Entity Types"));
+				scrollEntityTypes.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 				{
-					lblCorpBusinessTelNo = new JLabel("Business Tel. No");
-					pnlCorpContactLabel.add(lblCorpBusinessTelNo);
+					modelEntityTypes = new modelCI_EntityTypes();
+
+					tblEntityTypes = new _JTableMain(modelEntityTypes);
+					scrollEntityTypes.setViewportView(tblEntityTypes);
+					tblEntityTypes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+					tblEntityTypes.hideColumns("WTAX ID", "WTAX Description", "WTAX Rate");
+					tblEntityTypes.setSortable(false);
+
+					//Process after row add in tables
+					modelEntityTypes.addTableModelListener(new TableModelListener() {
+						public void tableChanged(TableModelEvent e) {
+
+							((DefaultListModel)rowHeaderEntityTypes.getModel()).addElement(modelEntityTypes.getRowCount());
+
+							if(modelEntityTypes.getRowCount() == 0){
+								rowHeaderEntityTypes.setModel(new DefaultListModel());
+							}
+						}
+					});
 				}
+
 				{
-					lblCorpMobileNo = new JLabel("Cellphone No.");
-					pnlCorpContactLabel.add(lblCorpMobileNo);
-				}
-				{
-					lblCorpFaxNo = new JLabel("Fax No.");
-					pnlCorpContactLabel.add(lblCorpFaxNo);
-				}
-				{
-					lblCorpEmail = new JLabel("Email");
-					pnlCorpContactLabel.add(lblCorpEmail);
-				}
-				{
-					lblCorpFacebookAcct = new JLabel("Facebook Acct");
-					pnlCorpContactLabel.add(lblCorpFacebookAcct);
-				}
-				{
-					pnlCorpContactLabel.add(Box.createHorizontalBox());
-				}
-			}
-			{
-				pnlCorpContactComponents = new JPanel(new GridLayout(6, 1, 5, 5));
-				pnlCorpContact.add(pnlCorpContactComponents, BorderLayout.CENTER);
-				{
-					txtCorpBusinessTelNo = new _JXTextField();
-					pnlCorpContactComponents.add(txtCorpBusinessTelNo);
-				}
-				{
-					txtCorpMobileNo = new _JXTextField();
-					pnlCorpContactComponents.add(txtCorpMobileNo);
-				}
-				{
-					txtCorpFaxNo = new _JXTextField();
-					pnlCorpContactComponents.add(txtCorpFaxNo);
-				}
-				{
-					txtCorpEmail = new _JXTextField();
-					pnlCorpContactComponents.add(txtCorpEmail);
-				}
-				{
-					txtCorpFacebookAcct = new _JXTextField();
-					pnlCorpContactComponents.add(txtCorpFacebookAcct);
-				}
-				{
-					JPanel pnlAddCorpContact = new JPanel(new BorderLayout(5, 5));
-					pnlCorpContactComponents.add(pnlAddCorpContact);
-					{
-						btnAddCorpContactInfo = new JButton("Add Corp. Contact Info");
-						pnlAddCorpContact.add(btnAddCorpContactInfo, BorderLayout.EAST);
-						btnAddCorpContactInfo.setPreferredSize(new Dimension(250, 0));
-						btnAddCorpContactInfo.setActionCommand("Add Corp Contact Info");
-						btnAddCorpContactInfo.addActionListener(this);
-						btnAddCorpContactInfo.setEnabled(false);
-					}
+					rowHeaderEntityTypes = tblEntityTypes.getRowHeader();
+					rowHeaderEntityTypes.setModel(new DefaultListModel());
+					scrollEntityTypes.setRowHeaderView(rowHeaderEntityTypes);
+					scrollEntityTypes.setCorner(ScrollPaneConstants.UPPER_LEFT_CORNER, FncTables.getRowHeader_Header());
 				}
 			}
 		}
@@ -338,7 +309,7 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 
 		return civilstatus.toArray();
 	}
-	
+
 	private Object[] getBusinessClass() {//ARRAYLIST FOR THE BUSINESS CLASS
 		ArrayList<Object> civilstatus = new ArrayList<Object>();
 
@@ -350,6 +321,10 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 			}
 		}
 		return civilstatus.toArray();
+	}
+	
+	public void newSupplier(String entity_id) {
+		
 	}
 
 	@Override
