@@ -4,8 +4,8 @@
     <!--ANT 1.7 is required                                        -->
     <!--define folder properties-->
     <property name="dir.buildfile" value="."/>
-    <property name="dir.workspace" value="/home/monique/eclipse-workspace"/>
-    <property name="dir.jarfile" value="/home/monique/Documents/JAR-FILES/ARCSystem"/>
+    <property name="dir.workspace" value="${dir.buildfile}/.."/>
+    <property name="dir.jarfile" value="/home/jaricruz/Documents/JavaCompiledJars/ArcSystem"/>
     <target name="create_run_jar">
         <jar destfile="${dir.jarfile}/ArcSystem.jar" filesetmanifest="mergewithoutmain" duplicate="preserve">
             <manifest>
@@ -66,7 +66,6 @@
             <zipfileset excludes="META-INF/*.SF" src="${dir.buildfile}/lib/xfont_tahoma.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="${dir.buildfile}/lib/xmlbeans-xmlpublic-2.6.0.jar"/>
             <zipfileset excludes="META-INF/*.SF" src="${dir.buildfile}/lib/postgresql-42.2.29.jre7.jar"/>
-            <zipfileset excludes="META-INF/*.SF" src="${dir.buildfile}/lib/tahoma.jar"/>
         </jar>
     	<signjar jar="${dir.jarfile}/ArcSystem.jar" alias="ArcSys" keystore="${dir.jarfile}/arcsystem20240718.jks" storepass="arcsystemtsm"/>
     </target>
