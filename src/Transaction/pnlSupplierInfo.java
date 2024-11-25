@@ -32,6 +32,7 @@ import components.JTBorderFactory;
 import components._JTableMain;
 import components._JXTextField;
 import tablemodel.modelCI_EntityTypes;
+import tablemodel.modelSuppInfoEntityTypes;
 
 public class pnlSupplierInfo extends JXPanel implements ActionListener {
 
@@ -53,7 +54,7 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 	private JPanel pnlCorpInfoComponents;
 	private JPanel pnlCorpTypes;
 	private JPanel pnlCorpInfoRight;
-	private modelCI_EntityTypes modelEntityTypes;
+	private modelSuppInfoEntityTypes modelEntityTypes;
 	private JScrollPane scrollEntityTypes;
 	private _JTableMain tblEntityTypes;
 	private JList rowHeaderEntityTypes;
@@ -262,12 +263,11 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 				scrollEntityTypes.setBorder(JTBorderFactory.createTitleBorder("Entity Types"));
 				scrollEntityTypes.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 				{
-					modelEntityTypes = new modelCI_EntityTypes();
+					modelEntityTypes = new modelSuppInfoEntityTypes();
 
 					tblEntityTypes = new _JTableMain(modelEntityTypes);
 					scrollEntityTypes.setViewportView(tblEntityTypes);
 					tblEntityTypes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-					tblEntityTypes.hideColumns("WTAX ID", "WTAX Description", "WTAX Rate");
 					tblEntityTypes.setSortable(false);
 
 					//Process after row add in tables

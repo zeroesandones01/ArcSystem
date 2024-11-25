@@ -58,6 +58,8 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 
 	private static final long serialVersionUID = -2045289035602315347L;
 	
+	static Dimension SIZE = new Dimension(1000, 615);
+	
 	static String title = "Supplier Information";
 	private Border LINE_BORDER = BorderFactory.createLineBorder(Color.GRAY);
 

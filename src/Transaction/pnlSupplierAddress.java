@@ -625,7 +625,7 @@ public class pnlSupplierAddress extends JPanel implements _GUI, ActionListener {
 			}
 		}
 
-		si.setComponentsEditable(pnlUpper, false);
+		//si.setComponentsEditable(pnlUpper, false);
 		setComponentsEnabled(false, false, false, false, false, false, false, false, false, false, false);
 
 		mapProvinces();
