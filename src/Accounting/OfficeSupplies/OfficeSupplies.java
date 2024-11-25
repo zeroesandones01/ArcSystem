@@ -1,4 +1,4 @@
-package Accounting.OfficeSupplies;
+package src.Accounting.OfficeSupplies;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -10,6 +10,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -53,6 +56,7 @@ public class OfficeSupplies extends _JInternalFrame implements _GUI, ActionListe
 	private model_officesupplies modelofc_supply;
 	private _JTableMain tblofc_supply;
 	private JList rowheaderofc_supply;
+	private _JLookup lookuprequestno;
 
 	public OfficeSupplies() {
 		super(title, true, true, true, true);
@@ -92,7 +96,7 @@ public class OfficeSupplies extends _JInternalFrame implements _GUI, ActionListe
 							JLabel lblcategory = new JLabel("<html><font color='red'>Category</font></html>");
 							pnlnorth_left_1.add(lblcategory, BorderLayout.WEST);
 							lblcategory.setFont(new Font("Serif", Font.BOLD, 12));
-							lblcategory.setPreferredSize(new Dimension(70, 0));
+							lblcategory.setPreferredSize(new Dimension(80, 0));
 						}
 						{
 							lookupcategory = new _JLookup();
@@ -116,18 +120,35 @@ public class OfficeSupplies extends _JInternalFrame implements _GUI, ActionListe
 						{
 							tagcategory = new _JTagLabel("[ ]");
 							pnlnorth_left_1.add(tagcategory, BorderLayout.EAST);
-							tagcategory.setPreferredSize(new Dimension(300, 0));
+							tagcategory.setPreferredSize(new Dimension(245, 0));
 							tagcategory.setEditable(false);
 						}
 					}
 					{
 						JPanel pnlnorth_left_2 = new JPanel(new BorderLayout(3, 3));
 						pnlnorth_left.add(pnlnorth_left_2);
-//						{
-//							JLabel lbltest = new JLabel("Testt");
-//							lbltest.setFont(new Font("Serif", Font.BOLD, 14));
-//							pnlnorth_left_2.add(lbltest, BorderLayout.CENTER);
-//						}
+						{
+							JLabel lbltest = new JLabel("<html><font color='red'>Req. No.</font></html>");
+							lbltest.setFont(new Font("Serif", Font.BOLD, 12));
+							pnlnorth_left_2.add(lbltest, BorderLayout.WEST);
+							lbltest.setPreferredSize(new Dimension(80, 0));
+							
+						}
+						{
+							lookuprequestno = new _JLookup();
+							pnlnorth_left_2.add(lookuprequestno, BorderLayout.CENTER);
+							lookuprequestno.addLookupListener(new LookupListener() {
+								public void lookupPerformed(LookupEvent event) {
+									
+								}
+							});
+							
+						}
+						{
+							JLabel lblextra = new JLabel("");
+							pnlnorth_left_2.add(lblextra, BorderLayout.EAST);
+							lblextra.setPreferredSize(new Dimension(245, 0));
+						}
 					}
 				}
 				{
@@ -173,6 +194,21 @@ public class OfficeSupplies extends _JInternalFrame implements _GUI, ActionListe
 						modelofc_supply = new model_officesupplies();
 						tblofc_supply = new _JTableMain(modelofc_supply);
 						scrollofc_supply.setViewportView(tblofc_supply);
+						tblofc_supply.addMouseListener(new MouseAdapter() {
+							
+							public void mousePressed(MouseEvent e) {
+								if ((e.getClickCount() >= 2)) {
+									int column 	= tblofc_supply.getSelectedColumn();
+									if (column == 8) {}
+								}
+							}
+							public void mouseReleased(MouseEvent e) {
+								if ((e.getClickCount() >= 2)) {
+									int column 	= tblofc_supply.getSelectedColumn();
+									if (column == 8) {}
+								}
+							}
+						});	
 						
 						tblofc_supply.getColumnModel().getColumn(1).setPreferredWidth(100);
 						tblofc_supply.getColumnModel().getColumn(2).setPreferredWidth(300);
@@ -202,18 +238,21 @@ public class OfficeSupplies extends _JInternalFrame implements _GUI, ActionListe
 					btnnew = new _JButton("New");
 					pnlsouth.add(btnnew);
 					btnnew.setActionCommand("new");
+					btnnew.setEnabled(false);
 					btnnew.addActionListener(this);
 				}
 				{
 					btnsave = new _JButton("Save");
 					pnlsouth.add(btnsave);
 					btnsave.setActionCommand("save");
+					btnsave.setEnabled(false);
 					btnsave.addActionListener(this);
 				}
 				{
 					btncancel = new _JButton("Cancel");
 					pnlsouth.add(btncancel);
 					btncancel.setActionCommand("cancel");
+					btncancel.setEnabled(false);
 					btncancel.addActionListener(this);
 				}
 			}
@@ -227,6 +266,7 @@ public class OfficeSupplies extends _JInternalFrame implements _GUI, ActionListe
 		if (e.getActionCommand().equals("new")) {
 			lookupcategory.setEditable(true);
 			modelofc_supply.setEditable(true);
+			lookuprequestno.setValue(getreq_no());
 			btnstate(false, true, true);
 		}
 		if (e.getActionCommand().equals("save")) {
@@ -235,6 +275,7 @@ public class OfficeSupplies extends _JInternalFrame implements _GUI, ActionListe
 		if (e.getActionCommand().equals("cancel")) {
 			lookupcategory.setValue(null);
 			lookupcategory.setEditable(true);
+			lookuprequestno.setValue(null);
 			tagcategory.setTag("");
 			//txtsearch.setText("");
 			//txtsearch.setEditable(false);
@@ -242,8 +283,16 @@ public class OfficeSupplies extends _JInternalFrame implements _GUI, ActionListe
 			rowheaderofc_supply = tblofc_supply.getRowHeader(); 
 			scrollofc_supply.setRowHeaderView(rowheaderofc_supply);
 			modelofc_supply.setEditable(false);
-			btnstate(true, false, true);
+			btnstate(false, false, true);
 		}
+	}
+	
+	public static  String getreq_no () {
+		pgSelect db = new pgSelect();
+		String sql = "select to_char((coalesce(max(req_no)::int, 0) + 1),'FM00000000')||date_part('month',now()::date)|| substring(date_part('year',now()::date)::varchar,3,2) \n"
+				+ "from rf_request_supplies";
+		db.select(sql);
+		return db.getResult()[0][0].toString();
 	}
 	
 	private void btnstate (/*Boolean gen,*/ Boolean addnew, Boolean save, Boolean cancel) {
