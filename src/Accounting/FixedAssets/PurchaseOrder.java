@@ -349,7 +349,8 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 				
 			}else {
 				
-				String po_no = PurchaseOrderTab.lookuppono.getValue();
+				String po_no = PurchaseOrderTab.lookuppono.getText();
+				System.out.println("po_no: "+po_no);
 				
 				if( po_no.equals("") || po_no.equals(null)) {
 					
