@@ -324,6 +324,45 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 	}
 	
 	public void newSupplier(String entity_id) {
+		txtCorpName.setEditable(true);
+		txtCorpAlias.setEditable(true);
+		cmbEntityKind.setEnabled(true);
+		txtAuthorizedPerson.setEditable(true);
+		txtPosition.setEditable(true);
+		txtTIN_No.setEditable(true);
+		chkCorpVAT.setEnabled(true);
+		txtEmail.setEditable(true);
+		txtTelNo.setEditable(true);
+		cmbCorpBusinessClass.setEnabled(true);
+		cmbCorpBusinessNature.setEnabled(true);
+	}
+	
+	public void cancelSuppInfo(String entity_id) {
+		
+		txtCorpName.setEditable(false);
+		txtCorpName.setText("");
+		txtCorpAlias.setEditable(false);
+		txtCorpAlias.setText("");
+		cmbEntityKind.setEnabled(false);
+		cmbEntityKind.setSelectedItem(null);
+		txtAuthorizedPerson.setEditable(false);
+		txtAuthorizedPerson.setText("");
+		txtPosition.setEditable(false);
+		txtPosition.setText("");
+		txtTIN_No.setEditable(false);
+		txtTIN_No.setText("");
+		chkCorpVAT.setEnabled(false);
+		chkCorpVAT.setSelected(false);
+		txtEmail.setEditable(false);
+		txtEmail.setText("");
+		txtTelNo.setEditable(false);
+		txtTelNo.setText("");
+		cmbCorpBusinessClass.setEnabled(false);
+		cmbCorpBusinessNature.setEnabled(false);
+		
+	}
+	
+	public void displaySuppEntityTypes(String entity_id) {
 		
 	}
 

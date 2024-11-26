@@ -447,7 +447,9 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 		btnCancel.setEnabled(sCancel);
 	}
 	//SET THE PANEL STATE WHEN EDITING OR CREATING NEW DATA
-	public static void pnlState(Boolean CI, Boolean sub_id){
+	public static void pnlState(Boolean si, Boolean address){
+		tabCenter.setEnabledAt(0, si);
+		tabCenter.setEnabledAt(1, address);
 //		tabCenter.setEnabledAt(0, CI);
 //		tabCenter.setEnabledAt(1, sub_id);
 //		tabCenter.setEnabledAt(2, addr);
@@ -570,10 +572,11 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 					timerStatus.stop();
 				}
 				SupplierInfo.this.setTitle(title);
+				pnlSI.newSupplier(lookupClient.getValue());
 				
-				//Commented on 2016-09-02
 				displayClientInformation(lookupClient.getValue());
 				pnlState(true, false);
+				
 			}
 			
 //			if(selectedTab == 1){
@@ -719,39 +722,11 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 							JOptionPane.showMessageDialog(getContentPane(), "Out of memory.", "Loading Image.", JOptionPane.WARNING_MESSAGE);
 						}
 					//displayClientImage(lblClientImageFileChooser, actionCommand);
-					
 				}
 				
 				if(selectedTab == 1){
 					btnState(true, false, false, false, false);
 				}
-//				if (selectedTab == 2){
-//					pnlADDRESS.cancelAddress();
-//					btnState(true, false, false, false, false);
-//				}
-//				if (selectedTab == 3){
-//					pnlConnect.cancelConnection();
-//					btnState(true, false, false, false, false);
-//				}
-//				if (selectedTab == 4){
-//					pnlDepend.cancelDependents();
-//					btnState(true, false, false, false, false);
-//				}
-//				if (selectedTab == 5){
-//					pnlWorkExp.cancelWorkexp();
-//					displayWorkExpList(lookupClient.getValue());
-//					btnState(true, false, false, false, false);
-//				}
-//				
-//				if (selectedTab == 6){
-//					pnlFinanceInfo.cancelFinancialInfo();
-//					btnState(false, true, false, false, false);
-//					displayFinancialInfo(lookupClient.getValue());
-//				}
-//				
-//				if (selectedTab == 7){
-//					pnlRefOther.cancelRefOther();
-//				}
 				
 				if(lookupClient.getValue() == null){
 					pnlState(false, false);
