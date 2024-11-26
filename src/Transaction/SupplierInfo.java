@@ -176,12 +176,12 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 							//DISPLAYS THE DETAILS AFTER CLEARING FOR THE SELECTED ENTITY
 							displayClientInformation(entity_id);
 							
-							try {
-							displayClientImage(lblClientImageFileChooser, entity_id);
-							displayClientSignature(lblClientSignatureFileChooser, entity_id);
-							} catch (IOException e) {
-								e.printStackTrace();	
-							}	
+//							try {
+//							displayClientImage(lblClientImageFileChooser, entity_id);
+//							displayClientSignature(lblClientSignatureFileChooser, entity_id);
+//							} catch (IOException e) {
+//								e.printStackTrace();	
+//							}	XXX
 							
 							setSecondaryTitle(entity_name);
 							startTimerStatus();
@@ -409,7 +409,7 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 				tabCenter.addTab("Supplier Info", pnlSI);
 			}
 			{
-				pnlSuppAddress = new pnlSupplierAddress();
+				pnlSuppAddress = new pnlSupplierAddress(this);
 				tabCenter.addTab("Address", pnlSuppAddress);
 			}			
 			tabCenter.addChangeListener(new ChangeListener() {
@@ -579,10 +579,10 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 				
 			}
 			
-//			if(selectedTab == 1){
-//				pnlSubmittedID.newSubmittedID();
-//				pnlState(false, true);
-//			}
+			if(selectedTab == 1){
+				pnlSuppAddress.newAddress();
+				pnlState(false, true);
+			}
 			
 			lookupClient.setEditable(false);
 			btnState(false, false, false, true, true);
@@ -713,14 +713,14 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 					lblClientImageFileChooser.setClickable(false);
 					lblClientSignatureFileChooser.setClickable(false);
 					
-					try {
-						displayClientImage(lblClientImageFileChooser, lookupClient.getValue());
-						displayClientSignature(lblClientSignatureFileChooser, lookupClient.getValue());
-						} catch (IOException a) {
-							a.printStackTrace();
-						} catch (OutOfMemoryError er){
-							JOptionPane.showMessageDialog(getContentPane(), "Out of memory.", "Loading Image.", JOptionPane.WARNING_MESSAGE);
-						}
+//					try {
+//						displayClientImage(lblClientImageFileChooser, lookupClient.getValue());
+//						displayClientSignature(lblClientSignatureFileChooser, lookupClient.getValue());
+//						} catch (IOException a) {
+//							a.printStackTrace();
+//						} catch (OutOfMemoryError er){
+//							JOptionPane.showMessageDialog(getContentPane(), "Out of memory.", "Loading Image.", JOptionPane.WARNING_MESSAGE);
+//						}
 					//displayClientImage(lblClientImageFileChooser, actionCommand);
 				}
 				

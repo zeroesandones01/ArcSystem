@@ -136,7 +136,8 @@ public class pnlSupplierAddress extends JPanel implements _GUI, ActionListener {
 
 	private SupplierInfo si;
 
-	public pnlSupplierAddress() {
+	public pnlSupplierAddress(SupplierInfo si) {
+		this.si= si;
 		initGUI();
 	}
 

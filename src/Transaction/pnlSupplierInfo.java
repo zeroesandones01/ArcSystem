@@ -269,6 +269,7 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 					scrollEntityTypes.setViewportView(tblEntityTypes);
 					tblEntityTypes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 					tblEntityTypes.setSortable(false);
+					tblEntityTypes.hideColumns("ID", "WTAX ID");
 
 					//Process after row add in tables
 					modelEntityTypes.addTableModelListener(new TableModelListener() {
@@ -335,6 +336,8 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 		txtTelNo.setEditable(true);
 		cmbCorpBusinessClass.setEnabled(true);
 		cmbCorpBusinessNature.setEnabled(true);
+		displaySuppEntityTypes(entity_id);
+		modelEntityTypes.setEditable(true);
 	}
 	
 	public void cancelSuppInfo(String entity_id) {
@@ -363,6 +366,18 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 	}
 	
 	public void displaySuppEntityTypes(String entity_id) {
+		modelEntityTypes.clear();
+		pgSelect db = new pgSelect();
+		String SQL = "select * from view_suppinfo_entity_types('"+entity_id+"');";
+		db.select(SQL);
+		
+		if(db.isNotNull()) {
+			for(int x=0; x<db.getRowCount(); x++) {
+				modelEntityTypes.addRow(db.getResult()[x]);
+			}
+		}
+		scrollEntityTypes.setCorner(ScrollPaneConstants.LOWER_LEFT_CORNER, FncTables.getRowHeader_Footer(Integer.toString(tblEntityTypes.getRowCount())));
+		tblEntityTypes.packAll();
 		
 	}
 
