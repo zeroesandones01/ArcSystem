@@ -31,7 +31,9 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
+import Accounting.FixedAssets.panelAssetInformation2;
 import Database.pgSelect;
 import Functions.FncSystem;
 import Functions.FncTables;
@@ -53,12 +55,12 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 	public static Dimension frameSize = new Dimension(922, 630);
 	public static Border lineBorder = BorderFactory.createLineBorder(Color.GRAY);
 	private JTabbedPane tabAssets;
-	protected static _JLookup lookupselectcompany;
-	protected static JTextField txtcompany;
-	protected static _JLookup lookupCustodianid;
-	protected static JTextField txtCustodianid;
-	protected static JCheckBox chkinactiveemp;
-	protected static JCheckBox chkinactiveassets;
+	public static _JLookup lookupselectcompany;
+	public static JTextField txtcompany;
+	public static _JLookup lookupCustodianid;
+	public static JTextField txtCustodianid;
+	public static JCheckBox chkinactiveemp;
+	public static JCheckBox chkinactiveassets;
 	private JScrollPane scrollAssets;
 	public static modelAssetMonitoring modelAssets;
 	public static _JTableMain tblAssets;
@@ -69,8 +71,8 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 	private JTextField txtmovementno;
 	private _JLookup lookupnewCustodian;
 	private JTextField txtnewCustodian;
-	protected static _JLookup lookupLocation;
-	protected static JTextField txtLocation;
+	public static _JLookup lookupLocation;
+	public static JTextField txtLocation;
 	protected String loc_id;
 	private JTextField jtxtRemarks;
 	private JScrollPane scrollMovement;
@@ -188,8 +190,11 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 									public void lookupPerformed(LookupEvent event) {
 										Object[] data = ((_JLookup) event.getSource()).getDataSet();
 										if (data != null) {
+											String emp_code = (String) data[0];
 											String cust_name = (String) data[1];
 											txtCustodianid.setText(cust_name);
+											
+											displayIndividualAssets(modelAssets, rowheaderAssets,emp_code);
 										}
 									}
 								});
@@ -246,6 +251,7 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 									try {
 										int row = tblAssets.getSelectedRow();
 										String asset_no = (String) modelAssets.getValueAt(row, 1);
+										String rec_id = (String) modelAssets.getValueAt(row, 9);
 										
 										panelAssetInformation2.displayAssetDetail(asset_no);
 										buttontagging(true, true, true);
@@ -535,6 +541,43 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 		btn1.setEnabled(transfer);
 		btnDispose.setEnabled(dispose);
 		btnRetire.setEnabled(retire);
+	}
+	
+	public static void displayIndividualAssets(DefaultTableModel model, JList rowHeader, String emp_code){
+		
+		FncTables.clearTable(model);//Code to clear model.
+		DefaultListModel listModel = new DefaultListModel();//Creating listModel for rowHeader.
+		rowHeader.setModel(listModel);//Setting of listModel into rowHeader.
+		
+		//Individual display of assets
+		String strSQL = "select false, to_char(a.asset_no,'FM00000000'),\n" +
+				"'' as asset_code, \n" + 
+				"a.asset_name, \n" + 
+				"a.date_Acquired,\n" + 
+				"lpad(a.current_cust::text, 6, '0'::text),\n" + 
+				"get_employee_name(a.current_cust::varchar), \n" + 
+				"a.reference_no, \n" + 
+				"format('%s',left(a.status,1)) as status \n"+
+				"from rf_asset a \n" + 
+				"where  a.current_cust='"+emp_code+"'\n" + 
+				"and a.status not in ('I')\n" + 
+				"order by asset_no ";
+		
+		FncSystem.out("displayIndividualAssets", strSQL);	
+		 
+		pgSelect db = new pgSelect();
+		db.select(strSQL);
+
+		if(db.isNotNull()){
+			for(int x=0; x < db.getRowCount(); x++)
+			{
+				//You can only use this kind of adding row in model when you're query and model has the same and exact unmber of columns and column types.
+				model.addRow(db.getResult()[x]);
+				
+				//For every row added in model, the table header will also add the row number.
+				listModel.addElement(model.getRowCount());
+			}
+		}
 	}
 	
 }
