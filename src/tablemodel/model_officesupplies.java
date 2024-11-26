@@ -2,6 +2,7 @@ package tablemodel;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
@@ -44,8 +45,10 @@ public class model_officesupplies extends DefaultTableModel {
 			"Unit",				//4
 			"Remaining",		//5
 			"Quantity",			//6
-			"Purpose"			//7
-			
+			"Purpose",			//7
+			"RELEASED",			//8
+			"DATE RELEASED",	//9	
+			"RELEASED BY"		//10
 			};
 
 	
@@ -63,7 +66,10 @@ public class model_officesupplies extends DefaultTableModel {
 			String.class, 		//Unit
 			Integer.class, 		//Remaining
 			Integer.class,		//Quantity
-			String.class		//Purpose
+			String.class,		//Purpose
+			Integer.class,		//Released
+			Date.class,			//Date Released
+			String.class		//Released by
 	};
 
 	private void initThis() {
@@ -75,7 +81,10 @@ public class model_officesupplies extends DefaultTableModel {
 				false,	//Unit
 				false, 	//Remaining
 				false, 	//Quantity
-				false	//Purpose
+				false,	//Purpose
+				false,	//Released
+				false,	//Date Released
+				false,	//Released by
 		};
 	}
 
@@ -101,7 +110,10 @@ public class model_officesupplies extends DefaultTableModel {
 					false,	//Unit
 					false, 	//Remaining
 					true, 	//Quantity
-					true	//Purpose
+					true,	//Purpose
+					true,	//Released
+					true,	//Date Released
+					true,	//Released by
 			};
 		}else{
 			COLUMN_EDITABLE = new boolean[] {
@@ -111,9 +123,11 @@ public class model_officesupplies extends DefaultTableModel {
 					false,	//Unit
 					false, 	//Remaining
 					false, 	//Quantity
-					false	//Purpose
+					false,	//Purpose
+					false,	//Released
+					false,	//Date Released
+					false,	//Released by
 			};
 		}
 	}
-
 }

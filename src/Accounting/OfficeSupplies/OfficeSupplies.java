@@ -1,4 +1,4 @@
-package src.Accounting.OfficeSupplies;
+package Accounting.OfficeSupplies;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
