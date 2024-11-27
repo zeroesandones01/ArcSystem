@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -18,6 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -35,8 +37,10 @@ import javax.swing.table.DefaultTableModel;
 
 import Accounting.FixedAssets.panelAssetInformation2;
 import Database.pgSelect;
+import Database.pgUpdate;
 import Functions.FncSystem;
 import Functions.FncTables;
+import Functions.UserInfo;
 import Lookup.LookupEvent;
 import Lookup.LookupListener;
 import Lookup._JLookup;
@@ -68,21 +72,22 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 	private panelAssetInformation2 pnlInformation;
 	private JPanel pnlTransfer;
 	private JPanel pnlNorth;
-	private JTextField txtmovementno;
-	private _JLookup lookupnewCustodian;
-	private JTextField txtnewCustodian;
+	public static JTextField txtmovementno;
+	public static _JLookup lookupnewCustodian;
+	public static JTextField txtnewCustodian;
 	public static _JLookup lookupLocation;
 	public static JTextField txtLocation;
-	protected String loc_id;
-	private JTextField jtxtRemarks;
+	protected static String loc_id = null ;
+	public static String div_code = null;
+	public static JTextField jtxtRemarks;
 	private JScrollPane scrollMovement;
 	private JPanel pnlsouthtransfer;
 	private JButton btn1;
 	private JButton btnDispose;
 	private JButton btnRetire;
-	private modelMovement modelmovement;
+	public static modelMovement modelmovement;
 	private _JTableMain tblmovement;
-	private JList rowheaderMovement;
+	public static JList rowheaderMovement;
 	public static String co_id = "01";
 	public static String co_name = "ACERLAND DEVELOPMENT CORPORATION";
 	public static String co_logo = "cenqlogo.png";
@@ -254,6 +259,7 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 										String rec_id = (String) modelAssets.getValueAt(row, 9);
 										
 										panelAssetInformation2.displayAssetDetail(asset_no);
+										displayMovementHistory(modelmovement,rowheaderMovement, asset_no);
 										buttontagging(true, true, true);
 										
 
@@ -340,6 +346,7 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 										if (setCustodian != null) {
 											String emp_code = (String) setCustodian[0];
 											String emp_name = (String) setCustodian[1];
+											div_code = (String) setCustodian[2];
 											lookupnewCustodian.setValue(emp_code);
 											txtnewCustodian.setText(emp_name);
 											txtmovementno.setText(getMoveNo());
@@ -451,6 +458,7 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 							pnlsouthtransfer.add(pnlbuttons);
 							{
 								btn1 = new JButton("Transfer asset");
+								btn1.setActionCommand("transfer");
 								pnlbuttons.add(btn1, BorderLayout.WEST);
 								btn1.setEnabled(false);
 								btn1.addActionListener(this);
@@ -458,12 +466,14 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 							{
 								btnDispose = new JButton("Dispose");
 								pnlbuttons.add(btnDispose);
+								btnDispose.setActionCommand("dispose");
 								btnDispose.setEnabled(false);
 								btnDispose.addActionListener(this);
 							}
 							{
 								btnRetire = new JButton("Retire");
 								pnlbuttons.add(btnRetire);
+								btnRetire.setActionCommand("retire");
 								btnRetire.setEnabled(false);
 								btnRetire.addActionListener(this);
 							}
@@ -485,6 +495,129 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 				}
 			});
 		}
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		if(e.getActionCommand().equals("transfer")) {
+			
+			int move_no = Integer.valueOf(txtmovementno.getText());
+			if (tblAssets.getSelectedRows().length > 0) {
+				if (hasCheckedAssets()) {
+					int toSave = JOptionPane.showConfirmDialog(getTopLevelAncestor(),"Are all entries correct?", btn1.getText(),JOptionPane.YES_NO_OPTION);
+					if (toSave == JOptionPane.YES_OPTION) {
+						int row = tblAssets.getSelectedRow();
+						String custodian_id = modelAssets.getValueAt(row, 5).toString();
+						System.out.println("move_no: "+move_no);
+						transferAsset(move_no, custodian_id, lookupnewCustodian.getValue(),jtxtRemarks.getText(), txtnewCustodian.getText(),div_code);
+						panelAssetInformation2.resetInformation();
+						JOptionPane.showMessageDialog(getTopLevelAncestor(),"Asset is already transferred.", "Transfer",JOptionPane.INFORMATION_MESSAGE);
+						
+						System.out.println("Transfer asssssettt");
+					}
+					
+				}else {
+					JOptionPane.showMessageDialog(getTopLevelAncestor(),
+							"Please fill up the required fields", btn1.getText(),
+							JOptionPane.WARNING_MESSAGE);
+				}
+			}else {
+				JOptionPane.showMessageDialog(getTopLevelAncestor(),
+						"Please select asset to transfer", "Transfer",
+						JOptionPane.WARNING_MESSAGE);
+			}
+			
+		}
+		
+		if(e.getActionCommand().equals("dispose")) {
+			
+		}
+		
+		if(e.getActionCommand().equals("retire")) {
+			
+		}
+	}
+	
+	public static void transferAsset(Integer move_no, String prev_cust, String current_cust, String remarks,
+			String new_cust_name, String dept_code) {
+		pgUpdate db = new pgUpdate();
+		ArrayList<String> listAsset_no = new ArrayList<String>();
+		ArrayList<Boolean> isSaved = new ArrayList<Boolean>();
+		for (int x = 0; x < modelAssets.getRowCount(); x++) {
+
+			Boolean selected = (Boolean) modelAssets.getValueAt(x, 0);
+
+			if (selected) {
+				String asset_no = ((String) modelAssets.getValueAt(x, 1)).trim();
+				String custodian_id = (String) modelAssets.getValueAt(x, 5).toString();
+				String strSQL = null;
+				if (loc_id == null) {
+					strSQL = "INSERT INTO rf_asset_history( \n" + "prev_cust, " + "current_cust, "
+							+ "trans_date, " + "reason, " + "remarks, \n" + "status, " + "move_no, " + "asset_no, "
+							+ "trans_by,\n" +
+							"div_code) \n" + "VALUES ( " + 
+							"'" + custodian_id + "', \n" + // prev_cust
+							"'" + current_cust + "', \n" + // current_cust
+							"current_date, \n" + // trans_date
+							"'TRANSFER', \n" + // reason
+							"'" + remarks + "', \n" + // remarks
+							"'A', \n" + // status
+							"'"+move_no+"', \n" + // move_no
+							"'" + asset_no + "', \n" + // asset_no
+							"'" + UserInfo.EmployeeCode + "',\n" +
+							"'" + dept_code + "') \n";// trans_by
+				} else {
+					strSQL = "INSERT INTO rf_asset_history( \n" + "prev_cust, " + "current_cust, "
+							+ "trans_date, " + "reason, " + "remarks, \n" + "status, " + "move_no, " + "asset_no, "
+							+ "trans_by,\n" +
+							"old_location,\n" + "div_code) \n" + "VALUES ("+
+							"'" + custodian_id + "', \n" + // prev_cust
+							"'" + current_cust + "', \n" + // current_cust
+							"current_date, \n" + // trans_date
+							"'TRANSFER', \n" + // reason
+							"'" + remarks + "', \n" + // remarks
+							"'A', \n" + // status
+							"'"+move_no+"', \n" + // move_no
+							"'" + asset_no + "', \n" + // asset_no
+							"'" + UserInfo.EmployeeCode + "',\n" +
+							"(select loc_id from rf_asset where asset_no='" + asset_no + "' ),\n" + "'" + dept_code
+							+ "') \n";// trans_by
+				}
+				System.out.println("move_no" + move_no);
+				System.out.println("prev_cust" + prev_cust);
+				System.out.println("current_cust" + current_cust);
+				System.out.println("remarks" + remarks);
+				System.out.println("new_cust_name" + new_cust_name);
+				System.out.println("dept_code " + dept_code);
+				System.out.println();
+				db.executeUpdate(strSQL, true);
+				String strSQL2 = null;
+				if (loc_id == null) {
+					strSQL2 = "update rf_asset set current_cust='" + current_cust
+							+ "',status='A',item_found='t'  where asset_no='" + asset_no + "'::int";
+				} else {
+					strSQL2 = "update rf_asset set current_cust='" + current_cust
+							+ "',status='A',item_found='t',loc_id='" + loc_id + "'  where asset_no='" + asset_no
+							+ "'::int";
+				}
+				db.executeUpdate(strSQL2, false);
+				listAsset_no.add(asset_no);
+				isSaved.add(true);
+				FncSystem.out("transfer asset", strSQL);
+				FncSystem.out("transfer asset", strSQL2);
+
+			}
+		}
+		db.commit();
+	}
+	
+	protected Boolean hasCheckedAssets() {
+		ArrayList<Boolean> checkTable = new ArrayList<Boolean>();
+		for (int x = 0; x < tblAssets.getRowCount(); x++) {
+			if (tblAssets.getValueAt(x, 0).equals(true))
+				checkTable.add(true);
+		}
+		return checkTable.contains(true);
+
 	}
 	
 	protected void clearcheckbox() {
@@ -574,6 +707,46 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 				//You can only use this kind of adding row in model when you're query and model has the same and exact unmber of columns and column types.
 				model.addRow(db.getResult()[x]);
 				
+				//For every row added in model, the table header will also add the row number.
+				listModel.addElement(model.getRowCount());
+			}
+		}
+	}
+	
+public static void displayMovementHistory(DefaultTableModel model, JList rowHeader , String asset_no){
+		
+		FncTables.clearTable(model);//Code to clear model.
+		DefaultListModel listModel = new DefaultListModel();//Creating listModel for rowHeader.
+		rowHeader.setModel(listModel);//Setting of listModel into rowHeader.
+		
+		String strSQL ="\n" + 
+				"select  a.move_no,\n" + 
+				"format('%s, %s %s.', c.last_name, c.first_name, left(c.middle_name, 1)),\n" + 
+				"format('%s, %s %s.', d.last_name, d.first_name, left(d.middle_name, 1)),\n" + 
+				"a.trans_date,\n" + 
+				"a.reason,\n" + 
+				"a.remarks,\n" + 
+				"coalesce((select loc_name from rf_asset_location where loc_id = a.old_location), 'NOT CHANGED') \n"+
+				"from rf_asset_history a  \n" + 
+				"left join rf_employee b on a.prev_cust=b.emp_code::int\n" + 
+				"left join rf_employee e on a.current_cust=e.emp_code::int\n" + 
+				"--left join tbl_asset_history  on b.emp_code=a.current_cust::varchar\n" + 
+				"left join rf_entity c on b.entity_id=c.entity_id\n" + 
+				"left join rf_entity d on e.entity_id=d.entity_id \n" + 
+				"where a.asset_no="+asset_no+"\n" + 
+				"order by a.move_no desc, a.trans_date desc ";
+		
+		pgSelect db= new pgSelect(); 
+		db.select(strSQL);
+		
+		FncSystem.out("displayMovementHistory", strSQL);
+		
+		if(db.isNotNull()){
+			for(int x=0; x < db.getRowCount(); x++){
+
+				//You can only use this kind of adding row in model when you're query and model has the same and exact unmber of columns and column types.
+				model.addRow(db.getResult()[x]);
+
 				//For every row added in model, the table header will also add the row number.
 				listModel.addElement(model.getRowCount());
 			}

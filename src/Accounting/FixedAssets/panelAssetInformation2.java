@@ -396,7 +396,6 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 							lookupCustodian = new _JLookup(null , "Custodian", 0);
 							jPanel3.add(lookupCustodian);
 							lookupCustodian.setEditable(false);
-							//lookupCustodian.setLookupSQL("select '900767', 'BITUEN, JOHN ERICK RESPICIO'");
 							lookupCustodian.setLookupSQL(getCustodian());
 							lookupCustodian.addLookupListener(new LookupListener() {
 								@Override
@@ -405,7 +404,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 									if(db != null) {
 										String emp_code= (String) db[0];
 										String emp_name= (String) db[1];
-										
+										dept_code = (String) db[2];
 										lookupCustodian.setValue(emp_code);
 										txtCustodian.setText(emp_name);
 										lookupCategory.requestFocus();
@@ -473,7 +472,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 							lookupItem.setReturnColumn(0);
 							lookupItem.setEnabled(false);
 							//lookupItem.setLookupSQL(_AssetMonitoring.getItem(lookupCategory.getValue()));
-							lookupItem.setLookupSQL("select '01', 'Car'");
+							lookupItem.setLookupSQL("select '01', 'Car' union all select '02', 'Computer set' ");
 							lookupItem.addLookupListener(new LookupListener() {
 								public void lookupPerformed(LookupEvent event) {
 									Object[] data = ((_JLookup) event.getSource()).getDataSet();
@@ -1158,7 +1157,13 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 					String Item = txtItem.getText();
 					Item=Item.replaceAll(",", "");
 					
+					boolean w_peripheral = false;
+					
+					
 					if(grpNE.isSelected(btnNew.getModel())) {
+						if ( txtItem.getText().equals("Computer set")) {
+							w_peripheral = true;
+						}
 						
 						System.out.println("btnNew is selected");
 						addAsset(
@@ -1188,7 +1193,8 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 								txtBrand.getText(),						//brand
 								txtDescription.getText(),				//description
 								dept_code,								//dept_code
-								location_id								//location_id
+								location_id,								//location_id
+								w_peripheral
 						);
 						JOptionPane.showMessageDialog(getTopLevelAncestor(), "New Asset has been Added", "Save", JOptionPane.INFORMATION_MESSAGE);
 						resetInformation();
@@ -1331,7 +1337,8 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 			String brand,
 			String description,
 			String dept_code,
-			String location_id
+			String location_id,
+			boolean with_peripheral
 			){
 		pgUpdate db=new pgUpdate();
 		
@@ -1375,6 +1382,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 							"loc_id,\n"+
 							//"replaced_assetno,\n"+
 							"date_disposed,\n"+
+							"with_peripheral,\n"+
 							"rec_status \n"+
 							")\n"+
 							"VALUES (\n" +
@@ -1414,7 +1422,8 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 							"'"+dept_code+"', \n"+ 								//dept_code
 							"'"+location_id+"',\n"+								//location id of the asset
 							"null, \n"+								//asset number replace by the new item
-							"true)";
+							""+with_peripheral+", \n"+		
+							"'A')";
 			
 			db.executeUpdate(strSQL, true);
 			db.commit();
@@ -1493,7 +1502,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 	
 	public static String getCustodian(){
 		
-		String strsql="select  a.emp_code, b.entity_name\n"
+		String strsql="select  a.emp_code, b.entity_name, c.div_code, c.div_name \n"
 				+ "from  rf_employee a\n"
 				+ "left join rf_entity b ON a.entity_id=b.entity_id\n"
 				+ "left join mf_division as c on a.div_code=c.div_code\n"
@@ -1657,13 +1666,18 @@ public static void resetInformation(){
 				AssetMonitoring2.chkinactiveassets.setSelected(false);
 				AssetMonitoring2.chkinactiveemp.setSelected(false);
 				AssetMonitoring2.modelAssets.clear();
+				AssetMonitoring2.modelmovement.clear();
 				AssetMonitoring2.displayAllAssets(false,false);
 				AssetMonitoring2.tblAssets.setEnabled(true);
 				AssetMonitoring2.lookupCustodianid.setValue("");
 				AssetMonitoring2.txtCustodianid.setText("");
 				AssetMonitoring2.lookupLocation.setValue("");
 				AssetMonitoring2.txtLocation.setText("");
-				//txtAssetNo.setText("");
+				AssetMonitoring2.jtxtRemarks.setText("");
+				AssetMonitoring2.lookupnewCustodian.setText("");
+				AssetMonitoring2.txtnewCustodian.setText("");
+				AssetMonitoring2.txtmovementno.setText("");
+				
 				dateAcquired.getCalendarButton().setEnabled(false);
 				
 				lookupCompany.setEditable(false);
