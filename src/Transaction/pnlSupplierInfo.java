@@ -29,6 +29,7 @@ import org.jdesktop.swingx.JXPanel;
 import Database.pgSelect;
 import Functions.FncSystem;
 import Functions.FncTables;
+import Functions.UserInfo;
 import components.JTBorderFactory;
 import components._JTableMain;
 import components._JXTextField;
@@ -90,6 +91,7 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 	private _JXTextField txtEmail;
 	private _JXTextField txtCorpFacebookAcct;
 	private JButton btnAddCorpContactInfo;
+	private String entity_id;
 
 	public pnlSupplierInfo() {
 		initGUI();
@@ -212,15 +214,15 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 										if(entity_kind.equals("Individual")) {
 											splitRegisteredName.getLeftComponent().setVisible(false);
 											splitRegisteredName.getRightComponent().setVisible(true);
-											txtAuthorizedPerson.setEditable(false);
-											txtPosition.setEditable(false);
+//											txtAuthorizedPerson.setEditable(false);
+//											txtPosition.setEditable(false);
 										}
 										
 										if(entity_kind.equals("Corporation")) {
 											splitRegisteredName.getLeftComponent().setVisible(true);
 											splitRegisteredName.getRightComponent().setVisible(false);
-											txtAuthorizedPerson.setEditable(true);
-											txtPosition.setEditable(true);
+//											txtAuthorizedPerson.setEditable(true);
+//											txtPosition.setEditable(true);
 										}
 										
 									}
@@ -340,6 +342,7 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 				}
 			}
 		}
+		displaySuppEntityTypes("");
 	}//XXX END OF INIT GUI
 
 	private Object[] getBusinessNature() {//ARRAYLIST FOR THE BUSINESS NATURE
@@ -372,7 +375,10 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 		return civilstatus.toArray();
 	}
 	
+	
+	
 	public void newSupplier(String entity_id) {
+		cancelSuppInfo(entity_id);
 		txtCorpName.setEditable(true);
 		txtFName.setEditable(true);
 		txtMName.setEditable(true);
@@ -388,6 +394,24 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 		cmbCorpBusinessClass.setEnabled(true);
 		cmbCorpBusinessNature.setEnabled(true);
 		displaySuppEntityTypes(entity_id);
+		modelEntityTypes.setEditable(true);
+	}
+	
+	public void editSupplierInfo() {
+		txtCorpName.setEditable(true);
+		txtFName.setEditable(true);
+		txtMName.setEditable(true);
+		txtLName.setEditable(true);
+		txtCorpAlias.setEditable(true);
+		cmbEntityKind.setEnabled(true);
+		txtAuthorizedPerson.setEditable(true);
+		txtPosition.setEditable(true);
+		txtTIN_No.setEditable(true);
+		chkCorpVAT.setEnabled(true);
+		txtEmail.setEditable(true);
+		txtTelNo.setEditable(true);
+		cmbCorpBusinessClass.setEnabled(true);
+		cmbCorpBusinessNature.setEnabled(true);
 		modelEntityTypes.setEditable(true);
 	}
 	
@@ -421,6 +445,7 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 		cmbCorpBusinessNature.setEnabled(false);
 		modelEntityTypes.clear();
 		scrollEntityTypes.setCorner(ScrollPaneConstants.LOWER_LEFT_CORNER, FncTables.getRowHeader_Footer(""));
+		modelEntityTypes.setEditable(false);
 	}
 	
 	public void displaySuppEntityTypes(String entity_id) {
@@ -510,6 +535,115 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 			listSelected.add((Boolean) modelEntityTypes.getValueAt(x, 0));
 		}
 		return listSelected.contains(true);
+	}
+	
+	public void saveSupplierInfo(String entity_id) {
+		String entity_kind = (cmbEntityKind.getSelectedIndex() == 0 ? "I":"C");
+		String entity_name = (cmbEntityKind.getSelectedIndex() == 0 ? String.format("%s, %s %s", txtLName.getText().replace("'", "''"), txtFName.getText().replace("'", "''"), txtMName.getText().replace("'", "''")).toUpperCase().trim():txtCorpName.getText().toUpperCase().trim().replace("'", "''"));
+		String fname = txtFName.getText().toUpperCase().trim().replace("'", "''");
+		String mname = txtMName.getText().toUpperCase().trim().replace("'", "''");
+		String lname = txtLName.getText().toUpperCase().trim().replace("'", "''");
+		String trade_name = txtCorpAlias.getText().toUpperCase().trim();
+		String authorized_person = txtAuthorizedPerson.getText().toUpperCase().trim();
+		String position = txtPosition.getText().toUpperCase().trim();
+		String tin = txtTIN_No.getText().trim();
+		Boolean vat_registered = chkCorpVAT.isSelected();
+		String business_nature = ((String) cmbCorpBusinessNature.getSelectedItem()).split("-")[1].trim();
+		String business_class = ((String) cmbCorpBusinessClass.getSelectedItem()).split("-")[1].trim();
+		String telephone = txtTelNo.getText().trim();
+		String email = txtEmail.getText().trim();
+		
+		
+		pgSelect db = new pgSelect();
+		String SQL = "SELECT sp_save_supplier_info('"+entity_id+"', '"+entity_kind+"', '"+entity_name+"', '"+fname+"', '"+mname+"', '"+lname+"', '"+trade_name+"', '"+authorized_person+"', "
+				+ "'"+position+"', '"+tin+"', "+vat_registered+", '"+business_nature+"', '"+business_class+"', '"+telephone+"', '"+email+"', '"+UserInfo.EmployeeCode+"');";
+		db.select(SQL);
+	}
+	
+	public boolean saveEntityTypes(String entity_id) {
+		Boolean saved = false;
+		
+			ArrayList<Boolean> isTagged = new ArrayList<Boolean>();
+			
+			for(int x=0; x<modelEntityTypes.getRowCount(); x++){
+				Boolean isSelected = (Boolean) modelEntityTypes.getValueAt(x, 0);
+				if(isSelected){
+					isTagged.add(isSelected);
+				}
+			}
+			
+			if(isTagged.contains(true)){
+				for(int x=0; x < modelEntityTypes.getRowCount(); x++){
+					Boolean selected = (Boolean) modelEntityTypes.getValueAt(x, 0);
+					String entity_type_id = (String) modelEntityTypes.getValueAt(x, 1);
+
+					String SQL = "SELECT sp_update_entity_types('"+ entity_id +"', '"+ entity_type_id +"', "+ selected +", '"+ UserInfo.EmployeeCode +"');";
+
+					pgSelect db = new pgSelect();
+					db.select(SQL);
+					
+					FncSystem.out("Display ", SQL);
+					saved = true;
+				}
+			}else{
+				JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Please select entity type", "Save", JOptionPane.WARNING_MESSAGE);
+				saved = false;
+			}
+		
+		return saved;
+	}
+	
+	public void displayDetails(String entity_id) {
+		this.entity_id = entity_id;
+		
+		displaySupplierInfo(entity_id);
+		displaySuppEntityTypes(entity_id);
+		scrollEntityTypes.setCorner(ScrollPaneConstants.LOWER_LEFT_CORNER, FncTables.getRowHeader_Footer(Integer.toString(tblEntityTypes.getRowCount())));
+		tblEntityTypes.packAll();
+		
+		
+	}
+	
+	public void displaySupplierInfo(String entity_id) {
+		pgSelect db = new pgSelect();
+		String SQL = "select * from view_supplier_info('"+entity_id+"');";
+		db.select(SQL);
+		
+		if(db.isNotNull()) {
+			String entity_name = (String) db.getResult()[0][0];
+			String first_name= (String) db.getResult()[0][1];
+			String middle_name = (String) db.getResult()[0][2];
+			String last_name = (String) db.getResult()[0][3];
+			String trade_name = (String) db.getResult()[0][4];
+			String entity_kind = (String) db.getResult()[0][5];
+			String authorized_person = (String) db.getResult()[0][6];
+			String position = (String) db.getResult()[0][7];
+			String tin = (String) db.getResult()[0][8];
+			Boolean vat_registered = (Boolean) db.getResult()[0][9];
+			String business_nature = (String) db.getResult()[0][10];
+			String business_class = (String) db.getResult()[0][11];
+			String tel_no = (String) db.getResult()[0][12];
+			String email = (String) db.getResult()[0][13];
+			
+			if(entity_kind.equals("I")) {
+				cmbEntityKind.setSelectedIndex(0);
+			}else {
+				cmbEntityKind.setSelectedIndex(1);
+			}
+			txtCorpName.setText(entity_name);
+			txtFName.setText(first_name);
+			txtMName.setText(middle_name);
+			txtLName.setText(last_name);
+			txtCorpAlias.setText(trade_name);
+			txtAuthorizedPerson.setText(authorized_person);
+			txtPosition.setText(position);
+			txtTIN_No.setText(tin);
+			cmbCorpBusinessNature.setSelectedItem(business_nature);
+			cmbCorpBusinessClass.setSelectedItem(business_class);
+			txtTelNo.setText(tel_no);
+			txtEmail.setText(email);
+		}
+		
 	}
 
 	@Override

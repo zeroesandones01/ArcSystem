@@ -174,7 +174,7 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 							//pnlRefOther.cl
 
 							//DISPLAYS THE DETAILS AFTER CLEARING FOR THE SELECTED ENTITY
-							displayClientInformation(entity_id);
+							displaySupplierInformation(entity_id);
 							
 //							try {
 //							displayClientImage(lblClientImageFileChooser, entity_id);
@@ -511,8 +511,8 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 	}
 
 	//DIPLAYS THE DETAILS IN CLIENT INFORMATION BASED ON THE SELECTED TAB
-	public static void displayClientInformation(String entity_id) {
-		//pnlSI.displayDetails(entity_id);
+	public static void displaySupplierInformation(String entity_id) {
+		pnlSI.displayDetails(entity_id);
 	}
 	
 //
@@ -574,7 +574,7 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 				SupplierInfo.this.setTitle(title);
 				pnlSI.newSupplier(lookupClient.getValue());
 				
-				displayClientInformation(lookupClient.getValue());
+				displaySupplierInformation(lookupClient.getValue());
 				pnlState(true, false);
 				
 			}
@@ -597,6 +597,7 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 					grpNewEdit.setSelectedButton(e);
 					lookupClient.setEditable(false);
 					btnState(false, false, false, true, true);
+					pnlSI.editSupplierInfo();
 					//System.out.println("Dumaan dito sa edit ng Client Info");
 			}
 			
@@ -633,15 +634,19 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 					if (JOptionPane.showConfirmDialog(this.getTopLevelAncestor(), "Are all entries correct?", actionCommand, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
 
 							//pnlCI.saveEntityTypes(lookupClient.getValue());
-							saveImage(lblClientImageFileChooser.getImageByte(), lblClientSignatureFileChooser.getImageByte() ,lookupClient.getValue());
-							lblClientImageFileChooser.setClickable(false);
-							lblClientSignatureFileChooser.setClickable(false);
-							JOptionPane.showMessageDialog(this.getTopLevelAncestor(), "Client Information has been Saved", actionCommand, JOptionPane.INFORMATION_MESSAGE);
-							displayClientInformation(lookupClient.getValue());
+							pnlSI.saveSupplierInfo(lookupClient.getValue());
+							pnlSI.saveEntityTypes(lookupClient.getValue());
+//							saveImage(lblClientImageFileChooser.getImageByte(), lblClientSignatureFileChooser.getImageByte() ,lookupClient.getValue());
+//							lblClientImageFileChooser.setClickable(false);
+//							lblClientSignatureFileChooser.setClickable(false);
+							JOptionPane.showMessageDialog(SupplierInfo.this.getTopLevelAncestor(), "Supplier Information has been Saved", actionCommand, JOptionPane.INFORMATION_MESSAGE);
+							
 							btnState(true, true, false, false, false);
 							pnlState(true, true);
 							
 							lookupClient.setEditable(true);
+							pnlSI.cancelSuppInfo(lookupClient.getValue());
+							displaySupplierInformation(lookupClient.getValue());
 					}
 				}
 			}
@@ -666,6 +671,7 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 					lblClientImageFileChooser.setClickable(false);
 					lblClientSignatureFileChooser.setClickable(false);
 					pnlSI.cancelSuppInfo(lookupClient.getValue());
+					pnlSI.displayDetails(lookupClient.getValue());
 //					try {
 //						displayClientImage(lblClientImageFileChooser, lookupClient.getValue());
 //						displayClientSignature(lblClientSignatureFileChooser, lookupClient.getValue());
@@ -694,7 +700,7 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 	
 	public void displayClientInfo(String _entity_id, String entity_name) { //CHARD
 		
-		displayClientInformation(_entity_id);
+		displaySupplierInformation(_entity_id);
 
 		lookupClient.setValue(_entity_id);
 		
