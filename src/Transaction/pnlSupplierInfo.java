@@ -15,6 +15,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -39,7 +40,7 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 	private static final long serialVersionUID = 4256723533785577913L;
 	private JPanel pnlCorporation;
 	private JPanel pnlCorpMainInfo;
-	private JSplitPane splitCorpInfo;
+	private JSplitPane splitRegisteredName;
 	private JPanel pnlCorpInfoLeft;
 
 	private JPanel pnlCorpInfoLabel;
@@ -65,6 +66,9 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 	private _JXTextField txtAuthorizedPerson;
 	private _JXTextField txtCorpAlias;
 	private _JXTextField txtCorpName;
+	private _JXTextField txtFName;
+	private _JXTextField txtMName;
+	private _JXTextField txtLName;
 	private _JXTextField txtTIN_No;
 	private JCheckBox chkCorpVAT;
 	private JComboBox cmbCorpBusinessNature;
@@ -152,9 +156,32 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 				{
 					pnlCorpInfoComponents = new JPanel(new GridLayout(7, 1, 5, 5));
 					pnlCorpInfoLeft.add(pnlCorpInfoComponents, BorderLayout.CENTER);
+					
 					{
-						txtCorpName = new _JXTextField("Registered Name");
-						pnlCorpInfoComponents.add(txtCorpName);
+						splitRegisteredName = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+						pnlCorpInfoComponents.add(splitRegisteredName, BorderLayout.CENTER);
+						splitRegisteredName.setOneTouchExpandable(false);
+						splitRegisteredName.setDividerLocation(0);
+						{
+							txtCorpName = new _JXTextField("Registered Name");
+							splitRegisteredName.add(txtCorpName, JSplitPane.LEFT);
+						}
+						{
+							JPanel pnlFullName = new JPanel(new GridLayout(1, 3, 3, 3));
+							splitRegisteredName.add(pnlFullName, JSplitPane.RIGHT);
+							{
+								txtFName = new _JXTextField("First Name");
+								pnlFullName.add(txtFName);
+							}
+							{
+								txtMName = new _JXTextField("MIddle Name");
+								pnlFullName.add(txtMName);
+							}
+							{
+								txtLName = new _JXTextField("Last Name");
+								pnlFullName.add(txtLName);
+							}
+						}
 					}
 					{
 						JPanel pnlCorpAlias = new JPanel(new BorderLayout(3, 3));
@@ -162,7 +189,7 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 						{
 							txtCorpAlias = new _JXTextField("Trade Name");
 							pnlCorpAlias.add(txtCorpAlias, BorderLayout.WEST);
-							txtCorpAlias.setPreferredSize(new Dimension(225, 0));
+							txtCorpAlias.setPreferredSize(new Dimension(380, 0));
 						}
 						{
 							JPanel pnlEntityKind = new JPanel(new BorderLayout(3, 3));
@@ -172,11 +199,32 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 								pnlEntityKind.add(lblEntityKind);
 							}
 							{
-								cmbEntityKind = new JComboBox(new String[] { "Corporation", "Individual" });
+								cmbEntityKind = new JComboBox(new String[] { "Individual", "Corporation"});
 								pnlEntityKind.add(cmbEntityKind, BorderLayout.EAST);
 								cmbEntityKind.setEnabled(false);
-								cmbEntityKind.setSelectedItem(null);
 								cmbEntityKind.setPreferredSize(new Dimension(200, 0));
+								cmbEntityKind.addActionListener(new ActionListener() {
+									
+									@Override
+									public void actionPerformed(ActionEvent e) {
+										String entity_kind = (String) ((JComboBox)e.getSource()).getSelectedItem();
+										
+										if(entity_kind.equals("Individual")) {
+											splitRegisteredName.getLeftComponent().setVisible(false);
+											splitRegisteredName.getRightComponent().setVisible(true);
+											txtAuthorizedPerson.setEditable(false);
+											txtPosition.setEditable(false);
+										}
+										
+										if(entity_kind.equals("Corporation")) {
+											splitRegisteredName.getLeftComponent().setVisible(true);
+											splitRegisteredName.getRightComponent().setVisible(false);
+											txtAuthorizedPerson.setEditable(true);
+											txtPosition.setEditable(true);
+										}
+										
+									}
+								});
 							}
 						}
 					}
@@ -326,6 +374,9 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 	
 	public void newSupplier(String entity_id) {
 		txtCorpName.setEditable(true);
+		txtFName.setEditable(true);
+		txtMName.setEditable(true);
+		txtLName.setEditable(true);
 		txtCorpAlias.setEditable(true);
 		cmbEntityKind.setEnabled(true);
 		txtAuthorizedPerson.setEditable(true);
@@ -344,10 +395,16 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 		
 		txtCorpName.setEditable(false);
 		txtCorpName.setText("");
+		txtFName.setEditable(false);
+		txtFName.setText("");
+		txtMName.setEditable(false);
+		txtMName.setText("");
+		txtLName.setEditable(false);
+		txtLName.setText("");
 		txtCorpAlias.setEditable(false);
 		txtCorpAlias.setText("");
 		cmbEntityKind.setEnabled(false);
-		cmbEntityKind.setSelectedItem(null);
+		cmbEntityKind.setSelectedIndex(0);
 		txtAuthorizedPerson.setEditable(false);
 		txtAuthorizedPerson.setText("");
 		txtPosition.setEditable(false);
@@ -362,7 +419,8 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 		txtTelNo.setText("");
 		cmbCorpBusinessClass.setEnabled(false);
 		cmbCorpBusinessNature.setEnabled(false);
-		
+		modelEntityTypes.clear();
+		scrollEntityTypes.setCorner(ScrollPaneConstants.LOWER_LEFT_CORNER, FncTables.getRowHeader_Footer(""));
 	}
 	
 	public void displaySuppEntityTypes(String entity_id) {
@@ -379,6 +437,79 @@ public class pnlSupplierInfo extends JXPanel implements ActionListener {
 		scrollEntityTypes.setCorner(ScrollPaneConstants.LOWER_LEFT_CORNER, FncTables.getRowHeader_Footer(Integer.toString(tblEntityTypes.getRowCount())));
 		tblEntityTypes.packAll();
 		
+	}
+	
+	//CHECKING OF REQUIRED FIELDS BEFORE SAVING
+	public boolean isRequiredComplete() {
+		String required_fields = "";
+		Boolean toSave = true;
+		
+		//INDIVIDUAL REQUIRED FIELDS
+		if(cmbEntityKind.getSelectedIndex() == 0) {
+			if(txtFName.getText().equals("")){
+				required_fields = required_fields + "• First Name\n";
+				toSave = false;
+			}
+			if(txtLName.getText().equals("")){
+				required_fields = required_fields + "• Last Name\n";
+				toSave = false;
+			}
+		}
+		
+		//CORPORATION REQUIRED FIELDS
+		if(cmbEntityKind.getSelectedIndex() == 1) {
+			if(txtCorpName.getText().equals("")){
+				required_fields = required_fields + "• Registered Name\n";
+				toSave = false;
+			}
+			if(txtAuthorizedPerson.getText().equals("")){
+				required_fields = required_fields + "• Authorized Person\n";
+				toSave = false;
+			}
+			if(txtPosition.getText().equals("")){
+				required_fields = required_fields + "• Position\n";
+				toSave = false;
+			}
+			
+		}
+		
+		if(txtCorpAlias.getText().equals("")) {
+			required_fields = required_fields + "• Trade Name\n";
+			toSave = false;
+		}
+		
+		if(txtTIN_No.getText().equals("")) {
+			required_fields = required_fields + "• TIN\n";
+			toSave = false;
+		}
+		if(txtTelNo.getText().equals("")) {
+			required_fields = required_fields + "• Tel. No\n";
+			toSave = false;
+		}
+		if(txtEmail.getText().equals("")) {
+			required_fields = required_fields + "• Email\n";
+			toSave = false;
+		}
+		
+		if(hasSelected() == false) {
+			required_fields = required_fields + "• Entity Types\n";
+			toSave = false;
+		}
+		
+		if(toSave == false){
+			JOptionPane.showMessageDialog(null, "Please fill up all required fields:\n"+required_fields,"Save",JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private Boolean hasSelected() {
+		ArrayList<Boolean> listSelected = new ArrayList<Boolean>();
+		for (int x = 0; x < modelEntityTypes.getRowCount(); x++) {
+			listSelected.add((Boolean) modelEntityTypes.getValueAt(x, 0));
+		}
+		return listSelected.contains(true);
 	}
 
 	@Override

@@ -607,53 +607,6 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 				lookupClient.setEditable(false);
 			}
 //			
-//			if(selectedTab == 2){
-//				pnlADDRESS.editAddress();
-//				pnlState(false, false, true, false, false, false, false, false);
-//				btnState(false, false, false, true, true);
-//				grpNewEdit.setSelectedButton(e);
-//				lookupClient.setEditable(false);
-//			}
-//			
-//			if(selectedTab == 3){
-//				pnlConnect.editConnection();
-//				pnlState(false, false, false, true, false, false, false, false);
-//				btnState(false, false, false, true, true);
-//				grpNewEdit.setSelectedButton(e);
-//				lookupClient.setEditable(false);
-//			}
-//			
-//			if(selectedTab == 4){
-//				pnlDepend.editDependet();
-//				pnlState(false, false, false, false, true, false, false, false);
-//				btnState(false, false, false, true, true);
-//				grpNewEdit.setSelectedButton(e);
-//				lookupClient.setEditable(false);
-//			}
-//			
-//			if(selectedTab == 5){
-//				pnlWorkExp.editWorkExp();
-//				pnlState(false, false, false, false, false, false, false, true);
-//				btnState(false, false, false, true, true);
-//				grpNewEdit.setSelectedButton(e);
-//				lookupClient.setEditable(false);
-//			}
-//			
-//			if (selectedTab == 6){
-//				pnlFinanceInfo.editFinancialInfo();
-//				pnlState(false, false, false, false, false, true, false, false);
-//				btnState(false, false, false, true, true);
-//				grpNewEdit.setSelectedButton(e);
-//				lookupClient.setEditable(false);
-//			}
-//			
-//			if(selectedTab == 7){
-//				pnlRefOther.edit(lookupClient.getValue());
-//				pnlState(false, false, false, false, false, false, true, false);
-//				btnState(false, false, false, true, true);
-//				grpNewEdit.setSelectedButton(e);
-//				lookupClient.setEditable(false);
-//			}
 			
 		}
 		
@@ -676,9 +629,9 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 		
 		if(actionCommand.equals("Save")){//SAVING FOR THE CLIENT INFORMATION
 			if (tabCenter.getSelectedIndex() == 0){
+				if(pnlSI.isRequiredComplete()) {
 					if (JOptionPane.showConfirmDialog(this.getTopLevelAncestor(), "Are all entries correct?", actionCommand, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
 
-							
 							//pnlCI.saveEntityTypes(lookupClient.getValue());
 							saveImage(lblClientImageFileChooser.getImageByte(), lblClientSignatureFileChooser.getImageByte() ,lookupClient.getValue());
 							lblClientImageFileChooser.setClickable(false);
@@ -690,7 +643,7 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 							
 							lookupClient.setEditable(true);
 					}
-				//}
+				}
 			}
 			
 			
@@ -712,7 +665,7 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 					
 					lblClientImageFileChooser.setClickable(false);
 					lblClientSignatureFileChooser.setClickable(false);
-					
+					pnlSI.cancelSuppInfo(lookupClient.getValue());
 //					try {
 //						displayClientImage(lblClientImageFileChooser, lookupClient.getValue());
 //						displayClientSignature(lblClientSignatureFileChooser, lookupClient.getValue());
