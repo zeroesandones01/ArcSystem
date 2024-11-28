@@ -178,6 +178,7 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 								if(data !=null) {
 									
 									display_po(modelPO, rowheaderPO, data[0].toString(), cmbtype.getSelectedIndex());
+									lookuppono.setLookupSQL(get_po(cmbtype.getSelectedIndex(), PurchaseOrder.lookupcompany.getValue(), PurchaseOrder.lookuprequester.getValue()));
 									PurchaseOrder.enable_buttons(false, false, true, false, true, true);
 									PurchaseOrder.lookupcompany.setValue(data[7].toString());
 									PurchaseOrder.txtcompany.setText((String)data[8]);
@@ -190,6 +191,7 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 									txtrplfno.setText((String)data[9]);
 									date_PO.setDate((Date) data[6]);
 									PurchaseOrder.txtdivdept.setText((String) data[10]);
+									txtqoute.setText((String) data[11]);
 									
 								}
 							}
@@ -528,7 +530,7 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 	}
 	
 	public static String get_po ( Integer class_type, String co_id, String requester) {
-		String sql = "select distinct on(a.po_no)  a.po_no, a.requester, c.entity_name,  NULLIF(a.supplier,'null') as supplier, c.entity_name, NULLIF(a.terms,'null') as terms, a.po_date, a.co_id, e.company_name, a.rplf_no, f.exec_office_alias|| '/' || g.div_alias \n"
+		String sql = "select distinct on(a.po_no)  a.po_no, a.requester, c.entity_name,  NULLIF(a.supplier,'null') as supplier, c.entity_name, NULLIF(a.terms,'null') as terms, a.po_date, a.co_id, e.company_name, a.rplf_no, f.exec_office_alias|| '/' || g.div_alias, a.quotation_no \n"
 				+ "from rf_purchase_order a\n"
 				+ "left join rf_employee b on a.requester = b.emp_code\n"
 				+ "left join rf_entity c on b.entity_id = c.entity_id\n"
@@ -646,7 +648,8 @@ public class PurchaseOrderTab extends JPanel implements _GUI, ActionListener, Mo
 						"select 	'INSTALLMENT', 	'02'  			union all	\n" + 
 						"select 	'CHEQUE', 		'03' 			union all 	\n" + 
 						"select 	'7 DAYS', 		'04' 			union all 	\n" + 
-						"select 	'15 DAYS', 		'05' 			";
+						"select 	'15 DAYS', 		'05' 			union all 	\n" + 
+						"select 	'30 DAYS', 		'06' 			";
 		return strsql;
 		
 	}

@@ -50,32 +50,22 @@ public class modelMovement extends DefaultTableModel {
 	
 	String[] COLUMNS = new String[] {
 			"Movement No.", 
-			"Asset Code",
 			"From",
 			"To",
 			"Date Transfered",
 			"Reason",
 			"Remarks",
-			"Old Location" // added by jari cruz as of july 8 2022
-			//"Approved by dept. head",
-			//"Date approved by dept. head",
-			//"Approved by had",
-			//"Date approved by HAD"
+			"Old Location" 
 	};
 	
 	Class[] CLASS_TYPES = new Class[] {
 			Integer.class, //Movement No.
-			Object.class, //Old Asset Code
 			Object.class, //From
 			Object.class, //To
 			Timestamp.class, //Date Transfered 
 			Object.class, //Reason
 			Object.class, //Remarks
-			Object.class //Old Location added by jari cruz as of july 8 2022
-			//Integer.class,//dept_head
-			//Timestamp.class,//date_approvedby_dept_head
-			//Integer.class,//approvedby_had
-			//Timestamp.class//date_approvedby_HAD
+			Object.class //Old Location 
 		
 	};
 	

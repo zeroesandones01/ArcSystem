@@ -349,13 +349,15 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 				
 			}else {
 				
-				String po_no = PurchaseOrderTab.lookuppono.getValue();
+				String po_no = PurchaseOrderTab.lookuppono.getText();
+				System.out.println("po_no: "+po_no);
 				
 				if( po_no.equals("") || po_no.equals(null)) {
 					
 					System.out.println("Add new P.O.");
 					String set_po_no = getpo_no();
 					PurchaseOrderTab.save_purchase_order( set_po_no );
+					JOptionPane.showMessageDialog(getTopLevelAncestor(), "New purchase order saved.", "Saving", JOptionPane.INFORMATION_MESSAGE);
 					System.out.println("New Po no after saving: "+set_po_no);
 					PurchaseOrderTab.lookuppono.setValue(set_po_no);
 					PurchaseOrderTab.display_po(PurchaseOrderTab.modelPO, PurchaseOrderTab.rowheaderPO, set_po_no, PurchaseOrderTab.cmbtype.getSelectedIndex());
@@ -368,6 +370,7 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 					PurchaseOrderTab.save_purchase_order( PurchaseOrderTab.lookuppono.getValue() );
 					
 					db.commit();
+					JOptionPane.showMessageDialog(getTopLevelAncestor(), "Edited purchase order saved.", "Saving", JOptionPane.INFORMATION_MESSAGE);
 					System.out.println("Po no after edit: "+po_no);
 					PurchaseOrderTab.lookuppono.setValue(po_no);
 					PurchaseOrderTab.display_po(PurchaseOrderTab.modelPO, PurchaseOrderTab.rowheaderPO, po_no, PurchaseOrderTab.cmbtype.getSelectedIndex());

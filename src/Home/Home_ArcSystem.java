@@ -141,6 +141,7 @@ import Utilities.ZipCodes;
 import Utilities.fixedasset_peripheral;
 import System.Add_Edit_Holidays;
 import Transaction.PettyCash;
+import Transaction.SupplierInfo;
 
 //import System.DcrfInactivePayments;
 
@@ -316,116 +317,116 @@ public class Home_ArcSystem extends JXFrame implements ActionListener, WindowLis
 								DesktopPane.add(panCard);
 								panCard.setOpaque(false);
 								move(panCard, screenSize.width-25, screenSize.height-25, 150, 400); 
-								{
-									{
-										final JLabel lblCard = new JLabel(FncLookAndFeel.iconCARD); 
-										panCard.add(lblCard, BorderLayout.CENTER);
-										lblCard.setToolTipText("<html><body><h3>Customers Account Record Details</h3></body></html>");
-										lblCard.addMouseListener(new MouseListener() {
-											public void mouseReleased(MouseEvent e) {
-
-											}
-
-											public void mousePressed(MouseEvent e) {
-												lblCard.setBorder(BorderFactory.createLoweredBevelBorder());
-												redo();
-											}
-
-											public void mouseExited(MouseEvent e) {
-												lblCard.setBorder(null);
-												redo();
-											}
-
-											public void mouseEntered(MouseEvent e) {
-												lblCard.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
-												redo();
-											}
-
-											public void mouseClicked(MouseEvent e) {
-												
-											}
-
-											void redo() {
-												lblCard.repaint();
-												lblCard.revalidate();
-											}
-										});
-									}
-									{
-										final JLabel lblSMS = new JLabel(FncLookAndFeel.iconSMS); 
-										panCard.add(lblSMS, BorderLayout.CENTER);
-										lblSMS.setToolTipText("<html><body><h3>SMS</h3></body></html>");
-										lblSMS.addMouseListener(new MouseListener() {
-											public void mouseReleased(MouseEvent e) {
-
-											}
-
-											public void mousePressed(MouseEvent e) {
-												lblSMS.setBorder(BorderFactory.createLoweredBevelBorder());
-												redo();
-											}
-
-											public void mouseExited(MouseEvent e) {
-												lblSMS.setBorder(null);
-												redo();
-											}
-
-											public void mouseEntered(MouseEvent e) {
-												lblSMS.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
-												redo();
-											}
-
-											public void mouseClicked(MouseEvent e) {
-												
-											}
-
-											void redo() {
-												lblSMS.repaint();
-												lblSMS.revalidate();
-											}
-										});
-									}
-									{
-										lblDCRF = new JLabel(FncLookAndFeel.iconDCRF); 
-										panCard.add(lblDCRF, BorderLayout.CENTER);
-										lblDCRF.setToolTipText("<html><body><h3>Data Change Request</h3></body></html>");
-										lblDCRF.addMouseListener(new MouseListener() {
-											public void mouseReleased(MouseEvent e) {
-
-											}
-
-											public void mousePressed(MouseEvent e) {
-												lblDCRF.setBorder(BorderFactory.createLoweredBevelBorder());
-												redo();
-											}
-
-											public void mouseExited(MouseEvent e) {
-												lblDCRF.setBorder(null);
-												redo();
-											}
-
-											public void mouseEntered(MouseEvent e) {
-												lblDCRF.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
-												redo();
-											}
-
-											public void mouseClicked(MouseEvent e) {
-												JOptionPane.showMessageDialog(null, "Quick DCRF feature not yet ready");
-
-												lblDCRF.setBorder(null);
-												redo();
-											}
-
-											void redo() {
-												lblDCRF.repaint();
-												lblDCRF.revalidate();
-											}
-										});
-										withPending(); 
-									}
-
-							
-								}
+//								{
+//									{
+//										final JLabel lblCard = new JLabel(FncLookAndFeel.iconCARD); 
+//										panCard.add(lblCard, BorderLayout.CENTER);
+//										lblCard.setToolTipText("<html><body><h3>Customers Account Record Details</h3></body></html>");
+//										lblCard.addMouseListener(new MouseListener() {
+//											public void mouseReleased(MouseEvent e) {
+//
+//											}
+//
+//											public void mousePressed(MouseEvent e) {
+//												lblCard.setBorder(BorderFactory.createLoweredBevelBorder());
+//												redo();
+//											}
+//
+//											public void mouseExited(MouseEvent e) {
+//												lblCard.setBorder(null);
+//												redo();
+//											}
+//
+//											public void mouseEntered(MouseEvent e) {
+//												lblCard.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+//												redo();
+//											}
+//
+//											public void mouseClicked(MouseEvent e) {
+//												
+//											}
+//
+//											void redo() {
+//												lblCard.repaint();
+//												lblCard.revalidate();
+//											}
+//										});
+//									}
+//									{
+//										final JLabel lblSMS = new JLabel(FncLookAndFeel.iconSMS); 
+//										panCard.add(lblSMS, BorderLayout.CENTER);
+//										lblSMS.setToolTipText("<html><body><h3>SMS</h3></body></html>");
+//										lblSMS.addMouseListener(new MouseListener() {
+//											public void mouseReleased(MouseEvent e) {
+//
+//											}
+//
+//											public void mousePressed(MouseEvent e) {
+//												lblSMS.setBorder(BorderFactory.createLoweredBevelBorder());
+//												redo();
+//											}
+//
+//											public void mouseExited(MouseEvent e) {
+//												lblSMS.setBorder(null);
+//												redo();
+//											}
+//
+//											public void mouseEntered(MouseEvent e) {
+//												lblSMS.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+//												redo();
+//											}
+//
+//											public void mouseClicked(MouseEvent e) {
+//												
+//											}
+//
+//											void redo() {
+//												lblSMS.repaint();
+//												lblSMS.revalidate();
+//											}
+//										});
+//									}
+//									{
+//										lblDCRF = new JLabel(FncLookAndFeel.iconDCRF); 
+//										panCard.add(lblDCRF, BorderLayout.CENTER);
+//										lblDCRF.setToolTipText("<html><body><h3>Data Change Request</h3></body></html>");
+//										lblDCRF.addMouseListener(new MouseListener() {
+//											public void mouseReleased(MouseEvent e) {
+//
+//											}
+//
+//											public void mousePressed(MouseEvent e) {
+//												lblDCRF.setBorder(BorderFactory.createLoweredBevelBorder());
+//												redo();
+//											}
+//
+//											public void mouseExited(MouseEvent e) {
+//												lblDCRF.setBorder(null);
+//												redo();
+//											}
+//
+//											public void mouseEntered(MouseEvent e) {
+//												lblDCRF.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+//												redo();
+//											}
+//
+//											public void mouseClicked(MouseEvent e) {
+//												JOptionPane.showMessageDialog(null, "Quick DCRF feature not yet ready");
+//
+//												lblDCRF.setBorder(null);
+//												redo();
+//											}
+//
+//											void redo() {
+//												lblDCRF.repaint();
+//												lblDCRF.revalidate();
+//											}
+//										});
+//										withPending(); 
+//									}
+//
+//							
+//								}
 
 							}
 
@@ -1209,6 +1210,21 @@ public class Home_ArcSystem extends JXFrame implements ActionListener, WindowLis
 								}
 							}
 						}
+					}
+					{
+						JMenuItem menuitemSupplierInfo = new JMenuItem("Supplier Info");
+						menuTransaction.add(menuitemSupplierInfo);
+						menuitemSupplierInfo.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								if(isNotExisting("SupplierInfo")) {
+									SupplierInfo si= new SupplierInfo();
+									addWindow(si);
+								}
+								
+							}
+						});
 					}
 					{
 						JMenuItem menuitemPettyCash = new JMenuItem("Petty Cash");

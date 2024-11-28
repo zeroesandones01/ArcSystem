@@ -56,7 +56,8 @@ public class modelAssetMonitoring extends DefaultTableModel {
 			"Custodian ID",
 			"Custodian",
 			"Reference No.",
-			"status"
+			"Status",
+			"Rec ID"
 	};
 	
 	Class[] CLASS_TYPES = new Class[] {
@@ -69,6 +70,7 @@ public class modelAssetMonitoring extends DefaultTableModel {
 			Object.class, //Custodian
 			Object.class, //Reference No.
 			String.class, //status
+			String.class, //rec_id
 	};
 	
 	private void initThis() {
@@ -85,6 +87,7 @@ public class modelAssetMonitoring extends DefaultTableModel {
 			false, //6
 			false, //7
 			false, //8
+			false, //9
 			
 	};
 	
@@ -111,14 +114,15 @@ public class modelAssetMonitoring extends DefaultTableModel {
 		if(editable){
 			COLUMNS_EDITABLE = new Boolean[]{
 					true, //0
-					true, //1
-					true, //2
-					true, //3
-					true, //4
-					true, //5
-					true, //6
-					true, //7
-					true, //8
+					false, //1
+					false, //2
+					false, //3
+					false, //4
+					false, //5
+					false, //6
+					false, //7
+					false, //8
+					false, //9
 			};
 		}else{
 			COLUMNS_EDITABLE = new Boolean[]{
@@ -131,6 +135,7 @@ public class modelAssetMonitoring extends DefaultTableModel {
 					false, //6
 					false, //7
 					false, //8
+					false, //9
 			};
 	}
 		
