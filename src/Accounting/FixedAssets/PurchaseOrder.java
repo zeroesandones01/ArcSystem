@@ -276,6 +276,8 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 				
 				PurchaseOrderTab.lookupterms.setEditable(true);
 				PurchaseOrderTab.txtqoute.setEditable(true);
+				PurchaseOrderTab.date_PO.setEditable(true);
+				PurchaseOrderTab.date_PO.setDate(null);
 				
 			}else {// For Fixed Assets
 				
