@@ -87,9 +87,9 @@ public class modelSuppInfoEntityTypes extends DefaultTableModel {
 	public void setEditable(boolean editable) {
 		this.editable = editable;
 		if(editable){
-			COLUMN_EDITABLE = new boolean[] { true, false, false };
+			COLUMN_EDITABLE = new boolean[] { true, false, false, false, false, false };
 		}else{
-			COLUMN_EDITABLE = new boolean[] { false, false, false };
+			COLUMN_EDITABLE = new boolean[] { false, false, false, false, false, false  };
 		}
 	}
 
