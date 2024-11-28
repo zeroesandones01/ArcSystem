@@ -110,6 +110,7 @@ public class ArcSystemLogin extends JDialog {
 		initialize();
 		FncGlobal.initialize(false);
 		//FncGlobal.initialize2();
+		
 
 		frame = new JFrame("Login");
 		frame.setUndecorated(true);
