@@ -266,8 +266,16 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 			if ( PurchaseOrderTab.cmbtype.getSelectedIndex() == 0) {// For Supplies
 				
 				generate_supplies_po(PurchaseOrderTab.modelPO, PurchaseOrderTab.rowheaderPO);
-				PurchaseOrderTab.tblPO.setEditable(false);
-				PurchaseOrderTab.tblPO.setEnabled(false);
+				PurchaseOrderTab.tblPO.setEditable(true);
+				PurchaseOrderTab.tblPO.setEnabled(true);
+				PurchaseOrderTab.modelPO.setEditable(true);
+				
+				lookupcompany.setEnabled(true);
+				lookupcompany.setEditable(true);
+				lookuprequester.setEnabled(true);
+				
+				PurchaseOrderTab.lookupterms.setEditable(true);
+				PurchaseOrderTab.txtqoute.setEditable(true);
 				
 			}else {// For Fixed Assets
 				
@@ -288,7 +296,6 @@ public class PurchaseOrder extends _JInternalFrame implements _GUI, ActionListen
 			lookupcompany.setEnabled(true);
 			lookupcompany.setEditable(true);
 			lookuprequester.setEnabled(true);
-			
 			
 			//PurchaseOrderTab.lookuppono.setText(getpo_no());
 			PurchaseOrderTab.lookupsupplier.setValue(null);
