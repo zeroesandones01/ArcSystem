@@ -6,6 +6,7 @@ import javax.swing.SwingUtilities;
 import Functions.FncGlobal;
 import Functions.FncLookAndFeel;
 import Login.ArcSysLogin;
+import Login.ArcSystemLogin;
 import Login.ArcSystemLogin2;
 import components._JXLoginPane;
 
@@ -15,10 +16,10 @@ public class ArcSystem {
 		//FncGlobal.lpsOut = Functions.LoggedPrintStream.create(System.out);
 		//System.setOut(FncGlobal.lpsOut);
 
-		//ArcSystemLogin2.showLogin();
+		ArcSystemLogin.showLogin();
 		
-		FncLookAndFeel.initialize();
-		FncGlobal.initialize(false);
+//		FncLookAndFeel.initialize();
+//		FncGlobal.initialize(false);
 //
 //		/*UIDefaults defaults = UIManager.getLookAndFeelDefaults();
 //		for (Enumeration enumm = defaults.keys(); enumm.hasMoreElements();) {
@@ -32,12 +33,12 @@ public class ArcSystem {
 //		
 //		//JOptionPane.showMessageDialog(null, "Cannot login system is under maintenance", "Login", JOptionPane.WARNING_MESSAGE);
 //
-		FncGlobal.parentFrame = _JXLoginPane.showLoginFrame(FncGlobal.login);
-		//FncGlobal.parentFrame = JXLoginPane.showLoginFrame(FncGlobal.login);
-		FncGlobal.parentFrame.setTitle(FncGlobal.ORIGINAL_TITLE);
-		FncGlobal.parentFrame.setIconImage(FncLookAndFeel.iconSystem);
-		FncGlobal.parentFrame.pack();
-		FncGlobal.parentFrame.setVisible(true);
+//		FncGlobal.parentFrame = _JXLoginPane.showLoginFrame(FncGlobal.login);
+//		//FncGlobal.parentFrame = JXLoginPane.showLoginFrame(FncGlobal.login);
+//		FncGlobal.parentFrame.setTitle(FncGlobal.ORIGINAL_TITLE);
+//		FncGlobal.parentFrame.setIconImage(FncLookAndFeel.iconSystem);
+//		FncGlobal.parentFrame.pack();
+//		FncGlobal.parentFrame.setVisible(true);
 		
 //		SwingUtilities.invokeLater(() -> {
 //            ArcSysLogin frame = new ArcSysLogin();
