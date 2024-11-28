@@ -245,22 +245,31 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 	public DisbursementRequestForm() {
 		super(title, true, true, true, true);
 
-		// Selection of Access for Accounting and Admin Personnel
-		if(UserInfo.Department.equals("009") || UserInfo.Department.equals("010") || UserInfo.Department.equals("002")) {
-			selectedAccess = getSelectedAccess(); 
-			initGUI();
+		// Check if the user belongs to a Accounting / Finance / Admin Dept
+		if (UserInfo.Department.equals("009") || UserInfo.Department.equals("010") || UserInfo.Department.equals("002")) {
+		    
+		    // Retrieve the selected access for the user
+		    selectedAccess = getSelectedAccess(); 
+		    
+		    // If no access has been selected, apply default access
+		    if (selectedAccess.equals("No access selected")) {
+		        // Show a warning message indicating that no access was selected
+		        showWarningMessage("No access selected. Default access will be applied", "Access");
+		        
+		        // Set default access to "User" and initialize the GUI
+		        selectedAccess = "User"; 
+		        initGUI();
+		    } else {
+		        // If access is selected, simply initialize the GUI
+		        initGUI();
+		    }
+		    
+		// For users who are not part of the specified departments (Non-Accounting and Non-Admin)
 		} else {
-			initGUI();
-		}	
-	}
-
-	public DisbursementRequestForm(String title) {
-		super(title);
-	}
-
-	public DisbursementRequestForm(String title, boolean resizable, boolean closable, boolean maximizable,
-			boolean iconifiable) {
-		super(title, resizable, closable, maximizable, iconifiable);
+		    // Initialize the GUI directly
+		    initGUI();
+		}
+	
 	}
 
 	@Override
@@ -274,8 +283,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		getContentPane().add(pnlMain, BorderLayout.CENTER);
 		pnlMain.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		pnlMain.setLayout(new BorderLayout(5, 5));
-		pnlMain.setPreferredSize(new java.awt.Dimension(1134, 645));
-
+		
 		{
 			menu = new JPopupMenu("Popup");
 			mnidelete = new JMenuItem("Remove Row");

@@ -145,32 +145,11 @@ import tablemodel.modelDRF_particulars.BigDecimalCellEditor;
 			super(title, true, true, true, true);
 			initGUI();
 		}
-	
-		/**
-		 * @param title
-		 */
-		public PettyCash(String title) {
-			super(title);
-			initGUI();
-		}
-	
-		/**
-		 * @param title
-		 * @param resizable
-		 * @param closable
-		 * @param maximizable
-		 * @param iconifiable
-		 */
-		public PettyCash(String title, boolean resizable, boolean closable, boolean maximizable, boolean iconifiable) {
-			super(title, resizable, closable, maximizable, iconifiable);
-			initGUI();
-		}
-	
+
 		@SuppressWarnings({ "rawtypes", "unchecked" })
 		@Override
 		public void initGUI() {
 			this.setLayout(new BorderLayout(5, 5));
-			this.setSize(SIZE);
 			this.setPreferredSize(new Dimension(935, 540));
 			this.setTitle(title);
 			{
