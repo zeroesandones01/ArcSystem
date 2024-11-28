@@ -408,10 +408,10 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 				pnlSI = new pnlSupplierInfo();
 				tabCenter.addTab("Supplier Info", pnlSI);
 			}
-			{
-				pnlSuppAddress = new pnlSupplierAddress(this);
-				tabCenter.addTab("Address", pnlSuppAddress);
-			}			
+//			{
+//				pnlSuppAddress = new pnlSupplierAddress(this);
+//				tabCenter.addTab("Address", pnlSuppAddress);
+//			}			
 			tabCenter.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent arg0) {
 					int selectedTab = ((_JTabbedPane)arg0.getSource()).getSelectedIndex();

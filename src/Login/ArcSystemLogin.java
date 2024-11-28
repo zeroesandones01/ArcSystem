@@ -106,7 +106,7 @@ public class ArcSystemLogin extends JDialog {
 	private static int getCurrentYear = getCurrentDate.getYear() + 1900;
 
 	public static void showLogin() {
-		resetLookAndFeel();
+//		resetLookAndFeel();
 		initialize();
 		FncGlobal.initialize(false);
 		//FncGlobal.initialize2();
@@ -114,7 +114,7 @@ public class ArcSystemLogin extends JDialog {
 
 		frame = new JFrame("Login");
 		frame.setUndecorated(true);
-		frame.setSize(new Dimension(450, 500));
+		frame.setSize(new Dimension(600, 500));
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
@@ -130,7 +130,8 @@ public class ArcSystemLogin extends JDialog {
 	}
 
 	private static void LoginGUI() {
-		panMain = new JXPanel(new BorderLayout(0, 0));
+		panMain = new JXPanel(new GridLayout(1, 2, 3, 3));
+		//panMain = new JXPanel(new BorderLayout(3, 3));
 		frame.add(panMain);
 //		frame.setUndecorated(true);
 //		frame.setSize(new Dimension(600, 400));
@@ -527,9 +528,13 @@ public class ArcSystemLogin extends JDialog {
 	}
 
 	public static void initialize() {
-		String windowString_Light = "128 64 0"; 
-		String windowString_Dark = "128 64 0"; 
-		String windowForeground = "40 40 40";
+//		String windowString_Light = "128 64 0"; 
+//		String windowString_Dark = "128 64 0"; 
+//		String windowForeground = "40 40 40";
+		
+		String windowString_Light = "29, 191, 100"; 
+		String windowString_Dark = "29, 191, 83"; 
+		String windowForeground = "29, 191, 83";
 
 		Font systemFont_Bold = new Font(font_name, Font.BOLD, font_size); 
 
@@ -559,17 +564,17 @@ public class ArcSystemLogin extends JDialog {
 			props.put("selectionForegroundColor", "255 255 255");
 			props.put("selectionBackgroundColor", windowString_Dark);
 
-//			props.put("windowTitleForegroundColor", "255 255 255");
-//			props.put("windowTitleBackgroundColor", windowString_Light); 
-//			props.put("windowTitleColorLight", windowString_Light); 
-//			props.put("windowTitleColorDark", windowString_Dark); 
-//			props.put("windowBorderColor", windowString_Dark);
+			props.put("windowTitleForegroundColor", windowString_Dark);
+			props.put("windowTitleBackgroundColor", windowString_Light); 
+			props.put("windowTitleColorLight", windowString_Light); 
+			props.put("windowTitleColorDark", windowString_Dark); 
+			props.put("windowBorderColor", windowString_Dark);
 			
-			props.put("windowTitleForegroundColor", "191, 191, 191");
-			props.put("windowTitleBackgroundColor", "191, 191, 191"); 
-			props.put("windowTitleColorLight", "191, 191, 191"); 
-			props.put("windowTitleColorDark", "191, 191, 191"); 
-			props.put("windowBorderColor", "191, 191, 191");
+//			props.put("windowTitleForegroundColor", "191, 191, 191");
+//			props.put("windowTitleBackgroundColor", "191, 191, 191"); 
+//			props.put("windowTitleColorLight", "191, 191, 191"); 
+//			props.put("windowTitleColorDark", "191, 191, 191"); 
+//			props.put("windowBorderColor", "191, 191, 191");
 			
 
 //			props.put("windowInactiveTitleColorLight", windowString_Light);
@@ -689,6 +694,8 @@ public class ArcSystemLogin extends JDialog {
 
 			return true;
 		} catch (SQLException e) {
+			
+			System.out.printf("Display value of e: %s%n", e);
 			JOptionPane.showMessageDialog(null, "Username/password doesn't exist!", "Login", JOptionPane.WARNING_MESSAGE);
 			disableControls(false);
 			purge();
