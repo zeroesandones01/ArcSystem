@@ -848,11 +848,11 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 			pay_process_PCR(pcr_status);
 			displayPCR_header(co_id, pcr_no);
 
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					btnPreview.requestFocusInWindow();
-				}
-			});
+//			SwingUtilities.invokeLater(new Runnable() {
+//				public void run() {
+//					btnPreview.requestFocusInWindow();
+//				}
+//			});
 		}
 
 		if(e.getActionCommand().equals("Process")) {
