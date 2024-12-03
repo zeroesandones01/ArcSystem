@@ -65,83 +65,85 @@ public class modelDRF_particulars extends DefaultTableModel {
 
 	public String[] COLUMNS = new String[] {
 			"Account ID",		// 0
-			"Proj. Cost ID",	// 1
-			"Div",				// 2	
-			"Proj",				// 3			
-			"<html><center>Account<html><br><html><center>Description<html>", // 4
-			"  Amount  ",		// 5	
-			"Within", 			// 6
-			"Payee ID",			// 7			
-			"Payee Type",		// 8
-			"Payee Name",		// 9	
-			"Ref ID", 			// 10
-			"Ref No", 			// 11 
-			"Ref Date", 		// 12
-			"Item ID", 			// 13
-			"Item Description", // 14
-			"Invoice No.",		// 15
-			"Invoice Date", 	// 16
-			"SOA/Bill No.",		// 17
-			"SOA/Bill Date", 	// 18
-			"Asset No.",		// 19	
-			"Vatable Project", 	// 20
-			"<html><center>Vatable<html><br><html><center>Entity<html>",  // 21	
-			"Taxable", 			// 22	
-			"Gross Amt.",		// 23
-			"Net Amt",			// 24
-			"VAT Rate (%)",		// 25
-			"VAT Amount",		// 26
-			"WTax ID",			// 27			
-			"WTax Rate (%)",	// 28			
-			"WTax Amount",		// 29
-			"<html><center>Expense<html><br><html><center>Amount<html>",  	// 30
-			"<html><center>Retention<html><br><html><center>Amount<html>",  // 31			
-			"<html><center>DP Recoup.<html><br><html><center>Amount<html>", // 32					
-			"<html><center>BC Liquidation<html><br><html><center>Amount<html>", // 33		
-			"<html><center>Other Liqui.<html><br><html><center>Amount<html>",  	// 34
-			"<html><center>Payable<html><br><html><center>Amount<html>",  	// 35
-			"Rec ID" //36
+			"<html><center>Account<html><br><html><center>Description<html>", // 1
+			"Proj. Cost ID",	// 2
+			"<html><center>Project Cost<html><br><html><center>Description<html>", // 3
+			"Div",				// 4	
+			"Proj",				// 5			
+			"  Amount  ",		// 6	
+			"Within", 			// 7
+			"Payee ID",			// 8			
+			"Payee Type",		// 9
+			"Payee Name",		// 10	
+			"Ref ID", 			// 11
+			"Ref No", 			// 12 
+			"Ref Date", 		// 13
+			"Item ID", 			// 14
+			"Item Description", // 15
+			"Invoice No.",		// 16
+			"Invoice Date", 	// 17
+			"SOA/Bill No.",		// 18
+			"SOA/Bill Date", 	// 19
+			"Asset No.",		// 20	
+			"Vatable Project", 	// 21
+			"<html><center>Vatable<html><br><html><center>Entity<html>",  // 22	
+			"Taxable", 			// 23
+			"Gross Amt.",		// 24
+			"Net Amt",			// 25
+			"VAT Rate (%)",		// 26
+			"VAT Amount",		// 27
+			"WTax ID",			// 28			
+			"WTax Rate (%)",	// 29			
+			"WTax Amount",		// 30
+			"<html><center>Expense<html><br><html><center>Amount<html>",  	// 31
+			"<html><center>Retention<html><br><html><center>Amount<html>",  // 32			
+			"<html><center>DP Recoup.<html><br><html><center>Amount<html>", // 33					
+			"<html><center>BC Liquidation<html><br><html><center>Amount<html>", // 34		
+			"<html><center>Other Liqui.<html><br><html><center>Amount<html>",  	// 35
+			"<html><center>Payable<html><br><html><center>Amount<html>",  	// 36
+			"Rec ID" //37
 			};
 
 	public Class[] CLASS_TYPES = new Class[] {
 			
 			_JLookup.class,		// 0 Account ID
-			_JLookup.class,		// 1 Proj. Cost ID
-			String.class,		// 2 Div		
-			_JLookup.class,		// 3 Proj
-			Object.class, 		// 4 Account Desc
-			BigDecimal.class,	// 5 Amount	
-			Boolean.class, 		// 6 Within
-			_JLookup.class,		// 7 Payee ID
-			_JLookup.class,		// 8 Payee Type
-			String.class,		// 9 Payee Name
-			String.class,		// 10 Ref ID
-			String.class,		// 11 Ref No
-			_JDateChooser.class,// 12 Ref Date 
-			String.class,		// 13 Item ID
-			String.class,		// 14 Item Description
-			String.class, 		// 15 Invoice No.
-			_JDateChooser.class, // 16 Invoice Date
-			String.class, 		// 17 SOA/Bill No.
-			_JDateChooser.class, // 18 SOA/Bill Date
-			String.class,		// 19 Asset No.	
-			Boolean.class,		// 20 Vatable Project
-			Boolean.class,		// 21 Vatable Entity
-			Boolean.class,		// 22 Taxable
-			BigDecimal.class,	// 23 Gross Amt.
-			BigDecimal.class,	// 24 Net Amt
-			BigDecimal.class,	// 25 VAT Rate (%)
-			BigDecimal.class,	// 26 VAT Amount
-			_JLookup.class,		// 27 WTax ID			
-			BigDecimal.class,	// 28 WTax Rate (%)
-			BigDecimal.class,	// 29 WTax Amount
-			BigDecimal.class,	// 30 Expense Amount
-			BigDecimal.class,	// 31 Retention Amount			
-			BigDecimal.class,	// 32 DP Recoup Amount
-			BigDecimal.class,	// 33 BC Liqui. Amount
-			BigDecimal.class,	// 34 Other Liqui. Amount
-			BigDecimal.class,	// 35 Payable Amount
-			String.class		// 36 Rec ID
+			String.class,		// 1 Account Desc	
+			_JLookup.class,		// 2 Proj. Cost ID
+			String.class,		// 3 Proj. Cost Desc		
+			String.class,		// 4 Div		
+			_JLookup.class,		// 5 Proj
+			BigDecimal.class,	// 6 Amount	
+			Boolean.class, 		// 7 Within
+			_JLookup.class,		// 8 Payee ID
+			_JLookup.class,		// 9 Payee Type
+			String.class,		// 10 Payee Name
+			String.class,		// 11 Ref ID
+			String.class,		// 12 Ref No
+			_JDateChooser.class,// 13 Ref Date 
+			String.class,		// 14 Item ID
+			String.class,		// 15 Item Description
+			String.class, 		// 16 Invoice No.
+			_JDateChooser.class, // 17 Invoice Date
+			String.class, 		// 18 SOA/Bill No.
+			_JDateChooser.class, // 19 SOA/Bill Date
+			String.class,		// 20 Asset No.	
+			Boolean.class,		// 21 Vatable Project
+			Boolean.class,		// 22 Vatable Entity
+			Boolean.class,		// 23 Taxable
+			BigDecimal.class,	// 24 Gross Amt.
+			BigDecimal.class,	// 25 Net Amt
+			BigDecimal.class,	// 26 VAT Rate (%)
+			BigDecimal.class,	// 27 VAT Amount
+			_JLookup.class,		// 28 WTax ID			
+			BigDecimal.class,	// 29 WTax Rate (%)
+			BigDecimal.class,	// 30 WTax Amount
+			BigDecimal.class,	// 31 Expense Amount
+			BigDecimal.class,	// 32 Retention Amount			
+			BigDecimal.class,	// 33 DP Recoup Amount
+			BigDecimal.class,	// 34 BC Liqui. Amount
+			BigDecimal.class,	// 35 Other Liqui. Amount
+			BigDecimal.class,	// 36 Payable Amount
+			String.class		// 37 Rec ID
 			
 	};
 
@@ -150,42 +152,43 @@ public class modelDRF_particulars extends DefaultTableModel {
 		COLUMN_EDITABLE = new boolean[] {
 			
 				false,	// 0 Account ID
-				false,	// 1 Proj. Cost ID
-				false,	// 2 Div							
-				false,	// 3 Proj
-				false, 	// 4 Account Desc
-				false,	// 5 Amount	
-				false,	// 6 Within
-				false,	// 7 Payee ID
-				false,	// 8 Payee Type			
-				false,	// 9 Payee Name
-				false,	// 10 Ref ID*
-				false,	// 11 Ref No*
-				false,	// 12 Ref Date*
-				false,	// 13 Item ID*
-				false,	// 14 Item Description*
-				true, 	// 15 Invoice No.
-				true,	// 16 Invoice Date
-				true, 	// 17 SOA/Bill No.
-				true, 	// 18 SOA/Bill Date
-				false,	// 19 Asset No.
-				false,	// 20 Vatable Project* 			
-				true,	// 21 Vatable Entity
-				true,	// 22 Taxable
-				false,	// 23 Gross Amt.
-				false, 	// 24 Net Amt. 
-				false,	// 25 VAT Rate (%)
-				false,	// 26 VAT Amount
-				false,	// 27 WTax ID				
-				false,	// 28 WTax Rate (%)
-				false,	// 29 WTax Amount
-				false,	// 30 Expense Amount
-				false,	// 31 Retention Amount				
-				false,	// 32 DP Recoup Amount
-				false,	// 33 BC Liqui Amount
-				false,	// 34 Other Liqui Amount
-				false, 	// 35 Payable Amount
-				false 	// 36 Rec ID
+				false, 	// 1 Account Desc
+				false,	// 2 Proj. Cost ID
+				false, 	// 3 Proj. Cost Desc
+				false,	// 4 Div							
+				false,	// 5 Proj
+				false,	// 6 Amount	
+				false,	// 7 Within
+				false,	// 8 Payee ID
+				false,	// 9 Payee Type			
+				false,	// 10 Payee Name
+				false,	// 11 Ref ID*
+				false,	// 12 Ref No*
+				false,	// 13 Ref Date*
+				false,	// 14 Item ID*
+				false,	// 15 Item Description*
+				true, 	// 16 Invoice No.
+				true,	// 17 Invoice Date
+				true, 	// 18 SOA/Bill No.
+				true, 	// 19 SOA/Bill Date
+				false,	// 20 Asset No.
+				false,	// 21 Vatable Project* 			
+				true,	// 22 Vatable Entity
+				true,	// 23 Taxable
+				false,	// 24 Gross Amt.
+				false, 	// 25 Net Amt. 
+				false,	// 26 VAT Rate (%)
+				false,	// 27 VAT Amount
+				false,	// 28 WTax ID				
+				false,	// 29 WTax Rate (%)
+				false,	// 30 WTax Amount
+				false,	// 31 Expense Amount
+				false,	// 32 Retention Amount				
+				false,	// 33 DP Recoup Amount
+				false,	// 34 BC Liqui Amount
+				false,	// 35 Other Liqui Amount
+				false, 	// 36 Payable Amount
+				false 	// 37 Rec ID
 		};
 	}
 
@@ -207,50 +210,52 @@ public class modelDRF_particulars extends DefaultTableModel {
 			COLUMN_EDITABLE = new boolean[] {
 					
 					false,	// 0 Account ID
-					false,	// 1 Proj. Cost ID
-					true,	// 2 Div
-					false,	// 3 Proj
-					false, 	// 4 Account Desc
-					true,	// 5 Amount
-					false,	// 6 Within
-					false,	// 7 Payee ID
-					false,	// 8 Payee Type			
-					false,	// 9 Payee Name
-					true,	// 10 Ref ID*
-					true,	// 11 Ref No*
-					true,	// 12 Ref Date*
-					true,	// 13 Item ID*
-					true,	// 14 Item Description*
-					true, 	// 15 Invoice No.
-					true,	// 16 Invoice Date
-					true, 	// 17 SOA/Bill No.
-					true, 	// 18 SOA/Bill Date
-					true,	// 19 Asset No.	
-					true,	// 20 Vatable Project*
-					true,	// 21 Vatable Entity
-					true,	// 22 Taxable
-					false,	// 23 Gross Amt.
-					false, 	// 24 Net Amt. 
-					false,	// 25 VAT Rate (%)
-					false,	// 26 VAT Amount
-					false,	// 27 WTax ID				
-					false,	// 28 WTax Rate (%)
-					false,	// 29 WTax Amount
-					false,	// 30 Expense Amount
-					false,	// 31 Retention Amount				
-					false,	// 32 DP Recoup Amount
-					false,	// 33 BC Liqui Amount
-					false,	// 34 Other Liqui Amount
-					false,	// 35 Payable Amount
-					false 	// 36 Rec ID
+					false, 	// 1 Account Desc
+					false,	// 2 Proj. Cost ID
+					false, 	// 3 Proj. Cost Desc
+					false,	// 4 Div
+					false,	// 5 Proj
+					true,	// 6 Amount
+					false,	// 7 Within
+					false,	// 8 Payee ID
+					false,	// 9 Payee Type			
+					false,	// 10 Payee Name
+					true,	// 11 Ref ID*
+					true,	// 12 Ref No*
+					true,	// 13 Ref Date*
+					true,	// 14 Item ID*
+					true,	// 15 Item Description*
+					false, 	// 16 Invoice No.
+					false,	// 17 Invoice Date
+					false, 	// 18 SOA/Bill No.
+					false, 	// 19 SOA/Bill Date
+					true,	// 20 Asset No.	
+					true,	// 21 Vatable Project*
+					true,	// 22 Vatable Entity
+					true,	// 23 Taxable
+					false,	// 24 Gross Amt.
+					false, 	// 25 Net Amt. 
+					false,	// 26 VAT Rate (%)
+					false,	// 27 VAT Amount
+					false,	// 28 WTax ID				
+					false,	// 29 WTax Rate (%)
+					false,	// 30 WTax Amount
+					false,	// 31 Expense Amount
+					false,	// 32 Retention Amount				
+					false,	// 33 DP Recoup Amount
+					false,	// 34 BC Liqui Amount
+					false,	// 35 Other Liqui Amount
+					false,	// 36 Payable Amount
+					false 	// 37 Rec ID
 			};
 		}else{
 			COLUMN_EDITABLE = new boolean[] {
 					false,	// Account ID
+					false, 	// Account Desc
 					false,	// Proj. Cost ID
+					false, 	// Proj. Cost Desc
 					false,	// Div							
 					false,	// Proj
-					false, 	// Account Desc
 					false,	// Amount	
 					false,	// Within
 					false,	// Payee ID
@@ -284,6 +289,7 @@ public class modelDRF_particulars extends DefaultTableModel {
 					false 	// Rec ID
 			};
 		}
+		
 	}
 	
 	@Override
@@ -291,9 +297,9 @@ public class modelDRF_particulars extends DefaultTableModel {
 	    Object value = super.getValueAt(row, column);
 	    
 	    // Ensure that BigDecimal columns return as BigDecimal
-	    if (column == 5 || column == 23 || column == 24 || column == 25 || column == 26 || column == 27 ||
-	    	column == 28 ||column == 29 ||column == 30 || column == 31 || column == 32 || column == 33 ||
-	        column == 34 || column == 35) { // Adjust indices as needed
+	    if (column == 6 || column == 24 || column == 25 || column == 26 || column == 27 || column == 28 ||
+	    	column == 29 ||column == 30 ||column == 31 || column == 32 || column == 33 || column == 34 ||
+	        column == 35 || column == 36) { // Adjust indices as needed
 	        if (value instanceof Number) {
 	            return BigDecimal.valueOf(((Number) value).doubleValue());
 	        } else if (value instanceof Long) {
@@ -301,34 +307,12 @@ public class modelDRF_particulars extends DefaultTableModel {
 			}
 	     
 	    // Converting null cells into empty string
-	    } else if (column == 0 || column == 1 || column == 7) {
+	    } else if (column == 0 || column == 2 || column == 5) {
 	    	return value == null ? "" : value; 
 	    }
 	    
 	    return value;
 	}
-	
-//	 public String getFormattedDate(int row, int column) {
-//	        Object value = super.getValueAt(row, column);
-//	        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
-//	        if (value instanceof Date) {
-//	            return dateFormat.format((Date) value);
-//	        } else if (value instanceof Timestamp) {
-//	            dateFormat = new SimpleDateFormat("MM-dd-yyyy");
-//	            return dateFormat.format((Timestamp) value);
-//	        } if (value instanceof String) {
-//	            try {
-//	                SimpleDateFormat originalFormat = new SimpleDateFormat("yyyy-MM-dd"); // Adjust format as necessary
-//	                Date parsedDate = (Date) originalFormat.parse((String) value);
-//	                return dateFormat.format(parsedDate);
-//	            } catch (ParseException e) {
-//	                e.printStackTrace();
-//	            }
-//	        }
-//
-//	        
-//	        return null; 
-//	    }
 	 
 	// Custom cell editor for BigDecimal (used for the "Amount" column)
 	public class BigDecimalCellEditor extends DefaultCellEditor {
@@ -371,4 +355,33 @@ public class modelDRF_particulars extends DefaultTableModel {
 	         }
 	     }
 	 }
+	
+	public void setEditableForInvoice(boolean editable) {
+		
+	    COLUMN_EDITABLE[16] = editable;  // Invoice No.
+	    COLUMN_EDITABLE[17] = editable;  // Invoice Date
+	    
+	    fireTableDataChanged();  // Trigger to update the table and and reflect the changes made
+	}
+	
+	public void setEditableForBilling(boolean editable) {
+
+	    COLUMN_EDITABLE[18] = editable;  // SOA/Bill No.
+	    COLUMN_EDITABLE[19] = editable;  // SOA/Bill Date
+	    
+	    fireTableDataChanged();  //  Trigger to update the table and and reflect the changes made
+	}
+	
+    // Method to count non-empty "Acct ID" rows (column 0)
+    public int countRowsWithNonEmptyAcctID() {
+        int count = 0;
+        for (int i = 0; i < getRowCount(); i++) {
+            Object value = getValueAt(i, 0); // Acct ID
+            if (value != null && !value.toString().trim().isEmpty()) {
+                count++;
+            }
+        }
+        return count;
+    }
+	
 }

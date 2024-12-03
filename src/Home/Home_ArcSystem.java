@@ -81,6 +81,7 @@ import com.cloudgarden.layout.AnchorLayout;
 import com.lowagie.text.Rectangle;
 
 import Accounting.Cashiering.CashReceiptBook;
+import Accounting.Cashiering.PettyCashCount;
 import Accounting.Collections.CheckStatusMonitoring;
 import Accounting.Commissions.Commission_Schedule_Generator;
 import Accounting.ContractorsPayment.BackchargeUtilities;
@@ -771,6 +772,18 @@ public class Home_ArcSystem extends JXFrame implements ActionListener, WindowLis
 									}
 								});
 							}
+							{
+								JMenuItem menuitemPettyCashCount = new JMenuItem("Petty Cash Count");
+								menuCashiering.add(menuitemPettyCashCount);
+								menuitemPettyCashCount.addActionListener(new ActionListener() {
+									public void actionPerformed(ActionEvent e) {
+										if(isNotExisting("PettyCashCount")){
+											PettyCashCount pcc = new PettyCashCount();
+											addWindow(pcc, e);
+										}
+									}
+								});
+							}
 						}
 						{
 							JMenu menuCollections = new JMenu("Collections");
@@ -1241,18 +1254,6 @@ public class Home_ArcSystem extends JXFrame implements ActionListener, WindowLis
 						});
 					}
 					{
-						JMenuItem menuitemDisbursementRequestForm = new JMenuItem("Disbursement Request Form");
-						menuTransaction.add(menuitemDisbursementRequestForm);
-						menuitemDisbursementRequestForm.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								if(isNotExisting("DisbursementRequestForm")){
-									DisbursementRequestForm drf = new DisbursementRequestForm();
-									addWindow(drf, e);
-								}
-							}
-						});
-					}
-					{
 						JMenuItem menuitemCARD = new JMenuItem("CARD");
 						menuTransaction.add(menuitemCARD);
 						menuitemCARD.addActionListener(new ActionListener() {
@@ -1411,6 +1412,24 @@ public class Home_ArcSystem extends JXFrame implements ActionListener, WindowLis
 								});
 							}
 						}
+					}
+					{
+						JMenu menuAllUsersUtil = new JMenu("All Users");
+						menuUtilities.add(menuAllUsersUtil);
+						{
+							JMenuItem menuitemDisbursementRequestForm = new JMenuItem("Disbursement Request Form");
+							menuAllUsersUtil.add(menuitemDisbursementRequestForm);
+							menuitemDisbursementRequestForm.addActionListener(new ActionListener() {
+								public void actionPerformed(ActionEvent e) {
+									
+									if(isNotExisting("DisbursementRequestForm")){
+										DisbursementRequestForm drf = new DisbursementRequestForm();
+										addWindow(drf, e);
+									}
+								}
+							});
+						}
+					
 					}
 					{
 						JMenu menuAdminUtil = new JMenu("Admin");
@@ -1937,8 +1956,8 @@ public class Home_ArcSystem extends JXFrame implements ActionListener, WindowLis
 
 		if(db.isNotNull()){
 			for(int x=0; x < db.getRowCount(); x++){
-				final String class_location = (String) db.getResult()[x][1];
-				final String module_name = (String) db.getResult()[x][2];
+				final String class_location = (String) db.getResult()[x][2];
+				final String module_name = (String) db.getResult()[x][3];
 				final String class_name = class_location.split("\\.")[class_location.split("\\.").length - 1];
 
 				JMenuItem menuitemAboutBOIModule = new JMenuItem(module_name);

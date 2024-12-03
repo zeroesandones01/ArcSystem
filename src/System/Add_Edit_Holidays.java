@@ -345,7 +345,7 @@ public class Add_Edit_Holidays extends _JInternalFrame {
 									if (DuplicateValidation(dateVal)) {
 										JOptionPane.showMessageDialog(getContentPane(), "Error, Selected Date is Existing","Error",JOptionPane.ERROR_MESSAGE);
 									} else {
-										getValue();
+										saveNewHoliday();
 										JOptionPane.showMessageDialog(getContentPane(), "Successfully Save");
 										displayValue(model_HolidaySetterTable, rowHeadHoliday);
 										chooseDate.setEnabled(false);
@@ -422,7 +422,7 @@ public class Add_Edit_Holidays extends _JInternalFrame {
 	
 	
 	//METHOD TO SAVE A NEW HOLIDAY INTO THE DATABASE
-	private void getValue(){
+	private void saveNewHoliday(){
 		pgSelect db = new pgSelect();
 		Date dateVal = chooseDate.getDate();
 		String textVal = textName.getText();
@@ -469,7 +469,7 @@ public class Add_Edit_Holidays extends _JInternalFrame {
 			comboVal = "R";
 		}
 		{
-			String query = "UPDATE mf_holidays SET holidays = '"+dateVal+"',holiday_desc = '"+textVal+"',holiday_type = '"+comboVal+"'"
+			String query = "UPDATE mf_holidays SET holiday_date = '"+dateVal+"',holiday_desc = '"+textVal+"',holiday_type = '"+comboVal+"'"
 					+ ",halfday = '"+checkVal+"',created_by = '"+userVal+"' WHERE rec_id = '"+rwRec+"' ";
 			db.executeUpdate(query, true);
 		}

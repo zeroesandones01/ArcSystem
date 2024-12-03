@@ -637,6 +637,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 							{
 								lookupPCRLiq = new _JLookup(null, "PCR Liquidation", 0); 
 								pnlCSWComp.add(lookupPCRLiq); 
+								lookupPCRLiq.setFont(new Font("Segoe UI", Font.BOLD, 12));
 								lookupPCRLiq.addLookupListener(new LookupListener() {
 
 									@Override
@@ -1196,19 +1197,25 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 
 		// Checker if liquidation requires cash return or amount to be reimbursed
 		if(pcr_type_id.equals("03")) {
+			
+			BigDecimal totalPCRAmt = (BigDecimal) modelPettyCashReqTotal.getValueAt(0, 7);
 
 			//Liquidation Amount is less than CA Amount
 			if(totalAmt.compareTo(pcr_liq_amt) < 0) {
+				BigDecimal cashReturnAmt_should_be = pcr_liq_amt.subtract(totalPCRAmt);
+				ftxtCashReturned.setValue(cashReturnAmt_should_be);
 				ftxtCashReturned.setEnabled(true);
-				ftxtCashReturned.setEditable(true);
+				ftxtCashReturned.setEditable(false);
 				ftxtAmtToBeReimbursed.setEnabled(false);
 				ftxtAmtToBeReimbursed.setValue(BigDecimal.ZERO);
 
 				//Liquidation Amount is greater than CA Amount
 			} else if(totalAmt.compareTo(pcr_liq_amt) > 0) {
+				BigDecimal reimbursementAmt_should_be = totalPCRAmt.subtract(pcr_liq_amt); 
+				ftxtAmtToBeReimbursed.setValue(reimbursementAmt_should_be);
 				ftxtCashReturned.setEnabled(false);
 				ftxtAmtToBeReimbursed.setEnabled(true);
-				ftxtAmtToBeReimbursed.setEditable(true);
+				ftxtAmtToBeReimbursed.setEditable(false);
 				ftxtCashReturned.setValue(BigDecimal.ZERO);
 
 			} else { //Liquidation Amount is equal CA Amount
@@ -1383,42 +1390,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 			return;
 		}
 
-		// Retrieve the total amount of CA (Cash Advanced Request) to be liquidated
-		BigDecimal totalAmtOfCA = (BigDecimal) ftxtTotalAmtOfCA.getValued2();
-
-		// Retrieve the total amount of Cash Fund Liquidation
-		totalPCRAmt = (BigDecimal) modelPettyCashReqTotal.getValueAt(0, 7);
-
-		// Special condition for PCR Type "03" (CASH FUND LIQUIDATION)
-		if ("03".equals(pcr_type_id) && totalPCRAmt.compareTo(totalAmtOfCA) != 0) {
-
-			// Handle Cash Return and Reimbursement scenarios
-			cashRetamt = (BigDecimal) ftxtCashReturned.getValued(); 
-			reimbursementAmt = (BigDecimal) ftxtAmtToBeReimbursed.getValued(); 
-
-			System.out.println("Cash Return Amount: " + cashRetamt);
-			System.out.println("Reimbursement Amount: " + reimbursementAmt);
-			System.out.println("Total PCR Amount: " + totalPCRAmt);
-
-			if (totalPCRAmt.compareTo(totalAmtOfCA) < 0 && (cashRetamt == null || cashRetamt.equals(BigDecimal.ZERO)) ) {
-				showWarningMessage("Please input cash return amount.", "Cash Return");
-				return;
-			} else if (totalPCRAmt.compareTo(totalAmtOfCA) > 0 && (reimbursementAmt == null || reimbursementAmt.equals(BigDecimal.ZERO)) ) {
-				showWarningMessage("Please input reimbursement amount.", "Reimbursement");
-				return;
-			}
-
-			// Validate based on applicable liquidation scenario
-			if (cashRetamt != null && !cashRetamt.equals(BigDecimal.ZERO)) {
-				validateCashReturned(totalAmtOfCA);
-			} else if (reimbursementAmt != null && reimbursementAmt.compareTo(BigDecimal.ZERO) > 0) {
-				validateReimbursement(totalAmtOfCA);
-			} 
-
-		} else {
-			// If not Cash Fund Liquidation, confirm and save request directly
-			confirmAndSaveRequest();
-		}
+		confirmAndSaveRequest();
 	}
 
 	public void saveRequest() {
@@ -1699,7 +1671,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 		mapParameters.put("co_id", co_id);
 		mapParameters.put("logo", this.getClass().getClassLoader().getResourceAsStream("Images/" + company_logo));
 		mapParameters.put("user", UserInfo.FullName);
-		mapParameters.put("pcr_no", lookupPCRNo.getValue());
+		mapParameters.put("pcr_no", pcr_no);
 
 		System.out.println("");
 		System.out.println("Value of co_id:" +  co_id);

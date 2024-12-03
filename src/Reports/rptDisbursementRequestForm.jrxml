@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptDisbursementRequestForm" pageWidth="612" pageHeight="936" columnWidth="540" leftMargin="36" rightMargin="36" topMargin="36" bottomMargin="36">
 	<property name="ireport.zoom" value="1.331000000000033"/>
 	<property name="ireport.x" value="3"/>
-	<property name="ireport.y" value="291"/>
+	<property name="ireport.y" value="292"/>
 	<subDataset name="Table Dataset 1"/>
 	<parameter name="co_id" class="java.lang.String"/>
 	<parameter name="drf_no" class="java.lang.String"/>
@@ -430,10 +430,10 @@ AND a.drf_no = $P{drf_no}]]>
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
 				</box>
-				<textField isBlankWhenNull="true">
-					<reportElement x="142" y="28" width="386" height="18"/>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="142" y="28" width="386" height="18"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-						<font fontName="Tahoma" size="9" isBold="false"/>
+						<font fontName="Tahoma" size="8" isBold="false"/>
 					</textElement>
 					<textFieldExpression class="java.lang.String"><![CDATA[$F{soa_bill}]]></textFieldExpression>
 				</textField>
@@ -474,16 +474,16 @@ AND a.drf_no = $P{drf_no}]]>
 					<reportElement x="0" y="149" width="540" height="1"/>
 				</line>
 			</elementGroup>
-			<textField isBlankWhenNull="true">
-				<reportElement x="142" y="78" width="386" height="18"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="142" y="78" width="386" height="18"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="Tahoma" size="9" isBold="false"/>
+					<font fontName="Tahoma" size="8" isBold="false"/>
 				</textElement>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="142" y="61" width="386" height="18"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="142" y="61" width="386" height="18"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="Tahoma" size="9" isBold="false"/>
+					<font fontName="Tahoma" size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{other_details}]]></textFieldExpression>
 			</textField>
@@ -526,17 +526,17 @@ AND a.drf_no = $P{drf_no}]]>
 				</textElement>
 				<text><![CDATA[Other Details:]]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="142" y="95" width="386" height="18"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="142" y="95" width="386" height="18"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="Tahoma" size="9" isBold="false"/>
+					<font fontName="Tahoma" size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{requesters_remarks}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
-				<reportElement x="142" y="10" width="386" height="18"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="142" y="10" width="386" height="18"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="Tahoma" size="9" isBold="false"/>
+					<font fontName="Tahoma" size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{invoice}]]></textFieldExpression>
 			</textField>
@@ -579,10 +579,10 @@ AND a.drf_no = $P{drf_no}]]>
 				</textElement>
 				<text><![CDATA[Asset No:]]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="142" y="44" width="386" height="18"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="142" y="44" width="386" height="18"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" markup="none">
-					<font fontName="Tahoma" size="9" isBold="false"/>
+					<font fontName="Tahoma" size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{attachments}]]></textFieldExpression>
 			</textField>

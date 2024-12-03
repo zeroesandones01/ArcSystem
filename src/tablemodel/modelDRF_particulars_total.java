@@ -46,84 +46,86 @@ public class modelDRF_particulars_total extends DefaultTableModel {
 	public String[] COLUMNS = new String[] {
 		
 			"Account ID",		// 0
-			"Cost ID",			// 1
-			"Div",				// 2
-			"Proj",				// 3
-			"Account Desc", 	// 4
-			"Amount",			// 5
-			"Within", 			// 6
-			"Payee ID",			// 7
-			"Payee Type",		// 8
-			"Payee Name",		// 9
-			"Ref ID", 			// 10
-			"Ref No", 			// 11 
-			"Ref Date", 		// 12
-			"Item ID", 			// 13
-			"Item Description", // 14
-			"Invoice No.",		// 15
-			"Invoice Date", 	// 16
-			"SOA/Bill No.",		// 17
-			"SOA/Bill Date", 	// 18
-			"Asset No.", 		// 19
-			"Vatable Project",	// 20
-			"Vatable Entity",	// 21
-			"Taxable", 			// 22
-			"Gross Amt.",		// 23
-			"Net Amt",			// 24
-			"VAT Rate (%)",		// 25
-			"VAT Amount",		// 26
-			"WTax ID",			// 27
-			"WTax Rate (%)",	// 28
-			"WTax Amount",		// 29
-			"<html><center>Expense<html><br><html><center>Amount<html>",  	// 30
-			"<html><center>Retention<html><br><html><center>Amount<html>",  // 31			
-			"<html><center>DP Recoup.<html><br><html><center>Amount<html>", // 32			
-			"<html><center>Payable<html><br><html><center>Amount<html>",  	// 33
-			"<html><center>BC Liquidation<html><br><html><center>Amount<html>", // 34		
-			"<html><center>Other Liqui.<html><br><html><center>Amount<html>",  	// 35
-			"Rec ID" //36
+			"Account Desc", 	// 1
+			"Cost ID",			// 2
+			"Cost Desc", 		// 3
+			"Div",				// 4
+			"Proj",				// 5
+			"Amount",			// 6
+			"Within", 			// 7
+			"Payee ID",			// 8
+			"Payee Type",		// 9
+			"Payee Name",		// 10
+			"Ref ID", 			// 11
+			"Ref No", 			// 12 
+			"Ref Date", 		// 13
+			"Item ID", 			// 14
+			"Item Description", // 15
+			"Invoice No.",		// 16
+			"Invoice Date", 	// 17
+			"SOA/Bill No.",		// 18
+			"SOA/Bill Date", 	// 19
+			"Asset No.", 		// 20
+			"Vatable Project",	// 21
+			"Vatable Entity",	// 22
+			"Taxable", 			// 23
+			"Gross Amt.",		// 24
+			"Net Amt",			// 25
+			"VAT Rate (%)",		// 26
+			"VAT Amount",		// 27
+			"WTax ID",			// 28
+			"WTax Rate (%)",	// 29
+			"WTax Amount",		// 30
+			"<html><center>Expense<html><br><html><center>Amount<html>",  	// 31
+			"<html><center>Retention<html><br><html><center>Amount<html>",  // 32			
+			"<html><center>DP Recoup.<html><br><html><center>Amount<html>", // 33			
+			"<html><center>Payable<html><br><html><center>Amount<html>",  	// 34
+			"<html><center>BC Liquidation<html><br><html><center>Amount<html>", // 35		
+			"<html><center>Other Liqui.<html><br><html><center>Amount<html>",  	// 36
+			"Rec ID" //37
 			};
 
 
 	public Class[] CLASS_TYPES = new Class[] {
 		
 			String.class,		// 0 Account ID
-			String.class,		// 1 Cost ID
-			String.class,		// 2 Div
-			String.class,		// 3 Proj
-			Object.class, 		// 4 Account Desc
-			BigDecimal.class,	// 5 Amount
-			String.class,		// 6 Within
-			String.class,		// 7 Payee ID
-			String.class,		// 8 Payee Type	
-			String.class,		// 9 Payee Name
-			String.class, 		// 10 Ref ID
-			String.class, 		// 11 Ref No
-			Timestamp.class, 	// 12 Ref Date
-			String.class, 		// 13 Item ID
-			String.class, 		// 14 Item Description
-			String.class, 		// 15 Invoice No.
-			Timestamp.class, 	// 16 Invoice Date
-			String.class, 		// 17 SOA/Bill No.
-			Timestamp.class, 	// 18 SOA/Bill Date	
-			String.class,		// 19 Asset No.
-			String.class, 		// 20 Vatable Project
-			String.class,		// 21 Vatable Entity
-			String.class,		// 22 Taxable
-			BigDecimal.class,	// 23 Gross Amt.
-			BigDecimal.class,	// 24 Net Amt.
-			BigDecimal.class,	// 25 VAT Rate (%)
-			BigDecimal.class,	// 26 VAT Amount
-			String.class,		// 27 WTax ID
-			BigDecimal.class,	// 28 WTax Rate (%)
-			BigDecimal.class,	// 29 WTax Amount
-			BigDecimal.class,	// 30 Expense Amount
-			BigDecimal.class,	// 31 Retention Amount
-			BigDecimal.class,	// 32 DP Recoup Amount
-			BigDecimal.class,	// 33 BC Liqui. Amount
-			BigDecimal.class,	// 34 Other Liqui. Amount
-			BigDecimal.class,	// 35 Payable Amount
-			String.class 		// 36 Rec ID
+			Object.class, 		// 1 Account Desc
+			String.class,		// 2 Cost ID
+			Object.class, 		// 3 Cost Desc
+			String.class,		// 4 Div
+			String.class,		// 5 Proj
+			BigDecimal.class,	// 6 Amount
+			String.class,		// 7 Within
+			String.class,		// 8 Payee ID
+			String.class,		// 9 Payee Type	
+			String.class,		// 10 Payee Name
+			String.class, 		// 11 Ref ID
+			String.class, 		// 12 Ref No
+			Timestamp.class, 	// 13 Ref Date
+			String.class, 		// 14 Item ID
+			String.class, 		// 15 Item Description
+			String.class, 		// 16 Invoice No.
+			Timestamp.class, 	// 17 Invoice Date
+			String.class, 		// 18 SOA/Bill No.
+			Timestamp.class, 	// 19 SOA/Bill Date	
+			String.class,		// 20 Asset No.
+			String.class, 		// 21 Vatable Project
+			String.class,		// 22 Vatable Entity
+			String.class,		// 23 Taxable
+			BigDecimal.class,	// 24 Gross Amt.
+			BigDecimal.class,	// 25 Net Amt.
+			BigDecimal.class,	// 26 VAT Rate (%)
+			BigDecimal.class,	// 27 VAT Amount
+			String.class,		// 28 WTax ID
+			BigDecimal.class,	// 29 WTax Rate (%)
+			BigDecimal.class,	// 30 WTax Amount
+			BigDecimal.class,	// 31 Expense Amount
+			BigDecimal.class,	// 32 Retention Amount
+			BigDecimal.class,	// 33 DP Recoup Amount
+			BigDecimal.class,	// 34 BC Liqui. Amount
+			BigDecimal.class,	// 35 Other Liqui. Amount
+			BigDecimal.class,	// 36 Payable Amount
+			String.class 		// 37 Rec ID
 			
 	};
 
@@ -131,42 +133,43 @@ public class modelDRF_particulars_total extends DefaultTableModel {
 		setColumnIdentifiers(COLUMNS);
 		COLUMN_EDITABLE = new boolean[] {
 				false,	// 0 Account ID
-				false,	// 1 Cost ID
-				false,	// 2 Div							
-				false,	// 3 Proj
-				false, 	// 4 Account Desc
-				false,	// 5 Amount	
-				false,	// 6 Within
-				false,	// 7 Payee ID
-				false,	// 8 Payee Type			
-				false,	// 9 Payee Name
-				false, 	// 10 Ref ID
-				false, 	// 11 Ref No
-				false, 	// 12 Ref Date
-				false, 	// 13 Item ID
-				false, 	// 14 Item Description
-				true, 	// 15 Invoice No.
-				true,	// 16 Invoice Date
-				true, 	// 17 SOA/Bill No.
-				true, 	// 18 SOA/Bill Date
-				false,	// 19 Asset No.	
-				false, 	// 20 Vatable Project	
-				true,	// 21 Vatable Entity
-				true,	// 22 Taxable
-				false,	// 23 Gross Amt.
-				false, 	// 24 Net Amt. 
-				false,	// 25 VAT Rate (%)
-				false,	// 26 VAT Amount
-				false,	// 27 WTax ID				
-				false,	// 28 WTax Rate (%)
-				false,	// 29 WTax Amount
-				false,	// 30 Expense Amount
-				false,	// 31 Retention Amount				
-				false,	// 32 DP Recoup Amount
-				false,	// 33 BC Liqui Amount
-				false,	// 34 Other Liqui Amount
-				false,	// 35 Payable Amount
-				false	// 36 Rec ID
+				false, 	// 1 Account Desc
+				false,	// 2 Cost ID
+				false, 	// 3 Account Desc
+				false,	// 4 Div							
+				false,	// 5 Proj
+				false,	// 6 Amount	
+				false,	// 7 Within
+				false,	// 8 Payee ID
+				false,	// 9 Payee Type			
+				false,	// 10 Payee Name
+				false, 	// 11 Ref ID
+				false, 	// 12 Ref No
+				false, 	// 13 Ref Date
+				false, 	// 14 Item ID
+				false, 	// 15 Item Description
+				true, 	// 16 Invoice No.
+				true,	// 17 Invoice Date
+				true, 	// 18 SOA/Bill No.
+				true, 	// 19 SOA/Bill Date
+				false,	// 20 Asset No.	
+				false, 	// 21 Vatable Project	
+				true,	// 22 Vatable Entity
+				true,	// 23 Taxable
+				false,	// 24 Gross Amt.
+				false, 	// 25 Net Amt. 
+				false,	// 26 VAT Rate (%)
+				false,	// 27 VAT Amount
+				false,	// 28 WTax ID				
+				false,	// 29 WTax Rate (%)
+				false,	// 30 WTax Amount
+				false,	// 31 Expense Amount
+				false,	// 32 Retention Amount				
+				false,	// 33 DP Recoup Amount
+				false,	// 34 BC Liqui Amount
+				false,	// 35 Other Liqui Amount
+				false,	// 36 Payable Amount
+				false	// 37 Rec ID
 		};
 	}
 
@@ -187,10 +190,11 @@ public class modelDRF_particulars_total extends DefaultTableModel {
 		if(editable){
 			COLUMN_EDITABLE = new boolean[] {
 					false,	// Account ID
+					false, 	// Account Desc
 					false,	// Cost ID
+					false, 	// Cost Desc
 					false,	// Div
 					false,	// Proj
-					false, 	// Account Desc
 					false,	// Amount
 					false,	// Payee ID
 					false,	// Payee Type			
@@ -226,10 +230,11 @@ public class modelDRF_particulars_total extends DefaultTableModel {
 		}else{
 			COLUMN_EDITABLE = new boolean[] {
 					false,	// Account ID
+					false, 	// Account Desc
 					false,	// Cost ID
+					false, 	// Cost Desc
 					false,	// Div							
 					false,	// Proj
-					false, 	// Account Desc
 					false,	// Amount		
 					false,	// Payee ID
 					false,	// Payee Type			
