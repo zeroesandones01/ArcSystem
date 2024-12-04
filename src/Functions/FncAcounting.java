@@ -10,7 +10,7 @@ public class FncAcounting {
 
 		String SQL = 
 				"select status_id " +
-						"from mf_fad_process_access " +
+						"from rf_fad_process_access " +
 						"where emp_code = '"+emp_code+"' " +
 						"and process_no = "+process_no+" " +
 						"and authority_no = 1 " ;
@@ -38,7 +38,7 @@ public class FncAcounting {
 
 		String SQL = 
 				"select status_id " +
-						"from mf_fad_process_access " +
+						"from rf_fad_process_access " +
 						"where emp_code = '"+emp_code+"' " +
 						"and process_no = "+process_no+" " +
 						"and authority_no = 2 " ;
@@ -66,7 +66,7 @@ public class FncAcounting {
 
 		String SQL = 
 				"select status_id " +
-						"from mf_fad_process_access " +
+						"from rf_fad_process_access " +
 						"where emp_code = '"+emp_code+"' " +
 						"and process_no = "+process_no+" " +
 						"and authority_no = 3 " ;
@@ -94,7 +94,7 @@ public class FncAcounting {
 
 		String SQL = 
 				"select status_id " +
-						"from mf_fad_process_access " +
+						"from rf_fad_process_access " +
 						"where emp_code = '"+emp_code+"' " +
 						"and process_no = "+process_no+" " +
 						"and authority_no = 4 " ;
@@ -123,7 +123,7 @@ public class FncAcounting {
 
 		String SQL = 
 				"select status_id " +
-						"from mf_fad_process_access " +
+						"from rf_fad_process_access " +
 						"where emp_code = '"+emp_code+"' " +
 						"and process_no = "+process_no+" " +
 						"and authority_no = 5 " ;
@@ -151,7 +151,7 @@ public class FncAcounting {
 
 		String SQL = 
 				"select status_id " 
-				+ "from mf_fad_process_access " 
+				+ "from rf_fad_process_access " 
 				+ "where emp_code = '"+emp_code+"' " 
 				+ "and process_no = "+process_no+" " 
 				+ "and authority_no in (6,7) " ;

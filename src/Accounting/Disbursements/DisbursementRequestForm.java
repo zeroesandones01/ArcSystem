@@ -770,7 +770,6 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 					pnlDRFDtl_2a.add(lookupRequestType);
 					lookupRequestType.setBounds(20, 27, 20, 25);
 					lookupRequestType.setReturnColumn(0);
-					lookupRequestType.setEnabled(false);
 					lookupRequestType.setPreferredSize(new java.awt.Dimension(157, 22));
 					lookupRequestType.addLookupListener(new LookupListener() {	
 						
@@ -1627,7 +1626,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		lookupDRF_no.setEnabled(true);
 		btnCancel.setEnabled(true);
 		btnAddNew.setEnabled(true);
-
+		lookupRequestType.setEnabled(false);
 
 		if(allowedAccess.equals("Accounting")){
 			lookupDRF_no.setLookupSQL(getDRF_no_accntg(lookupCompany.getValue()));
@@ -4863,8 +4862,10 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 	}
 	
 	private static Date getMinDRFDate(){
+		Integer validity = 5; 
+		
 		pgSelect db = new pgSelect();
-		db.select("Select fn_get_previous_5_working_days(); ");
+		db.select("Select fn_get_last_valid_working_day("+validity+"); ");
 		return (Date) db.getResult()[0][0];
 	}
 

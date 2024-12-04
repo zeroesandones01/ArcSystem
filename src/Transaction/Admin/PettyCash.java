@@ -1,7 +1,7 @@
 /**
  * 
  */
-package Transaction;
+package Transaction.Admin;
 
 import java.awt.BorderLayout;
 import java.awt.Checkbox;
@@ -848,12 +848,6 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 		if(e.getActionCommand().equals("Pay")) {
 			pay_process_PCR(pcr_status);
 			displayPCR_header(co_id, pcr_no);
-
-//			SwingUtilities.invokeLater(new Runnable() {
-//				public void run() {
-//					btnPreview.requestFocusInWindow();
-//				}
-//			});
 		}
 
 		if(e.getActionCommand().equals("Process")) {
@@ -932,7 +926,6 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 		modelPettyCashReq.setEditable(true);
 		setDiv();
 	}
-
 
 	public static String getPCR_no(String co_id, String user, String curr_year) {
 		String SQL = "SELECT a.pcr_no AS \"PCR No\"\n"
@@ -1132,10 +1125,11 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 			Object [] data = dlg.getReturnDataSet(); 
 
 			if(data != null) {
-				if(selected_column == 2) {
+				if(selected_column == 2) { // Acct. Description 
 					modelPettyCashReq.setValueAt(data[0], selected_row, selected_column);
 					modelPettyCashReq.setValueAt(data[1], selected_row, selected_column -1); 
-				}else if (selected_column == 4) {
+					
+				}else if (selected_column == 4) { // Project
 					modelPettyCashReq.setValueAt(data[2], selected_row, selected_column);
 					modelPettyCashReq.setValueAt(data[0], selected_row, selected_column -1); 
 				}
@@ -1249,13 +1243,13 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 						// Check if the Petty Cash amount is greater than 0
 						if (pcrAmt > 0) {
 							System.out.println("Petty Cash Amount is Greater than 0!");
-							isValid = true;  // Valid PCR amount
+							isValid = true;  
 						} else {
-							isValid = false;  // Invalid PCR amount (less than or equal to 0)
+							isValid = false; 
 						}
 					} else {
 						System.out.println("Petty Cash Amount is empty or invalid.");
-						isValid = false;  // PCR amount is invalid if empty
+						isValid = false;  
 					}
 				} catch (NumberFormatException e) {
 					System.out.println("Invalid PCR amount format at row " + rowIndex + ": " + e.getMessage());
@@ -1280,12 +1274,13 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 					// Get the account ID from the table and check if it's empty
 					String acctId = modelPettyCashReq.getValueAt(rowIndex, 2).toString().trim();
 					if (acctId.isEmpty()) {
-						isComplete = false;  // If account ID is missing, return false
-						break;  		                }
+						isComplete = false; 
+						break;  		              
+					}
 				}
 			} catch (NumberFormatException e) {
 				System.out.println("Invalid Petty Cash amount at row " + rowIndex + ": " + e.getMessage());
-				isComplete = false;  // If Petty Cash amount is invalid, return false
+				isComplete = false; 
 				break;
 			}
 		}
@@ -1308,54 +1303,54 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 		return isValid;
 	}
 
-	private void validateCashReturned(BigDecimal pcr_liq_amt) {
-
-		System.out.println("");
-		System.out.println("Value of Cash Adv Amount to Liquidate: " + pcr_liq_amt);
-		System.out.println("Value of Cash Returned: " + ftxtCashReturned.getValued());
-		System.out.println("Value of PCR Liquidation: " + totalPCRAmt);
-		System.out.println(pcr_liq_amt + " = " + totalPCRAmt.add(cashRetamt));
-		System.out.println("");
-
-		BigDecimal cashReturnAmt_should_be = pcr_liq_amt.subtract(totalPCRAmt); 
-		String formattedValue = String.format("%,.2f", cashReturnAmt_should_be);
-
-		if((totalPCRAmt.add(cashRetamt)).compareTo(pcr_liq_amt) < 0) {
-			showWarningMessage("Insufficient cash returned amount. \nThe amount shoud be " + formattedValue , "Liquidation");
-			return; 
-		} else if ((totalPCRAmt.add(cashRetamt)).compareTo(pcr_liq_amt) > 0){
-			showWarningMessage("Excess cash returned amount. \nThe amount shoud be " + formattedValue, "Liquidation");
-			return; 
-		} else {
-			// If total PCR amount equals amount of CA , ask for confirmation to save
-			confirmAndSaveRequest();
-		}
-	}
-
-	private void validateReimbursement(BigDecimal pcr_liq_amt) {
-
-		System.out.println("");
-		System.out.println("Value of Cash Adv Amount to Liquidate: " + pcr_liq_amt);
-		System.out.println("Value of Amount to be Reimburse: " + ftxtAmtToBeReimbursed.getValued());
-		System.out.println("Value of PCR Liquidation: " + totalPCRAmt);
-		System.out.println(pcr_liq_amt.add(reimbursementAmt) + " = " + totalPCRAmt);
-		System.out.println("");
-
-		BigDecimal reimbursementAmt_should_be = totalPCRAmt.subtract(pcr_liq_amt); 
-		String formattedValue = String.format("%,.2f", reimbursementAmt_should_be);
-
-
-		if((pcr_liq_amt.add(reimbursementAmt)).compareTo(totalPCRAmt) < 0) {
-			showWarningMessage("Insufficient reimbursement amount. \nThe amount shoud be " + formattedValue, "Liquidation");
-			return;
-		} else if ((pcr_liq_amt.add(reimbursementAmt)).compareTo(totalPCRAmt) > 0) {
-			showWarningMessage("Excess reimbursement amount. \nThe amount shoud be " + formattedValue, "Liquidation");
-			return;
-		}	else {
-			// If total PCR amount equals amount of CA , ask for confirmation to save
-			confirmAndSaveRequest();
-		}
-	}
+//	private void validateCashReturned(BigDecimal pcr_liq_amt) {
+//
+//		System.out.println("");
+//		System.out.println("Value of Cash Adv Amount to Liquidate: " + pcr_liq_amt);
+//		System.out.println("Value of Cash Returned: " + ftxtCashReturned.getValued());
+//		System.out.println("Value of PCR Liquidation: " + totalPCRAmt);
+//		System.out.println(pcr_liq_amt + " = " + totalPCRAmt.add(cashRetamt));
+//		System.out.println("");
+//
+//		BigDecimal cashReturnAmt_should_be = pcr_liq_amt.subtract(totalPCRAmt); 
+//		String formattedValue = String.format("%,.2f", cashReturnAmt_should_be);
+//
+//		if((totalPCRAmt.add(cashRetamt)).compareTo(pcr_liq_amt) < 0) {
+//			showWarningMessage("Insufficient cash returned amount. \nThe amount shoud be " + formattedValue , "Liquidation");
+//			return; 
+//		} else if ((totalPCRAmt.add(cashRetamt)).compareTo(pcr_liq_amt) > 0){
+//			showWarningMessage("Excess cash returned amount. \nThe amount shoud be " + formattedValue, "Liquidation");
+//			return; 
+//		} else {
+//			// If total PCR amount equals amount of CA , ask for confirmation to save
+//			confirmAndSaveRequest();
+//		}
+//	}
+//
+//	private void validateReimbursement(BigDecimal pcr_liq_amt) {
+//
+//		System.out.println("");
+//		System.out.println("Value of Cash Adv Amount to Liquidate: " + pcr_liq_amt);
+//		System.out.println("Value of Amount to be Reimburse: " + ftxtAmtToBeReimbursed.getValued());
+//		System.out.println("Value of PCR Liquidation: " + totalPCRAmt);
+//		System.out.println(pcr_liq_amt.add(reimbursementAmt) + " = " + totalPCRAmt);
+//		System.out.println("");
+//
+//		BigDecimal reimbursementAmt_should_be = totalPCRAmt.subtract(pcr_liq_amt); 
+//		String formattedValue = String.format("%,.2f", reimbursementAmt_should_be);
+//
+//
+//		if((pcr_liq_amt.add(reimbursementAmt)).compareTo(totalPCRAmt) < 0) {
+//			showWarningMessage("Insufficient reimbursement amount. \nThe amount shoud be " + formattedValue, "Liquidation");
+//			return;
+//		} else if ((pcr_liq_amt.add(reimbursementAmt)).compareTo(totalPCRAmt) > 0) {
+//			showWarningMessage("Excess reimbursement amount. \nThe amount shoud be " + formattedValue, "Liquidation");
+//			return;
+//		}	else {
+//			// If total PCR amount equals amount of CA , ask for confirmation to save
+//			confirmAndSaveRequest();
+//		}
+//	}
 
 	private static String getPayeeID(String emp_code){
 		pgSelect db = new pgSelect();
@@ -1693,7 +1688,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 		if (JOptionPane.showConfirmDialog(getContentPane(), "Are you sure to pay / process this request?", "Confirmation",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
 
-			// Password validation for custodian
+			// Password validation for Custodian
 			dlg_CR_PW_Entry pw = new dlg_CR_PW_Entry(FncGlobal.homeMDI, "Password");
 			pw.setLocationRelativeTo(null);
 			pw.setVisible(true);
@@ -1714,6 +1709,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 						query = "UPDATE rf_petty_cash_header \n"
 								+ "SET status_id = 'B'\n"
 								+ ", pcr_date_paid = '"+dateFormat.format(dteTransDate.getDate())+"' \n"
+								+ ", pcr_paid_by = '"+user+"'\n"
 								+ "WHERE co_id = '"+co_id+"'\n"
 								+ "AND pcr_no = '"+pcr_no+"'\n"
 								+ "AND rec_status = 'A';"; 
@@ -1725,6 +1721,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 						query = "UPDATE rf_petty_cash_header \n"
 								+ "SET status_id = 'G'\n"
 								+ ", pcr_date_processed = '"+dateFormat.format(dteTransDate.getDate())+"' \n"
+								+ ", pcr_processed_by = '"+user+"'\n"
 								+ "WHERE co_id = '"+co_id+"'\n"
 								+ "AND pcr_no = '"+pcr_no+"'\n"
 								+ "AND rec_status = 'A';"; 
@@ -1737,6 +1734,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 					query = "UPDATE rf_petty_cash_header \n"
 							+ "SET status_id = 'G'\n"
 							+ ", pcr_date_processed = '"+dateFormat.format(dteTransDate.getDate())+"' \n"
+							+ ", pcr_processed_by = '"+user+"'\n"
 							+ "WHERE co_id = '"+co_id+"'\n"
 							+ "AND pcr_no = '"+pcr_no+"'\n"
 							+ "AND rec_status = 'A';"; 
