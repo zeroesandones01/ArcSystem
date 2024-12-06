@@ -89,7 +89,7 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 	private _JTableMain tblmovement;
 	public static JList rowheaderMovement;
 	public static String co_id = "01";
-	public static String co_name = "ACERLAND DEVELOPMENT CORPORATION";
+	public static String co_name = "ACERLAND REALTY CORPORATION";
 	public static String co_logo = "cenqlogo.png";
 	protected DefaultTableCellRenderer rendererCenterAlign = new DefaultTableCellRenderer();
 	
@@ -97,7 +97,7 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 	public AssetMonitoring2() {
 		super(title, true, true, true, true);
 		initGUI();
-		displayAllAssets(false, false);
+		
 	}
 
 	public AssetMonitoring2(String title) {
@@ -138,6 +138,7 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 							JLabel lblselectcompany = new JLabel("Company");
 							pnlcomp_filter.add(lblselectcompany, BorderLayout.WEST);
 							lblselectcompany.setPreferredSize(new Dimension(76, 0));
+							lblselectcompany.setFont(new Font("Segoe UI", Font.BOLD, 12));
 						}
 						{
 							lookupselectcompany = new _JLookup();
@@ -181,6 +182,7 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 							JLabel lblcustodian = new JLabel("Custodian");
 							pnlcustodian.add(lblcustodian, BorderLayout.WEST);
 							lblcustodian.setPreferredSize(new Dimension(78, 0));
+							lblcustodian.setFont(new Font("Segoe UI", Font.BOLD, 12));
 						}
 						{
 							JPanel pnlcustodian_filter = new JPanel(new BorderLayout(5, 5));
@@ -216,6 +218,7 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 								{
 									chkinactiveemp = new JCheckBox("Include Inactive Employees");
 									pnlcheckbox.add(chkinactiveemp, BorderLayout.WEST);
+									chkinactiveemp.setFont(new Font("Segoe UI", Font.BOLD, 10));
 									chkinactiveemp.addItemListener(new ItemListener() {
 										public void itemStateChanged(ItemEvent e) {
 											
@@ -225,6 +228,7 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 								{
 									chkinactiveassets = new JCheckBox("Include Inactive Assets");
 									pnlcheckbox.add(chkinactiveassets, BorderLayout.EAST);
+									chkinactiveassets.setFont(new Font("Segoe UI", Font.BOLD, 10));
 									chkinactiveassets.addItemListener(new ItemListener() {
 										public void itemStateChanged(ItemEvent e) {
 											
@@ -254,10 +258,12 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 							public void valueChanged(ListSelectionEvent e) {
 								if (!e.getValueIsAdjusting()) {
 									try {
+										//int row = tblAssets.convertRowIndexToModel(tblAssets.getSelectedRow());
 										int row = tblAssets.getSelectedRow();
 										String asset_no = (String) modelAssets.getValueAt(row, 1);
-										String rec_id = (String) modelAssets.getValueAt(row, 9);
+										String rec_id = (String) modelAssets.getValueAt(row, 8);
 										
+										System.out.println("Asset No.: "+ asset_no);
 										panelAssetInformation2.displayAssetDetail(asset_no);
 										displayMovementHistory(modelmovement,rowheaderMovement, asset_no);
 										buttontagging(true, true, true);
@@ -273,7 +279,6 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 						tblAssets.setFillsViewportHeight(false);
 						tblAssets.getColumnModel().getColumn(0).setPreferredWidth(50);// checkbox
 						tblAssets.getColumnModel().getColumn(1).setPreferredWidth(120);
-						tblAssets.getColumnModel().getColumn(2).setPreferredWidth(130);// asset code
 						tblAssets.getColumnModel().getColumn(3).setPreferredWidth(200);// asset name
 						tblAssets.getColumnModel().getColumn(4).setPreferredWidth(100);// date acquired
 						tblAssets.getColumnModel().getColumn(6).setPreferredWidth(230);// Custodian
@@ -495,6 +500,7 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 				}
 			});
 		}
+		displayAllAssets(false, false);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -518,12 +524,12 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 				}else {
 					JOptionPane.showMessageDialog(getTopLevelAncestor(),
 							"Please fill up the required fields", btn1.getText(),
-							JOptionPane.WARNING_MESSAGE);
+							JOptionPane.ERROR_MESSAGE);
 				}
 			}else {
 				JOptionPane.showMessageDialog(getTopLevelAncestor(),
 						"Please select asset to transfer", "Transfer",
-						JOptionPane.WARNING_MESSAGE);
+						JOptionPane.ERROR_MESSAGE);
 			}
 			
 		}

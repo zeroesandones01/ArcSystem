@@ -29,6 +29,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -71,6 +73,8 @@ import DateChooser._JDateChooser;
 import Dialogs.dlg_accesories_v1;
 import Dialogs.dlg_accesories_v2;
 import Dialogs.dlg_todo_assetmonitoring;
+import FormattedTextField.InputEvent;
+import FormattedTextField.InputListener;
 import FormattedTextField._JXFormattedTextField;
 import Functions.FncGlobal;
 import Functions.FncReport;
@@ -212,7 +216,6 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 	public static ButtonGroup grpCapitalized = new ButtonGroup();
 	public static JRadioButton rbCapitalizedYes;
 	public static JRadioButton rbCapitalizedNo;
-
 	private JPanel pnl17;
 	private JPanel pnl17_1;
 	private static JLabel lblInsured;
@@ -223,15 +226,11 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 	private JPanel pnl17_2;
 	private static JLabel lblInsuredValue;
 	public static _JXFormattedTextField txtInsuredValue;
-
 	private JPanel pnl18;
 	private JPanel pnl18_1;
 	private static JLabel lblReferenceNo;
 	public static JXTextField txtReferenceNo;
 	private JPanel pnl18_2;
-	//private static JLabel lblNoOfAssets;
-	//public static JTextField txtNoOfAssets;
-	
 	public static JCheckBox chkMyAssets;
 	protected JGlassLoading glass;
 	protected ListSelectionModel rowSM;
@@ -256,15 +255,13 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 	public static ButtonGroup grpFound = new ButtonGroup();
 	private JPanel pnl19_2;
 	public static JComboBox cmbstatus;
-	public static String co_id;
-	public static String co_name;
+	public static String co_id = AssetMonitoring2.co_id;
+	public static String co_name = AssetMonitoring2.co_name;
 	public static String co_logo;
 	public static String division_code;
 	public String Item;
 	private JPanel pnl13_1;
 	private JPanel pnl13_2;
-	private JLabel lblrplf;
-	private _JXFormattedTextField txtrplf;
 	public static JComboBox cmbremarks;
 	private JPanel pnl9_1;
 	public static JButton btnaccesories;
@@ -275,6 +272,14 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 
 	protected String location_id;
 
+	private _JXFormattedTextField txtdrfno;
+
+	private JLabel lbldrf;
+
+	protected Integer category_id;
+
+	private static _JXFormattedTextField txtgross;
+
 	public static JDialog dialog;
 	public static JButton btnattachment;
 	public static JButton btnviewattachment;
@@ -283,6 +288,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 	public static String sticker_count="";
 	public static String emp_code="";
 	public static String loc_id;
+	static NumberFormat nf = new DecimalFormat("###,###,###,##0.00"); 
 
 	public panelAssetInformation2() {
 		initGUI();
@@ -325,6 +331,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 						{
 							lblAssetNo = new JLabel("Asset No.");
 							jPanel1.add(lblAssetNo);
+							lblAssetNo.setFont(new Font("Segoe UI", Font.BOLD, 10));
 						}
 						{
 							txtAssetNo = new JTextField();
@@ -346,6 +353,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 					{
 						lblAcquired = new JLabel("Date Acquired", JLabel.TRAILING);
 						pnl1.add(lblAcquired, BorderLayout.CENTER);
+						lblAcquired.setFont(new Font("Segoe UI", Font.BOLD, 10));
 					}
 				}
 				{
@@ -358,6 +366,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 						{
 							lblCompany = new JLabel("Company");
 							jPanel2.add(lblCompany);
+							lblCompany.setFont(new Font("Segoe UI", Font.BOLD, 10));
 						}
 						{
 							lookupCompany = new _JLookup(null , "Company",0);
@@ -391,12 +400,14 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 						{
 							lblCustodian = new JLabel("*Custodian");
 							jPanel3.add(lblCustodian);
+							lblCustodian.setFont(new Font("Segoe UI", Font.BOLD, 10));
 						}
 						{
 							lookupCustodian = new _JLookup(null , "Custodian", 0);
 							jPanel3.add(lookupCustodian);
 							lookupCustodian.setEditable(false);
 							lookupCustodian.setLookupSQL(getCustodian());
+							lookupCustodian.setFilterName(true);
 							lookupCustodian.addLookupListener(new LookupListener() {
 								@Override
 								public void lookupPerformed(LookupEvent event) {
@@ -431,6 +442,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 						{
 							lblCategory = new JLabel("*Category");
 							jPanel4.add(lblCategory);
+							lblCategory.setFont(new Font("Segoe UI", Font.BOLD, 10));
 						}
 						{
 							lookupCategory = new _JLookup(null , "Category");
@@ -438,12 +450,17 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 							lookupCategory.setReturnColumn(0);
 							lookupCategory.setEditable(false);
 							lookupCategory.setLookupSQL(getCategory());
+							lookupCategory.setFilterName(true);
 							lookupCategory.addLookupListener(new LookupListener() {
+
 								@Override
 								public void lookupPerformed(LookupEvent event) {
 									Object[] data = ((_JLookup) event.getSource()).getDataSet();
 									if(data != null){
 										txtCategory.setText((String)data[1]);
+										category_id = (Integer) data[0];
+										lookupItem.setLookupSQL(getitem(category_id));
+										
 									}
 								}
 							});
@@ -465,14 +482,16 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 						{
 							lblItem = new JLabel("*Item");
 							jPanel5.add(lblItem);
+							lblItem.setFont(new Font("Segoe UI", Font.BOLD, 10));
 						}
 						{
 							lookupItem = new _JLookup(null , "Item" );
 							jPanel5.add(lookupItem);
 							lookupItem.setReturnColumn(0);
 							lookupItem.setEnabled(false);
+							lookupItem.setFilterName(true);
 							//lookupItem.setLookupSQL(_AssetMonitoring.getItem(lookupCategory.getValue()));
-							lookupItem.setLookupSQL("select '01', 'Car' union all select '02', 'Computer set' ");
+							//lookupItem.setLookupSQL("select '01', 'Car' union all select '02', 'Computer set' ");
 							lookupItem.addLookupListener(new LookupListener() {
 								public void lookupPerformed(LookupEvent event) {
 									Object[] data = ((_JLookup) event.getSource()).getDataSet();
@@ -508,6 +527,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 						lblBrand = new JLabel("*Brand");
 						pnl6.add(lblBrand, BorderLayout.WEST);
 						lblBrand.setPreferredSize(new Dimension(80, 25));
+						lblBrand.setFont(new Font("Segoe UI", Font.BOLD, 10));
 					}
 					{
 						txtBrand = new JTextField();
@@ -544,6 +564,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 						lblDescription = new JLabel("*Description");
 						pnl7.add(lblDescription, BorderLayout.WEST);
 						lblDescription.setPreferredSize(new Dimension(80, 25));
+						lblDescription.setFont(new Font("Segoe UI", Font.BOLD, 10));
 					}
 					{
 						txtDescription = new JTextField();
@@ -580,13 +601,14 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 						{
 							lblSupplier = new JLabel("*Supplier");
 							jPanel8.add(lblSupplier);
+							lblSupplier.setFont(new Font("Segoe UI", Font.BOLD, 10)); 
 						}
 						{
 							lookupSupplier = new _JLookup(null , "Supplier", 0);
 							jPanel8.add(lookupSupplier);
 							lookupSupplier.setEditable(false);
 							lookupSupplier.setLookupSQL(getsupplier());
-							//lookupSupplier.setLookupSQL("Select '01', 'Test Supplier'");
+							lookupSupplier.setFilterName(true);
 							lookupSupplier.addLookupListener(new LookupListener() {
 								
 								@Override
@@ -609,29 +631,461 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 					pnl9 = new JPanel(new BorderLayout(3,3));
 					pnlInfo1.add(pnl9);
 					{
-						lblRemarks = new JLabel("Remarks1");
+						lblRemarks = new JLabel("Remarks");
 						pnl9.add(lblRemarks, BorderLayout.WEST);
 						lblRemarks.setPreferredSize(new Dimension(77, 25));
+						lblRemarks.setFont(new Font("Segoe UI", Font.BOLD, 10)); 
 					}
 					{
 						txtRemarks = new JTextField();
 						pnl9.add(txtRemarks, BorderLayout.CENTER);
 						txtRemarks.setEditable(false);
 					}
-					{
-						pnl9_1 = new JPanel(new BorderLayout(3,3));
-						pnl9.add(pnl9_1, BorderLayout.EAST);
-						pnl9_1.setPreferredSize(new Dimension(170,0));
-//						{
-//							lblremarks2 = new JLabel("Remarks2");
-//							pnl9_1.add(lblremarks2, BorderLayout.WEST);
-//							lblremarks2.setPreferredSize(new Dimension(65,0));
-//						}
-					}
-		
 				}
 			}
 			{
+				pnlInfo2 = new JPanel(new GridLayout(1, 2, 3, 3));
+				pnlInfomationCenter.add(pnlInfo2);
+				{
+					JPanel pnlInfo2_a = new JPanel(new GridLayout(10, 1, 3, 3));
+					pnlInfo2.add(pnlInfo2_a);
+					{
+						JPanel pnl1a = new JPanel(new BorderLayout());
+						pnlInfo2_a.add(pnl1a);
+						{
+							lblBookValue = new JLabel("Book Value");
+							pnl1a.add(lblBookValue, BorderLayout.WEST);
+							lblBookValue.setPreferredSize(new Dimension(75, 0));
+							lblBookValue.setFont(new Font("Segoe UI", Font.BOLD, 10)); 
+							
+						}
+						{
+							txtBookValue = new _JXFormattedTextField(JXFormattedTextField.RIGHT);
+							pnl1a.add(txtBookValue, BorderLayout.CENTER);
+							txtBookValue.setEditable(false);
+							txtBookValue.setFormatterFactory(_JXFormattedTextField.DECIMAL);
+						}
+					}
+					{
+						JPanel pnl2a = new JPanel( new BorderLayout() );
+						pnlInfo2_a.add(pnl2a);
+						{
+							lblRetCost = new JLabel("Ret. Cost");
+							pnl2a.add(lblRetCost, BorderLayout.WEST);
+							lblRetCost.setPreferredSize(new Dimension(75, 0));
+							lblRetCost.setFont(new Font("Segoe UI", Font.BOLD, 10)); 
+						}
+						{
+							txtRetCost = new _JXFormattedTextField(JXFormattedTextField.RIGHT);
+							pnl2a.add(txtRetCost, BorderLayout.CENTER);
+							txtRetCost.setEditable(false);
+							txtRetCost.setFormatterFactory(_JXFormattedTextField.DECIMAL);
+						}
+
+					}
+					{
+						JPanel pnl4a = new JPanel( new BorderLayout() );
+						pnlInfo2_a.add(pnl4a);
+						{
+							JLabel lblgross = new JLabel("*Gross Cost");
+							pnl4a.add(lblgross, BorderLayout.WEST);
+							lblgross.setPreferredSize(new Dimension(75, 0));
+							lblgross.setFont(new Font("Segoe UI", Font.BOLD, 10)); 
+						}
+						{
+							txtgross = new _JXFormattedTextField(JXFormattedTextField.RIGHT);
+							txtgross.setActionCommand("gross");
+							pnl4a.add(txtgross, BorderLayout.CENTER);
+							txtgross.setFormatterFactory(_JXFormattedTextField.DECIMAL);
+							txtgross.addKeyListener(new KeyAdapter() {
+								
+								public void keyReleased(KeyEvent e) {
+									try{
+										System.out.println("press Gross");
+										txtUsefulLife.setEditable(true);
+										
+										Double gross = Double.valueOf(txtgross.getText().trim().replace(",","")).doubleValue();
+										txtNetCost.setText(nf.format(gross));
+										
+										
+										if(txtUsefulLife.getValue() == null) {
+											System.out.println("ULM: "+ txtUsefulLife.getValue());
+										}else {
+											computemonthlydep();
+										}
+									} catch(NumberFormatException a) {}
+								}
+
+								public void keyPressed(KeyEvent e) {
+									if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+										System.out.println("Enter Gross");
+									}
+								}
+							});
+						}
+					}
+					{
+						JPanel pnl5b = new JPanel( new BorderLayout() );
+						pnlInfo2_a.add(pnl5b);
+						{
+							lblNetCost = new JLabel("*Net Cost");
+							pnl5b.add(lblNetCost, BorderLayout.WEST);
+							lblNetCost.setPreferredSize(new Dimension(75, 0));
+							lblNetCost.setFont(new Font("Segoe UI", Font.BOLD, 10)); 
+						}
+						{
+							txtNetCost = new _JXFormattedTextField(JXFormattedTextField.RIGHT);
+							pnl5b.add(txtNetCost, BorderLayout.CENTER);
+							txtNetCost.setFormatterFactory(_JXFormattedTextField.DECIMAL);
+							
+						}
+					}
+					{
+						JPanel pnl6a = new JPanel( new BorderLayout()) ;
+						pnlInfo2_a.add(pnl6a);
+						{
+							lblUsefulLife = new JLabel("*ULM" );
+							pnl6a.add(lblUsefulLife, BorderLayout.WEST);
+							lblUsefulLife.setPreferredSize(new Dimension(75, 0));
+							lblUsefulLife.setFont(new Font("Segoe UI", Font.BOLD, 10)); 
+						}
+						{
+							txtUsefulLife = new _JXFormattedTextField(JXFormattedTextField.CENTER);
+							pnl6a.add(txtUsefulLife, BorderLayout.CENTER);
+							txtUsefulLife.setEditable(false);
+							txtUsefulLife.setFormatterFactory(_JXFormattedTextField.INTEGER);
+							txtUsefulLife.addKeyListener(new KeyAdapter() {
+								
+								public void keyReleased(KeyEvent e) {
+									try{
+										System.out.println("press Gross");
+										if(txtgross.getValue() == null) {
+											System.out.println("gross: "+ txtgross.getValue());
+											JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please enter gross amount.", null, JOptionPane.WARNING_MESSAGE);
+										}else {
+											computemonthlydep();
+										}
+									} catch(NumberFormatException a) {}
+								}
+
+								public void keyPressed(KeyEvent e) {
+									if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+										System.out.println("Enter Gross");
+									}
+								}
+							});
+						}
+					}
+					{
+						JPanel pnl5a = new JPanel( new BorderLayout() );
+						pnlInfo2_a.add(pnl5a);
+						{
+							lblMonthlyDep = new JLabel("Monthly Dep." );
+							pnl5a.add(lblMonthlyDep, BorderLayout.WEST);
+							lblMonthlyDep.setPreferredSize(new Dimension(75, 0));
+							lblMonthlyDep.setFont(new Font("Segoe UI", Font.BOLD, 10)); 
+						}
+						{
+							txtMonthlyDep = new _JXFormattedTextField(JXFormattedTextField.RIGHT);
+							pnl5a.add(txtMonthlyDep, BorderLayout.CENTER);
+							txtMonthlyDep.setEditable(false);
+							txtMonthlyDep.setFormatterFactory(_JXFormattedTextField.DECIMAL);
+						}
+					}
+					{
+						JPanel pnl7a = new JPanel( new BorderLayout() );
+						pnlInfo2_a.add(pnl7a);
+						{
+							lblOwned = new JLabel("*Owned");
+							pnl7a.add(lblOwned, BorderLayout.WEST);
+							lblOwned.setPreferredSize(new Dimension(75, 0));
+							lblOwned.setFont(new Font("Segoe UI", Font.BOLD, 10)); 
+						}
+						{
+							pnlOwned = new JPanel(new GridLayout(1, 2));
+							pnl7a.add(pnlOwned, BorderLayout.CENTER);
+							pnlOwned.setBorder(BorderFactory.createTitledBorder(_LINE_BORDER));;
+							{
+								rbOwnedYes = new JRadioButton("Yes");
+								rbOwnedYes.setEnabled(false);
+								pnlOwned.add(rbOwnedYes);
+								grpOwned.add(rbOwnedYes);
+							}
+							{
+								rbOwnedNo = new JRadioButton("No");
+								rbOwnedNo.setEnabled(false);
+								pnlOwned.add(rbOwnedNo);
+								grpOwned.add(rbOwnedNo);
+							}
+						}
+					}
+					{
+						JPanel pnl8a = new JPanel( new BorderLayout() );
+						pnlInfo2_a.add(pnl8a);
+						{
+							lblInsured = new JLabel("*Insured");
+							pnl8a.add(lblInsured, BorderLayout.WEST);
+							lblInsured.setPreferredSize(new Dimension(75, 0));
+							lblInsured.setFont(new Font("Segoe UI", Font.BOLD, 10)); 
+						}
+						{
+							pnlInsured = new JPanel(new GridLayout(1, 2));
+							pnl8a.add(pnlInsured, BorderLayout.CENTER);
+							pnlInsured.setBorder(BorderFactory.createTitledBorder(_LINE_BORDER));;
+							{
+								rbInsuredYes = new JRadioButton("Yes");
+								pnlInsured.add(rbInsuredYes);
+								rbInsuredYes.setEnabled(false);
+								grpInsured.add(rbInsuredYes);
+								rbInsuredYes.addActionListener(new ActionListener() {
+									public void actionPerformed(ActionEvent e) {
+										
+									}
+								});
+							}
+							{
+								rbInsuredNo = new JRadioButton("No");
+								pnlInsured.add(rbInsuredNo);
+								rbInsuredNo.setEnabled(false);
+								grpInsured.add(rbInsuredNo);
+								rbInsuredNo.addActionListener(new ActionListener() {
+									public void actionPerformed(ActionEvent e) {
+									}
+								});
+							}
+						}
+					}
+					{
+						JPanel pnl9a = new JPanel( new BorderLayout() );
+						pnlInfo2_a.add(pnl9a);
+						{
+							lblReferenceNo = new JLabel("Ref. No.");
+							pnl9a.add(lblReferenceNo, BorderLayout.WEST);
+							lblReferenceNo.setPreferredSize(new Dimension(75, 0));
+							lblReferenceNo.setFont(new Font("Segoe UI", Font.BOLD, 10)); 
+						}
+						{
+							txtReferenceNo = new JXTextField();
+							pnl9a.add(txtReferenceNo, BorderLayout.CENTER);
+							txtReferenceNo.setEditable(false);
+						}
+					}
+					{
+						JPanel pnl10a = new JPanel( new BorderLayout() );
+						pnlInfo2_a.add(pnl10a);
+						{
+							lblFound= new JLabel("Item Found");
+							pnl10a.add(lblFound, BorderLayout.WEST);
+							lblFound.setPreferredSize(new Dimension(75, 0));
+							lblFound.setFont(new Font("Segoe UI", Font.BOLD, 10)); 
+						}
+						{
+							pnlFound=new JPanel(new GridLayout(1, 2));
+							pnl10a.add(pnlFound, BorderLayout.CENTER);
+							pnlFound.setPreferredSize(new Dimension(150, 0));
+							{
+								rbFoundYes= new JRadioButton("Yes");
+								pnlFound.add(rbFoundYes);
+								grpFound.add(rbFoundYes);
+								
+							}
+							{
+								rbFoundNo= new JRadioButton("No");
+								pnlFound.add(rbFoundNo);
+								grpFound.add(rbFoundNo);
+								
+							}
+						}
+					}
+				}
+				
+				//Left
+				{
+					JPanel pnlInfo2_b = new JPanel(new GridLayout(10,1, 3, 3));
+					pnlInfo2.add(pnlInfo2_b);
+					{
+						JPanel pnl1b = new JPanel( new BorderLayout() );
+						pnlInfo2_b.add(pnl1b);
+						{
+							lblStatus = new JLabel("Status");
+							pnl1b.add(lblStatus, BorderLayout.WEST);
+							lblStatus.setPreferredSize(new Dimension(100, 0));
+							lblStatus.setFont(new Font("Segoe UI", Font.BOLD, 10)); 
+						}
+						{
+							jComboBox1Model = new DefaultComboBoxModel(new String[] {"A","I","FOR REPAIR"});
+							cmbstatus= new JComboBox();
+							cmbstatus.setModel(jComboBox1Model);
+							cmbstatus.setEditable(false);
+							cmbstatus.setEnabled(false);
+							pnl1b.add(cmbstatus,BorderLayout.CENTER);
+						}
+					}
+					{
+						JPanel pnl2b = new JPanel( new BorderLayout() );
+						pnlInfo2_b.add(pnl2b);
+						{
+							lblFromDepDate = new JLabel("From Dep. Date" );
+							pnl2b.add(lblFromDepDate, BorderLayout.WEST);
+							lblFromDepDate.setPreferredSize(new Dimension(100, 0));
+							lblFromDepDate.setFont(new Font("Segoe UI", Font.BOLD, 10)); 
+							
+						}
+						{
+							dateFromDep = new _JDateChooser("MM/dd/yyyy", "##/##/#####", '_');
+							pnl2b.add(dateFromDep, BorderLayout.CENTER);
+							dateFromDep.setEditable(false);
+							dateFromDep.setEnabled(false);
+							
+							
+						}
+						
+					}
+					{
+						JPanel pnl3b = new JPanel( new BorderLayout() );
+						pnlInfo2_b.add(pnl3b);
+						{
+							lblToDepDate = new JLabel("To Dep. Date" );
+							pnl3b.add(lblToDepDate, BorderLayout.WEST);
+							lblToDepDate.setPreferredSize(new Dimension(100, 0));
+							lblToDepDate.setFont(new Font("Segoe UI", Font.BOLD, 10)); 
+							
+						}
+						{
+							dateToDep = new _JDateChooser("MM/dd/yyyy", "##/##/#####", '_');
+							pnl3b.add(dateToDep, BorderLayout.CENTER);
+							dateToDep.setEditable(false);
+							dateToDep.setEnabled(false);
+						}
+					}
+					{
+						JPanel pnl4b = new JPanel( new BorderLayout() );
+						pnlInfo2_b.add(pnl4b);
+						{
+							lbldrf = new JLabel("DRF No." );
+							pnl4b.add(lbldrf, BorderLayout.WEST);
+							lbldrf.setPreferredSize(new Dimension(100, 0));
+							lbldrf.setFont(new Font("Segoe UI", Font.BOLD, 10)); 
+						}
+						{
+							txtdrfno = new _JXFormattedTextField(JXFormattedTextField.CENTER);
+							pnl4b.add(txtdrfno, BorderLayout.CENTER);
+							txtdrfno.setEditable(false);
+							txtdrfno.setFormatterFactory(_JXFormattedTextField.INTEGER);
+						}
+					}
+					{
+						JPanel pnl5b = new JPanel( new BorderLayout()) ;
+						pnlInfo2_b.add(pnl5b);
+						{
+						lblSerialNo = new JLabel("Serial No.");
+						pnl5b.add(lblSerialNo, BorderLayout.WEST);
+						lblSerialNo.setPreferredSize(new Dimension(100, 0));
+						lblSerialNo.setFont(new Font("Segoe UI", Font.BOLD, 10)); 
+					}
+					{
+						txtSerialNo = new JXTextField();
+						txtSerialNo.setEditable(false);
+						pnl5b.add(txtSerialNo, BorderLayout.CENTER);
+					}
+					}
+					{
+						JPanel pnl6b = new JPanel( new BorderLayout() );
+						pnlInfo2_b.add(pnl6b);
+						{
+							lblModelNo = new JLabel("Model No." );
+							pnl6b.add(lblModelNo, BorderLayout.WEST);
+							lblModelNo.setPreferredSize(new Dimension(100, 0));
+							lblModelNo.setFont(new Font("Segoe UI", Font.BOLD, 10)); 
+						}
+						{
+							txtModelNo = new JXTextField();
+							txtModelNo.setEditable(false);
+							pnl6b.add(txtModelNo, BorderLayout.CENTER);
+						}
+						
+					}
+					{
+						JPanel pnl7b = new JPanel( new BorderLayout() );
+						pnlInfo2_b.add(pnl7b);
+						{
+							lblCapitalized = new JLabel("*Capitalized" );
+							pnl7b.add(lblCapitalized, BorderLayout.WEST);
+							lblCapitalized.setPreferredSize(new Dimension(100, 0));
+							lblCapitalized.setFont(new Font("Segoe UI", Font.BOLD, 10)); 
+						}
+						{
+							pnlCapitalized = new JPanel(new GridLayout(1, 2));
+							pnl7b.add(pnlCapitalized, BorderLayout.CENTER);
+							pnlCapitalized.setBorder(BorderFactory.createTitledBorder(_LINE_BORDER));
+							{
+								rbCapitalizedYes = new JRadioButton("Yes");
+								rbCapitalizedYes.setEnabled(false);
+								pnlCapitalized.add(rbCapitalizedYes);
+								grpCapitalized.add(rbCapitalizedYes);
+							}
+							{
+								rbCapitalizedNo = new JRadioButton("No");
+								rbCapitalizedNo.setEnabled(false);
+								pnlCapitalized.add(rbCapitalizedNo);
+								grpCapitalized.add(rbCapitalizedNo);
+							}
+						}
+						
+					}
+					{
+						JPanel pnl8b = new JPanel( new BorderLayout() );
+						pnlInfo2_b.add(pnl8b);
+						{
+							lblInsuredValue = new JLabel("Insured Value" );
+							pnl8b.add(lblInsuredValue, BorderLayout.WEST);
+							lblInsuredValue.setPreferredSize(new Dimension(100, 0));
+							lblInsuredValue.setFont(new Font("Segoe UI", Font.BOLD, 10)); 
+						}
+						{
+							txtInsuredValue = new _JXFormattedTextField(JXFormattedTextField.RIGHT);
+							pnl8b.add(txtInsuredValue, BorderLayout.CENTER);
+							txtInsuredValue.setFormatterFactory(_JXFormattedTextField.DECIMAL);
+							txtInsuredValue.setEditable(false);
+							
+						}
+						
+					}
+					{
+						JPanel pnl9b = new JPanel( new BorderLayout() );
+						pnlInfo2_b.add(pnl9b);
+						{
+							lblLocation= new JLabel("*Location" );
+							pnl9b.add(lblLocation, BorderLayout.WEST);
+							lblLocation.setPreferredSize(new Dimension(100, 0));
+							lblLocation.setFont(new Font("Segoe UI", Font.BOLD, 10)); 
+						}
+						{
+							lookupLocation= new _JLookup("", 1);
+							pnl9b.add(lookupLocation,BorderLayout.CENTER);
+							lookupLocation.setEditable(false);
+							lookupLocation.setLookupSQL("select * from rf_asset_location ");
+							lookupLocation.addLookupListener(new LookupListener() {
+
+								public void lookupPerformed(LookupEvent event) {
+									Object [] db = ((_JLookup)event.getSource()).getDataSet();
+									
+									if(db !=null){
+										location_id = (String)db[0];
+								   }
+								}
+							});
+						}
+						
+					}
+					{
+						JPanel pnl10b = new JPanel( new BorderLayout() );
+						pnlInfo2_b.add(pnl10b);
+						
+					}
+				}
+			}
+			/*{
 				pnlInfo2 = new JPanel(new GridLayout(10, 1, 3, 3));
 				pnlInfomationCenter.add(pnlInfo2);
 				{
@@ -641,32 +1095,44 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 						pnl10_1 = new JPanel(new BorderLayout());
 						pnl10.add(pnl10_1);
 						{
+							lblBookValue = new JLabel("Book Value");
+							pnl10_1.add(lblBookValue, BorderLayout.WEST);
+							lblBookValue.setPreferredSize(new Dimension(75, 0));
+						}
+						{
+							txtBookValue = new _JXFormattedTextField(JXFormattedTextField.RIGHT);
+							pnl10_1.add(txtBookValue, BorderLayout.CENTER);
+							txtBookValue.setEditable(false);
+							txtBookValue.setFormatterFactory(_JXFormattedTextField.DECIMAL);
+						}
+//						{
+//							lblMonthlyDep = new JLabel("Monthly Dep.", JLabel.TRAILING);
+//							pnl10_1.add(lblMonthlyDep, BorderLayout.WEST);
+//							lblMonthlyDep.setPreferredSize(new Dimension(75, 0));
+//						}
+//						{
+//							txtMonthlyDep = new _JXFormattedTextField(JXFormattedTextField.RIGHT);
+//							pnl10_1.add(txtMonthlyDep, BorderLayout.CENTER);
+//							txtMonthlyDep.setEditable(false);
+//							txtMonthlyDep.setFormatterFactory(_JXFormattedTextField.DECIMAL);
+//						}
+					}
+					{
+						pnl10_2 = new JPanel(new BorderLayout(5, 5));
+						pnl10.add(pnl10_2);
+						
+						{
 							lblMonthlyDep = new JLabel("Monthly Dep.", JLabel.TRAILING);
-							pnl10_1.add(lblMonthlyDep, BorderLayout.WEST);
-							lblMonthlyDep.setPreferredSize(new Dimension(75, 0));
+							pnl10_2.add(lblMonthlyDep, BorderLayout.WEST);
+							lblMonthlyDep.setPreferredSize(new Dimension(100, 0));
 						}
 						{
 							txtMonthlyDep = new _JXFormattedTextField(JXFormattedTextField.RIGHT);
-							pnl10_1.add(txtMonthlyDep, BorderLayout.CENTER);
+							pnl10_2.add(txtMonthlyDep, BorderLayout.CENTER);
 							txtMonthlyDep.setEditable(false);
 							txtMonthlyDep.setFormatterFactory(_JXFormattedTextField.DECIMAL);
 						}
 					}
-//					{
-//						pnl10_2 = new JPanel(new BorderLayout(5, 5));
-//						pnl10.add(pnl10_2);
-//						{
-//							lblMonthlyDep = new JLabel("Monthly Dep.", JLabel.TRAILING);
-//							pnl10_2.add(lblMonthlyDep, BorderLayout.WEST);
-//							lblMonthlyDep.setPreferredSize(new Dimension(100, 0));
-//						}
-//						{
-//							txtMonthlyDep = new _JXFormattedTextField(JXFormattedTextField.RIGHT);
-//							pnl10_2.add(txtMonthlyDep, BorderLayout.CENTER);
-//							txtMonthlyDep.setEditable(false);
-//							txtMonthlyDep.setFormatterFactory(_JXFormattedTextField.DECIMAL);
-//						}
-//					}
 				}
 				{
 					pnl11 = new JPanel(new GridLayout(1, 2, 3, 3));
@@ -675,34 +1141,57 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 						pnl11_1 = new JPanel(new BorderLayout());
 						pnl11.add(pnl11_1);
 						{
-							lblBookValue = new JLabel("Book Value");
-							pnl11_1.add(lblBookValue, BorderLayout.WEST);
-							lblBookValue.setPreferredSize(new Dimension(75, 0));
+							lblRetCost = new JLabel("Ret. Cost");
+							pnl11_1.add(lblRetCost, BorderLayout.WEST);
+							lblRetCost.setPreferredSize(new Dimension(75, 0));
 						}
 						{
-							txtBookValue = new _JXFormattedTextField(JXFormattedTextField.RIGHT);
-							pnl11_1.add(txtBookValue, BorderLayout.CENTER);
-							txtBookValue.setEditable(false);
-							txtBookValue.setFormatterFactory(_JXFormattedTextField.DECIMAL);
+							txtRetCost = new _JXFormattedTextField(JXFormattedTextField.RIGHT);
+							pnl11_1.add(txtRetCost, BorderLayout.CENTER);
+							txtRetCost.setEditable(false);
+							txtRetCost.setFormatterFactory(_JXFormattedTextField.DECIMAL);
 						}
+//						{
+//							lblBookValue = new JLabel("Book Value");
+//							pnl11_1.add(lblBookValue, BorderLayout.WEST);
+//							lblBookValue.setPreferredSize(new Dimension(75, 0));
+//						}
+//						{
+//							txtBookValue = new _JXFormattedTextField(JXFormattedTextField.RIGHT);
+//							pnl11_1.add(txtBookValue, BorderLayout.CENTER);
+//							txtBookValue.setEditable(false);
+//							txtBookValue.setFormatterFactory(_JXFormattedTextField.DECIMAL);
+//						}
 					}
 					{
 						pnl11_2 = new JPanel(new BorderLayout(5, 5));
 						pnl11.add(pnl11_2);
 						{
-							lblFromDepDate = new JLabel("From Dep. Date", JLabel.TRAILING);
-							pnl11_2.add(lblFromDepDate, BorderLayout.WEST);
-							lblFromDepDate.setPreferredSize(new Dimension(100, 0));
+							lblToDepDate = new JLabel("To Dep. Date", JLabel.TRAILING);
+							pnl11_2.add(lblToDepDate, BorderLayout.WEST);
+							lblToDepDate.setPreferredSize(new Dimension(100, 0));
 							
 						}
 						{
-							dateFromDep = new _JDateChooser("MM/dd/yyyy", "##/##/#####", '_');
-							pnl11_2.add(dateFromDep, BorderLayout.CENTER);
-							dateFromDep.setEditable(false);
-							dateFromDep.setEnabled(false);
-							
-							
+							dateToDep = new _JDateChooser("MM/dd/yyyy", "##/##/#####", '_');
+							pnl11_2.add(dateToDep, BorderLayout.CENTER);
+							dateToDep.setEditable(false);
+							dateToDep.setEnabled(false);
 						}
+//						{
+//							lblFromDepDate = new JLabel("From Dep. Date", JLabel.TRAILING);
+//							pnl11_2.add(lblFromDepDate, BorderLayout.WEST);
+//							lblFromDepDate.setPreferredSize(new Dimension(100, 0));
+//							
+//						}
+//						{
+//							dateFromDep = new _JDateChooser("MM/dd/yyyy", "##/##/#####", '_');
+//							pnl11_2.add(dateFromDep, BorderLayout.CENTER);
+//							dateFromDep.setEditable(false);
+//							dateFromDep.setEnabled(false);
+//							
+//							
+//						}
 					}
 				}
 				{
@@ -794,6 +1283,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 							txtNetCost = new _JXFormattedTextField(JXFormattedTextField.RIGHT);
 							pnl14_1.add(txtNetCost, BorderLayout.CENTER);
 							txtNetCost.setFormatterFactory(_JXFormattedTextField.DECIMAL);
+							
 						}
 					}
 					{
@@ -1041,7 +1531,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 						}
 					}
 				}
-			}
+			}*/
 		}
 		{
 			pnlNavigation = new JPanel(new BorderLayout());
@@ -1093,6 +1583,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 				}	
 			}
 		}
+		//GUI END
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -1108,7 +1599,6 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 		if(e.getActionCommand().equals("edit")) {
 			grpNE.setSelected(btnEdit.getModel(), true);
 			
-			
 			AssetMonitoring2.tblAssets.setEnabled(false);
 			lookupCustodian.setEditable(false);
 			lookupCategory.setEditable(true);
@@ -1120,6 +1610,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 			lookupSupplier.setEditable(true);
 			txtRemarks.setEditable(true);
 			txtNetCost.setEditable(true);
+			txtgross.setEditable(true);
 			txtUsefulLife.setEditable(true);
 			txtSerialNo.setEditable(true);
 			txtInsuredValue.setEditable(true);
@@ -1142,6 +1633,9 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 			System.out.println("Save");
 			System.out.println("toAdd: "+toAdd());
 			
+			String loc = FncGlobal.GetString("select loc_id from rf_asset_location where loc_name = '"+lookupLocation.getValue()+"'");
+			System.out.println("loc: "+loc);
+			
 			if(toAdd()) {
 				
 				int toSave = JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Are all entries correct?", "Save", JOptionPane.YES_NO_OPTION);
@@ -1157,11 +1651,13 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 					String Item = txtItem.getText();
 					Item=Item.replaceAll(",", "");
 					
+					Double net = Double.valueOf(txtNetCost.getText().trim().replace(",","")).doubleValue();
+					
 					boolean w_peripheral = false;
 					
 					
 					if(grpNE.isSelected(btnNew.getModel())) {
-						if ( txtItem.getText().equals("Computer set")) {
+						if ( txtItem.getText().equals("Computer Set")) {
 							w_peripheral = true;
 						}
 						
@@ -1169,7 +1665,8 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 						addAsset(
 								lookupItem.getText(), 					//item_id
 								txtItem.getText()+", "+txtBrand.getText().replace("'", "''")+", "+txtDescription.getText().replace("'", "''"),//asset_name
-								txtNetCost.getText().replace(",", ""),	//asset_cost
+								//txtNetCost.getText().replace(",", ""),	//asset_cost
+								net,
 								Integer.parseInt(txtUsefulLife.getText()),//asset_ulm
 								txtAssetNo.getText(),					//asset_no
 								txtSerialNo.getText(),					//asset_serial
@@ -1183,7 +1680,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 								lookupSupplier.getValue(),				//supp_id
 								lookupCustodian.getValue(),				//current_cust
 								txtReferenceNo.getText(),				//reference_no
-								txtNetCost.getText().replace(",", ""), //original_cost
+								txtgross.getText().replace(",", ""), //original_cost
 								(rbCapitalizedYes.isSelected() ? "true":"false"),//capitalized
 								txtCustodian.getText().trim(),			//custodian_name
 							    true,									//toPrint
@@ -1193,7 +1690,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 								txtBrand.getText(),						//brand
 								txtDescription.getText(),				//description
 								dept_code,								//dept_code
-								location_id,								//location_id
+								location_id,							//location_id
 								w_peripheral
 						);
 						JOptionPane.showMessageDialog(getTopLevelAncestor(), "New Asset has been Added", "Save", JOptionPane.INFORMATION_MESSAGE);
@@ -1210,6 +1707,8 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 							System.out.println("Item: "+ txtItem.getText() );
 							System.out.println("Brand: "+Brand);
 							System.out.println("Description: "+Description);
+							
+							
 							updateAsset(
 									lookupItem.getText(),
 									txtItem.getText()+", "+Brand.replace("'", "''")+", "+Description.replace("'", "''"), 
@@ -1226,7 +1725,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 									txtRemarks.getText().replace("'", "''"),
 									lookupSupplier.getText(),
 									txtReferenceNo.getText(),
-									txtNetCost.getText().replace(",", ""), 
+									txtgross.getText().replace(",", ""), 
 									(rbCapitalizedYes.isSelected() ? "true":"false"),//capitalized
 									lookupCompany.getText(),
 									lookupCustodian.getText(),
@@ -1235,7 +1734,9 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 									Item,
 									txtBrand.getText(),
 									txtDescription.getText(),
-									location_id);
+									//location_id
+									loc
+									);
 							JOptionPane.showMessageDialog(getTopLevelAncestor(), "Asset details has been updated", "Save", JOptionPane.INFORMATION_MESSAGE);
 							resetInformation();
 							btnState(true, false, false, true);
@@ -1246,35 +1747,38 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 			}else {
 				System.out.println("Else save");
 				if(txtCustodian.getText().equals("")){
-					JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please select custodian", "Warning", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please select custodian", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				if(lookupCompany.getText().equals("")){
-					JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please select company", "Warning", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please select company", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				if(lookupItem.getText().equals("")){
-					JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please select item", "Warning", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please select item", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				if (txtBrand.getText().equals("")){
-					JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please input item brand", "Warning", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please input item brand", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				if(txtDescription.getText().equals("")){
-					JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please input item description", "Warning", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please input item description", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				if(txtUsefulLife.getText().equals("")||txtUsefulLife.getText().equals(0.00)){
-					JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please input item ULM", "Warning", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please input item ULM", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+				if(txtgross.getText().equals("")||txtgross.getText().equals("0.00")){
+					JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please enter gross amount.", "Error",JOptionPane.ERROR_MESSAGE);
 				}
 				if(txtNetCost.getText().equals("")||txtNetCost.getText().equals("0.00")){
 					//JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please input item net cost", "Warning", JOptionPane.WARNING_MESSAGE);
 					txtNetCost.setText(JOptionPane.showInputDialog(getTopLevelAncestor(), "Please input net cost."));
 				}
 				if (txtSerialNo.getText().equals("")){
-					JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please put serial number of the asset.", "Warning",JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please put serial number of the asset.", "Error",JOptionPane.ERROR_MESSAGE);
 				}
 				if (txtModelNo.getText().equals("")){
-					JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please put model of the asset.", "Warning",JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please put model of the asset.", "Error",JOptionPane.ERROR_MESSAGE);
 				}
 				if(txtReferenceNo.getText().equals("")){
-					JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please input item reference no.", "Warning", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please input item reference no.", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				if(rbInsuredYes.isSelected()){
 					if (txtInsuredValue.getText().equals("0.00")||txtInsuredValue.getText().equals("")){
@@ -1283,21 +1787,29 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 					}
 				}
 				if(lookupLocation.getText().equals("")){
-					JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please select asset location.", "Warning", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please select asset location.", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 //				if( Double.parseDouble(txtNetCost.getText().replace(",", "")) <= 5000.00){
 //					JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Asset cost is below 5,000.00", "Error", JOptionPane.ERROR_MESSAGE);
 //				}
 			}
 		}
+		
 	}
 	
 	public static String getCategory(){
 		return "select category_id as \"ID\", category_name as \"Category Name\" from mf_asset_category order by category_name";
 	}
 	
+	public static String getitem(Integer category_id) {
+		String sql = " select item_id, item_name from mf_asset_item where category_id = '"+category_id+"'::varchar ";
+		
+		System.out.println("getitem: "+ sql);
+		return sql;
+	}
+	
 	private String getsupplier () {
-		return "select entity_id, entity_name from rf_entity where status_id = 'A' ";
+		return "select entity_id, entity_name from rf_entity where entity_type_id in (select entity_type_id from mf_entity_type where entity_type_desc ~* 'SUPPLIER'  and status_id = 'A' order by entity_type_id asc)";
 	}
 	
 	private void buttonstate (Boolean addnew, Boolean edit, Boolean save, Boolean reset) {
@@ -1311,7 +1823,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 			
 			String item_id,
 			String asset_name,
-			String asset_cost,
+			double asset_cost,
 			Integer asset_ulm,
 			String asset_no,
 			String asset_serial, 
@@ -1327,9 +1839,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 			String reference_no, 
 			String original_cost, 
 			String capitalized, 
-			//String comp_id,
 			String custodian_name,
-			//int noofAsset,
 			boolean toPrint,
 			String co_id,
 			String item_found,
@@ -1344,7 +1854,6 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 		
 			String strSQL =
 					"INSERT INTO rf_asset( \n" +
-							//"asset_code, \n" +
 							"item_id, \n" +
 							"asset_name, \n" +
 							"asset_cost, \n" +
@@ -1369,37 +1878,39 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 							"added_by, \n" +
 							"date_added, \n" +
 							"reference_no, \n" +
-							"original_cost, \n" +							
+							"gross_amt, \n" +							
 							"capitalized, \n" +
-							//"comp_id, \n" +
 							"co_id, \n" +
 							"item_found, \n" +
 							"item_name, \n"+
 							"brand, \n"+
 							"description, \n"+
 							"dept_code, \n"+
-							//"remarks2, \n"+
 							"loc_id,\n"+
-							//"replaced_assetno,\n"+
 							"date_disposed,\n"+
 							"with_peripheral,\n"+
 							"rec_status \n"+
 							")\n"+
 							"VALUES (\n" +
-							//"'"+panelAssetInformation.txtAssetCode.getText()+"', \n" +	//asset_code
 							""+item_id+", \n" +									//item_id
 							"'"+asset_name+"', \n" +							//asset_name
 							""+asset_cost+", \n" +								//asset_cost
 							""+asset_ulm+", \n" +								//asset_ulm
-							"("+asset_cost+" -1)/"+asset_ulm+", \n" +			//asset_mon_dep
+							"'"+Double.parseDouble(txtMonthlyDep.getText().replace(",", ""))+"', \n"+
+							//"("+asset_cost+" -1)/"+asset_ulm+", \n" +			//asset_mon_dep
 							""+asset_no+", \n" +							//asset_no
 							"'"+asset_serial+"', \n" +							//asset_serial
 							"'"+asset_model+"', \n" +							//asset_model
 							""+asset_bk_val+", \n" +							//asset_bk_val
 							"1.00, \n" +										//asset_ret_cost
 							"'"+date_acquired+"', \n" +							//date_acquired
-							"(select LAST_DAY('"+date_acquired+"'::date) + 1), \n" +//from_dep
-							"(select ( date '"+date_acquired+"' + INTERVAL '"+((asset_ulm) + 1)+" MONTH' )), \n" +	//to_dep
+							//From dep and to_dep is requested by Orly
+							"(case when date_part('day','"+date_acquired+"'::date) < 15 then (select LAST_DAY('"+date_acquired+"'::date)) " +
+							"			else (select last_day(last_day('"+date_acquired+"'::date) + 1)::date) end),\n"+
+							//"case when date_part('day','"+date_acquired+"'::date)(select LAST_DAY('"+date_acquired+"'::date) + 1), \n" +//from_dep
+							"(select ( date (case when date_part('day','"+date_acquired+"'::date) < 15 then (select LAST_DAY('"+date_acquired+"'::date))  "+
+							"						else (select last_day(last_day('"+date_acquired+"'::date) + 1)::date) end) "+
+							"+ INTERVAL '"+((asset_ulm) + 1)+" MONTH' )), \n" +	//to_dep
 							"null, \n" +										//date_retired
 							""+owned+", \n" +									//owned
 							""+insured+", \n" +									//insured
@@ -1413,7 +1924,6 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 							"'"+reference_no+"', \n" +							//reference_no
 							""+original_cost+", \n" +							//original_cost
 							""+capitalized+", \n" +								//capitalized
-							//""+comp_id+", \n"+									//comp_id
 							"'"+co_id+"', \n"+									//co_id
 							""+item_found+",\n"+								//item_found
 							"'"+item_name+"',\n"+								//item_name
@@ -1472,15 +1982,17 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 					"asset_model='"+asset_model+"', \n" +					//assetmodel
 					"asset_bk_val="+asset_bk_val+", \n" +					//assetbkval
 					"date_acquired='"+date_acquired+"', \n" +				//dateacquired
-					"from_dep=(select ( date '"+date_acquired+"' + INTERVAL '1 MONTH' )), \n" +				//fromdep
-					"to_dep=(select ( date '"+date_acquired+"' + INTERVAL '"+asset_ulm+" MONTH' )), \n" +	//todep
+					"from_dep = '"+dateFromDep.getDate().toString()+"',  \n"+
+					"to_dep = '"+dateToDep.getDate().toString()+"', \n"+
+					//"from_dep=(select ( date '"+date_acquired+"' + INTERVAL '1 MONTH' )), \n" +				//fromdep
+					//"to_dep=(select ( date '"+date_acquired+"' + INTERVAL '"+asset_ulm+" MONTH' )), \n" +	//todep
 					"\"owned\"="+owned+", \n" +								//owned
 					"insured="+insured+", \n" +								//insured
 					"insured_value="+insured_value+", \n" +					//insuredvalue
 					"remarks='"+remarks+"', \n" +							//remarks
 					"supp_id="+supp_id+", \n" +								//suppid
 					"reference_no='"+reference_no+"', \n" +					//referenceno
-					"original_cost="+original_cost+", \n" +					//originalcost
+					"gross_amt ="+original_cost+", \n" +					//originalcost
 					"capitalized="+capitalized+", \n" +						//capitalized
 					"edited_by='"+UserInfo.EmployeeCode+"', \n" +			//editedby
 					"date_edited='now()', \n" +								//dateedited
@@ -1534,77 +2046,65 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 	
 	public static  void newState(){
 		
+		lookupCompany.setValue(co_id);
+		txtCompany.setText(co_name);
 		cmbstatus.setEnabled(true);
 		txtInsuredValue.setEditable(false);
-		//AssetMonitoring2.disbletableAssets(false);
-		AssetMonitoring2.tblAssets.setEnabled(false);
 		dateAcquired.setDate(FncGlobal.getDateToday());
 		lookupCustodian.setEnabled(true);
 		lookupCustodian.setEditable(true);
 		txtAssetNo.setText(_AssetMonitoring.getAssetNo());
 		grpNE.setSelected(btnNew.getModel(), true);
 		dateAcquired.getCalendarButton().setEnabled(true);
-		
-		//lblCompany.setFont(null);
-//		lookupCompany.setEnabled(false);
-//		lookupCompany.setValue(AssetMonitoring2.lookupselectcompany.getValue());
-//		lookupCompany.setEditable(false);
-//		txtCompany.setText(AssetMonitoring2.txtcompany.getText());
-		
-		System.out.println("Company:: "+ AssetMonitoring2.lookupselectcompany.getValue());
-		
+		dateAcquired.setForeground(Color.GREEN);
+		dateAcquired.setMaxSelectableDate(FncGlobal.getDateToday());
 		lblCustodian.setName("*Custodian");
-		if(AssetMonitoring2.lookupselectcompany.getValue() == null) {
-			lookupCompany.setEnabled(true);
-			lookupCompany.setEditable(true);
-		}else {
-			lookupCompany.setEnabled(false); 
-			lookupCompany.setValue(AssetMonitoring2.lookupselectcompany.getValue());
-			lookupCompany.setEditable(false);
-			txtCompany.setText(AssetMonitoring2.txtcompany.getText());
-		}
+		AssetMonitoring2.tblAssets.setEnabled(false);
+		AssetMonitoring2.lookupselectcompany.setValue(null);
+		AssetMonitoring2.lookupselectcompany.setEditable(false);
+		AssetMonitoring2.txtcompany.setText("");
+		AssetMonitoring2.txtcompany.setEditable(false);
+		AssetMonitoring2.lookupCustodianid.setValue(null);
+		AssetMonitoring2.lookupCustodianid.setEditable(false);
+		AssetMonitoring2.txtCustodianid.setText("");
+		AssetMonitoring2.txtCustodianid.setEditable(false);
 		
 		lookupCustodian.setText("");
 		txtCustodian.setText("");
 		
-		lblCategory.setFont(null);
+		//lblCategory.setFont(null);
 		lookupCategory.setEnabled(true);
 		lookupCategory.setEditable(true);
 		lookupCategory.setText("");
 		txtCategory.setText("");
 		
-		lblItem.setFont(null);
 		lookupItem.setEnabled(true);
 		lookupItem.setEditable(true);
 		lookupItem.setText("");
 		txtItem.setText("");
 		
-		lblBrand.setFont(null);
 		txtBrand.setText("");
 		txtBrand.setEditable(true);
 		
 
-		lblDescription.setFont(null);
 		txtDescription.setText("");
 		txtDescription.setEditable(true);
 
-		lblSupplier.setFont(null);
 		lookupSupplier.setEnabled(true);
 		lookupSupplier.setEditable(true);
 		lookupSupplier.setText("");
 		txtSupplier.setText("");
 
-		//txtAssetCode.setText("");
-
 		txtRemarks.setText("NEW ITEM");
 		txtRemarks.setEditable(true);
 
-		lblNetCost.setFont(null);
-		txtNetCost.setText("");
+		txtNetCost.setText("0.00");
 		txtNetCost.setEditable(true);
-
-		txtUsefulLife.setText("36");
-		txtUsefulLife.setEditable(true);
+		
+		txtUsefulLife.setValue(null);
+		
+		txtgross.setText("0.00");
+		txtgross.setEditable(true);
 
 		txtSerialNo.setEditable(true);
 
@@ -1620,9 +2120,8 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 		grpCapitalized.clearSelection();
 		rbCapitalizedYes.setEnabled(true);
 		rbCapitalizedNo.setEnabled(true);
-		rbCapitalizedNo.setSelected(true);
+		rbCapitalizedYes.setSelected(true);
 
-		lblInsured.setFont(null);
 		grpInsured.clearSelection();
 		rbInsuredYes.setEnabled(true);
 		rbInsuredNo.setEnabled(true);
@@ -1633,24 +2132,17 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 		rbFoundYes.setEnabled(true);
 		rbFoundYes.setSelected(true);
 		
-		lblInsuredValue.setFont(null);
 		txtInsuredValue.setText("0.00");
 
-		lblReferenceNo.setFont(null);
 		txtReferenceNo.setText("No Reference #");
 		txtReferenceNo.setEditable(true);
-
-		//lblNoOfAssets .setFont(null);
-		//txtNoOfAssets .setText("1");
-		//lblNoOfAssets .setEnabled(true);
-		
 
 		txtMonthlyDep.setText("0.00");
 		
 		txtBookValue.setText("0.00");
 		txtBookValue.setEditable(false);
 		
-		txtRetCost.setText("0.00");
+		txtRetCost.setText("1.00");
 		lookupLocation.setEditable(true);
 		lookupLocation.setText("");
 		
@@ -1661,6 +2153,7 @@ public static void resetInformation(){
 		new Thread(new  Runnable() {
 			public void run() {
 				FncGlobal.startProgress("Refreshing fields, please wait.");
+				//initializeComponents();
 				AssetMonitoring2.lookupselectcompany.setValue(co_id);
 				AssetMonitoring2.txtcompany.setText(co_name);
 				AssetMonitoring2.chkinactiveassets.setSelected(false);
@@ -1677,6 +2170,11 @@ public static void resetInformation(){
 				AssetMonitoring2.lookupnewCustodian.setText("");
 				AssetMonitoring2.txtnewCustodian.setText("");
 				AssetMonitoring2.txtmovementno.setText("");
+				
+				AssetMonitoring2.lookupselectcompany.setEditable(true);
+				AssetMonitoring2.txtcompany.setEditable(false);
+				AssetMonitoring2.lookupCustodianid.setEditable(true);
+				AssetMonitoring2.txtCustodianid.setEditable(false);
 				
 				dateAcquired.getCalendarButton().setEnabled(false);
 				
@@ -1730,7 +2228,10 @@ public static void resetInformation(){
 				txtNetCost.setText("0.00");
 				txtNetCost.setEditable(false);
 				
-				txtUsefulLife.setText("");
+				txtgross.setText("0.00");
+				txtgross.setEditable(false);
+				
+				txtUsefulLife.setValue(null);
 				txtUsefulLife.setEditable(false);
 				
 				txtSerialNo.setText("");
@@ -1804,13 +2305,15 @@ public static void resetInformation(){
 				"a.insured_value as insured_value, \n" + 
 				"a.reference_no::varchar as reference_no, \n" + 
 				"round(a.asset_mon_dep,2)::numeric as monthly_depreciation, \n" + 
-				"round(a.asset_bk_val,2)::numeric as book_value,\n" + 
+				"round(((asset_cost -1) / asset_ulm) * (SELECT getdatediff('month', 'now()'::date, to_dep::date)),2) as bookval,\n"+
+				//"round(a.asset_bk_val,2)::numeric as book_value,\n" + 
 				"a.asset_ret_cost as retirement_cost, \n" + 
 				"a.from_dep as from_depreciation, \n" + 
 				"a.to_dep as to_depreciation,\n" + 
 				"a.item_found, \n"+
 				//"a.remarks2, \n"+
-				"(case when a.loc_id != '' then (select loc_name from rf_asset_location  where loc_id=a.loc_id) else 'Not yet scanned' end) as loc_name \n"+
+				"(case when a.loc_id != '' then (select loc_name from rf_asset_location  where loc_id=a.loc_id) else 'Not yet scanned' end) as loc_name, \n"+
+				"gross_amt \n"+
 				"from rf_asset a \n" + 
 				"left join rf_employee  b on a.current_cust=b.emp_code::int\n" + 
 				"left join mf_company  c on a.co_id=c.co_id\n" + 
@@ -1823,8 +2326,10 @@ public static void resetInformation(){
 		FncSystem.out("display Asset Detail", SQL);
 		pgSelect db = new pgSelect();
 		db.select(SQL);
+		
 
 		if(db.isNotNull()){
+			
 			txtAssetNo.setText((String) db.getResult()[0][0]);
 			dateAcquired.setDate((Date) db.getResult()[0][1]);
 			lookupCompany.setValue((String) db.getResult()[0][2]);
@@ -1884,7 +2389,17 @@ public static void resetInformation(){
 				rbFoundYes.setSelected(false);	
 			}
 			lookupLocation.setValue((String) db.getResult()[0][31]);
+			txtgross.setValue(db.getResult()[0][32]);
 			//txtNoOfAssets
+			System.out.println("monthly dep: "+ txtMonthlyDep.getText());
+//			Double net = Double.valueOf(txtNetCost.getText().trim().replace(",","")).doubleValue();
+//			 DecimalFormat decfor = new DecimalFormat("0.00");  
+//			Double dec = (Math.ceil(net - 1)/ txtUsefulLife.getIntegerValue());
+//			Double dec_noround = (net - 1)/ txtUsefulLife.getIntegerValue();
+//			System.out.println("double: "+ dec);
+//			System.out.println("dec_noround: "+ dec_noround);
+//			System.out.println("2 decimal dec_noround: "+ decfor.format(dec_noround));
+//			System.out.println("2 decimal: "+ decfor.format(dec));
 		}
 	}
 	
@@ -2116,6 +2631,16 @@ public static void resetInformation(){
 				+ "company_logo as \"Company Logo\"\n"
 				+ "from mf_company";
 		return sql;
+	}
+	
+	public static void computemonthlydep() {
+		Double gross = Double.valueOf(txtgross.getText().trim().replace(",","")).doubleValue();
+		Double net = Double.valueOf(txtNetCost.getText().trim().replace(",","")).doubleValue(); 
+		
+		txtNetCost.setText(nf.format(gross));
+		txtMonthlyDep.setText(nf.format((net -1)/ txtUsefulLife.getIntegerValue()));
+		System.out.println("gross: "+gross);
+		System.out.println("depreciation: "+(net -1)/ txtUsefulLife.getIntegerValue());
 	}
 
 }

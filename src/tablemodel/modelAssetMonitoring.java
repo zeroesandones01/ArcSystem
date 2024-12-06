@@ -50,7 +50,6 @@ public class modelAssetMonitoring extends DefaultTableModel {
 	String[] COLUMNS = new String[] {
 			"Selected",
 			"Asset No.", 
-			"Asset Code",
 			"Asset Name",
 			"Date Acquired",
 			"Custodian ID",
@@ -63,7 +62,6 @@ public class modelAssetMonitoring extends DefaultTableModel {
 	Class[] CLASS_TYPES = new Class[] {
 			Boolean.class,//checkbox
 			String.class, //Asset No.
-			String.class, //Asset Code
 			Object.class, //Asset Name
 			Timestamp.class, //Date Acquired
 			String.class, //Custodian ID
@@ -80,7 +78,6 @@ public class modelAssetMonitoring extends DefaultTableModel {
 	Boolean[] COLUMNS_EDITABLE = new Boolean[] {
 			false, //0
 			false, //1
-			false, //2
 			false, //3
 			false, //4
 			false, //5
@@ -115,7 +112,6 @@ public class modelAssetMonitoring extends DefaultTableModel {
 			COLUMNS_EDITABLE = new Boolean[]{
 					true, //0
 					false, //1
-					false, //2
 					false, //3
 					false, //4
 					false, //5
@@ -128,7 +124,6 @@ public class modelAssetMonitoring extends DefaultTableModel {
 			COLUMNS_EDITABLE = new Boolean[]{
 					false, //0
 					false, //1
-					false, //2
 					false, //3
 					false, //4
 					false, //5
