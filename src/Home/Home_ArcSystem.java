@@ -764,7 +764,7 @@
 									
 									@Override
 									public void actionPerformed(ActionEvent arg0) {
-										if(isNotExisting("PettyCashFund")) {
+										if(isNotExisting("PettyCash")) {
 											PettyCash pc = new PettyCash();
 											addWindow(pc);
 										}

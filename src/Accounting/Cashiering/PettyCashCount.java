@@ -14,6 +14,8 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -35,6 +37,7 @@ import Database.pgSelect;
 import Database.pgUpdate;
 import FormattedTextField._JXFormattedTextField;
 import Functions.FncGlobal;
+import Functions.FncReport;
 import Functions.FncTables;
 import Functions.UserInfo;
 import Lookup.LookupEvent;
@@ -84,7 +87,7 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 	private _JScrollPaneMain scrollCashCount;
 	private modelPettyCashCount modelCashCount;
 	private _JTableMain tblCashCount;
-	private JList<Integer> rowHeaderCashCount;
+	private JList rowHeaderCashCount;
 	private _JScrollPaneTotal scrollCashCountTotal;
 	private modelPettyCashCount modelCashCountTotal;
 	private _JTableTotal tblCashCountTotal;
@@ -101,6 +104,7 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 	private String pcc_status;
 	private String user;
 	private JPanel pnlInputs;
+	private Object company_logo;
 	private static _JXFormattedTextField ftxtCashInToday;
 	private static _JXFormattedTextField ftxtCashReleasedToday;
 	private static _JXFormattedTextField ftxtCheckEncashment; 
@@ -198,6 +202,7 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 					{
 						lookupPCC_No = new _JLookup(null, "Petty Cash Count No.", 0); 
 						pnlNCCompnents.add(lookupPCC_No);
+						lookupPCC_No.setFont(new Font("Segoe UI", Font.BOLD, 12));
 						lookupPCC_No.addLookupListener(new LookupListener() {
 
 							private String pcc_no;
@@ -279,9 +284,10 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 						tblCashCount.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(countEditor));
 
 						{
-							rowHeaderCashCount = tblCashCount.getRowHeader22();
+							rowHeaderCashCount = tblCashCount.getRowHeader();
 							scrollCashCount.setRowHeaderView(rowHeaderCashCount);
 							scrollCashCount.setCorner(ScrollPaneConstants.UPPER_LEFT_CORNER, FncTables.getRowHeader_Header());
+							scrollCashCount.setCorner(ScrollPaneConstants.LOWER_LEFT_CORNER, FncTables.getRowHeader_Footer(Integer.toString(modelCashCount.getRowCount())));
 						}
 					}
 					{
@@ -294,7 +300,6 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 							tblCashCountTotal = new _JTableTotal(modelCashCountTotal, tblCashCount);
 							scrollCashCountTotal.setViewportView(tblCashCountTotal);
 							tblCashCountTotal.setFont(dialog12Bold);
-							((_JTableTotal) tblCashCountTotal).setTotalLabel(0);
 						}
 					}
 				}
@@ -385,7 +390,6 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 						{
 							ftxtCashReturned = new _JXFormattedTextField(_JXFormattedTextField.CENTER);
 							pnlInputs.add(ftxtCashReturned); 
-							ftxtCashReturned.setText("0.00"); 
 							ftxtCashReturned.setFormatterFactory(_JXFormattedTextField.DECIMAL);
 							ftxtCashReturned.addKeyListener(new KeyAdapter() {
 								public void keyReleased(KeyEvent e) {
@@ -405,7 +409,6 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 						{
 							ftxtCheckEncashment = new _JXFormattedTextField(_JXFormattedTextField.CENTER);
 							pnlInputs.add(ftxtCheckEncashment); 
-							ftxtCheckEncashment.setText("0.00"); 
 							ftxtCheckEncashment.setFormatterFactory(_JXFormattedTextField.DECIMAL);
 							ftxtCheckEncashment.addKeyListener(new KeyAdapter() {
 								public void keyReleased(KeyEvent e) {
@@ -429,7 +432,6 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 						{
 							ftxtCashAdvance = new _JXFormattedTextField(_JXFormattedTextField.CENTER);
 							pnlInputs.add(ftxtCashAdvance); 
-							ftxtCashAdvance.setText("0.00"); 
 							ftxtCashAdvance.setFormatterFactory(_JXFormattedTextField.DECIMAL);
 							ftxtCashAdvance.addKeyListener(new KeyAdapter() {
 								public void keyReleased(KeyEvent e) {
@@ -447,7 +449,6 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 						}
 						{
 							ftxtReimbursement = new _JXFormattedTextField(_JXFormattedTextField.CENTER);
-							ftxtReimbursement.setText("0.00"); 
 							pnlInputs.add(ftxtReimbursement); 
 							ftxtReimbursement.setFormatterFactory(_JXFormattedTextField.DECIMAL);
 							ftxtReimbursement.addKeyListener(new KeyAdapter() {
@@ -466,7 +467,6 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 						}
 						{
 							ftxtAddtlCashReleased = new _JXFormattedTextField(_JXFormattedTextField.CENTER);
-							ftxtAddtlCashReleased.setText("0.00"); 
 							pnlInputs.add(ftxtAddtlCashReleased); 
 							ftxtAddtlCashReleased.setFormatterFactory(_JXFormattedTextField.DECIMAL);
 							ftxtAddtlCashReleased.addKeyListener(new KeyAdapter() {
@@ -482,7 +482,6 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 							pnlInputs.add(Box.createHorizontalBox()); 
 
 							ftxtShortOverage = new _JXFormattedTextField(_JXFormattedTextField.CENTER);
-							ftxtShortOverage.setText("0.00"); 
 							pnlInputs.add(ftxtShortOverage); 
 							ftxtShortOverage.setFormatterFactory(_JXFormattedTextField.DECIMAL); 
 							ftxtShortOverage.setEditable(false);
@@ -499,7 +498,6 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 						{
 							ftxtBegBalance = new _JXFormattedTextField(_JXFormattedTextField.CENTER);
 							pnlAmounts.add(ftxtBegBalance); 
-							ftxtBegBalance.setText("0.00"); 
 							ftxtBegBalance.setFormatterFactory(_JXFormattedTextField.DECIMAL);
 							ftxtBegBalance.setEditable(false);
 							ftxtBegBalance.setFont(dialog12Bold);
@@ -507,7 +505,6 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 						{
 							ftxtCashInToday = new _JXFormattedTextField(_JXFormattedTextField.CENTER); 
 							pnlAmounts.add(ftxtCashInToday); 
-							ftxtCashInToday.setText("0.00"); 
 							ftxtCashInToday.setFormatterFactory(_JXFormattedTextField.DECIMAL);
 							ftxtCashInToday.setEditable(false);
 							ftxtCashInToday.setFont(dialog12Bold);
@@ -519,7 +516,6 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 						{
 							ftxtTotalCashOnHand = new _JXFormattedTextField(_JXFormattedTextField.CENTER);
 							pnlAmounts.add(ftxtTotalCashOnHand); 
-							ftxtCashInToday.setText("0.00"); 
 							ftxtTotalCashOnHand.setFormatterFactory(_JXFormattedTextField.DECIMAL);
 							ftxtTotalCashOnHand.setEditable(false); 
 							ftxtTotalCashOnHand.setFont(dialog12Bold);
@@ -527,7 +523,6 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 						{
 							ftxtCashReleasedToday = new _JXFormattedTextField(_JXFormattedTextField.CENTER);
 							pnlAmounts.add(ftxtCashReleasedToday); 
-							ftxtCashReleasedToday.setText("0.00"); 
 							ftxtCashReleasedToday.setFormatterFactory(_JXFormattedTextField.DECIMAL);
 							ftxtCashReleasedToday.setEditable(false); 
 							ftxtCashReleasedToday.setFont(dialog12Bold);
@@ -540,7 +535,6 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 						{
 							ftxtCOHShouldBe = new _JXFormattedTextField(_JXFormattedTextField.CENTER);
 							pnlAmounts.add(ftxtCOHShouldBe); 
-							ftxtCOHShouldBe.setText("0.00"); 
 							ftxtCOHShouldBe.setFormatterFactory(_JXFormattedTextField.DECIMAL);
 							ftxtCOHShouldBe.setEditable(false); 
 							ftxtCOHShouldBe.setFont(dialog12Bold);
@@ -551,7 +545,6 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 						{
 							ftxtCOHCounted = new _JXFormattedTextField(_JXFormattedTextField.CENTER);
 							pnlAmounts.add(ftxtCOHCounted); 
-							ftxtCOHCounted.setText("0.00"); 
 							ftxtCOHCounted.setFormatterFactory(_JXFormattedTextField.DECIMAL);
 							ftxtCOHCounted.setEditable(false);
 							ftxtCOHCounted.setFont(dialog12Bold);
@@ -611,6 +604,7 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 	private void initializeComponents() {
 		//DEFAULT VALUE OF COMPANY
 		co_id = "01"; 
+		company_logo = getCompanyLogo(co_id);
 		lookupCompany.setValue("ACERLAND REALTY CORPORATION");
 		user = UserInfo.EmployeeCode;
 		dtePCCDate.setEnabled(false);
@@ -624,58 +618,62 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 		lookupPCC_No.setEditable(true);
 		lookupPCC_No.setLookupSQL(getPCC_no(co_id));
 		btnState(true, false, false, false, false, false);
-
+	
 		System.out.println("Cash Count No.: " + lookupPCC_No.getText());
 		System.out.println(""); 
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		if(e.getActionCommand().equals("Add New")) {
-
-			createCashCountList(modelCashCount, rowHeaderCashCount, modelCashCountTotal);
-			setComponentsEnabled(pnlNorth, true);
-			lookupPCC_No.setEnabled(false);
-			lookupCompany.setEditable(false);
-			dtePCCDate.getCalendarButton().setVisible(true);
-			txtStatus.setText("ACTIVE");
-			pcc_status = "A";
-			setCompEnabled(pnlCashCount);
-			tblCashCount.setEditable(true);
-			modelCashCount.setEditable(true);
-			setCompEnabled(pnlCashFundSummary);
-			setComponentsEditable(pnlInputs, true);
-			ftxtShortOverage.setEditable(false);
-			setFTxtDefaultValue();
-			btnState(false, false, true, false, true, false);
-
+			
+			if(pendingPettyCashCount() != null) {
+				showWarningMessage("Petty Cash Count No. " +pendingPettyCashCount()+ " is not yet posted. \n Please post it before creating a new one.", "Add New");
+				return;
+			} else {
+				setFTxtDefaultValue();
+				createCashCountList(modelCashCount, rowHeaderCashCount, modelCashCountTotal);
+				setComponentsEnabled(pnlNorth, true);
+				lookupPCC_No.setEnabled(false);
+				lookupCompany.setEditable(false);
+				dtePCCDate.getCalendarButton().setVisible(true);
+				txtStatus.setText("ACTIVE");
+				pcc_status = "A";
+				setCompEnabled(pnlCashCount);
+				tblCashCount.setEditable(true);
+				modelCashCount.setEditable(true);
+				setCompEnabled(pnlCashFundSummary);
+				setComponentsEditable(pnlInputs, true);
+				ftxtShortOverage.setEditable(false);
+				btnState(false, false, true, false, true, false);
+				updateCashInToday(); 
+				updateTotalCashReleasedToday();
+			}
+			
 		}
 
 		if(e.getActionCommand().equals("Save")) {
-			
-			// Validate value of Total Amount of Petty Cash Count 
-			String str_total_cash_count = modelCashCountTotal.getValueAt(0, 2).toString().trim().replace(",",""); 
-			BigDecimal total_cash_count = new BigDecimal(str_total_cash_count); 
 
-			if(total_cash_count.compareTo(BigDecimal.ZERO) <= 0) {
+			// Validate value of Total Amount of Petty Cash Count 
+			String strTotalCashCount = modelCashCountTotal.getValueAt(0, 2).toString().trim().replace(",",""); 
+			BigDecimal totalCashCount = new BigDecimal(strTotalCashCount); 
+
+			if(totalCashCount.compareTo(BigDecimal.ZERO) <= 0) {
 				showWarningMessage("Please input cash count denomination(s).", "Cash Count");
 				return;
 			} 
 			
-			System.out.println("");
-			System.out.println("Value of Shortage/Overage: " + parseAmount(ftxtAddtlCashReleased));
-			
-			if(isShortOrOver()) {
-				executeSave(total_cash_count);
-			} else {
-				if (JOptionPane.showConfirmDialog(getContentPane(), "Are all details correct?", "Confirmation",
-						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-					executeSave(total_cash_count);
-				} else {
-					return;
-				}
-				
-			}
+		    // Check if cash count discrepancy exists (Short or Over)
+		    if (isShortOrOver(totalCashCount)) {
+		        // If there's a discrepancy and user declines to proceed, stop the process
+		        return;
+		    }
 
+		    // Proceed with saving if no discrepancy or user confirms all details are correct
+		    if (JOptionPane.showConfirmDialog(getContentPane(), "Are all details correct?", "Confirmation",
+		            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
+		        executeSave(totalCashCount);
+		    }
+		    
 		}
 
 		if(e.getActionCommand().equals("Edit")) {
@@ -698,6 +696,10 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 
 		if(e.getActionCommand().equals("Post")) {
 			post(lookupPCC_No.getText().trim()); 
+		}
+		
+		if(e.getActionCommand().equals("Preview")) {
+			preview(); 
 		}
 
 	}
@@ -767,22 +769,22 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 		Double check_encash = Double.valueOf(ftxtCheckEncashment.getText().trim().replace(",","")).doubleValue();
 
 		try { 
-			System.out.println("Cash Returned: " + cash_ret);
-			System.out.println("Check Encashment: " + check_encash);
-			System.out.println(""); 
+//			System.out.println("Cash Returned: " + cash_ret);
+//			System.out.println("Check Encashment: " + check_encash);
+//			System.out.println(""); 
 
 			// Calculate the sum
 			Double sum = (cash_ret + check_encash); 
-			System.out.println("Cash on Hand for the day: " + sum);
-			System.out.println(""); 
+//			System.out.println("Cash on Hand for the day: " + sum);
+//			System.out.println(""); 
 
 			// Display the sum in the result field
 			ftxtCashInToday.setText(nf.format(sum));  
 
 			// Calculate Total Cash On Hand For the Day
 			Double total_coh_for_the_day = (beg_bal+ sum);  
-			System.out.println("Total Cash On hand: " + total_coh_for_the_day);
-			System.out.println(""); 
+//			System.out.println("Total Cash On hand: " + total_coh_for_the_day);
+//			System.out.println(""); 
 
 			// Display the value of Total Cash On Hand For the Day
 			ftxtTotalCashOnHand.setText(nf.format(total_coh_for_the_day));
@@ -800,23 +802,23 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 		Double addtl_cash_rel = Double.valueOf(ftxtAddtlCashReleased.getText().trim().replace(",","")).doubleValue();
 
 		try { 
-			System.out.println("Cash Advance(s): " + cash_adv);
-			System.out.println("Reimbursement(s): " + reimbursement);
-			System.out.println("Addt'l Cash Released: " + addtl_cash_rel);
-			System.out.println(""); 
+//			System.out.println("Cash Advance(s): " + cash_adv);
+//			System.out.println("Reimbursement(s): " + reimbursement);
+//			System.out.println("Addt'l Cash Released: " + addtl_cash_rel);
+//			System.out.println(""); 
 
 			// Calculate the sum
 			Double sum = (cash_adv + reimbursement + addtl_cash_rel); 
-			System.out.println("Total Cash Released Today: " + sum);
-			System.out.println(""); 
+//			System.out.println("Total Cash Released Today: " + sum);
+//			System.out.println(""); 
 
 			// Display the sum in the result field
 			ftxtCashReleasedToday.setText(nf.format(sum));  
 
 			// Calculate value of Cash on hand - Should be
 			Double total_coh_should_be = (total_cash_on_hand - sum);  
-			System.out.println("Total Cash On hand - Should Be: " + total_coh_should_be);
-			System.out.println(""); 
+//			System.out.println("Total Cash On hand - Should Be: " + total_coh_should_be);
+//			System.out.println(""); 
 
 			// Display  Cash on hand - Should be in the result field
 			ftxtCOHShouldBe.setText(nf.format(total_coh_should_be));
@@ -834,14 +836,14 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 		Double cashOnHand_counted = Double.valueOf(ftxtCOHCounted.getText().trim().replace(",","")).doubleValue();
 
 		try { 
-			System.out.println("Cash On hand - Should Be: " + cashOnHand_should_be);
-			System.out.println("Cash On hand Counted: " + cashOnHand_counted);
-			System.out.println(""); 
+//			System.out.println("Cash On hand - Should Be: " + cashOnHand_should_be);
+//			System.out.println("Cash On hand Counted: " + cashOnHand_counted);
+//			System.out.println(""); 
 
 			// Calculate the value of Shortage / Overage
 			Double shortageOrOverage = (cashOnHand_counted - cashOnHand_should_be); 
-			System.out.println("Total Shortage Or Overage: " + shortageOrOverage);
-			System.out.println(""); 
+//			System.out.println("Total Shortage Or Overage: " + shortageOrOverage);
+//			System.out.println(""); 
 
 			// Format the value and check if it's negative
 			String formattedValue;
@@ -849,12 +851,12 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 				// For negative values, format inside parentheses
 				formattedValue = "(" + nf.format(Math.abs(shortageOrOverage)) + ")";
 			} else {
-				// For positive values, just format normally
+				// Positive values
 				formattedValue = nf.format(shortageOrOverage);
 			}
 
 			// Display the value in the text field
-			ftxtShortOverage.setText(formattedValue);
+			ftxtShortOverage.setValue(formattedValue);
 
 
 		} catch (Exception e) {
@@ -866,31 +868,33 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 
 		String pcc_no = lookupPCC_No.getText().trim();
 
-			// SAVE NEW PETTY CASH COUNT
-			if(pcc_no.equals("")) {
+		// SAVE NEW PETTY CASH COUNT
+		if(pcc_no.equals("")) {
 
-				pcc_no = savePettyCashCount(pcc_no, total_cash_count); 
-				JOptionPane.showMessageDialog(getContentPane(), "Petty Cash Count No. " + pcc_no + " was successfully saved."  , "Information",
-						JOptionPane.INFORMATION_MESSAGE);
-			} 
+			pcc_no = savePettyCashCount(pcc_no, total_cash_count); 
+			JOptionPane.showMessageDialog(getContentPane(), "Petty Cash Count No. " + pcc_no + " was successfully saved."  , "Information",
+					JOptionPane.INFORMATION_MESSAGE);
+		} 
 
-			// SAVE FROM EDIT
-			else { 
+	
+		else { // SAVE FROM EDIT
 
-				savePettyCashCount(pcc_no, total_cash_count); 
-				JOptionPane.showMessageDialog(getContentPane(), "Petty Cash Count No. " + pcc_no + " was successfully updated."  , "Information",
-						JOptionPane.INFORMATION_MESSAGE);
-			}
-			
-			lookupPCC_No.setValue(pcc_no);
-			lookupPCC_No.setEditable(true);
-			modelCashCount.setEditable(false);
-			displayCashCount(pcc_no);
-			btnState(false, true, false, true, true, true);
-			setCompEditable(pnlCashCount, false);
-			setCompEditable(pnlCashFundSummary, false);
-			
-		
+			savePettyCashCount(pcc_no, total_cash_count); 
+			JOptionPane.showMessageDialog(getContentPane(), "Petty Cash Count No. " + pcc_no + " was successfully updated."  , "Information",
+					JOptionPane.INFORMATION_MESSAGE);
+		}
+
+		lookupPCC_No.setValue(pcc_no);
+		lookupPCC_No.setEnabled(true);
+		lookupPCC_No.setEditable(true);
+		modelCashCount.setEditable(false);
+		displayCashCount(pcc_no);
+		btnState(false, true, false, true, true, true);
+		setCompEditable(pnlCashCount, false);
+		setCompEditable(pnlCashFundSummary, false);
+		dtePCCDate.getCalendarButton().setEnabled(false);
+		dtePCCDate.setEnabled(false);
+
 	}
 
 	private String savePettyCashCount(String pcc_no, BigDecimal total_cash_count) {
@@ -898,11 +902,6 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 		String pcc_date = dtePCCDate.getDate().toString();
 
 		double[] denominations = new double[13];
-//		String[] denominationLabels = {
-//				"denom_1000", "denom_500", "denom_200", "denom_100",
-//				"denom_50", "denom_20", "denom_10", "denom_5",
-//				"denom_1", "denom_50c", "denom_25c", "denom_10c", "denom_1c"
-//		};
 
 		for (int i = 0; i < denominations.length; i++) {
 			try {
@@ -950,13 +949,12 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 		System.out.println(""); 
 
 		// SAVING OF PETTY CASH FUND SUMMARY
-		savePettyFundSummary(pcc_no);
+		savePettyCashFundSummary(pcc_no);
 
 		return pcc_no;
 	}
 
-	private void savePettyFundSummary(String pcc_no) {
-		//Save to Petty Cash Fund Summary
+	private void savePettyCashFundSummary(String pcc_no) {
 
 		Double beg_bal = Double.valueOf(ftxtBegBalance.getText().trim().replace(",","")).doubleValue();
 		BigDecimal cash_returned = (BigDecimal) ftxtCashReturned.getValued(); 
@@ -966,8 +964,10 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 		BigDecimal reimbursement = (BigDecimal) ftxtReimbursement.getValued();
 		BigDecimal addtl_cash_released = (BigDecimal) ftxtAddtlCashReleased.getValued();
 		Double cash_on_hand_should_be = Double.valueOf(ftxtCOHShouldBe.getText().trim().replace(",","")).doubleValue();
-		Double shortage_or_overage = Double.valueOf(ftxtShortOverage.getText().trim().replace(",","")).doubleValue();
+		BigDecimal shortage_or_overage = parseAmount(ftxtShortOverage); 
 		BigDecimal cash_on_hand_counted = (BigDecimal) ftxtCOHCounted.getValued();
+
+		logCashFundSummaryValues(beg_bal, cash_returned, check_encashment, total_cash_on_hand, cash_advance, reimbursement, addtl_cash_released, cash_on_hand_should_be, shortage_or_overage, cash_on_hand_counted);
 
 		try {
 
@@ -1010,8 +1010,11 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 			db.executeUpdate(sql, true, true);
 			JOptionPane.showMessageDialog(getContentPane(), "Petty Cash Count has been successfully posted.", "Information", JOptionPane.INFORMATION_MESSAGE);
 
+			displayCashCount(pcc_no);
+			displayCashFundSummary(pcc_no);
 			btnState(false, false, false, true, true, false);
 			lookupPCC_No.setEditable(true);
+			modelCashCount.setEditable(false);
 
 		} else {
 			return; 
@@ -1079,7 +1082,12 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 				+ ", a.reimbursement\n"
 				+ ", a.addtl_cash_released\n"
 				+ ", a.cash_on_hand_should_be\n"
-				+ ", a.shortage_or_overage\n"
+				+ ", CASE \n"
+				+ "    WHEN a.shortage_or_overage < 0 THEN \n"
+				+ "        '(' || TO_CHAR(ABS(a.shortage_or_overage), 'FM9,999,999,990.00') || ')'\n"
+				+ "    ELSE \n"
+				+ "        TO_CHAR(a.shortage_or_overage, 'FM9,999,999,990.00')\n"
+				+ "	END AS \"Shortage or Overage\" \n"
 				+ ", cash_on_hand_counted\n"
 				+ "FROM rf_petty_cash_fund_summary a\n"
 				+ "LEFT JOIN rf_petty_cash_count b ON b.co_id = a.co_id AND b.petty_cash_count_no = a.pcc_no AND b.status_id != 'I'\n"
@@ -1091,9 +1099,11 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 
 		db.select(SQL);
 
-		System.out.println("displayPCR_header: "+ SQL);	
+		System.out.println("displayCashFundSummary: "+ SQL);	
 
 		if(db.isNotNull()) {
+			
+			
 			lookupCompany.setValue((String) db.getResult()[0][0]); 
 			dtePCCDate.setDate((Date)db.getResult()[0][1]); 
 			txtStatus.setText((String) db.getResult()[0][2]);
@@ -1107,26 +1117,26 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 			ftxtReimbursement.setValue((BigDecimal) db.getResult()[0][10]); 
 			ftxtAddtlCashReleased.setValue((BigDecimal) db.getResult()[0][11]); 
 			ftxtCOHShouldBe.setValue((BigDecimal) db.getResult()[0][12]); 
-			ftxtShortOverage.setValue((BigDecimal) db.getResult()[0][13]); 
+			ftxtShortOverage.setText((String) db.getResult()[0][13]); 
 			ftxtCOHCounted.setValue((BigDecimal) db.getResult()[0][14]); 
 		}
 
 	}
 
 	private void setFTxtDefaultValue(){
-
-		ftxtCashReturned.setText("0.00");
-		ftxtCashAdvance.setText("0.00");
-		ftxtReimbursement.setText("0.00");
-		ftxtAddtlCashReleased.setText("0.00");
-		ftxtBegBalance.setText("0.00");
-		ftxtTotalCashOnHand.setText("0.00");
-		ftxtCOHShouldBe.setText("0.00");
-		ftxtCOHCounted.setText("0.00");
-		ftxtShortOverage.setText("0.00");
-		ftxtCashInToday.setText("0.00");
-		ftxtCashReleasedToday.setText("0.00");
-		ftxtCheckEncashment.setText("0.00");
+		
+		ftxtBegBalance.setValue(getBegBalance()); 
+		ftxtCashReturned.setValue(BigDecimal.ZERO); 
+		ftxtCashAdvance.setValue(BigDecimal.ZERO); 
+		ftxtReimbursement.setValue(BigDecimal.ZERO); 
+		ftxtAddtlCashReleased.setValue(BigDecimal.ZERO); 
+		ftxtTotalCashOnHand.setValue(BigDecimal.ZERO); 
+		ftxtCOHShouldBe.setValue(BigDecimal.ZERO); 
+		ftxtCOHCounted.setValue(BigDecimal.ZERO); 
+		ftxtShortOverage.setValue(BigDecimal.ZERO); 
+		ftxtCashInToday.setValue(BigDecimal.ZERO); 
+		ftxtCashReleasedToday.setValue(BigDecimal.ZERO); 
+		ftxtCheckEncashment.setValue(BigDecimal.ZERO); 
 	}
 
 	private void adjustRowHeight(_JTableMain table) {
@@ -1174,32 +1184,55 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 
 	}
 
-	private Boolean isShortOrOver() {
-		Boolean isShortOrOver = false; 
+	private boolean isShortOrOver(BigDecimal totalCashCount) {
+		
+	    // Parse the short/over amount entered by the user
+	    BigDecimal discrepancyAmount = parseAmount(ftxtShortOverage);
 
-		BigDecimal amount = parseAmount(ftxtShortOverage);
+	    // If discrepancy exists (either short or over), prompt the user for confirmation
+	    if (discrepancyAmount.compareTo(BigDecimal.ZERO) != 0) {
+	        String message = (discrepancyAmount.compareTo(BigDecimal.ZERO) < 0) ? 
+	                          "Cash count discrepancy: Short by " + nf.format(discrepancyAmount) : 
+	                          "Cash count discrepancy: Over by " + nf.format(discrepancyAmount);
 
-		// Check if the amount is less than or greater than zero
-		if (amount.compareTo(BigDecimal.ZERO) < 0) {
-			if (JOptionPane.showConfirmDialog(getContentPane(), "Cash count discrepancy: Short by " + amount + ". Are you sure you want to continue saving?", "Confirmation",
-					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-				isShortOrOver = true; 
-			} else {
-				isShortOrOver = false; 
-			}
-			
-		} else if (amount.compareTo(BigDecimal.ZERO) > 0) {
-			if (JOptionPane.showConfirmDialog(getContentPane(), "Cash count discrepancy: Over by " + amount + ". Are you sure you want to continue saving?", "Confirmation",
-					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION) {
-				isShortOrOver = true; 
-			} else {
-				isShortOrOver = false; 
-			}
+	        int response = JOptionPane.showConfirmDialog(getContentPane(),
+	                message + ".\nAre you sure you want to continue saving?", 
+	                "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+	        // If user selects "No", return true, indicating the discrepancy exists but they didn't proceed
+	        if (response == JOptionPane.NO_OPTION) {
+	            return true;
+	        }
+
+	     // If user selects "Yes", proceed with saving immediately (bypass next prompt)
+	        if (response == JOptionPane.YES_OPTION) {
+	            executeSave(totalCashCount);
+	            return true; // Saving is already done, no need to proceed to next check
+	        }
+	    }
+
+	    // No discrepancy (amount is zero)
+	    return false;
+	}
+	
+	private String pendingPettyCashCount() {
+		String active_pcc = ""; 
+		
+		pgSelect db = new pgSelect(); 
+		db.select("SELECT petty_cash_count_no\n"
+				+ "FROM rf_petty_cash_count \n"
+				+ "WHERE status_id = 'A' \n"
+				+ "AND rec_status = 'A'\n"
+				+ "ORDER BY date_created\n"
+				+ "LIMIT 1;");
+		
+		if(db.isNotNull()) {
+			active_pcc = (String) db.getResult()[0][0]; 	
 		} else {
-			// amout is ZERO
-			isShortOrOver = false ; 
+			active_pcc = null; 
 		}
-		return isShortOrOver;
+		
+		return active_pcc; 
 	}
 
 	/**
@@ -1210,32 +1243,32 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 	public static BigDecimal parseAmount(JFormattedTextField shortage_or_overage) {
 		String value = shortage_or_overage.getText().trim();
 
-		System.out.println("Value ng Shortage/Overage before i-format: " + value);
+//		System.out.println("Value ng Shortage/Overage before i-format: " + value);
+		
 		// Check if the text is wrapped in parentheses (indicating a negative number)
 		if (value.startsWith("(") && value.endsWith(")")) {
+			
 			// Remove the parentheses and parse the value
 			String numberText = value.substring(1, value.length() - 1).trim().replace(",", "");
-//			numberText = numberText.trim().replace(",", ""); 
-
+			
 			try {
-				
+
 				System.out.println("Formatted amount: " + new BigDecimal("-" + numberText));
 				// Convert the number to a negative BigDecimal
 				return new BigDecimal("-" + numberText);
 			} catch (NumberFormatException e) {
-				// Handle invalid number format
-				System.out.println("Dumaan dito sa Invalid Format with Paretheses!");
+				// invalid number format
 				JOptionPane.showMessageDialog(null, "Invalid amount format.", "Error", JOptionPane.ERROR_MESSAGE);
-				return BigDecimal.ZERO; // Return zero if invalid input
+				return BigDecimal.ZERO; 
 			}
 		} else {
 			try {
-				// If it's not in parentheses, parse it normally
+	
 				return new BigDecimal(value.trim().replace(",", ""));
 			} catch (NumberFormatException e) {
-				// Handle invalid number format
+				// invalid number format
 				JOptionPane.showMessageDialog(null, "Invalid amount format.", "Error", JOptionPane.ERROR_MESSAGE);
-				return BigDecimal.ZERO; // Return zero if invalid input
+				return BigDecimal.ZERO; 
 			}
 		}
 	}
@@ -1256,15 +1289,14 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 
 		return SQL; 
 	}
-	
-	private String getBegBalance() {
-		String beg_bal = "";
 
-		String SQL = "SELECT total_pcc_amount\n"
+	private BigDecimal getBegBalance() {
+
+		String SQL = "SELECT COALESCE(total_pcc_amount, 0.00)\n"
 				+ "FROM rf_petty_cash_count \n"
 				+ "WHERE status_id = 'P'\n"
 				+ "AND rec_status = 'A'\n"
-				+ "ORDER BY date_created::DATE \n"
+				+ "ORDER BY date_created\n"
 				+ "DESC LIMIT 1";
 
 		System.out.printf("SQL Query (getBegBalance): %s%n", SQL);
@@ -1273,10 +1305,10 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 		db.select(SQL);
 
 		if (db.isNotNull() && db.getResult()[0][0] != null) {
-			return db.getResult()[0][0].toString();
+			return (BigDecimal) db.getResult()[0][0];
 		}
-		
-		return "0.00";
+
+		return BigDecimal.ZERO;
 	}
 
 	private String getDenomValue(String denom, String pcc_no) {
@@ -1315,8 +1347,7 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 	}
 
 	private String sql_getTotalCashCount(String pcc_no) {
-		String total_pcc_amount = "";
-
+		
 		String SQL = "SELECT total_pcc_amount::VARCHAR \n"
 				+ "FROM rf_petty_cash_count \n"
 				+ "WHERE co_id = '"+co_id+"' \n"
@@ -1332,6 +1363,56 @@ public class PettyCashCount extends _JInternalFrame implements _GUI, ActionListe
 			return db.getResult()[0][0].toString();
 		}
 		return "0.00";
+	}
+
+	// Log Cash Fund Summary values 
+	private void logCashFundSummaryValues(Double beg_bal,  BigDecimal cash_ret, BigDecimal check_encash, double total_coh, BigDecimal cash_advance, BigDecimal reimbursement, BigDecimal addtl_cash_rel, double coh_should_be, BigDecimal short_over, BigDecimal coh_counted) {
+		System.out.println("");
+		System.out.println("Beggining Balance: " + beg_bal);
+		System.out.println("Cash In Today: " + cash_ret.add(check_encash));
+		System.out.println("Cash Returned: " + cash_ret);
+		System.out.println("Check Encashment: " +  check_encash);
+		System.out.println("Total Cash on Hand For the Day: " + total_coh);
+		System.out.println("Cash Released Today: " + cash_advance.add(reimbursement).add(addtl_cash_rel));
+		System.out.println("Cash Advance(s): " + cash_advance);
+		System.out.println("Reimbursement(s): " + reimbursement);
+		System.out.println("Addt'l Cash Released: " + addtl_cash_rel);
+		System.out.println("Cash on hand Should Be: " + coh_should_be);
+		System.out.println("Shortage / Overage: " + short_over);
+		System.out.println("Cash on Hand Counted: " + coh_counted);
+		System.out.println("");
+
+	}
+	
+	public static String getCompanyLogo(String co_id) {
+		pgSelect db = new pgSelect(); 
+		String company_logo = "";
+
+		db.select("SELECT company_logo FROM mf_company where co_id = '"+co_id+"';");
+
+		if (db.isNotNull()) {
+			company_logo = (String) db.getResult()[0][0];
+		}
+
+		return company_logo;
+	}
+	
+	public void preview() {
+
+		Map<String, Object> mapParameters = new HashMap<String, Object>();
+		mapParameters.put("co_id", co_id);
+		mapParameters.put("logo", this.getClass().getClassLoader().getResourceAsStream("Images/" + company_logo));
+		mapParameters.put("user", UserInfo.FullName);
+		mapParameters.put("pcc_no", lookupPCC_No.getText().trim());
+
+		System.out.println("");
+		System.out.println("Value of co_id:" +  co_id);
+		System.out.println("Value of logo:" +  company_logo);
+		System.out.println("Value of user:" +  UserInfo.FullName);
+		System.out.println("Value of pcc_no:" +  lookupPCC_No.getText().trim());
+		
+		FncReport.generateReport("/Reports/rptPettyCashCountSheet.jasper", title, mapParameters);
+		
 	}
 
 }
