@@ -21,14 +21,14 @@
 	<detail>
 		<band height="50" splitType="Prevent">
 			<componentElement>
-				<reportElement x="19" y="0" width="120" height="37"/>
+				<reportElement x="20" y="3" width="120" height="37"/>
 				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="true" checksumRequired="false" barHeight="80">
 					<jr:codeExpression><![CDATA["Asset No."+$F{c_anum}]]></jr:codeExpression>
 					<jr:applicationIdentifierExpression><![CDATA[$F{c_anum}]]></jr:applicationIdentifierExpression>
 				</jr:barbecue>
 			</componentElement>
 			<frame>
-				<reportElement x="20" y="0" width="119" height="48"/>
+				<reportElement x="20" y="0" width="120" height="50"/>
 				<box>
 					<pen lineStyle="Dashed"/>
 					<topPen lineWidth="0.5" lineStyle="Dashed"/>
@@ -38,7 +38,7 @@
 				</box>
 			</frame>
 			<textField>
-				<reportElement x="20" y="37" width="119" height="10"/>
+				<reportElement x="20" y="40" width="119" height="10"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font size="7"/>
 				</textElement>

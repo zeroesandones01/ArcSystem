@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AssetCard_v3" pageWidth="792" pageHeight="612" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="756" leftMargin="18" rightMargin="18" topMargin="8" bottomMargin="8">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="75"/>
 	<parameter name="emp_code" class="java.lang.Integer"/>
 	<parameter name="co_logo" class="java.io.InputStream"/>
 	<parameter name="company_name" class="java.lang.String" isForPrompting="false"/>
@@ -90,32 +90,32 @@ order by a.asset_no]]>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{asset_filter}+" Card Listing"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="79" y="35" width="185" height="20"/>
+				<reportElement x="94" y="35" width="185" height="20"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{current_cust}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="79" y="53" width="185" height="20"/>
+				<reportElement x="94" y="53" width="185" height="20"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{div_dept}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="35" width="79" height="20"/>
+				<reportElement x="0" y="35" width="94" height="20"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[CUSTODIAN:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="53" width="79" height="20"/>
+				<reportElement x="0" y="53" width="94" height="20"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[DIV./DEPT.:]]></text>
+				<text><![CDATA[Div./Exec Office]]></text>
 			</staticText>
 			<textField pattern="MMMMM dd, yyyy">
 				<reportElement x="628" y="35" width="125" height="20"/>
