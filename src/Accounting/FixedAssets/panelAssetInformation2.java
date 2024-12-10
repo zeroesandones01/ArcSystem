@@ -758,13 +758,16 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 								
 								public void keyReleased(KeyEvent e) {
 									try{
-										System.out.println("press Gross");
-										if(txtgross.getValue() == null) {
-											System.out.println("gross: "+ txtgross.getValue());
-											JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Please enter gross amount.", null, JOptionPane.WARNING_MESSAGE);
-										}else {
-											computemonthlydep();
+										if(!txtUsefulLife.isEnabled()) {
+											System.out.println("press Gross");
+											if(txtgross.getValue() == null) {
+												System.out.println("gross: "+ txtgross.getValue());
+												JOptionPane.showMessageDialog(getTopLevelAncestor(), "Please enter gross amount.", null, JOptionPane.ERROR_MESSAGE);
+											}else {
+												computemonthlydep();
+											}
 										}
+										
 									} catch(NumberFormatException a) {}
 								}
 
@@ -1538,20 +1541,21 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 			this.add(pnlNavigation, BorderLayout.SOUTH);
 			pnlNavigation.setPreferredSize(new Dimension(0, 28));
 			{
-				pnlNavigationEast = new JPanel(new GridLayout(1, 7, 3, 3));
+				pnlNavigationEast = new JPanel(new GridLayout(1, 6, 3, 3));
 				pnlNavigation.add(pnlNavigationEast, BorderLayout.CENTER);
-//				{
-//					btnPreview= new JButton("Preview Sticker");
-//					pnlNavigationEast.add(btnPreview);
-//					btnPreview.setEnabled(false);
-//					btnPreview.addActionListener(this);
-//				}
-//				{
-//					btnattachment = new JButton("Attachments");
-//					pnlNavigationEast.add(btnattachment);
-//					btnattachment.addActionListener(this);
-//					
-//				}
+				{
+					btnPreview= new JButton("Preview Sticker");
+					pnlNavigationEast.add(btnPreview);
+					btnPreview.setActionCommand("preview");
+					btnPreview.setEnabled(false);
+					btnPreview.addActionListener(this);
+				}
+				{
+					btnattachment = new JButton("Attachments");
+					pnlNavigationEast.add(btnattachment);
+					btnattachment.addActionListener(this);
+					
+				}
 				{
 					btnNew = new JButton("New");
 					pnlNavigationEast.add(btnNew);
@@ -1626,7 +1630,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 			txtReferenceNo.setEditable(true);	
 			lookupLocation.setEditable(true);
 			
-			btnState(false, false, true, true);
+			btnState(false, false, false, true, true);
 		}
 		if(e.getActionCommand().equals("save")) {
 			
@@ -1695,7 +1699,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 						);
 						JOptionPane.showMessageDialog(getTopLevelAncestor(), "New Asset has been Added", "Save", JOptionPane.INFORMATION_MESSAGE);
 						resetInformation();
-						btnState(true, false, false, true);
+						btnState(false,true, false, false, true);
 						
 					}else {
 						
@@ -1739,7 +1743,7 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 									);
 							JOptionPane.showMessageDialog(getTopLevelAncestor(), "Asset details has been updated", "Save", JOptionPane.INFORMATION_MESSAGE);
 							resetInformation();
-							btnState(true, false, false, true);
+							btnState(false,true, false, false, true);
 						}
 					}
 					
@@ -1793,6 +1797,12 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 //					JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Asset cost is below 5,000.00", "Error", JOptionPane.ERROR_MESSAGE);
 //				}
 			}
+		}
+		
+		if(e.getActionCommand().equals("preview")) {
+			String custodian = FncGlobal.GetString("select current_cust::varchar from rf_asset where asset_no = "+txtAssetNo.getText()+" ");
+			
+			previewSticker(txtAssetNo.getText(), custodian, AssetMonitoring2.txtcompany.getText());
 		}
 		
 	}
@@ -2146,7 +2156,10 @@ public class panelAssetInformation2 extends JPanel implements ActionListener, _G
 		lookupLocation.setEditable(true);
 		lookupLocation.setText("");
 		
-		btnState(false, false, true, true);
+		cmbstatus.setEditable(true);
+		cmbstatus.setEnabled(true);
+		
+		btnState(false,false, false, true, true);
 	}
 	
 public static void resetInformation(){
@@ -2176,6 +2189,7 @@ public static void resetInformation(){
 				AssetMonitoring2.lookupCustodianid.setEditable(true);
 				AssetMonitoring2.txtCustodianid.setEditable(false);
 				
+				txtAssetNo.setText("");
 				dateAcquired.getCalendarButton().setEnabled(false);
 				
 				lookupCompany.setEditable(false);
@@ -2268,7 +2282,10 @@ public static void resetInformation(){
 				lookupLocation.setText("");
 				lookupLocation.setEditable(false);
 				
-				btnState(true, true, false, true);
+				cmbstatus.setEditable(false);
+				cmbstatus.setEnabled(false);
+				
+				btnState(false,true, true, false, true);
 				FncGlobal.stopProgress();
 			}
 		}).start();
@@ -2427,7 +2444,8 @@ public static void resetInformation(){
 		}
 	}
 	
-	public static  void btnState(Boolean sNew, Boolean sEdit, Boolean sSave, Boolean sReset){
+	public static  void btnState(Boolean spreview,Boolean sNew, Boolean sEdit, Boolean sSave, Boolean sReset){
+		btnPreview.setEnabled(spreview);
 		btnNew.setEnabled(sNew);
 		btnEdit.setEnabled(sEdit);
 		btnSave.setEnabled(sSave);
@@ -2468,7 +2486,7 @@ public static void resetInformation(){
 		lookupLocation.setEditable(true);
 		
 		
-		btnState(false, false, true, true);
+		btnState(false,false, false, true, true);
 	}
 	
 	private void previewSticker(String asset_no, String current_cust, String co_name){
@@ -2482,11 +2500,10 @@ public static void resetInformation(){
 	mapParameters.put("assetToPrint", Integer.valueOf(asset_no));
 	mapParameters.put("custodian",current_cust);
 	mapParameters.put("company_name", co_name);
-	mapParameters.put("co_logo", this.getClass().getClassLoader().getResourceAsStream("Images/"+ AssetMonitoring.co_logo));
+	mapParameters.put("co_logo", this.getClass().getClassLoader().getResourceAsStream("Images/arc-logo.png"));
 	mapParameters.put("no_sticker", sticker_count);
 	
 	FncSystem.out("co_name", co_name);
-	FncSystem.out("co_logo", co_logo);
 	FncSystem.out("current_cust", current_cust);
 	FncSystem.out("asset_no", asset_no);
 	FncSystem.out("sticker_count", sticker_count);
@@ -2494,12 +2511,12 @@ public static void resetInformation(){
 	if(Option == JOptionPane.YES_OPTION){
 
 		
-		FncReport.generateReport("/Reports/rptAssetSticker.jasper", "Assetcode Sticker", mapParameters);
+		FncReport.generateReport("/Reports/rptAssetSticker_big_individual.jasper", "Asset Sticker Big", mapParameters);
 		System.out.println("Big");
 	}
 	if(Option == JOptionPane.NO_OPTION){
 		System.out.println("Small");
-		FncReport.generateReport("/Reports/rptAssetSticker_small2.jasper", "Assetcode Sticker", mapParameters);
+		FncReport.generateReport("/Reports/rptAssetSticker_small_individual.jasper", "Assetcode Sticker Small", mapParameters);
 	}
 	
 	
