@@ -225,7 +225,7 @@ public class FncGlobal {
 		/**	Server Settings	**/ /**	Server Settings	**/ /**	Server Settings	**/
 		/*********************/ /*********************/ /*********************/
 		//Servers to be deployed in 7th Floor (Live)
-		mapURL.put("Summit - ArcSystem Live", "jdbc:postgresql://jsystemdb.cenqhomes.com:5432/acerland?ApplicationName=ArcSystem");
+		mapURL.put("Mandala - ArcSystem Live", "jdbc:postgresql://jsystemdb.cenqhomes.com:5432/acerland?ApplicationName=ArcSystem");
 		//mapURL.put("Summit - Terraverde Live", "jdbc:postgresql://localhost/terraverde_summit_local?ApplicationName=JSystem3.0");
 		//mapURL.put("Site - Open House", "jdbc:postgresql://177.177.176.179:5432/terraverde?ApplicationName=JSystem2.2 (Open House)"); //XXX OPEN HOUSE DATABASE 
 		/*********************/ /*********************/ /*********************/

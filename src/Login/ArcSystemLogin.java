@@ -459,7 +459,7 @@ public class ArcSystemLogin extends JDialog {
 					System.out.printf("password:%s", password);
 
 					try {
-						authenticate(txtUserName.getText(), password, "Summit - ArcSystem Live");
+						authenticate(txtUserName.getText(), password, "Mandala - ArcSystem Live");
 						//authenticate(txtUserName.getText(), password, "JPolicy-Offline");
 						
 						
