@@ -58,6 +58,10 @@ public class _JXTextField extends JXTextField implements _GUI{
 	public String getText() {
 		return super.getText().trim().replace("'", "''");
 	}
+	
+	public void setPromptForegroundColor(Color color) {
+        this.setPromptForeground(color);
+    }
 
 	@Override
 	public void initGUI() {

@@ -144,13 +144,13 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 			pnlEast = new JPanel(new BorderLayout(5, 5));
 			pnlMain.add(pnlEast, BorderLayout.EAST);
 			pnlEast.setLayout(new SpringLayout());
-			pnlEast.setBorder(JTBorderFactory.createTitleBorder("Client"));
+			pnlEast.setBorder(JTBorderFactory.createTitleBorder("Supplier"));
 			pnlEast.setPreferredSize(new Dimension(170, 571));
 			{
 				lookupClient = new _JLookup(null, "Client", 0);
 				pnlEast.add(lookupClient, BorderLayout.NORTH);
 				lookupClient.setLookupSQL(sqlClients());
-				lookupClient.setPreferredSize(new Dimension(170, 30));
+				lookupClient.setPreferredSize(new Dimension(170, 10));
 				lookupClient.setFilterName(true);
 				lookupClient.addLookupListener(new LookupListener() {
 					public void lookupPerformed(LookupEvent event) {
@@ -209,149 +209,149 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 			{
 				JPanel pnlSeparator3 = new JPanel(new BorderLayout(5, 5));
 				pnlEast.add(pnlSeparator3);
-				pnlSeparator3.setPreferredSize(new Dimension(170, 50));
+				pnlSeparator3.setPreferredSize(new Dimension(170, 250));
 			}
-			{
-				pnlPicture = new JPanel(new BorderLayout(5, 5));
-				pnlEast.add(pnlPicture);
-				pnlPicture.setLayout(new BorderLayout(5, 5));
-				pnlPicture.setBorder(LINE_BORDER);
-				pnlPicture.setPreferredSize(new Dimension(170, 150));
-				{
-					lblClientImageFileChooser = new FncImageFileChooser(145, 150);
-					pnlPicture.add(lblClientImageFileChooser);
-					lblClientImageFileChooser.setClickable(false);
-					lblClientImageFileChooser.setDefaultClientImage();
-					lblClientImageFileChooser.addMouseListener(new MouseListener() {
-						
-						@Override
-						public void mouseReleased(MouseEvent e) {
-							// TODO Auto-generated method stub
-							
-						}
-						
-						@Override
-						public void mousePressed(MouseEvent e) {
-							// TODO Auto-generated method stub
-							
-						}
-						
-						@Override
-						public void mouseExited(MouseEvent e) {
-							// TODO Auto-generated method stub
-							
-						}
-						
-						@Override
-						public void mouseEntered(MouseEvent e) {
-							// TODO Auto-generated method stub
-							
-						}
-						
-						@Override
-						public void mouseClicked(MouseEvent e) {
-							if(lblClientImageFileChooser.isClickable() == false && lookupClient.getValue() != null){
-								if(e.getClickCount() >= 2){
-									try{
-									dlg_ImageViewer img_dlg = new dlg_ImageViewer(FncGlobal.homeMDI, "Client Image", displayClientImage(lblClientImageFileChooser, lookupClient.getValue()), new Dimension(500, 500));
-									img_dlg.setLocationRelativeTo(null);
-									img_dlg.setVisible(true);
-									
-									
-									} catch (IOException a) {
-										a.printStackTrace();
-									} catch (OutOfMemoryError er){
-										JOptionPane.showMessageDialog(getContentPane(), "Out of memory.", "Loading Image.", JOptionPane.WARNING_MESSAGE);
-								
-									}
-								}
-							}
-							
-							if(lblClientImageFileChooser.isClickable()){
-								if(e.getClickCount() >= 2 && lblClientImageFileChooser.getIsOk()){
-									
-								}
-							}
-						}
-					});
-				}
-			}
-			{
-				lblPicture = new JLabel("Picture" , JLabel.CENTER);
-				pnlEast.add(lblPicture);
-			}
-			{
-				JPanel pnlSeparator2 = new JPanel(new BorderLayout(5, 5));
-				pnlEast.add(pnlSeparator2);
-			}
-			{
-				pnlSignature = new JPanel();
-				pnlEast.add(pnlSignature);
-				pnlSignature.setLayout(new BorderLayout(5, 5));
-				pnlSignature.setBorder(LINE_BORDER);
-				pnlSignature.setPreferredSize(new Dimension(170, 30));
-				{
-					lblClientSignatureFileChooser = new FncImageFileChooser(145, 30);
-					pnlSignature.add(lblClientSignatureFileChooser);
-					lblClientSignatureFileChooser.setClickable(false);
-					lblClientSignatureFileChooser.setDefaultClientSignature();
-					lblClientSignatureFileChooser.addMouseListener(new MouseListener() {
-						
-						@Override
-						public void mouseReleased(MouseEvent e) {
-							// TODO Auto-generated method stub
-							
-						}
-						
-						@Override
-						public void mousePressed(MouseEvent e) {
-							// TODO Auto-generated method stub
-							
-						}
-						
-						@Override
-						public void mouseExited(MouseEvent e) {
-							// TODO Auto-generated method stub
-							
-						}
-						
-						@Override
-						public void mouseEntered(MouseEvent e) {
-							// TODO Auto-generated method stub
-							
-						}
-						
-						@Override
-						public void mouseClicked(MouseEvent e) {
-							if(lblClientSignatureFileChooser.isClickable() == false && lookupClient.getValue() != null){
-								if(e.getClickCount() >= 2){
-									try{
-									dlg_ImageViewer img_dlg = new dlg_ImageViewer(FncGlobal.homeMDI, "Client Sginature", displayClientSignature(lblClientSignatureFileChooser, lookupClient.getValue()), new Dimension(500, 500));
-									img_dlg.setLocationRelativeTo(null);
-									img_dlg.setVisible(true);
-									
-									} catch (IOException a) {
-										a.printStackTrace();
-									} catch (OutOfMemoryError er){
-										JOptionPane.showMessageDialog(getContentPane(), "Out of memory.", "Loading Image.", JOptionPane.WARNING_MESSAGE);
-								
-									}
-								}
-							}
-							
-							if(lblClientSignatureFileChooser.isClickable()){
-								if(e.getClickCount() >= 2 && lblClientSignatureFileChooser.getIsOk()){
-									
-								}
-							}
-						}
-					});
-				}
-			}
-			{
-				lblSignature = new JLabel("Signature", JLabel.CENTER);
-				pnlEast.add(lblSignature);
-			}
+//			{
+//				pnlPicture = new JPanel(new BorderLayout(5, 5));
+//				pnlEast.add(pnlPicture);
+//				pnlPicture.setLayout(new BorderLayout(5, 5));
+//				pnlPicture.setBorder(LINE_BORDER);
+//				pnlPicture.setPreferredSize(new Dimension(170, 150));
+//				{
+//					lblClientImageFileChooser = new FncImageFileChooser(145, 150);
+//					pnlPicture.add(lblClientImageFileChooser);
+//					lblClientImageFileChooser.setClickable(false);
+//					lblClientImageFileChooser.setDefaultClientImage();
+//					lblClientImageFileChooser.addMouseListener(new MouseListener() {
+//						
+//						@Override
+//						public void mouseReleased(MouseEvent e) {
+//							// TODO Auto-generated method stub
+//							
+//						}
+//						
+//						@Override
+//						public void mousePressed(MouseEvent e) {
+//							// TODO Auto-generated method stub
+//							
+//						}
+//						
+//						@Override
+//						public void mouseExited(MouseEvent e) {
+//							// TODO Auto-generated method stub
+//							
+//						}
+//						
+//						@Override
+//						public void mouseEntered(MouseEvent e) {
+//							// TODO Auto-generated method stub
+//							
+//						}
+//						
+//						@Override
+//						public void mouseClicked(MouseEvent e) {
+//							if(lblClientImageFileChooser.isClickable() == false && lookupClient.getValue() != null){
+//								if(e.getClickCount() >= 2){
+//									try{
+//									dlg_ImageViewer img_dlg = new dlg_ImageViewer(FncGlobal.homeMDI, "Client Image", displayClientImage(lblClientImageFileChooser, lookupClient.getValue()), new Dimension(500, 500));
+//									img_dlg.setLocationRelativeTo(null);
+//									img_dlg.setVisible(true);
+//									
+//									
+//									} catch (IOException a) {
+//										a.printStackTrace();
+//									} catch (OutOfMemoryError er){
+//										JOptionPane.showMessageDialog(getContentPane(), "Out of memory.", "Loading Image.", JOptionPane.WARNING_MESSAGE);
+//								
+//									}
+//								}
+//							}
+//							
+//							if(lblClientImageFileChooser.isClickable()){
+//								if(e.getClickCount() >= 2 && lblClientImageFileChooser.getIsOk()){
+//									
+//								}
+//							}
+//						}
+//					});
+//				}
+//			}
+//			{
+//				lblPicture = new JLabel("Picture" , JLabel.CENTER);
+//				pnlEast.add(lblPicture);
+//			}
+//			{
+//				JPanel pnlSeparator2 = new JPanel(new BorderLayout(5, 5));
+//				pnlEast.add(pnlSeparator2);
+//			}
+//			{
+//				pnlSignature = new JPanel();
+//				pnlEast.add(pnlSignature);
+//				pnlSignature.setLayout(new BorderLayout(5, 5));
+//				pnlSignature.setBorder(LINE_BORDER);
+//				pnlSignature.setPreferredSize(new Dimension(170, 30));
+//				{
+//					lblClientSignatureFileChooser = new FncImageFileChooser(145, 30);
+//					pnlSignature.add(lblClientSignatureFileChooser);
+//					lblClientSignatureFileChooser.setClickable(false);
+//					lblClientSignatureFileChooser.setDefaultClientSignature();
+//					lblClientSignatureFileChooser.addMouseListener(new MouseListener() {
+//						
+//						@Override
+//						public void mouseReleased(MouseEvent e) {
+//							// TODO Auto-generated method stub
+//							
+//						}
+//						
+//						@Override
+//						public void mousePressed(MouseEvent e) {
+//							// TODO Auto-generated method stub
+//							
+//						}
+//						
+//						@Override
+//						public void mouseExited(MouseEvent e) {
+//							// TODO Auto-generated method stub
+//							
+//						}
+//						
+//						@Override
+//						public void mouseEntered(MouseEvent e) {
+//							// TODO Auto-generated method stub
+//							
+//						}
+//						
+//						@Override
+//						public void mouseClicked(MouseEvent e) {
+//							if(lblClientSignatureFileChooser.isClickable() == false && lookupClient.getValue() != null){
+//								if(e.getClickCount() >= 2){
+//									try{
+//									dlg_ImageViewer img_dlg = new dlg_ImageViewer(FncGlobal.homeMDI, "Client Sginature", displayClientSignature(lblClientSignatureFileChooser, lookupClient.getValue()), new Dimension(500, 500));
+//									img_dlg.setLocationRelativeTo(null);
+//									img_dlg.setVisible(true);
+//									
+//									} catch (IOException a) {
+//										a.printStackTrace();
+//									} catch (OutOfMemoryError er){
+//										JOptionPane.showMessageDialog(getContentPane(), "Out of memory.", "Loading Image.", JOptionPane.WARNING_MESSAGE);
+//								
+//									}
+//								}
+//							}
+//							
+//							if(lblClientSignatureFileChooser.isClickable()){
+//								if(e.getClickCount() >= 2 && lblClientSignatureFileChooser.getIsOk()){
+//									
+//								}
+//							}
+//						}
+//					});
+//				}
+//			}
+//			{
+//				lblSignature = new JLabel("Signature", JLabel.CENTER);
+//				pnlEast.add(lblSignature);
+//			}
 			{
 				JPanel pnlSeparator = new JPanel();
 				pnlEast.add(pnlSeparator);
@@ -399,7 +399,7 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 					btnCancel.addActionListener(this);
 				}
 			}
-			SpringUtilities.makeCompactGrid(pnlEast, 9, 1, 3, 3, 3, 3, false);
+			SpringUtilities.makeCompactGrid(pnlEast, 4, 1, 3, 3, 3, 3, false);
 		}
 		{
 			tabCenter = new _JTabbedPane();
@@ -561,12 +561,8 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 			
 			if(selectedTab == 0){
 				lookupClient.setValue(getNewEntityID());
-				lblClientImageFileChooser.setClickable(true);
-				lblClientSignatureFileChooser.setClickable(true);
 				
 				entity_id = lookupClient.getValue();
-				lblClientImageFileChooser.setDefaultClientImage();
-				lblClientSignatureFileChooser.setDefaultImage();
 				
 				if(timerStatus != null){
 					timerStatus.stop();
@@ -668,8 +664,6 @@ public class SupplierInfo extends _JInternalFrame implements ActionListener, Anc
 						btnState(true, true, false, false, false);
 					}
 					
-					lblClientImageFileChooser.setClickable(false);
-					lblClientSignatureFileChooser.setClickable(false);
 					pnlSI.cancelSuppInfo(lookupClient.getValue());
 					pnlSI.displayDetails(lookupClient.getValue());
 //					try {
