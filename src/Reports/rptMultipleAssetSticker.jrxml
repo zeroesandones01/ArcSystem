@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptMultipleAssetSticker" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="266"/>
-	<property name="ireport.y" value="75"/>
+	<property name="ireport.x" value="98"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="assetToPrint" class="java.lang.String"/>
 	<parameter name="custodian" class="java.lang.String"/>
 	<parameter name="co_name" class="java.lang.String"/>
@@ -35,7 +35,7 @@ from
 	c.entity_name as entity_name_1,
 	d.company_name as company_name_1,
 	lower(format('%s%s%s',left(c.first_name,1),left(c.middle_name,1),c.last_name)) as cuser_1,
-	a.date_acquired as date_acquired_1
+	a.date_acquired as date_acquired_1, to_dep as to_dep1
 	--coalesce(remarks2,'') as remarks2_1
 	from rf_asset  a
 	left join rf_employee b on a.current_cust::int=b.emp_code::int
@@ -66,7 +66,7 @@ from
 	to_char(a.asset_no, 'FM00000000') as anum_2,
 	c.entity_name as entity_name_2,
 	d.company_name as company_name_2,
-	lower(format('%s%s%s',left(c.first_name,1),left(c.middle_name,1),c.last_name)) as cuser_2,a.date_acquired as date_acquired_2--,coalesce(remarks2,'') as remarks2_2
+	lower(format('%s%s%s',left(c.first_name,1),left(c.middle_name,1),c.last_name)) as cuser_2,a.date_acquired as date_acquired_2, to_dep as to_dep2
 	from rf_asset  a
 	left join rf_employee b on a.current_cust::int=b.emp_code::int
 	left join rf_entity as c on b.entity_id=c.entity_id
@@ -83,6 +83,7 @@ on a.marker=b.marker]]>
 	<field name="company_name_1" class="java.lang.String"/>
 	<field name="cuser_1" class="java.lang.String"/>
 	<field name="date_acquired_1" class="java.sql.Date"/>
+	<field name="to_dep1" class="java.sql.Date"/>
 	<field name="marker" class="java.lang.Long"/>
 	<field name="asset_no_2" class="java.lang.String"/>
 	<field name="asset_name_2" class="java.lang.String"/>
@@ -91,6 +92,7 @@ on a.marker=b.marker]]>
 	<field name="company_name_2" class="java.lang.String"/>
 	<field name="cuser_2" class="java.lang.String"/>
 	<field name="date_acquired_2" class="java.sql.Date"/>
+	<field name="to_dep2" class="java.sql.Date"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -109,17 +111,45 @@ on a.marker=b.marker]]>
 					<rightPen lineWidth="0.5" lineStyle="Dashed"/>
 				</box>
 				<staticText>
-					<reportElement x="12" y="118" width="110" height="10"/>
-					<box>
+					<reportElement x="122" y="118" width="60" height="10"/>
+					<box leftPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[Date Acquired:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="12" y="118" width="55" height="10"/>
+					<box leftPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="6"/>
+					</textElement>
+					<text><![CDATA[Depreciation:]]></text>
+				</staticText>
+				<textField pattern="yyyy/MM/dd">
+					<reportElement x="67" y="118" width="55" height="10"/>
+					<box leftPadding="2">
 						<pen lineWidth="0.5"/>
 						<topPen lineWidth="0.5"/>
 						<leftPen lineWidth="0.5"/>
 						<bottomPen lineWidth="0.5"/>
 						<rightPen lineWidth="0.5"/>
 					</box>
-					<textElement/>
-					<text><![CDATA[Static text]]></text>
-				</staticText>
+					<textElement verticalAlignment="Middle">
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression class="java.util.Date"><![CDATA[$F{to_dep1}]]></textFieldExpression>
+				</textField>
 			</frame>
 			<textField>
 				<reportElement x="20" y="75" width="230" height="26"/>
@@ -164,15 +194,15 @@ on a.marker=b.marker]]>
 				<text><![CDATA[Custodian]]></text>
 			</staticText>
 			<textField pattern="MM/dd/yyyy">
-				<reportElement x="130" y="118" width="120" height="10"/>
-				<box rightPadding="2">
+				<reportElement x="190" y="118" width="60" height="10"/>
+				<box leftPadding="2" rightPadding="2">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="6"/>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{date_acquired_1}]]></textFieldExpression>
@@ -180,14 +210,14 @@ on a.marker=b.marker]]>
 			<componentElement>
 				<reportElement mode="Opaque" x="86" y="33" width="100" height="36"/>
 				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="true" checksumRequired="false" barHeight="80">
-					<jr:codeExpression><![CDATA[$F{asset_no_1}]]></jr:codeExpression>
+					<jr:codeExpression><![CDATA[$F{anum_1}]]></jr:codeExpression>
 					<jr:applicationIdentifierExpression><![CDATA[$F{anum_1}]]></jr:applicationIdentifierExpression>
 				</jr:barbecue>
 			</componentElement>
 			<textField>
 				<reportElement x="55" y="13" width="207" height="14"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="7" isBold="true" isUnderline="false"/>
+					<font size="8" isBold="true" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{company_name_1}]]></textFieldExpression>
 			</textField>
@@ -216,16 +246,16 @@ on a.marker=b.marker]]>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{asset_name_2}]]></textFieldExpression>
 			</textField>
-			<textField pattern="MM/dd/yyyy">
-				<reportElement x="434" y="118" width="120" height="10"/>
-				<box rightPadding="2">
+			<textField pattern="yyyy/MM/dd">
+				<reportElement x="494" y="118" width="60" height="10"/>
+				<box leftPadding="2" rightPadding="2">
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
 					<leftPen lineWidth="0.5"/>
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
-				<textElement textAlignment="Right" verticalAlignment="Middle">
+				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font size="6"/>
 				</textElement>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{date_acquired_2}]]></textFieldExpression>
@@ -233,7 +263,7 @@ on a.marker=b.marker]]>
 			<componentElement>
 				<reportElement x="386" y="33" width="100" height="36"/>
 				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="true" checksumRequired="false" barHeight="80">
-					<jr:codeExpression><![CDATA[$F{asset_no_2}]]></jr:codeExpression>
+					<jr:codeExpression><![CDATA[$F{anum_2}]]></jr:codeExpression>
 					<jr:applicationIdentifierExpression><![CDATA[$F{anum_2}]]></jr:applicationIdentifierExpression>
 				</jr:barbecue>
 			</componentElement>
@@ -272,7 +302,7 @@ on a.marker=b.marker]]>
 			<textField isBlankWhenNull="true">
 				<reportElement x="357" y="13" width="208" height="14"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="7" isBold="true" isUnderline="false"/>
+					<font size="8" isBold="true" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{company_name_2}]]></textFieldExpression>
 			</textField>
@@ -292,19 +322,47 @@ on a.marker=b.marker]]>
 					<bottomPen lineWidth="0.5" lineStyle="Dashed"/>
 					<rightPen lineWidth="0.5" lineStyle="Dashed"/>
 				</box>
-				<staticText>
-					<reportElement x="13" y="118" width="110" height="10"/>
-					<box>
+				<textField pattern="yyyy/MM/dd">
+					<reportElement x="68" y="118" width="55" height="10"/>
+					<box leftPadding="2" rightPadding="2">
 						<pen lineWidth="0.5"/>
 						<topPen lineWidth="0.5"/>
 						<leftPen lineWidth="0.5"/>
 						<bottomPen lineWidth="0.5"/>
 						<rightPen lineWidth="0.5"/>
 					</box>
-					<textElement/>
-					<text><![CDATA[Static text]]></text>
-				</staticText>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font size="6"/>
+					</textElement>
+					<textFieldExpression class="java.util.Date"><![CDATA[$F{to_dep2}]]></textFieldExpression>
+				</textField>
 			</frame>
+			<staticText>
+				<reportElement x="434" y="118" width="60" height="10"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Date Acquired:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="324" y="118" width="55" height="10"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Depreciation:]]></text>
+			</staticText>
 		</band>
 	</detail>
 </jasperReport>

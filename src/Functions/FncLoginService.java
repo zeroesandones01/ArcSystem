@@ -146,7 +146,7 @@ public class FncLoginService extends LoginService {
 
 				FncGlobal.ORIGINAL_TITLE = String.format("%s @ %s (%s)", FncGlobal.ORIGINAL_TITLE, FncGlobal.server, new SimpleDateFormat("yyyy-MM-dd").format(sDate));
 			} catch (ParseException e) {
-				FncGlobal.ORIGINAL_TITLE = String.format("%s @ %s (%s)", FncGlobal.ORIGINAL_TITLE, FncGlobal.server, ip_address);
+				FncGlobal.ORIGINAL_TITLE = String.format("%s @ %s", FncGlobal.ORIGINAL_TITLE, FncGlobal.server);
 			}
 
 			return true;

@@ -92,6 +92,7 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 	public static String co_name = "ACERLAND REALTY CORPORATION";
 	public static String co_logo = "cenqlogo.png";
 	protected DefaultTableCellRenderer rendererCenterAlign = new DefaultTableCellRenderer();
+	private static int selectedTab;
 	
 
 	public AssetMonitoring2() {
@@ -172,6 +173,21 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 								txtcompany.setPreferredSize(new Dimension(358, 0));
 								txtcompany.setText(co_name);
 							}
+							{
+								JPanel pnlcheckboxinactiveemp = new JPanel(new BorderLayout());
+								pnlcomp_filter_names.add(pnlcheckboxinactiveemp, BorderLayout.EAST);
+								pnlcheckboxinactiveemp.setPreferredSize(new Dimension(365, 0));
+								{
+									chkinactiveemp = new JCheckBox("Include Inactive Employees");
+									pnlcheckboxinactiveemp.add(chkinactiveemp, BorderLayout.WEST);
+									chkinactiveemp.setFont(new Font("Segoe UI", Font.BOLD, 10));
+									chkinactiveemp.addItemListener(new ItemListener() {
+										public void itemStateChanged(ItemEvent e) {
+											
+										}
+									});
+								}
+							}
 						}
 					}
 					{
@@ -181,7 +197,7 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 						{
 							JLabel lblcustodian = new JLabel("Custodian");
 							pnlcustodian.add(lblcustodian, BorderLayout.WEST);
-							lblcustodian.setPreferredSize(new Dimension(78, 0));
+							lblcustodian.setPreferredSize(new Dimension(76, 0));
 							lblcustodian.setFont(new Font("Segoe UI", Font.BOLD, 12));
 						}
 						{
@@ -212,22 +228,22 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 								txtCustodianid.setEditable(false);
 							}
 							{
-								JPanel pnlcheckbox = new JPanel(new GridLayout(1, 2, 3, 3));
+								JPanel pnlcheckbox = new JPanel(new BorderLayout());
 								pnlcustodian_filter.add(pnlcheckbox, BorderLayout.EAST);
 								pnlcheckbox.setPreferredSize(new Dimension(365, 0));
-								{
-									chkinactiveemp = new JCheckBox("Include Inactive Employees");
-									pnlcheckbox.add(chkinactiveemp, BorderLayout.WEST);
-									chkinactiveemp.setFont(new Font("Segoe UI", Font.BOLD, 10));
-									chkinactiveemp.addItemListener(new ItemListener() {
-										public void itemStateChanged(ItemEvent e) {
-											
-										}
-									});
-								}
+//								{
+//									chkinactiveemp = new JCheckBox("Include Inactive Employees");
+//									pnlcheckbox.add(chkinactiveemp, BorderLayout.WEST);
+//									chkinactiveemp.setFont(new Font("Segoe UI", Font.BOLD, 10));
+//									chkinactiveemp.addItemListener(new ItemListener() {
+//										public void itemStateChanged(ItemEvent e) {
+//											
+//										}
+//									});
+//								}
 								{
 									chkinactiveassets = new JCheckBox("Include Inactive Assets");
-									pnlcheckbox.add(chkinactiveassets, BorderLayout.EAST);
+									pnlcheckbox.add(chkinactiveassets, BorderLayout.WEST);
 									chkinactiveassets.setFont(new Font("Segoe UI", Font.BOLD, 10));
 									chkinactiveassets.addItemListener(new ItemListener() {
 										public void itemStateChanged(ItemEvent e) {
@@ -266,7 +282,13 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 										System.out.println("Asset No.: "+ asset_no);
 										panelAssetInformation2.displayAssetDetail(asset_no);
 										displayMovementHistory(modelmovement,rowheaderMovement, asset_no);
-										buttontagging(true, true, true);
+										panelAssetInformation2.btnPreview.setEnabled(true);
+										
+										if(selectedTab == 1) {
+											buttontagging(true, true, true);
+										}
+										
+										panelAssetInformation2.btnState(true, true, true, false, true);
 										
 
 									} catch (ArrayIndexOutOfBoundsException ex) {
@@ -488,7 +510,7 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 			}
 			tabAssets.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent e) {
-					int selectedTab = ((JTabbedPane) e.getSource()).getSelectedIndex();
+					selectedTab = ((JTabbedPane) e.getSource()).getSelectedIndex();
 					if(selectedTab == 0) {
 						clearcheckbox();
 					}
@@ -501,6 +523,7 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 			});
 		}
 		displayAllAssets(false, false);
+		panelAssetInformation2.btnState(false,true, false, false, true);
 	}
 	
 	public void actionPerformed(ActionEvent e) {

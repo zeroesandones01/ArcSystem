@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptassetstickersmall_mul" columnCount="3" printOrder="Horizontal" pageWidth="612" pageHeight="792" columnWidth="190" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="emp_code" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select * from
+(
+	select *, ROW_NUMBER () OVER  ( order by anum_1) as marker
+	from
+	(
+		select  ROW_NUMBER() OVER ( order BY
+		to_char(a.asset_no, 'FM00000000'),
+		(c.last_name || ', ' || left(c.first_name, 1)|| '.' || left(c.middle_name, 1) || '.')) AS "ROW",
+		to_char(a.asset_no, 'FM00000000') as anum_1,
+		(c.last_name || ', ' || left(c.first_name, 1)|| '.' || left(c.middle_name, 1) || '.') as cuser_1
+		from rf_asset  a
+		left join rf_employee b on a.current_cust::int=b.emp_code::int
+		left join rf_entity as c on b.entity_id=c.entity_id
+		left join mf_company d on b.co_id=d.co_id
+		where a.asset_no::int in (select asset_no::int from tmp_asset where emp_code =  $P{emp_code})
+	)  a
+)  x]]>
+	</queryString>
+	<field name="ROW" class="java.lang.Long"/>
+	<field name="anum_1" class="java.lang.String"/>
+	<field name="cuser_1" class="java.lang.String"/>
+	<field name="marker" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="44" splitType="Stretch"/>
+	</title>
+	<detail>
+		<band height="50" splitType="Stretch">
+			<componentElement>
+				<reportElement x="31" y="3" width="120" height="37"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128B" drawText="true" checksumRequired="false" barHeight="80">
+					<jr:codeExpression><![CDATA["Asset No."+" "+$F{anum_1}]]></jr:codeExpression>
+					<jr:applicationIdentifierExpression><![CDATA[$F{anum_1}]]></jr:applicationIdentifierExpression>
+				</jr:barbecue>
+			</componentElement>
+			<frame>
+				<reportElement x="31" y="0" width="120" height="50"/>
+				<box>
+					<pen lineStyle="Dashed"/>
+					<topPen lineWidth="0.5" lineStyle="Dashed"/>
+					<leftPen lineWidth="0.5" lineStyle="Dashed"/>
+					<bottomPen lineWidth="0.5" lineStyle="Dashed"/>
+					<rightPen lineWidth="0.5" lineStyle="Dashed"/>
+				</box>
+			</frame>
+			<textField>
+				<reportElement x="31" y="40" width="119" height="10"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{cuser_1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

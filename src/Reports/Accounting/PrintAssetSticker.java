@@ -269,7 +269,7 @@ public class PrintAssetSticker extends _JInternalFrame implements ActionListener
 									try{
 										
 										int row = tblAssets.getSelectedRow();
-										Integer	asset_no=    (Integer) modelAssets.getValueAt(row, 1);
+										String	asset_no=   (String) modelAssets.getValueAt(row, 1).toString();
 										System.out.println("asset_no: "+asset_no);
 										
 									}catch (ArrayIndexOutOfBoundsException ex) { }
@@ -340,40 +340,21 @@ public class PrintAssetSticker extends _JInternalFrame implements ActionListener
 			}
 		} 
 		
-//		Object[] option= {"Big Sticker"/*,"Small Sticker"*/};
-//		int Option=JOptionPane.showOptionDialog(getTopLevelAncestor(), "Please select sticker size.", "Sticker size option", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
-//		System.out.println("Option: "+Option);
-
 		Map<String, Object> mapParameters = new HashMap<String, Object>();
-		mapParameters.put("asset_type",filterAssetType);
 		mapParameters.put("emp_code",UserInfo.EmployeeCode);
 		mapParameters.put("co_logo_arc", this.getClass().getClassLoader().getResourceAsStream("Images/arc-logo.png"));
 		
-		FncReport.generateReport("/Reports/rptMultipleAssetSticker.jasper", "Assetcode Sticker", mapParameters);
 		
-//		try{
-//			mapParameters.put("co_logo_vdc", this.getClass().getClassLoader().getResourceAsStream("Images/verdant_logo.bmp"));
-//			mapParameters.put("co_logo_cdc", this.getClass().getClassLoader().getResourceAsStream("Images/cenqlogo.png"));
-//			mapParameters.put("co_logo_adc", this.getClass().getClassLoader().getResourceAsStream("Images/acer_logo.bmp"));
-//		}catch(NullPointerException e){}
+		Object[] option= {"Big Sticker","Small Sticker"};
+		int Option=JOptionPane.showOptionDialog(getTopLevelAncestor(), "Please select sticker size.", "Sticker size option", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
 		
-//		if(filterAssetType == "Non-fixed Asset") {
-//			System.out.println("Non-fixed Asset");
-//			if(Option == JOptionPane.NO_OPTION){
-//				System.out.println("No Option");
-//				FncReport.generateReport("/Reports/rptMultiple_NF_sticker.jasper", "Assetcode Sticker", mapParameters);
-//			}
-//			
-//		}else {
-//			if(Option == JOptionPane.YES_OPTION){
-//				FncReport.generateReport("/Reports/rptMultipleAssetSticker.jasper", "Assetcode Sticker", mapParameters);
-//			}
-//			if(Option == JOptionPane.NO_OPTION){
-//				FncReport.generateReport("/Reports/rptMultipleAssetSticker2.jasper", "Assetcode Sticker", mapParameters);
-//			}
-//		}
-		
-		
+		if(Option == JOptionPane.YES_OPTION) {
+			FncReport.generateReport("/Reports/rptMultipleAssetSticker.jasper", "Asset Sticker Big", mapParameters);
+		}else {
+			
+			System.out.println("No Option");
+			FncReport.generateReport("/Reports/rptassetstickersmall_mul.jasper", "Asset Sticker Small", mapParameters);
+		}
 	}	
 	
 	public static void filterbyCustodian(DefaultTableModel model, JList rowHeader, String emp_code){
@@ -386,42 +367,24 @@ public class PrintAssetSticker extends _JInternalFrame implements ActionListener
 		
 		if(filterAssetType == "Fixed Asset") {
 			strSQL="select false, \n"
-					+ "a.asset_no,\n"
+					+ "to_char(a.asset_no, 'FM00000000'),\n"
 					+ "a.asset_name,\n"
 					+ "a.date_acquired,\n"
 					+ "lpad(a.current_cust::text, 6, '0'::text),\n"
 					+ "format('%s,%s %s.', c.last_name,c.first_name,left(c.middle_name,1) ) as custodian, \n"
 					+ "a.reference_no, \n"
-					+ "format('%s',left(a.status,1)) as status \n"
+					+ "format('%s',left(a.status,1)) as status, \n"
+					+ "d.company_name as company_name,\n"
+					+ "d.company_logo as company_logo\n"
 					+ "from rf_asset a\n"
 					+ "left join rf_employee b on a.current_cust = b.emp_code::int\n"
 					+ "left join rf_entity c on b.entity_id = c.entity_id\n"
+					+ "left join mf_company d on a.co_id= d.co_id\n"
 					+ "where a.current_cust='"+emp_code+"'\n"
 					+ "and a.status='A'\n"
 					+ "order by a.asset_no";
 		}
 		
-//		if(filterAssetType == "Non-fixed Asset") {
-//			strSQL="select false, \n" + 
-//					"a.object_id,\n" + 
-//					"null,\n" + 
-//					"a.object_name,\n" + 
-//					"a.date_acquired,\n"+
-//					"lpad(a.current_cust::text, 6, '0'::text),\n" +
-//					"format('%s,%s %s.', c.last_name,c.first_name,left(c.middle_name,1) ) as custodian, \n" + 
-//					"a.reference_no, \n" +
-//					"format('%s',left(a.status_id,1)) as status \n"+
-//					"from tbl_nonfixedasset a,\n" + 
-//					"em_employee b,\n" + 
-//					"rf_entity c\n" + 
-//					"where a.current_cust='"+emp_code+"'\n" + 
-//					"and asset_cost between 1500 and 4999\n" +
-//					"and a.current_cust=b.emp_code\n" + 
-//					"and c.entity_id=b.entity_id\n" +
-//					"and a.status_id='Active'\n" +
-//					"order by a.asset_no";
-//		}
-	
 	FncSystem.out("Filter by Custodian", strSQL);
 	
 	pgSelect db = new pgSelect();
@@ -486,10 +449,10 @@ public class PrintAssetSticker extends _JInternalFrame implements ActionListener
 		String strSQL = null;
 		if (filterAssetType == "Fixed Asset") {
 			strSQL = 
-					"select false,a.asset_no, \n"
+					"select false,to_char(a.asset_no, 'FM00000000'), \n"
 					+ "a.asset_name,\n"
 					+ "a.date_Acquired,\n"
-					+ "lpad(a.current_cust::text, 6, '0'::text),\n"
+					+ "lpad(a.current_cust::text, 7, '0'::text),\n"
 					+ "d.entity_name,\n"
 					+ "a.reference_no, \n"
 					+ "format('%s',left(a.status,1)) as status, \n"
