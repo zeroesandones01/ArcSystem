@@ -683,7 +683,6 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 		lookupPCRNo.setEditable(true);
 		chkCurrYear.setEnabled(true);
 		chkCurrYear.setSelected(true);
-		this.setComponentsEnabled(pnlCenterSouth, false);
 		lblCompany.setEnabled(true);
 		lblPCRNo.setEnabled(true);
 		lookupCompany.setEnabled(true);
@@ -701,6 +700,7 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 		company_logo = getCompanyLogo(co_id);
 		dteDateCreated.getCalendarButton().setVisible(true);
 		dteTransDate.getCalendarButton().setVisible(true);
+		setCompDisabled(pnlCenterSouth);
 
 		if(FncAcounting.EmpPettyCashCustodian(user, process_id)) {
 			lookupPCRNo.setLookupSQL(getPCR_no_Custodian(co_id, curr_year));
@@ -1506,6 +1506,10 @@ public class PettyCash extends _JInternalFrame implements _GUI, ActionListener, 
 
 	private void setCompEditable(JPanel panel, Boolean editable) {
 		this.setComponentsEditable(panel, editable);
+	}
+	
+	private void setCompDisabled(JPanel panel) {
+		this.setComponentsEnabled(panel, false);
 	}
 
 	public static Boolean isToPay(String pcr_type) {

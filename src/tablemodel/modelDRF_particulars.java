@@ -241,10 +241,10 @@ public class modelDRF_particulars extends DefaultTableModel {
 					false,	// 29 WTax Rate (%)
 					false,	// 30 WTax Amount
 					false,	// 31 Expense Amount
-					false,	// 32 Retention Amount				
-					false,	// 33 DP Recoup Amount
-					false,	// 34 BC Liqui Amount
-					false,	// 35 Other Liqui Amount
+					true,	// 32 Retention Amount				
+					true,	// 33 DP Recoup Amount
+					true,	// 34 BC Liqui Amount
+					true,	// 35 Other Liqui Amount
 					false,	// 36 Payable Amount
 					false 	// 37 Rec ID
 			};

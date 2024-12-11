@@ -89,7 +89,8 @@
 	import Accounting.Disbursements.CheckVoucher;
 	import Accounting.Disbursements.DisbursementRequestForm;
 	import Accounting.Disbursements.DocsProcessing;
-	//import Accounting.Disbursements.RequestForPayment;
+import Accounting.Disbursements.PayableVoucher;
+//import Accounting.Disbursements.RequestForPayment;
 	import Accounting.Disbursements.reversalProccessing;
 	import Accounting.FixedAssets.AssetMonitoring;
 	import Accounting.FixedAssets.AssetMonitoring2;
@@ -866,6 +867,19 @@
 							{
 								JMenu menuDisbursement = new JMenu("Disbursements");
 								menuAccounting.add(menuDisbursement);
+								
+								{
+									JMenuItem menuitemPayableVoucher = new JMenuItem("Payable Voucher");
+									menuDisbursement.add(menuitemPayableVoucher);
+									menuitemPayableVoucher.addActionListener(new ActionListener() {
+										public void actionPerformed(ActionEvent e) {										
+											if(isNotExisting("PayableVoucher")){
+												PayableVoucher pay_vchr = new PayableVoucher();
+												addWindow(pay_vchr, e);
+											}
+										}
+									});
+								}
 								
 								{
 									JMenuItem menuitemCheckVoucher = new JMenuItem("Check Voucher");
