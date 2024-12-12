@@ -23,6 +23,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
@@ -34,6 +35,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+
+import org.jopendocument.dom.template.engine.Parsed;
 
 import Accounting.FixedAssets.panelAssetInformation2;
 import Database.pgSelect;
@@ -183,7 +186,21 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 									chkinactiveemp.setFont(new Font("Segoe UI", Font.BOLD, 10));
 									chkinactiveemp.addItemListener(new ItemListener() {
 										public void itemStateChanged(ItemEvent e) {
-											
+											if (chkinactiveemp.isSelected() == true) {
+												if (chkinactiveassets.isSelected() == true)
+
+												{
+													displayAllAssets(true, true, lookupCustodianid.getValue());
+												} else {
+													displayAllAssets(true, false, lookupCustodianid.getValue());
+												}
+											} else {
+												if (chkinactiveassets.isSelected() == true) {
+													displayAllAssets(false, true, lookupCustodianid.getValue());
+												} else {
+													displayAllAssets(false, false, lookupCustodianid.getValue());
+												}
+											}
 										}
 									});
 								}
@@ -247,7 +264,20 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 									chkinactiveassets.setFont(new Font("Segoe UI", Font.BOLD, 10));
 									chkinactiveassets.addItemListener(new ItemListener() {
 										public void itemStateChanged(ItemEvent e) {
-											
+											if (chkinactiveassets.isSelected() == true) {
+												if (chkinactiveemp.isSelected() == true) {
+													displayAllAssets(true, true, lookupCustodianid.getValue());
+
+												} else {
+													displayAllAssets(false, true, lookupCustodianid.getValue());
+												}
+											} else {
+												if (chkinactiveemp.isSelected() == true) {
+													displayAllAssets(true, false, lookupCustodianid.getValue());
+												} else {
+													displayAllAssets(false, false, lookupCustodianid.getValue());
+												}
+											}
 										}
 									});
 								}
@@ -269,6 +299,7 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 					{
 						modelAssets = new modelAssetMonitoring();
 						tblAssets = new _JTableMain(modelAssets);
+						modelAssets.setEditable(false);
 						scrollAssets.setViewportView(tblAssets);
 						tblAssets.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 							public void valueChanged(ListSelectionEvent e) {
@@ -281,12 +312,13 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 										
 										System.out.println("Asset No.: "+ asset_no);
 										panelAssetInformation2.displayAssetDetail(asset_no);
-										displayMovementHistory(modelmovement,rowheaderMovement, asset_no);
+										//displayMovementHistory(modelmovement,rowheaderMovement, asset_no);
+										panelAssetTagging.displayMovementHistory(asset_no);
 										panelAssetInformation2.btnPreview.setEnabled(true);
 										
-										if(selectedTab == 1) {
-											buttontagging(true, true, true);
-										}
+//										if(selectedTab == 1) {
+//										panelAssetTagging.buttontagging(false, false, false, true, false, false, false );
+//										}
 										
 										panelAssetInformation2.btnState(true, true, true, false, true);
 										
@@ -324,189 +356,194 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 					pnlInformation = new panelAssetInformation2();
 					tabAssets.addTab(" Asset Information ", null, pnlInformation, null);
 				}
+//				{
+//					pnlTransfer = new JPanel(new BorderLayout(5, 5));
+//					tabAssets.addTab("  Tagging  ", null, pnlTransfer, null);
+//					{
+//
+//						pnlNorth = new JPanel(new GridLayout(4, 1, 5, 5));
+//						pnlTransfer.add(pnlNorth, BorderLayout.NORTH);
+//						pnlNorth.setBorder(JTBorderFactory.createTitleBorder(""));
+//						pnlNorth.setPreferredSize(new Dimension(400, 150));
+//						{
+//							JPanel pnl1 = new JPanel(new BorderLayout(5, 5));
+//							pnlNorth.add(pnl1);
+//							{
+//								JLabel lblMovementno = new JLabel("Movement No.");
+//								pnl1.add(lblMovementno, BorderLayout.WEST);
+//								lblMovementno.setPreferredSize(new Dimension(115, 0));
+//							}
+//							{
+//								txtmovementno = new JTextField();
+//								pnl1.add(txtmovementno, BorderLayout.CENTER);
+//							}
+//							{
+//								JLabel lblextra = new JLabel("");
+//								pnl1.add(lblextra, BorderLayout.EAST);
+//								lblextra.setPreferredSize(new Dimension(650, 0));
+//							}
+//						}
+//						{
+//							JPanel pnl2 = new JPanel(new BorderLayout(5, 5));
+//							pnlNorth.add(pnl2);
+//							setPreferredSize(new Dimension(115, 30));
+//							{
+//								JLabel lblNewcustodian = new JLabel("*New Custodian");
+//								pnl2.add(lblNewcustodian, BorderLayout.WEST);
+//								lblNewcustodian.setPreferredSize(new Dimension(115, 0));
+//
+//							}
+//							{
+//								lookupnewCustodian = new _JLookup();
+//								pnl2.add(lookupnewCustodian, BorderLayout.CENTER);
+//								lookupnewCustodian.setEditable(true);
+//								lookupnewCustodian.setLookupSQL(panelAssetInformation2.getCustodian());
+//								lookupnewCustodian.addLookupListener(new LookupListener() {
+//									public void lookupPerformed(LookupEvent event) {
+//										Object[] setCustodian = ((_JLookup) event.getSource()).getDataSet();
+//										FncSystem.out("Display SQL for Client", lookupnewCustodian.getLookupSQL());
+//										if (setCustodian != null) {
+//											String emp_code = (String) setCustodian[0];
+//											String emp_name = (String) setCustodian[1];
+//											div_code = (String) setCustodian[2];
+//											lookupnewCustodian.setValue(emp_code);
+//											txtnewCustodian.setText(emp_name);
+//											txtmovementno.setText(getMoveNo());
+//
+//										}
+//									}
+//								});
+//							}
+//							{
+//								txtnewCustodian = new JTextField();
+//								pnl2.add(txtnewCustodian, BorderLayout.EAST);
+//								txtnewCustodian.setPreferredSize(new Dimension(650, 0));
+//								txtnewCustodian.setEditable(true);
+//							}
+//						}
+//						{
+//							JPanel pnl3 = new JPanel(new BorderLayout(5, 5));
+//							pnlNorth.add(pnl3);
+//							setPreferredSize(new Dimension(115, 30));
+//							{
+//								JLabel lblLocation = new JLabel("*Location");
+//								pnl3.add(lblLocation, BorderLayout.WEST);
+//								lblLocation.setPreferredSize(new Dimension(115, 0));
+//
+//							}
+//							{
+//								lookupLocation = new _JLookup();
+//								pnl3.add(lookupLocation, BorderLayout.CENTER);
+//								lookupLocation.setEditable(true);
+//								lookupLocation.setLookupSQL(getassetlocation());
+//								lookupLocation.addLookupListener(new LookupListener() {
+//
+//									@Override
+//									public void lookupPerformed(LookupEvent event) {
+//										Object[] setLocation = ((_JLookup) event.getSource()).getDataSet();
+//										FncSystem.out("Display SQL for Location", getassetlocation());
+//										if (setLocation != null) {
+//											loc_id = (String) setLocation[0];
+//											String loc_name = (String) setLocation[1];
+//											lookupLocation.setValue(loc_id);
+//											txtLocation.setText(loc_name);
+//
+//										}
+//									}
+//								});
+//							}
+//							{
+//								txtLocation = new JTextField();
+//								pnl3.add(txtLocation, BorderLayout.EAST);
+//								txtLocation.setPreferredSize(new Dimension(650, 0));
+//								txtLocation.setEditable(true);
+//							}
+//						}
+//						{
+//							JPanel pnl4 = new JPanel(new BorderLayout(5, 5));
+//							pnlNorth.add(pnl4);
+//							{
+//								JLabel lblRemarks = new JLabel("*Remarks");
+//								pnl4.add(lblRemarks, BorderLayout.WEST);
+//								lblRemarks.setPreferredSize(new Dimension(115, 0));
+//							}
+//							{
+//								jtxtRemarks = new JTextField();
+//								pnl4.add(jtxtRemarks, BorderLayout.CENTER);
+//								jtxtRemarks.setEditable(true);
+//							}
+//						}
+//					}
+//					{
+//						JPanel pnlCentertransfer = new JPanel(new BorderLayout(5, 5));
+//						pnlTransfer.add(pnlCentertransfer, BorderLayout.CENTER);
+//						{
+//							scrollMovement = new JScrollPane();
+//							pnlCentertransfer.add(scrollMovement);
+//							{
+//								modelmovement = new modelMovement();
+//								tblmovement = new _JTableMain(modelmovement);
+//								scrollMovement.setViewportView(tblmovement);
+//								
+//								tblmovement.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+//								tblmovement.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+//								tblmovement.getColumnModel().getColumn(0).setPreferredWidth(100);// move_no
+//								tblmovement.getColumnModel().getColumn(1).setPreferredWidth(125);// old asset
+//								tblmovement.getColumnModel().getColumn(2).setPreferredWidth(135);// prev_cust
+//								tblmovement.getColumnModel().getColumn(3).setPreferredWidth(135);// current_cust
+//								tblmovement.getColumnModel().getColumn(4).setPreferredWidth(110);// trans_date
+//								tblmovement.getColumnModel().getColumn(5).setPreferredWidth(95);// reason
+//								tblmovement.getColumnModel().getColumn(6).setPreferredWidth(150);// remarks
+//								tblmovement.getColumnModel().getColumn(6).setPreferredWidth(150);// old location 
+//								tblmovement.setFont(new Font("DejaVu Sans", 0, 12));
+//								tblmovement.getColumnModel().getColumn(0).setCellRenderer(rendererCenterAlign);
+//								tblmovement.getColumnModel().getColumn(1).setCellRenderer(rendererCenterAlign);
+//								tblmovement.getColumnModel().getColumn(4).setCellRenderer(rendererCenterAlign);
+//							}
+//							{
+//								rowheaderMovement = tblmovement.getRowHeader();
+//								scrollMovement.setRowHeaderView(rowheaderMovement);
+//								scrollMovement.setCorner(ScrollPaneConstants.UPPER_LEFT_CORNER,
+//										FncTables.getRowHeader_Header());
+//							}
+//						}
+//					}
+//					{
+//						pnlsouthtransfer = new JPanel(new BorderLayout(5, 5));
+//						pnlTransfer.add(pnlsouthtransfer, BorderLayout.SOUTH);
+//						pnlsouthtransfer.setPreferredSize(new Dimension(0, 35));
+//						{
+//							JPanel pnlbuttons = new JPanel(new GridLayout(1, 3, 5, 5));
+//							pnlsouthtransfer.add(pnlbuttons);
+//							{
+//								btn1 = new JButton("Transfer asset");
+//								btn1.setActionCommand("transfer");
+//								pnlbuttons.add(btn1, BorderLayout.WEST);
+//								btn1.setEnabled(false);
+//								btn1.addActionListener(this);
+//							}
+//							{
+//								btnDispose = new JButton("Dispose");
+//								pnlbuttons.add(btnDispose);
+//								btnDispose.setActionCommand("dispose");
+//								btnDispose.setEnabled(false);
+//								btnDispose.addActionListener(this);
+//							}
+//							{
+//								btnRetire = new JButton("Retire");
+//								pnlbuttons.add(btnRetire);
+//								btnRetire.setActionCommand("retire");
+//								btnRetire.setEnabled(false);
+//								btnRetire.addActionListener(this);
+//							}
+//						}
+//					}
+//				}
 				{
-					pnlTransfer = new JPanel(new BorderLayout(5, 5));
-					tabAssets.addTab("  Tagging  ", null, pnlTransfer, null);
-					{
-
-						pnlNorth = new JPanel(new GridLayout(4, 1, 5, 5));
-						pnlTransfer.add(pnlNorth, BorderLayout.NORTH);
-						pnlNorth.setBorder(JTBorderFactory.createTitleBorder(""));
-						pnlNorth.setPreferredSize(new Dimension(400, 150));
-						{
-							JPanel pnl1 = new JPanel(new BorderLayout(5, 5));
-							pnlNorth.add(pnl1);
-							{
-								JLabel lblMovementno = new JLabel("Movement No.");
-								pnl1.add(lblMovementno, BorderLayout.WEST);
-								lblMovementno.setPreferredSize(new Dimension(115, 0));
-							}
-							{
-								txtmovementno = new JTextField();
-								pnl1.add(txtmovementno, BorderLayout.CENTER);
-							}
-							{
-								JLabel lblextra = new JLabel("");
-								pnl1.add(lblextra, BorderLayout.EAST);
-								lblextra.setPreferredSize(new Dimension(650, 0));
-							}
-						}
-						{
-							JPanel pnl2 = new JPanel(new BorderLayout(5, 5));
-							pnlNorth.add(pnl2);
-							setPreferredSize(new Dimension(115, 30));
-							{
-								JLabel lblNewcustodian = new JLabel("*New Custodian");
-								pnl2.add(lblNewcustodian, BorderLayout.WEST);
-								lblNewcustodian.setPreferredSize(new Dimension(115, 0));
-
-							}
-							{
-								lookupnewCustodian = new _JLookup();
-								pnl2.add(lookupnewCustodian, BorderLayout.CENTER);
-								lookupnewCustodian.setEditable(true);
-								lookupnewCustodian.setLookupSQL(panelAssetInformation2.getCustodian());
-								lookupnewCustodian.addLookupListener(new LookupListener() {
-									public void lookupPerformed(LookupEvent event) {
-										Object[] setCustodian = ((_JLookup) event.getSource()).getDataSet();
-										FncSystem.out("Display SQL for Client", lookupnewCustodian.getLookupSQL());
-										if (setCustodian != null) {
-											String emp_code = (String) setCustodian[0];
-											String emp_name = (String) setCustodian[1];
-											div_code = (String) setCustodian[2];
-											lookupnewCustodian.setValue(emp_code);
-											txtnewCustodian.setText(emp_name);
-											txtmovementno.setText(getMoveNo());
-
-										}
-									}
-								});
-							}
-							{
-								txtnewCustodian = new JTextField();
-								pnl2.add(txtnewCustodian, BorderLayout.EAST);
-								txtnewCustodian.setPreferredSize(new Dimension(650, 0));
-								txtnewCustodian.setEditable(true);
-							}
-						}
-						{
-							JPanel pnl3 = new JPanel(new BorderLayout(5, 5));
-							pnlNorth.add(pnl3);
-							setPreferredSize(new Dimension(115, 30));
-							{
-								JLabel lblLocation = new JLabel("*Location");
-								pnl3.add(lblLocation, BorderLayout.WEST);
-								lblLocation.setPreferredSize(new Dimension(115, 0));
-
-							}
-							{
-								lookupLocation = new _JLookup();
-								pnl3.add(lookupLocation, BorderLayout.CENTER);
-								lookupLocation.setEditable(true);
-								lookupLocation.setLookupSQL(getassetlocation());
-								lookupLocation.addLookupListener(new LookupListener() {
-
-									@Override
-									public void lookupPerformed(LookupEvent event) {
-										Object[] setLocation = ((_JLookup) event.getSource()).getDataSet();
-										FncSystem.out("Display SQL for Location", getassetlocation());
-										if (setLocation != null) {
-											loc_id = (String) setLocation[0];
-											String loc_name = (String) setLocation[1];
-											lookupLocation.setValue(loc_id);
-											txtLocation.setText(loc_name);
-
-										}
-									}
-								});
-							}
-							{
-								txtLocation = new JTextField();
-								pnl3.add(txtLocation, BorderLayout.EAST);
-								txtLocation.setPreferredSize(new Dimension(650, 0));
-								txtLocation.setEditable(true);
-							}
-						}
-						{
-							JPanel pnl4 = new JPanel(new BorderLayout(5, 5));
-							pnlNorth.add(pnl4);
-							{
-								JLabel lblRemarks = new JLabel("*Remarks");
-								pnl4.add(lblRemarks, BorderLayout.WEST);
-								lblRemarks.setPreferredSize(new Dimension(115, 0));
-							}
-							{
-								jtxtRemarks = new JTextField();
-								pnl4.add(jtxtRemarks, BorderLayout.CENTER);
-								jtxtRemarks.setEditable(true);
-							}
-						}
-					}
-					{
-						JPanel pnlCentertransfer = new JPanel(new BorderLayout(5, 5));
-						pnlTransfer.add(pnlCentertransfer, BorderLayout.CENTER);
-						{
-							scrollMovement = new JScrollPane();
-							pnlCentertransfer.add(scrollMovement);
-							{
-								modelmovement = new modelMovement();
-								tblmovement = new _JTableMain(modelmovement);
-								scrollMovement.setViewportView(tblmovement);
-								
-								tblmovement.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-								tblmovement.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-								tblmovement.getColumnModel().getColumn(0).setPreferredWidth(100);// move_no
-								tblmovement.getColumnModel().getColumn(1).setPreferredWidth(125);// old asset
-								tblmovement.getColumnModel().getColumn(2).setPreferredWidth(135);// prev_cust
-								tblmovement.getColumnModel().getColumn(3).setPreferredWidth(135);// current_cust
-								tblmovement.getColumnModel().getColumn(4).setPreferredWidth(110);// trans_date
-								tblmovement.getColumnModel().getColumn(5).setPreferredWidth(95);// reason
-								tblmovement.getColumnModel().getColumn(6).setPreferredWidth(150);// remarks
-								tblmovement.getColumnModel().getColumn(6).setPreferredWidth(150);// old location 
-								tblmovement.setFont(new Font("DejaVu Sans", 0, 12));
-								tblmovement.getColumnModel().getColumn(0).setCellRenderer(rendererCenterAlign);
-								tblmovement.getColumnModel().getColumn(1).setCellRenderer(rendererCenterAlign);
-								tblmovement.getColumnModel().getColumn(4).setCellRenderer(rendererCenterAlign);
-							}
-							{
-								rowheaderMovement = tblmovement.getRowHeader();
-								scrollMovement.setRowHeaderView(rowheaderMovement);
-								scrollMovement.setCorner(ScrollPaneConstants.UPPER_LEFT_CORNER,
-										FncTables.getRowHeader_Header());
-							}
-						}
-					}
-					{
-						pnlsouthtransfer = new JPanel(new BorderLayout(5, 5));
-						pnlTransfer.add(pnlsouthtransfer, BorderLayout.SOUTH);
-						pnlsouthtransfer.setPreferredSize(new Dimension(0, 35));
-						{
-							JPanel pnlbuttons = new JPanel(new GridLayout(1, 3, 5, 5));
-							pnlsouthtransfer.add(pnlbuttons);
-							{
-								btn1 = new JButton("Transfer asset");
-								btn1.setActionCommand("transfer");
-								pnlbuttons.add(btn1, BorderLayout.WEST);
-								btn1.setEnabled(false);
-								btn1.addActionListener(this);
-							}
-							{
-								btnDispose = new JButton("Dispose");
-								pnlbuttons.add(btnDispose);
-								btnDispose.setActionCommand("dispose");
-								btnDispose.setEnabled(false);
-								btnDispose.addActionListener(this);
-							}
-							{
-								btnRetire = new JButton("Retire");
-								pnlbuttons.add(btnRetire);
-								btnRetire.setActionCommand("retire");
-								btnRetire.setEnabled(false);
-								btnRetire.addActionListener(this);
-							}
-						}
-					}
+					JPanel pnltag = new panelAssetTagging();
+					tabAssets.addTab("  Tagging  ", null, pnltag, null);
 				}
+				
 			}
 			tabAssets.addChangeListener(new ChangeListener() {
 				public void stateChanged(ChangeEvent e) {
@@ -515,21 +552,21 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 						clearcheckbox();
 					}
 					if(selectedTab == 1) {
-						modelAssets.setEditable(true);
+						//modelAssets.setEditable(true);
 						clearcheckbox();
 						
 					}
 				}
 			});
 		}
-		displayAllAssets(false, false);
+		displayAllAssets(false, false, lookupCustodianid.getValue());
 		panelAssetInformation2.btnState(false,true, false, false, true);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
 		if(e.getActionCommand().equals("transfer")) {
 			
-			int move_no = Integer.valueOf(txtmovementno.getText());
+			int move_no = Integer.valueOf(panelAssetTagging.lookupmove_no.getValue());
 			if (tblAssets.getSelectedRows().length > 0) {
 				if (hasCheckedAssets()) {
 					int toSave = JOptionPane.showConfirmDialog(getTopLevelAncestor(),"Are all entries correct?", btn1.getText(),JOptionPane.YES_NO_OPTION);
@@ -558,12 +595,112 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 		}
 		
 		if(e.getActionCommand().equals("dispose")) {
-			
+			if (hasCheckedAssets()) {
+				int todispose = JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Dispose selected asset?", "Dispose", JOptionPane.YES_NO_OPTION);
+				if (todispose == JOptionPane.YES_OPTION) {
+					disposeAsset(tblAssets);
+					panelAssetInformation2.resetInformation();
+					JOptionPane.showMessageDialog(getTopLevelAncestor(),"Asset has been disposed.", "Dispose",JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
 		}
 		
 		if(e.getActionCommand().equals("retire")) {
-			
+			if (hasCheckedAssets()) {
+				int todispose = JOptionPane.showConfirmDialog(getTopLevelAncestor(), "Retire selected asset?", "Retire", JOptionPane.YES_NO_OPTION);
+				if (todispose == JOptionPane.YES_OPTION) {
+					retireAsset(tblAssets);
+					panelAssetInformation2.resetInformation();
+					JOptionPane.showMessageDialog(getTopLevelAncestor(),"Asset has been Retired.", "Retire",JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
 		}
+	}
+	
+	protected Boolean hasCheckedAssets() {
+		ArrayList<Boolean> checkTable = new ArrayList<Boolean>();
+		for (int x = 0; x < tblAssets.getRowCount(); x++) {
+			if (tblAssets.getValueAt(x, 0).equals(true))
+				checkTable.add(true);
+		}
+		return checkTable.contains(true);
+
+	}
+	
+	public static void disposeAsset(JTable table){
+		pgUpdate db= new pgUpdate();
+		for(int x=0; x<table.getRowCount(); x++){
+			
+		Boolean selected = (Boolean) table.getValueAt(x, 0);
+		if( selected ){
+			String strSQL = "update rf_asset set status='I', remarks='DISPOSED', date_disposed = now()::date where asset_no = "+table.getValueAt(x, 1)+" " ;
+			FncSystem.out("update rf_asset: ", strSQL);
+			db.executeUpdate(strSQL, true);
+			
+			String strSQL2 = "INSERT INTO rf_asset_history( \n" +
+						"prev_cust, \n" +
+						"current_cust, \n" +
+						"trans_date, \n" +
+						"reason, \n" +
+						"remarks, \n" +
+						"status, \n" +
+						"move_no, \n" +
+						"asset_no, \n" +
+						"trans_by) \n" +
+						"VALUES (\n" +
+						"(select current_cust from rf_asset where asset_no ="+table.getValueAt(x, 1)+"), \n" +//prev_cust
+						"(select current_cust from rf_asset where asset_no ="+table.getValueAt(x, 1)+"), \n" +//current_cust
+						"now()::date, \n" +//trans_date
+						"'Disposed', \n" +//reason
+						"'Disposed by "+UserInfo.FullName+"', \n" +//remarks
+						"'I', \n" +//status
+						"(select coalesce(max(move_no),0) + 1 from rf_asset_history), \n" +//move_no
+						""+table.getValueAt(x, 1)+", \n" +//asset_no
+						"'" +UserInfo.EmployeeCode + "') \n";//trans_by
+				
+			FncSystem.out("INSERT INTO rf_asset_history: ", strSQL2);
+			db.executeUpdate(strSQL2, true);
+			}
+		}
+		db.commit();
+	}
+	
+	public static void retireAsset(JTable table){
+		pgUpdate db=new pgUpdate();	
+		
+		for(int x=0; x<table.getRowCount(); x++) {
+			Boolean selected = (Boolean) table.getValueAt(x, 0);
+			if( selected) {
+				
+				System.out.println("Ass. "+ tblAssets.getValueAt(x, 1));
+				String strSQL = "update rf_asset set status='I', remarks='RETIRED', date_retired=current_date where asset_no = "+table.getValueAt(x, 1)+" " ;
+				FncSystem.out("update rf_asset: ", strSQL);
+				db.executeUpdate(strSQL, true);
+				String strSQL2 = "INSERT INTO rf_asset_history( \n" +
+							"prev_cust, \n" +
+							"current_cust, \n" +
+							"trans_date, \n" +
+							"reason, \n" +
+							"remarks, \n" +
+							"status, \n" +
+							"move_no, \n" +
+							"asset_no, \n" +
+							"trans_by) \n" +
+							"VALUES (\n" +
+							"(select current_cust from rf_asset where asset_no ="+table.getValueAt(x, 1)+"), \n" +//prev_cust
+							"(select current_cust from rf_asset where asset_no ="+table.getValueAt(x, 1)+"), \n" +//current_cust
+							"now()::date, \n" +//trans_date
+							"'Retired', \n" +//reason
+							"'Retired by "+UserInfo.FullName+"', \n" +//remarks
+							"'A', \n" +//status
+							"(select coalesce(max(move_no),0) + 1 from rf_asset_history), \n" +//move_no
+							""+table.getValueAt(x, 1)+", \n" +//asset_no
+							"'" + UserInfo.EmployeeCode+ "') \n";//trans_by
+				FncSystem.out("INSERT INTO rf_asset_history: ", strSQL2);
+				db.executeUpdate(strSQL2, true);
+			}
+		}
+		db.commit();
 	}
 	
 	public static void transferAsset(Integer move_no, String prev_cust, String current_cust, String remarks,
@@ -639,20 +776,10 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 		db.commit();
 	}
 	
-	protected Boolean hasCheckedAssets() {
-		ArrayList<Boolean> checkTable = new ArrayList<Boolean>();
-		for (int x = 0; x < tblAssets.getRowCount(); x++) {
-			if (tblAssets.getValueAt(x, 0).equals(true))
-				checkTable.add(true);
-		}
-		return checkTable.contains(true);
+	public static void clearcheckbox() {
 
-	}
-	
-	protected void clearcheckbox() {
-
-		for (int x = 0; x < tblAssets.getRowCount(); x++) {
-			tblAssets.setValueAt(false, x, 0);
+		for (int x = 0; x < AssetMonitoring2.tblAssets.getRowCount(); x++) {
+			AssetMonitoring2.tblAssets.setValueAt(false, x, 0);
 		}
 	}
 	
@@ -664,13 +791,13 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 		return db.getResult()[0][0].toString();
 	}
 	
-	public static void displayAllAssets(Boolean emp, Boolean assts) {
+	public static void displayAllAssets(Boolean emp, Boolean assts, String custodian) {
 		modelAssets.clear();
 
 		DefaultListModel listModel = new DefaultListModel();// Creating listModel for rowHeader.
 		rowheaderAssets.setModel(listModel);// Setting of listModel into rowHeader.
 		System.out.println(lookupselectcompany.getValue());
-		String strSQL = " select * from view_allassetv3('" +co_id+ "'," + assts + "," + emp+ ")";
+		String strSQL = " select * from view_allassetv3('" +co_id+ "'," + assts + "," + emp+ ", '"+custodian+"' )";
 		
 		FncSystem.out("Display All Assets", strSQL);
 		// System.out.println(co_id);
@@ -697,12 +824,6 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 	public static String getassetlocation() {
 
 		return "select loc_id,loc_name from rf_asset_location ";
-	}
-	
-	private void buttontagging(Boolean transfer, Boolean dispose, Boolean retire) {
-		btn1.setEnabled(transfer);
-		btnDispose.setEnabled(dispose);
-		btnRetire.setEnabled(retire);
 	}
 	
 	public static void displayIndividualAssets(DefaultTableModel model, JList rowHeader, String emp_code){
@@ -742,44 +863,44 @@ public class AssetMonitoring2 extends _JInternalFrame implements _GUI, ActionLis
 		}
 	}
 	
-public static void displayMovementHistory(DefaultTableModel model, JList rowHeader , String asset_no){
-		
-		FncTables.clearTable(model);//Code to clear model.
-		DefaultListModel listModel = new DefaultListModel();//Creating listModel for rowHeader.
-		rowHeader.setModel(listModel);//Setting of listModel into rowHeader.
-		
-		String strSQL ="\n" + 
-				"select  a.move_no,\n" + 
-				"format('%s, %s %s.', c.last_name, c.first_name, left(c.middle_name, 1)),\n" + 
-				"format('%s, %s %s.', d.last_name, d.first_name, left(d.middle_name, 1)),\n" + 
-				"a.trans_date,\n" + 
-				"a.reason,\n" + 
-				"a.remarks,\n" + 
-				"coalesce((select loc_name from rf_asset_location where loc_id = a.old_location), 'NOT CHANGED') \n"+
-				"from rf_asset_history a  \n" + 
-				"left join rf_employee b on a.prev_cust=b.emp_code::int\n" + 
-				"left join rf_employee e on a.current_cust=e.emp_code::int\n" + 
-				"--left join tbl_asset_history  on b.emp_code=a.current_cust::varchar\n" + 
-				"left join rf_entity c on b.entity_id=c.entity_id\n" + 
-				"left join rf_entity d on e.entity_id=d.entity_id \n" + 
-				"where a.asset_no="+asset_no+"\n" + 
-				"order by a.move_no desc, a.trans_date desc ";
-		
-		pgSelect db= new pgSelect(); 
-		db.select(strSQL);
-		
-		FncSystem.out("displayMovementHistory", strSQL);
-		
-		if(db.isNotNull()){
-			for(int x=0; x < db.getRowCount(); x++){
-
-				//You can only use this kind of adding row in model when you're query and model has the same and exact unmber of columns and column types.
-				model.addRow(db.getResult()[x]);
-
-				//For every row added in model, the table header will also add the row number.
-				listModel.addElement(model.getRowCount());
-			}
-		}
-	}
+//	public static void displayMovementHistory(DefaultTableModel model, JList rowHeader , String asset_no){
+//			
+//			FncTables.clearTable(model);//Code to clear model.
+//			DefaultListModel listModel = new DefaultListModel();//Creating listModel for rowHeader.
+//			rowHeader.setModel(listModel);//Setting of listModel into rowHeader.
+//			
+//			String strSQL ="\n" + 
+//					"select  to_char(a.move_no,'FM00000000') as move_no,\n" + 
+//					"format('%s, %s %s.', c.last_name, c.first_name, left(c.middle_name, 1)),\n" + 
+//					"format('%s, %s %s.', d.last_name, d.first_name, left(d.middle_name, 1)),\n" + 
+//					"a.trans_date,\n" + 
+//					"a.reason,\n" + 
+//					"a.remarks,\n" + 
+//					"coalesce((select loc_name from rf_asset_location where loc_id = a.old_location), 'NOT CHANGED') \n"+
+//					"from rf_asset_history a  \n" + 
+//					"left join rf_employee b on a.prev_cust=b.emp_code::int\n" + 
+//					"left join rf_employee e on a.current_cust=e.emp_code::int\n" + 
+//					"--left join tbl_asset_history  on b.emp_code=a.current_cust::varchar\n" + 
+//					"left join rf_entity c on b.entity_id=c.entity_id\n" + 
+//					"left join rf_entity d on e.entity_id=d.entity_id \n" + 
+//					"where a.asset_no="+asset_no+"\n" + 
+//					"order by a.move_no desc, a.trans_date desc ";
+//			
+//			pgSelect db= new pgSelect(); 
+//			db.select(strSQL);
+//			
+//			FncSystem.out("displayMovementHistory", strSQL);
+//			
+//			if(db.isNotNull()){
+//				for(int x=0; x < db.getRowCount(); x++){
+//	
+//					//You can only use this kind of adding row in model when you're query and model has the same and exact unmber of columns and column types.
+//					model.addRow(db.getResult()[x]);
+//	
+//					//For every row added in model, the table header will also add the row number.
+//					listModel.addElement(model.getRowCount());
+//				}
+//			}
+//		}
 	
 }
