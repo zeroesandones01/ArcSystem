@@ -3,7 +3,6 @@ package Accounting.FixedAssets;
 import interfaces._GUI;
 import Accounting.FixedAssets.AssetMonitoring2;
 import tablemodel.modelAssetMonitoring;
-import tablemodel.modelMovement;
 import tablemodel.model_accesories;
 
 import java.awt.BorderLayout;
@@ -2166,23 +2165,17 @@ public static void resetInformation(){
 		new Thread(new  Runnable() {
 			public void run() {
 				FncGlobal.startProgress("Refreshing fields, please wait.");
-				//initializeComponents();
+				
 				AssetMonitoring2.lookupselectcompany.setValue(co_id);
 				AssetMonitoring2.txtcompany.setText(co_name);
 				AssetMonitoring2.chkinactiveassets.setSelected(false);
 				AssetMonitoring2.chkinactiveemp.setSelected(false);
 				AssetMonitoring2.modelAssets.clear();
-				AssetMonitoring2.modelmovement.clear();
-				AssetMonitoring2.displayAllAssets(false,false);
+				AssetMonitoring2.modelAssets.setEditable(false);
+				AssetMonitoring2.displayAllAssets(false,false, null);
 				AssetMonitoring2.tblAssets.setEnabled(true);
 				AssetMonitoring2.lookupCustodianid.setValue("");
 				AssetMonitoring2.txtCustodianid.setText("");
-				AssetMonitoring2.lookupLocation.setValue("");
-				AssetMonitoring2.txtLocation.setText("");
-				AssetMonitoring2.jtxtRemarks.setText("");
-				AssetMonitoring2.lookupnewCustodian.setText("");
-				AssetMonitoring2.txtnewCustodian.setText("");
-				AssetMonitoring2.txtmovementno.setText("");
 				
 				AssetMonitoring2.lookupselectcompany.setEditable(true);
 				AssetMonitoring2.txtcompany.setEditable(false);
@@ -2286,6 +2279,25 @@ public static void resetInformation(){
 				cmbstatus.setEnabled(false);
 				
 				btnState(false,true, true, false, true);
+				
+				//panelAssetTagging
+				panelAssetTagging.modelmovement.clear();
+				
+				panelAssetTagging.lookupmove_no.setEnabled(true);
+				panelAssetTagging.lookupmove_no.setValue(null);
+				
+				panelAssetTagging.lookupnewCustodian.setEnabled(false);
+				panelAssetTagging.lookupnewCustodian.setValue(null);
+				panelAssetTagging.txtnewCustodian.setText("");
+				
+				panelAssetTagging.lookupLocation.setEnabled(false);
+				panelAssetTagging.lookupLocation.setValue(null);
+				panelAssetTagging.txtLocation.setText("");
+				
+				panelAssetTagging.jtxtRemarks.setEnabled(false);
+				panelAssetTagging.jtxtRemarks.setText("");
+				
+				
 				FncGlobal.stopProgress();
 			}
 		}).start();
