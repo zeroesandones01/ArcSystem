@@ -564,7 +564,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 							System.out.println("WTax Rate: " + tax_rate);
 
 							btnAddNew.setEnabled(false);
-							lookupCompany.setEnabled(false);
+							lookupCompany.setEnabled(true);
 
 							mnisetupPV.setEnabled(true);
 							mniInactivate.setEnabled(true);
@@ -3013,8 +3013,11 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 
 		Boolean isPVcreated = false;
 
-		String SQL = "select trim(status_id) from rf_pv_header where pv_no = '" + lookupDRF_no.getText()
-		+ "' and status_id in ( 'A', 'F', 'P' ) and co_id = '" + co_id + "' ";
+		String SQL = "Select 1 from rf_pv_header\n"
+				+ "where co_id = '"+co_id+"' \n"
+				+ "and drf_no = '"+drf_no+"' \n"
+				+ "and status_id IN ('A', 'F', 'P')\n"
+				+ "and rec_status = 'A'; ";
 
 		System.out.printf("SQL-isPVcreated: %s", SQL);
 		pgSelect db = new pgSelect();
@@ -3025,7 +3028,7 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		} else {
 			isPVcreated = false;
 		}
-
+		
 		return isPVcreated;
 
 	}
@@ -3034,8 +3037,11 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 
 		Boolean isPVcreated = false;
 
-		String SQL = "select trim(status_id) from rf_pv_header " + "where pv_no = '" + lookupDRF_no.getText()
-		+ "' and status_id in ( 'I' ) and co_id = '" + co_id + "' ";
+		String SQL = "Select 1 from rf_pv_header\n"
+				+ "where co_id = '"+co_id+"' \n"
+				+ "and drf_no = '"+drf_no+"' \n"
+				+ "and status_id = 'I' \n"
+				+ "and rec_status = 'A'; ";
 
 		System.out.printf("SQL-isPVcreated_but_inactive: %s", SQL);
 		pgSelect db = new pgSelect();
@@ -3048,102 +3054,6 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 		}
 
 		return isPVcreated;
-
-	}
-
-	public static Boolean isItemAnAcct(String item) {
-
-		Boolean isItemAnAcct = false;
-
-		String SQL = "select acct_id from mf_boi_chart_of_accounts where acct_id = '" + item + "' and status_id = 'A' ";
-
-		pgSelect db = new pgSelect();
-		db.select(SQL);
-
-		if (db.isNotNull()) {
-			isItemAnAcct = true;
-		} else {
-			isItemAnAcct = false;
-		}
-
-		return isItemAnAcct;
-
-	}
-
-	public static Boolean isItemOffice(String exec_off_code) {
-
-		Boolean isItemOffice = false;
-
-		String SQL = "select trim(exec_office_code) from mf_exec_office where exec_office_code = '"
-				+ exec_off_code.trim() + "' and status_id = 'A' AND rec_status != 'D'";
-
-		pgSelect db = new pgSelect();
-		db.select(SQL);
-
-		if (db.isNotNull()) {
-			isItemOffice = true;
-		} else {
-			isItemOffice = false;
-		}
-
-		return isItemOffice;
-
-	}
-
-	public static Boolean isItemDivision(String div_code) {
-
-		Boolean isItemDept = false;
-
-		String SQL = "select dept_code from mf_department where dept_code = '" + item.trim() + "'  ";
-
-		pgSelect db = new pgSelect();
-		db.select(SQL);
-
-		if (db.isNotNull()) {
-			isItemDept = true;
-		} else {
-			isItemDept = false;
-		}
-
-		return isItemDept;
-
-	}
-
-	public static Boolean isItemProject(String item) {
-
-		Boolean isItemProj = false;
-
-		String SQL = "select proj_id from mf_project where proj_id = '" + item.trim() + "'  ";
-
-		pgSelect db = new pgSelect();
-		db.select(SQL);
-
-		if (db.isNotNull()) {
-			isItemProj = true;
-		} else {
-			isItemProj = false;
-		}
-
-		return isItemProj;
-
-	}
-
-	public static Boolean isItemSubProject(String item) {
-
-		Boolean isItemSubProj = false;
-
-		String SQL = "select sub_proj_id from mf_unit_info where sub_proj_id = '" + item.trim() + "'  ";
-
-		pgSelect db = new pgSelect();
-		db.select(SQL);
-
-		if (db.isNotNull()) {
-			isItemSubProj = true;
-		} else {
-			isItemSubProj = false;
-		}
-
-		return isItemSubProj;
 
 	}
 
@@ -4091,9 +4001,13 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 
 						PayableVoucher.refresh_fields();
 
-						PayableVoucher.co_id = co_id;
+						PayableVoucher.co_id = lookupCompany.getText().trim();
+						System.out.println("");
+						System.out.println("Value of co_id on PV Set-Up: " + PayableVoucher.co_id);
+						System.out.println("");
+						
 						PayableVoucher.company = company;
-						PayableVoucher.payee1 = lookupPayee.getText();
+						PayableVoucher.payee = lookupPayee.getText();
 						PayableVoucher.availer_id = lookupAvailer.getText();
 						PayableVoucher.lookupCompany.setValue(co_id);
 						PayableVoucher.tagCompany.setTag(company);
@@ -4101,9 +4015,9 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 						PayableVoucher.btnAddNew.setEnabled(true);
 						PayableVoucher.btnCancel.setEnabled(true);
 
-						PayableVoucher.rplf_no = lookupDRF_no.getText().trim();
+						PayableVoucher.drf_no = lookupDRF_no.getText().trim();
 						drf_no = lookupDRF_no.getText().trim();
-						PayableVoucher.lookupPV_no.setText(drf_no);
+//						PayableVoucher.lookupPV_no.setText(drf_no);
 
 						PayableVoucher.lblDateTrans.setEnabled(true);
 						PayableVoucher.lookupCompany.setEnabled(false);
@@ -4155,9 +4069,9 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 					System.out.println("Else Setup PV");
 
 					PayableVoucher.refresh_fields();
-					PayableVoucher.co_id = co_id;
+					PayableVoucher.co_id = lookupCompany.getText().trim();
 					PayableVoucher.company = company;
-					PayableVoucher.payee1 = lookupPayee.getText();
+					PayableVoucher.payee = lookupPayee.getText();
 					PayableVoucher.availer_id = lookupAvailer.getText();
 					PayableVoucher.lookupCompany.setValue(co_id);
 					PayableVoucher.tagCompany.setTag(company);
@@ -4165,9 +4079,9 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 					PayableVoucher.btnAddNew.setEnabled(true);
 					PayableVoucher.btnCancel.setEnabled(true);
 
-					PayableVoucher.rplf_no = lookupDRF_no.getText().trim();
+					PayableVoucher.drf_no = lookupDRF_no.getText().trim();
 					drf_no = lookupDRF_no.getText().trim();
-					PayableVoucher.lookupPV_no.setText(drf_no);
+//					PayableVoucher.lookupPV_no.setText(drf_no);
 
 					PayableVoucher.lblDateTrans.setEnabled(true);
 					PayableVoucher.lookupCompany.setEnabled(false);
@@ -4462,63 +4376,6 @@ public class DisbursementRequestForm extends _JInternalFrame implements _GUI, Ac
 
 		item = modelDRF_part.getValueAt(row, column).toString().trim();
 		//		mnipaste.setEnabled(true);
-	}
-
-	public void paste() {
-
-		int column = tblDRF_part.getSelectedColumn();
-		int row = tblDRF_part.getSelectedRow();
-
-		if (column == 1) {
-			if (isItemAnAcct(item) == true) {
-				modelDRF_part.setValueAt(item, row, column);
-				tblDRF_part.packAll();
-			} else {
-				JOptionPane.showMessageDialog(getContentPane(), "Pasted item is not a valid Account ID.", "Information",
-						JOptionPane.ERROR_MESSAGE);
-			}
-		}
-
-		else if (column == 2) {
-			if (isItemOffice(item) == true) {
-				modelDRF_part.setValueAt(item, row, column);
-				tblDRF_part.packAll();
-			} else {
-				JOptionPane.showMessageDialog(getContentPane(), "Pasted item is not a valid Division ID.",
-						"Information", JOptionPane.ERROR_MESSAGE);
-			}
-		}
-
-		else if (column == 3) {
-			if (DisbursementRequestForm.isItemDivision(item) == true) {
-				modelDRF_part.setValueAt(item, row, column);
-				tblDRF_part.packAll();
-			} else {
-				JOptionPane.showMessageDialog(getContentPane(), "Pasted item is not a valid Department ID.",
-						"Information", JOptionPane.ERROR_MESSAGE);
-			}
-		}
-
-		else if (column == 5) {
-			if (DisbursementRequestForm.isItemProject(item) == true) {
-				modelDRF_part.setValueAt(item, row, column);
-				tblDRF_part.packAll();
-			} else {
-				JOptionPane.showMessageDialog(getContentPane(), "Pasted item is not a valid Project ID.", "Information",
-						JOptionPane.ERROR_MESSAGE);
-			}
-		}
-
-		else if (column == 6) {
-			if (DisbursementRequestForm.isItemSubProject(item) == true) {
-				modelDRF_part.setValueAt(item, row, column);
-				tblDRF_part.packAll();
-			} else {
-				JOptionPane.showMessageDialog(getContentPane(), "Pasted item is not a valid Sub-project ID.",
-						"Information", JOptionPane.ERROR_MESSAGE);
-			}
-		}
-
 	}
 
 	public void confirmWriteOff() {

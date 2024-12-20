@@ -136,7 +136,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 	private static JLabel lblPayeeType;
 	private JLabel lblDate;
 	static JLabel lblDateTrans;
-	private static JLabel lblRPLF_no;
+	private static JLabel lblDRF_no;
 	private static JLabel lblCV_no;
 	static JLabel lblPaymentType;
 
@@ -207,18 +207,17 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 	private JPopupMenu menu2;
 	private JMenuItem mniopenCV;
 	private JMenuItem mniopenDP;
-	private JMenuItem mniopenRPLF;
+	private JMenuItem mniopenDRF;
 
-	String drf_no = ""; // this is used to denote the number upon displaying of existing/saved RPLF No.
-	static String rplf_no = ""; // this is used to denote the RPLF number used for saving
-	public static String pv_no = ""; // this is used to denote the PV number upon displaying of existing/saved PV No.
-	public static String co_id = "02";
+	static String drf_no = ""; 
+	public static String pv_no = ""; 
+	public static String co_id = "01"; //default value 
 	static String availer_id = "";
 	public static String availer = "";
 	public static String company = "";
 	public static String company_logo;
 	static String pay_type = "";
-	static String payee1 = "";
+	static String payee = "";
 	Boolean is_payee_vatable = false;
 	String table = "";
 	public static String year = "";
@@ -243,6 +242,8 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 	private JTextField txtEntry;
 	private JPanel pnlSubButton;
 	private JButton btnSubPrev;
+	private JLabel lblRequestType;
+	private _JLookup lookupRequestType;
 	private static JCheckBox chkCurrentYear;
 
 	// static String isCurrentYear = "2018";
@@ -306,7 +307,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 
 		{
 			menu2 = new JPopupMenu("Popup");
-			mniopenRPLF = new JMenuItem("Open Payment Request");
+			mniopenDRF = new JMenuItem("Open Payment Request");
 			mniopenCV = new JMenuItem("Open Disbursement Voucher");
 			mniopenDP = new JMenuItem("Open Docs Processing");
 			mnisetup2307 = new JMenuItem("Open Form 2307 Monitoring");
@@ -322,7 +323,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 			JSeparator sp1 = new JSeparator();
 			JSeparator sp2 = new JSeparator();
 
-			menu2.add(mniopenRPLF);
+			menu2.add(mniopenDRF);
 			menu2.add(mniopenCV);
 			menu2.add(mniopenDP);
 			menu2.add(sp1);
@@ -334,7 +335,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 			menu2.add(mnieditePVdate);
 			menu2.add(mnireversePV);
 
-			mniopenRPLF.addActionListener(new ActionListener() {
+			mniopenDRF.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent evt) {
 					if (FncGlobal.homeMDI.isNotExisting("RequestForPayment")) {
 						openDRF();
@@ -691,7 +692,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 			{
 				pnlPVDtl = new JPanel(new BorderLayout(0, 5));
 				pnlPV.add(pnlPVDtl, BorderLayout.WEST);
-				pnlPVDtl.setPreferredSize(new java.awt.Dimension(911, 187));
+				pnlPVDtl.setPreferredSize(new java.awt.Dimension(911, 250));
 
 				pnlPVDtl_1 = new JPanel(new BorderLayout(0, 5));
 				pnlPVDtl.add(pnlPVDtl_1, BorderLayout.WEST);
@@ -703,7 +704,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 				pnlPVDtl_1a.setPreferredSize(new java.awt.Dimension(99, 116));
 				pnlPVDtl_1a.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 				{
-					lblDateTrans = new JLabel("Trans. Date", JLabel.TRAILING);
+					lblDateTrans = new JLabel("PV Date", JLabel.TRAILING);
 					pnlPVDtl_1a.add(lblDateTrans);
 					lblDateTrans.setEnabled(false);
 				}
@@ -713,9 +714,9 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 					lblDateNeeded.setEnabled(false);
 				}
 				{
-					lblRPLF_no = new JLabel("RPLF No.", JLabel.TRAILING);
-					pnlPVDtl_1a.add(lblRPLF_no);
-					lblRPLF_no.setEnabled(false);
+					lblDRF_no = new JLabel("DRF No.", JLabel.TRAILING);
+					pnlPVDtl_1a.add(lblDRF_no);
+					lblDRF_no.setEnabled(false);
 				}
 				{
 					lblCV_no = new JLabel("CV No.", JLabel.TRAILING);
@@ -760,7 +761,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 						public void lookupPerformed(LookupEvent event) {
 							Object[] data = ((_JLookup) event.getSource()).getDataSet();
 							if (data != null) {
-								rplf_no = (String) data[0];
+								drf_no = (String) data[0];
 
 								lblDateTrans.setEnabled(true);
 								lblDateNeeded.setEnabled(true);
@@ -772,11 +773,11 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 								// lookupPaymentType.setEditable(true);
 								tagReqType.setEnabled(true);
 								lookupPaymentType.setLookupSQL(getPayment_type());
-								rplf_type_id = getRPLF_typeID(rplf_no);
+								rplf_type_id = getRPLF_typeID(drf_no);
 
 								setDRF_header();
 								displayDRF_toPVdetails(modelPV_account, rowHeaderPV_account, modelPV_accounttotal);
-								displayPV_subsidiaryledgers(modelPV_SL, rowHeaderPV_SL, modelPV_SL_total, rplf_no);
+								displayPV_subsidiaryledgers(modelPV_SL, rowHeaderPV_SL, modelPV_SL_total, drf_no);
 
 								btnSave.setEnabled(true);
 								modelPV_account.setEditable(false);
@@ -801,11 +802,16 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 				pnlPVInfo.setPreferredSize(new java.awt.Dimension(694, 113));
 				pnlPVInfo.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
 
-				pnlPVInfo_1 = new JPanel(new GridLayout(4, 1, 5, 5));
+				pnlPVInfo_1 = new JPanel(new GridLayout(5, 1, 5, 5));
 				pnlPVInfo.add(pnlPVInfo_1, BorderLayout.WEST);
 				pnlPVInfo_1.setPreferredSize(new java.awt.Dimension(112, 113));
 				pnlPVInfo_1.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-
+				
+				{
+					lblRequestType = new JLabel("Request Type", JLabel.TRAILING);
+					pnlPVInfo_1.add(lblRequestType);
+					lblRequestType.setEnabled(false);
+				}
 				{
 					lblPaymentType = new JLabel("Payment Type", JLabel.TRAILING);
 					pnlPVInfo_1.add(lblPaymentType);
@@ -832,15 +838,31 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 				pnlPVDtl_2.setPreferredSize(new java.awt.Dimension(203, 118));
 				pnlPVDtl_2.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
 
-				pnlPVDtl_2a = new JPanel(new GridLayout(4, 1, 0, 5));
+				pnlPVDtl_2a = new JPanel(new GridLayout(5, 1, 0, 5));
 				pnlPVDtl_2.add(pnlPVDtl_2a, BorderLayout.WEST);
 				pnlPVDtl_2a.setPreferredSize(new java.awt.Dimension(119, 119));
 				pnlPVDtl_2a.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+				
+				{
+					lookupRequestType = new _JLookup(null, "Request Type", 0); 
+					pnlPVDtl_2a.add(lookupRequestType);
+					lookupRequestType.setEnabled(false);
+					lookupRequestType.addLookupListener(new LookupListener() {
+						
+						@Override
+						public void lookupPerformed(LookupEvent event) {
+							// TODO Auto-generated method stub
+							
+						}
+					});
+					
+					
+				}
 
 				{
 					lookupPaymentType = new _JLookup(null, "Payment Type", 2, 2);
 					pnlPVDtl_2a.add(lookupPaymentType);
-					lookupPaymentType.setBounds(20, 27, 20, 25);
+//					lookupPaymentType.setBounds(20, 27, 20, 25);
 					lookupPaymentType.setReturnColumn(0);
 					lookupPaymentType.setEnabled(false);
 					lookupPaymentType.setPreferredSize(new java.awt.Dimension(157, 22));
@@ -1404,11 +1426,11 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 
 		Integer w = 1;
 		Integer u = 1;
-		Integer line_count = sql_getDRF_line_count(rplf_no);
+		Integer line_count = sql_getDRF_line_count(drf_no);
 		String part_desc, availerNameAmt;
 		String particulars = "";
 
-		String drf_remarks = getDRF_remarks(rplf_no);
+		String drf_remarks = getDRF_remarks(drf_no);
 		String or_no_ref,mc_no;
 
 		/*while (w <= line_count) {
@@ -1427,7 +1449,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 			w++;
 		}*/
 		try {
-			part_desc = getDRF_particulars(lookupCompany.getValue(), rplf_no).toString().trim();
+			part_desc = getDRF_particulars(lookupCompany.getValue(), drf_no).toString().trim();
 		} catch (NullPointerException e) {
 			part_desc = "";
 		}
@@ -1439,7 +1461,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 		}
 		
 		//Added by Erick 2023-08-17
-		if(checktag(rplf_no, co_id)) {
+		if(checktag(drf_no, co_id)) {
 			//Added by Erick 2023-08-04 (or_no_ref,mc_no)
 			 or_no_ref  = FncGlobal.GetString ("select 'OR NO.: ' || coalesce(string_agg(remarks, ','), '') \n"
 				 		+ "from (\n"
@@ -1451,7 +1473,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 				 		+ "	from rf_request_header a\n"
 				 		+ "	left join rf_transfer_cost b on a.rplf_no = b.rplf_no and a.co_id = b.co_id\n"
 				 		+ "	left join rf_processing_cost c on a.rplf_no = c.rplf_no and a.co_id = c.co_id\n"
-				 		+ "	where a.rplf_no = '"+rplf_no+"' \n"
+				 		+ "	where a.rplf_no = '"+drf_no+"' \n"
 				 		+ "	and a.co_id = '"+co_id+"' \n"
 				 		+ "	group by a.rplf_no,\n"
 				 		+ "	b.or_no_reference , \n"
@@ -1461,7 +1483,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 				 		+ ") x group by x.rplf_no");
 			 mc_no = FncGlobal.GetString("select 'Mc No.: ' || coalesce(string_agg(c.mc_no, ','),'No MC') as mc_no\n"
 					+ "from ( select distinct on (pv_no) pv_no, co_id  from rf_pv_detail\n"
-					+ "where co_id = '"+co_id+"' and pv_no in ( select pv_no from  rf_pv_header where pv_no = '"+rplf_no+"'  and co_id = '04'  and status_id != 'I' and NULLIF(pv_no, '') is not null) \n"
+					+ "where co_id = '"+co_id+"' and pv_no in ( select pv_no from  rf_pv_header where pv_no = '"+drf_no+"'  and co_id = '04'  and status_id != 'I' and NULLIF(pv_no, '') is not null) \n"
 					+ "and status_id = 'A' and bal_side = 'D' group by pv_no, co_id) a\n"
 					+ "left join rf_pv_header b on a.pv_no = b.pv_no and a.co_id = b.co_id\n"
 					+ "left join rf_mc_detail c on a.pv_no = c.pv_no and a.co_id = c.co_id\n"
@@ -1478,7 +1500,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 		while (u <= line_count) {
 
 			try {
-				availerNameAmt = getDRFAvailerAmt(u, rplf_no).toString().trim();
+				availerNameAmt = getDRFAvailerAmt(u, drf_no).toString().trim();
 			} catch (NullPointerException e) {
 				availerNameAmt = "";
 			}
@@ -1523,7 +1545,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 		sql = sql +
 
 				"0.00  \r\n" + "\r\n" + "from rf_request_detail a \r\n"
-				+ "left join mf_boi_chart_of_accounts b on a.acct_id=b.acct_id \n " + "where a.rplf_no = '" + rplf_no
+				+ "left join mf_boi_chart_of_accounts b on a.acct_id=b.acct_id \n " + "where a.rplf_no = '" + drf_no
 				+ "' and a.status_id = 'A' and a.co_id = '" + lookupCompany.getValue() + "' \r\n"
 				+ "group by a.acct_id, a.div_id, a.dept_id, a.sect_id, a.project_id, a.sub_projectid, b.acct_name \n";
 
@@ -1535,7 +1557,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 					+ "'Input VAT',\r\n" + "a.vat_amt, \r\n" + "0\r\n" + "from (\r\n"
 					+ "select distinct on (div_id, dept_id, sect_id, project_id, sub_projectid) \r\n"
 					+ "div_id, dept_id, sect_id, project_id, sub_projectid, sum(vat_amt) as vat_amt\r\n"
-					+ "from rf_request_detail   \r\n" + "where rplf_no = '" + rplf_no
+					+ "from rf_request_detail   \r\n" + "where rplf_no = '" + drf_no
 					+ "' and status_id = 'A' and vat_amt > 0 and co_id = '" + lookupCompany.getValue() + "' \r\n"
 					+ "group by div_id, dept_id, sect_id, project_id, sub_projectid ) a \n";
 			
@@ -1555,7 +1577,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 				+ "0,\n" + "a.wtax_amt\n" + "from (\n"
 				+ "select distinct on (div_id, dept_id, sect_id, project_id, sub_projectid) \n"
 				+ "div_id, dept_id, sect_id, project_id, sub_projectid, sum(wtax_amt) as wtax_amt\n"
-				+ "from rf_request_detail   \n" + "where rplf_no = '" + rplf_no
+				+ "from rf_request_detail   \n" + "where rplf_no = '" + drf_no
 				+ "' and status_id = 'A' and wtax_amt > 0 and (rplf_no, co_id) not in (select rplf_no, co_id from rf_request_header where rplf_type_id in ('02', '07')) and co_id = '"
 				+ lookupCompany.getValue() + "'\n" + "group by div_id, dept_id, sect_id, project_id, sub_projectid ) a \n"+
 				"\n"+
@@ -1568,7 +1590,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 				+ "0,\r\n" + "a.retention_amt \r\n" + "from (\r\n"
 				+ "select distinct on (div_id, dept_id, sect_id, project_id, sub_projectid) \r\n"
 				+ "div_id, dept_id, sect_id, project_id, sub_projectid, sum(retention_amt) as retention_amt\r\n"
-				+ "from rf_request_detail   \r\n" + "where rplf_no = '" + rplf_no
+				+ "from rf_request_detail   \r\n" + "where rplf_no = '" + drf_no
 				+ "' and status_id = 'A' and retention_amt > 0 and co_id = '" + lookupCompany.getValue() + "' \r\n"
 				+ "group by div_id, dept_id, sect_id, project_id, sub_projectid ) a \n"+
 				"\n"+
@@ -1581,7 +1603,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 				+ "'Advances to Contractor - Down Payment',\r\n" + "0,\r\n" + "a.dp_recoup_amt \r\n" + "from (\r\n"
 				+ "select distinct on (div_id, dept_id, sect_id, project_id, sub_projectid) \r\n"
 				+ "div_id, dept_id, sect_id, project_id, sub_projectid, sum(dp_recoup_amt) as dp_recoup_amt\r\n"
-				+ "from rf_request_detail   \r\n" + "where rplf_no = '" + rplf_no
+				+ "from rf_request_detail   \r\n" + "where rplf_no = '" + drf_no
 				+ "' and status_id = 'A' and dp_recoup_amt > 0 and co_id = '" + lookupCompany.getValue() + "' \r\n"
 				+ "group by div_id, dept_id, sect_id, project_id, sub_projectid ) a \n"+
 				"\n"+
@@ -1692,7 +1714,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 				 "		and b.status_id = 'A'\n"+ 
 				 "		and b.co_id = '" + lookupCompany.getValue() + "' \n"+
 				 "		and b.bc_liqui_amt > 0\n"+
-				 "		and b.rplf_no = '" + rplf_no + "'\n"+
+				 "		and b.rplf_no = '" + drf_no + "'\n"+
 				 "		and EXISTS (select * from rf_request_detail where rplf_no = a.bc_rplf_no and status_id = 'A' and acct_id = '01-02-07-002')\n"+
 				 "		AND NOT EXISTS (SELECT * FROM rf_jv_header where jv_no = a.bc_rplf_no)\n"+
 				 "		) a \n"+
@@ -1715,12 +1737,12 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 			   //" 		y.tran_amt\n" + //Replaced due to it always display full amount of JV...
 			   //        What if only partial is deducted?
 				"		from\n" + "		(\n"+
-				"			select b.bc_rplf_no, a.rplf_no,a.status_id, b.bill_no, c.jv_no, b.liq_amt, c.acct_id  from (select distinct on (ref_doc_no) * from rf_request_detail where rplf_no = '" + rplf_no + "' and status_id = 'A') a\n"+
+				"			select b.bc_rplf_no, a.rplf_no,a.status_id, b.bill_no, c.jv_no, b.liq_amt, c.acct_id  from (select distinct on (ref_doc_no) * from rf_request_detail where rplf_no = '" + drf_no + "' and status_id = 'A') a\n"+
 				"			left join co_backcharge_liquidation b on a.ref_doc_no = b.bill_no \n"+
 				"			left join rf_jv_detail c on b.bc_rplf_no = c.jv_no and c.status_id = 'A' and c.bal_side = 'D'  \n" +
 				// 			and c.acct_id = '01-02-07-003' and c.bal_side = 'D'\n" +
 				"			where c.jv_no is not null\n"+ 
-				"			and a.rplf_no = '" + rplf_no + "'\n"+
+				"			and a.rplf_no = '" + drf_no + "'\n"+
 				"			and a.co_id = '"+lookupCompany.getValue()+"' \n"+
 				"			and a.status_id = 'A' \n" + 
 				"			and c.acct_id in ('01-02-07-003','01-02-07-002') \n"+ //--Added by Erick 2022-10-27 DCRF 2334 
@@ -1789,7 +1811,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 				+ "	left join co_billing_detail b on a.rplf_no = b.rplf_no "
 				+ "	left join co_other_deduction d on b.billing_no = d.bill_no "
 				+ "	left join mf_boi_chart_of_accounts c on d.acct_id = c.acct_id \r\n" + "	where a.rplf_no = '"
-				+ rplf_no + "' and a.status_id = 'A' and a.other_liqui_amt > 0 and a.co_id = '"
+				+ drf_no + "' and a.status_id = 'A' and a.other_liqui_amt > 0 and a.co_id = '"
 				+ lookupCompany.getValue() + "' and b.billing_no is not null \r\n" + "	and a.co_id = b.co_id"
 				+ "	group by a.div_id, a.dept_id, a.sect_id, a.project_id, a.sub_projectid,b.other_liqui_acct_id,c.acct_name, d.acct_id, d.ded_amt, a.other_liqui_amt ) a \r\n"
 				+ "group by  a.acct_id,a.div_id,a.dept_id,a.sect_id,a.project_id,a.sub_projectid,a.acct_name,a.other_liqui_amt \n"+
@@ -1804,7 +1826,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 				+ "0,\r\n" + "a.pv_amt\r\n" + "from (\r\n"
 				+ "select distinct on (div_id, dept_id, sect_id, project_id, sub_projectid) \r\n"
 				+ "div_id, dept_id, sect_id, project_id, sub_projectid, sum(pv_amt) as pv_amt\r\n"
-				+ "from rf_request_detail \r\n" + "where rplf_no = '" + rplf_no + "' and status_id = 'A' and co_id = '"
+				+ "from rf_request_detail \r\n" + "where rplf_no = '" + drf_no + "' and status_id = 'A' and co_id = '"
 				+ lookupCompany.getValue() + "' \r\n"
 				+ "group by div_id, dept_id, sect_id, project_id, sub_projectid ) a ";
 
@@ -1886,7 +1908,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 		txtDRFRemark.setText(pv_hrd[14].toString());
 
 		pay_type = (String) pv_hrd[5];
-		payee1 = (String) pv_hrd[7];
+		payee = (String) pv_hrd[7];
 		availer = (String) pv_hrd[9];
 	}
 	/*
@@ -1913,7 +1935,6 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 		Object[] drf_hrd = getDRF_header_details();
 
 		availer = (String) drf_hrd[4];
-
 		dteNeeded.setDate(FncGlobal.dateFormat(FncGlobal.getDateSQL()));
 		lookupPayee1.setText((String) drf_hrd[1]);
 		tagPayee1.setTag((String) drf_hrd[2]);
@@ -1948,7 +1969,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 		lblDateNeeded.setEnabled(x);
 		dteNeeded.setEnabled(x);
 
-		lblRPLF_no.setEnabled(x);
+		lblDRF_no.setEnabled(x);
 		lookupDRF_no.setEnabled(x);
 		// lookupDRF_no.setEditable(x);
 		lblCV_no.setEnabled(x);
@@ -2003,9 +2024,9 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 		btnSave.setActionCommand("Save");
 		txtDRFRemark.setText("");
 
-		payee1 = "";
+		payee = "";
 		availer_id = "";
-		rplf_no = "";
+		drf_no = "";
 		to_do = "addnew";
 	}
 
@@ -2042,8 +2063,8 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 
 	public void initialize_comp() {
 
-		co_id = "02";
-		company = "CENQHOMES DEVELOPMENT CORPORATION";
+		co_id = "01";
+		company = "ACERLAND REALTY CORPORATION";
 		tagCompany.setTag(company);
 		company_logo = sql_getCompanyLogo();
 
@@ -2230,7 +2251,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 		lblPV_no.setEnabled(false);
 		lookupPV_no.setEnabled(false);
 
-		lblRPLF_no.setEnabled(true);
+		lblDRF_no.setEnabled(true);
 		lookupDRF_no.setEnabled(true);
 
 		txtStatus.setText("ACTIVE");
@@ -2267,7 +2288,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 		// lookupPaymentType.setEditable(true);
 		tagReqType.setEnabled(true);
 		lookupPaymentType.setLookupSQL(getPayment_type());
-		lblRPLF_no.setEnabled(false);
+		lblDRF_no.setEnabled(false);
 		lookupDRF_no.setEnabled(false);
 		// lookupDRF_no.setEditable(false);
 		btnEdit.setEnabled(false);
@@ -2538,7 +2559,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 		mapParameters.put("pv_amt", pv_amt);
 		mapParameters.put("pv_amt_tot", pv_amt_tot);
 		mapParameters.put("pay_type", pay_type);
-		mapParameters.put("payee1", payee1);
+		mapParameters.put("payee", payee);
 		mapParameters.put("status", txtStatus.getText().trim());
 		mapParameters.put("particulars", txtDRFRemark.getText().trim());
 		mapParameters.put("remark_unliq_ca", remark_unliq_ca);
@@ -2731,20 +2752,14 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 
 	}
 
-	public static Integer sql_getDRF_line_count(String req_no) {
+	public static Integer sql_getDRF_line_count(String drf_no) {
 
 		Integer x = 1;
 
-		// COMMENTED CAUSE SOME LINE NUMBERS IN rf_request_detail are causing long loop
-		// because of high value 2022-04-27 c/o lester
-		/*
-		 * String SQL = "select max (line_no) from rf_request_detail where rplf_no = '"
-		 * +req_no+"' and co_id = '"+co_id+"'  group by rplf_no   " ;
-		 */
-
-		//String SQL = "select count (*)::INT from rf_request_detail where rplf_no = '" + req_no + "' and co_id = '"
-		String SQL = "select count (*)::INT from rf_request_detail where rplf_no = '" + req_no + "' and co_id = '"
-				+ co_id + "'";
+		String SQL = "select count (*)::INT \n"
+				+ "from rf_request_detail \n"
+				+ "where rplf_no = '000000029'\n"
+				+ "and co_id = '01'";
 		pgSelect db = new pgSelect();
 		db.select(SQL);
 
@@ -2794,7 +2809,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 				+ "left join rf_entity b on aa.entity_id1 = b.entity_id\r\n"
 				+ "left join rf_entity c on aa.entity_id2 = c.entity_id\r\n"
 				+ "left join mf_entity_type d on a.entity_type_id = d.entity_type_id\r\n"
-				+ "left join mf_record_status e on a.status_id = e.status_id\r\n" + "" + "where a.pv_no = '" + rplf_no
+				+ "left join mf_record_status e on a.status_id = e.status_id\r\n" + "" + "where a.pv_no = '" + drf_no
 				+ "' and a.co_id = '" + co_id + "'\r\n" + "";
 
 		System.out.printf("SQL #1 PV Header: %s", strSQL);
@@ -2810,18 +2825,22 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 
 	public static Object[] getDRF_header_details() {// used
 
-		String strSQL = "--- Display DRF Header\r\n" + "select \r\n" +
-
-				"a.date_needed,\r\n" + "a.entity_id1,\r\n" + "trim(b.entity_name) as payee_1,\r\n" + "a.entity_id2,\r\n"
-				+ "trim(c.entity_name) as payee_2,\r\n" + "a.entity_type_id,\r\n" + "d.entity_type_desc,"
-				+ "a.pay_type_id," + "(case when a.pay_type_id = 'B' then 'CHECK' else 'CASH' end) as py_type  \r\n" +
-
-				"from rf_request_header a\r\n" + "left join rf_entity b on a.entity_id1 = b.entity_id\r\n"
-				+ "left join rf_entity c on a.entity_id2 = c.entity_id\r\n"
-				+ "left join mf_entity_type d on a.entity_type_id = d.entity_type_id\r\n"
-				+ "left join mf_record_status e on a.status_id = e.status_id\r\n" +
-
-				"where a.rplf_no = '" + rplf_no + "'   and a.co_id = '" + co_id + "' \r\n";
+		String strSQL = "select \n"
+				+ "a.drf_due_date,\n"
+				+ "a.payee as payee_id,\n"
+				+ "fn_get_entity_name(a.payee) as payee,\n"
+				+ "a.availer as availer_id,\n"
+				+ "fn_get_entity_name(a.availer) as availer,\n"
+				+ "a.payee_type_id,\n"
+				+ "b.entity_type_desc,\n"
+				+ "a.payment_type_id,\n"
+				+ "d.payment_type_desc as pay_type\n"
+				+ "from rf_drf_header a\n"
+				+ "left join mf_entity_type b on b.entity_type_id =a.payee_type_id \n"
+				+ "left join mf_record_status c on c.status_id = a.status_id\n"
+				+ "left join mf_payment_type d ON d.payment_type_id = a.payment_type_id\n"
+				+ "where a.drf_no = '"+drf_no+"' "
+				+ "and a.co_id = '"+co_id+"' ";
 
 		pgSelect db = new pgSelect();
 		db.select(strSQL);
@@ -3044,7 +3063,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 		String SQL = "select reversal_jv_no from rf_pv_header where pv_no = '" + pv_no + "' and co_id = '" + co_id
 				+ "' ";
 
-		System.out.printf("SQL #1: sql_getCompanyLogo", SQL);
+		System.out.printf("SQL: sql_getReversal_jv", SQL);
 		pgSelect db = new pgSelect();
 		db.select(SQL);
 
@@ -3342,17 +3361,17 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 						// POSTING**//
 						if (checkAcctBalanceIfEqual() == true) {
 							pgUpdate db = new pgUpdate();
-							insertPV_header(rplf_no, db);
-							insertPV_detail(rplf_no, db);
+							insertPV_header(drf_no, db);
+							insertPV_detail(drf_no, db);
 							insertAudit_trail("Add-Payable Voucher", pv, db);
 							updateCDF(pv, db); // to update the status of cm-cdf-table to P-processed ;
 
 							db.commit();
-							lookupPV_no.setText(rplf_no);
+							lookupPV_no.setText(drf_no);
 
-							setPV_header(rplf_no);
-							displayPV_details(modelPV_SL, rowHeaderPV_account, modelPV_SL_total, rplf_no);
-							displayPV_subsidiaryledgers(modelPV_SL, rowHeaderPV_SL, modelPV_SL_total, rplf_no);
+							setPV_header(drf_no);
+							displayPV_details(modelPV_SL, rowHeaderPV_account, modelPV_SL_total, drf_no);
+							displayPV_subsidiaryledgers(modelPV_SL, rowHeaderPV_SL, modelPV_SL_total, drf_no);
 
 							tabCenter.setSelectedIndex(0);
 							JOptionPane.showMessageDialog(getContentPane(),
@@ -3382,7 +3401,7 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 						db.commit();
 						lookupPV_no.setText(pv);
 						setPV_header(pv);
-						displayPV_details(modelPV_SL, rowHeaderPV_account, modelPV_SL_total, rplf_no);
+						displayPV_details(modelPV_SL, rowHeaderPV_account, modelPV_SL_total, drf_no);
 						displayPV_subsidiaryledgers(modelPV_SL, rowHeaderPV_SL, modelPV_SL_total, pv);
 						tabCenter.setSelectedIndex(0);
 						JOptionPane.showMessageDialog(getContentPane(), "Payable Voucher (PV) transaction updated.",
@@ -3418,17 +3437,17 @@ public class PayableVoucher extends _JInternalFrame implements _GUI, ActionListe
 						if (checkAcctBalanceIfEqual() == true) {// **ADDED BY JED 2019-04-22 : TO CHECK TOTAL IF BALANCE
 																// OR NOT BEFORE SAVING OR POSTING**//
 							pgUpdate db = new pgUpdate();
-							updatePV_header_forsetup(rplf_no, db);
-							updateRPLF_detail(rplf_no, db);
-							insertPV_detail(rplf_no, db);
-							insertAudit_trail("Setup-Payable Voucher", rplf_no, db);
+							updatePV_header_forsetup(drf_no, db);
+							updateRPLF_detail(drf_no, db);
+							insertPV_detail(drf_no, db);
+							insertAudit_trail("Setup-Payable Voucher", drf_no, db);
 							updateCDF(pv, db); // to update the status of cm-cdf-table to P-processed ;
 
 							db.commit();
 							lookupPV_no.setText(pv);
 
-							setPV_header(rplf_no);
-							displayPV_details(modelPV_SL, rowHeaderPV_account, modelPV_SL_total, rplf_no);
+							setPV_header(drf_no);
+							displayPV_details(modelPV_SL, rowHeaderPV_account, modelPV_SL_total, drf_no);
 							displayPV_subsidiaryledgers(modelPV_SL, rowHeaderPV_SL, modelPV_SL_total, pv);
 
 							tabCenter.setSelectedIndex(0);
